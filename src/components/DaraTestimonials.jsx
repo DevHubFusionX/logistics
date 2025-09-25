@@ -5,26 +5,23 @@ import { useState, useEffect } from 'react'
 const testimonials = [
   {
     rating: 5,
-    title: "Transformative cold chain solutions that revolutionized our agricultural distribution network.",
-    content: "Dara's sophisticated logistics infrastructure has fundamentally transformed our supply chain efficiency. Their precision temperature control and real-time monitoring capabilities have eliminated product losses while ensuring consistent quality delivery across our extensive distribution network. The operational excellence and strategic partnership approach have exceeded our most ambitious expectations.",
+    content: "Dara transformed our agricultural distribution with precision temperature control and eliminated product losses completely.",
     author: "Dr. Adebayo Ogundimu",
-    position: "Chief Executive Officer, AgroVest Nigeria",
+    position: "CEO, AgroVest Nigeria",
     image: "/assets/img/testimonial-1.jpeg"
   },
   {
     rating: 5,
-    title: "Pharmaceutical-grade logistics that ensure therapeutic efficacy across Nigeria's healthcare network.",
-    content: "The regulatory compliance and temperature precision demonstrated by Dara's cold chain solutions have been instrumental in maintaining our pharmaceutical product integrity. Their WHO-compliant infrastructure and comprehensive monitoring systems provide the reliability essential for healthcare distribution, enabling us to serve Nigeria's medical institutions with unwavering confidence in product quality.",
+    content: "Their WHO-compliant infrastructure provides the reliability essential for pharmaceutical distribution across Nigeria.",
     author: "Prof. Kemi Adeleke", 
-    position: "Director of Operations, MedSupply West Africa",
+    position: "Director, MedSupply West Africa",
     image: "/assets/img/testimonial-2.jpeg"
   },
   {
     rating: 5,
-    title: "Strategic logistics partnership that scales with our commercial growth and operational demands.",
-    content: "Dara's enterprise-grade scalability and logistics intelligence have proven invaluable as our FMCG distribution requirements have expanded across multiple Nigerian markets. Their data-driven approach to route optimization and cost efficiency, combined with exceptional service reliability, has established them as an indispensable component of our supply chain strategy.",
+    content: "Dara's scalable logistics and route optimization have become indispensable to our FMCG supply chain strategy.",
     author: "Emeka Nwosu",
-    position: "Supply Chain Director, FreshMart Retail Group", 
+    position: "Supply Chain Director, FreshMart", 
     image: "/assets/img/testimonial-3.jpeg"
   }
 ]
