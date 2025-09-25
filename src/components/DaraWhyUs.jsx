@@ -1,5 +1,6 @@
-import { motion } from 'framer-motion'
-import { Thermometer, Radar, Truck, Users, TrendingUp, Shield } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Thermometer, Radar, Truck, Users, TrendingUp, Shield, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState, useEffect } from 'react'
 
 const features = [
   {
@@ -35,6 +36,25 @@ const features = [
 ]
 
 export default function DaraWhyUs() {
+  const [currentSlide, setCurrentSlide] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
+  useEffect(() => {
+    if (isMobile) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % features.length)
+      }, 4000)
+      return () => clearInterval(timer)
+    }
+  }, [isMobile])
+
   return (
     <section 
       id="whyus" 
@@ -87,66 +107,150 @@ export default function DaraWhyUs() {
           </p>
         </motion.div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, index) => {
-            const IconComponent = feature.icon
-            return (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="group p-8 rounded-2xl transition-all duration-300"
-                style={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  borderRadius: 'var(--radius-2xl)'
-                }}
-                whileHover={{ 
-                  y: -5,
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)'
-                }}
-              >
-                {/* Icon */}
+        {/* Features Grid/Carousel */}
+        {isMobile ? (
+          <div className="relative">
+            <div className="overflow-hidden">
+              <AnimatePresence mode="wait">
                 <motion.div
-                  className="w-16 h-16 rounded-xl flex items-center justify-center mb-6"
-                  style={{ 
-                    backgroundColor: 'var(--color-primary)',
-                    color: 'var(--text-inverse)'
+                  key={currentSlide}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.5 }}
+                  className="p-8 rounded-2xl"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: 'var(--radius-2xl)'
                   }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  transition={{ duration: 0.3 }}
                 >
-                  <IconComponent className="w-8 h-8" />
+                  {(() => {
+                    const feature = features[currentSlide]
+                    const IconComponent = feature.icon
+                    return (
+                      <>
+                        <div
+                          className="w-16 h-16 rounded-xl flex items-center justify-center mb-6"
+                          style={{ 
+                            backgroundColor: 'var(--color-primary)',
+                            color: 'var(--text-inverse)'
+                          }}
+                        >
+                          <IconComponent className="w-8 h-8" />
+                        </div>
+                        <div className="space-y-4">
+                          <h3 style={{
+                            fontSize: 'var(--text-xl)',
+                            fontWeight: 'var(--font-bold)',
+                            color: 'var(--text-inverse)'
+                          }}>
+                            {feature.title}
+                          </h3>
+                          <p style={{
+                            fontSize: 'var(--text-base)',
+                            color: 'var(--text-inverse)',
+                            fontWeight: 'var(--font-light)',
+                            lineHeight: 'var(--leading-relaxed)',
+                            opacity: 0.9
+                          }}>
+                            {feature.description}
+                          </p>
+                        </div>
+                      </>
+                    )
+                  })()}
                 </motion.div>
-
-                {/* Content */}
-                <div className="space-y-4">
-                  <h3 style={{
-                    fontSize: 'var(--text-xl)',
-                    fontWeight: 'var(--font-bold)',
-                    color: 'var(--text-inverse)'
-                  }}>
-                    {feature.title}
-                  </h3>
-                  
-                  <p style={{
-                    fontSize: 'var(--text-base)',
-                    color: 'var(--text-inverse)',
-                    fontWeight: 'var(--font-light)',
-                    lineHeight: 'var(--leading-relaxed)',
-                    opacity: 0.9
-                  }}>
-                    {feature.description}
-                  </p>
-                </div>
-              </motion.div>
-            )
-          })}
-        </div>
+              </AnimatePresence>
+            </div>
+            
+            {/* Navigation */}
+            <div className="flex justify-between items-center mt-6">
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev - 1 + features.length) % features.length)}
+                className="p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+              
+              <div className="flex gap-2">
+                {features.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-2 h-2 rounded-full transition-all ${
+                      index === currentSlide ? 'bg-white' : 'bg-white/40'
+                    }`}
+                  />
+                ))}
+              </div>
+              
+              <button
+                onClick={() => setCurrentSlide((prev) => (prev + 1) % features.length)}
+                className="p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => {
+              const IconComponent = feature.icon
+              return (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 50 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="group p-8 rounded-2xl transition-all duration-300"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    borderRadius: 'var(--radius-2xl)'
+                  }}
+                  whileHover={{ 
+                    y: -5,
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)'
+                  }}
+                >
+                  <motion.div
+                    className="w-16 h-16 rounded-xl flex items-center justify-center mb-6"
+                    style={{ 
+                      backgroundColor: 'var(--color-primary)',
+                      color: 'var(--text-inverse)'
+                    }}
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <IconComponent className="w-8 h-8" />
+                  </motion.div>
+                  <div className="space-y-4">
+                    <h3 style={{
+                      fontSize: 'var(--text-xl)',
+                      fontWeight: 'var(--font-bold)',
+                      color: 'var(--text-inverse)'
+                    }}>
+                      {feature.title}
+                    </h3>
+                    <p style={{
+                      fontSize: 'var(--text-base)',
+                      color: 'var(--text-inverse)',
+                      fontWeight: 'var(--font-light)',
+                      lineHeight: 'var(--leading-relaxed)',
+                      opacity: 0.9
+                    }}>
+                      {feature.description}
+                    </p>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </section>
   )
