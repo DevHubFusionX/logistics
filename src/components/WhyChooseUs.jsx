@@ -35,30 +35,30 @@ export default function WhyChooseUs() {
   return (
     <section className="py-20 bg-gradient-to-b from-sky-50 to-white">
       <div className="container mx-auto px-6">
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <motion.h2 
+          <motion.h2
             className="text-4xl font-bold text-gray-900 mb-4"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            Why Industry Leaders Choose Dora Logistics
+            Why Industry Leaders Choose Dara Logistics
           </motion.h2>
-          <motion.p 
+          <motion.p
             className="text-xl text-gray-600 max-w-3xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Trusted by Fortune 500 companies and growing businesses worldwide for our commitment 
+            Trusted by Fortune 500 companies and growing businesses worldwide for our commitment
             to excellence, innovation, and customer success.
           </motion.p>
         </motion.div>
@@ -68,24 +68,24 @@ export default function WhyChooseUs() {
           {features.map((feature, index) => {
             const IconComponent = feature.icon
             return (
-              <motion.div 
-                key={index} 
+              <motion.div
+                key={index}
                 className="text-center group"
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ 
-                  duration: 0.6, 
+                transition={{
+                  duration: 0.6,
                   delay: index * 0.15,
-                  ease: "easeOut" 
+                  ease: "easeOut"
                 }}
               >
-                <motion.div 
+                <motion.div
                   className="mb-6"
                   whileHover={{ scale: 1.1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <motion.div 
+                  <motion.div
                     className="w-16 h-16 bg-white rounded-full shadow-lg flex items-center justify-center mx-auto group-hover:shadow-xl transition-shadow duration-300"
                     whileHover={{ y: -5, rotate: 5 }}
                     transition={{ duration: 0.3 }}
@@ -93,7 +93,7 @@ export default function WhyChooseUs() {
                     <IconComponent className="w-8 h-8 text-sky-500" />
                   </motion.div>
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className="flex items-center justify-center gap-2 mb-3"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -110,7 +110,7 @@ export default function WhyChooseUs() {
                   </motion.div>
                   <h3 className="text-lg font-bold text-gray-900">{feature.title}</h3>
                 </motion.div>
-                <motion.p 
+                <motion.p
                   className="text-gray-600 leading-relaxed"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
@@ -125,7 +125,7 @@ export default function WhyChooseUs() {
         </div>
 
         {/* Stats Section */}
-        <motion.div 
+        <motion.div
           className="bg-white rounded-2xl shadow-xl p-8 border border-sky-100"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export default function WhyChooseUs() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           whileHover={{ scale: 1.02 }}
         >
-          <motion.div 
+          <motion.div
             className="text-center mb-8"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -143,23 +143,23 @@ export default function WhyChooseUs() {
             <h3 className="text-2xl font-bold text-gray-900 mb-2">Proven Track Record</h3>
             <p className="text-gray-600">Numbers that demonstrate our commitment to excellence</p>
           </motion.div>
-          
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <motion.div 
-                key={index} 
+              <motion.div
+                key={index}
                 className="text-center"
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.6, 
+                transition={{
+                  duration: 0.6,
                   delay: 0.4 + index * 0.1,
                   ease: "easeOut"
                 }}
                 whileHover={{ scale: 1.1 }}
               >
-                <motion.div 
+                <motion.div
                   className="text-3xl md:text-4xl font-bold text-sky-500 mb-2"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -168,7 +168,7 @@ export default function WhyChooseUs() {
                 >
                   {stat.number}
                 </motion.div>
-                <motion.div 
+                <motion.div
                   className="text-gray-600 font-medium"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}

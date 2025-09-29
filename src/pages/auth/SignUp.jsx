@@ -30,14 +30,14 @@ export default function SignUp() {
   return (
     <div className="min-h-screen bg-white flex">
       {/* Left Column - Content */}
-      <motion.div 
+      <motion.div
         className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sky-600 to-blue-700 p-12 flex-col justify-center"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="max-w-lg">
-          <motion.div 
+          <motion.div
             className="flex items-center gap-3 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -46,10 +46,10 @@ export default function SignUp() {
             <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
               <span className="text-sky-600 font-bold text-xl">D</span>
             </div>
-            <span className="text-white text-2xl font-bold">Dora Logistics</span>
+            <span className="text-white text-2xl font-bold">Dara Logistics</span>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             className="text-4xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -57,8 +57,8 @@ export default function SignUp() {
           >
             Join the Future of Global Logistics
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             className="text-sky-100 text-lg mb-8 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -66,12 +66,12 @@ export default function SignUp() {
           >
             Create your account today and unlock seamless shipping solutions trusted by over 10,000 businesses worldwide. Experience intelligent logistics that scales with your growth.
           </motion.p>
-          
+
           <div className="space-y-4">
             {benefits.map((benefit, index) => {
               const IconComponent = benefit.icon
               return (
-                <motion.div 
+                <motion.div
                   key={index}
                   className="flex items-center gap-4"
                   initial={{ opacity: 0, x: -20 }}
@@ -86,8 +86,8 @@ export default function SignUp() {
               )
             })}
           </div>
-          
-          <motion.div 
+
+          <motion.div
             className="mt-12 p-6 bg-sky-500/20 rounded-xl border border-sky-400/30"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -98,7 +98,7 @@ export default function SignUp() {
               <span className="text-white font-semibold">Trusted by Industry Leaders</span>
             </div>
             <p className="text-sky-100 text-sm">
-              "Dora Logistics transformed our supply chain efficiency by 40% and reduced shipping costs significantly." - Fortune 500 Company
+              "Dara Logistics transformed our supply chain efficiency by 40% and reduced shipping costs significantly." - Fortune 500 Company
             </p>
           </motion.div>
         </div>
@@ -106,13 +106,13 @@ export default function SignUp() {
 
       {/* Right Column - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <motion.div 
+        <motion.div
           className="max-w-md w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div 
+          <motion.div
             className="text-center mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -134,7 +134,7 @@ export default function SignUp() {
                 <input
                   type="text"
                   value={formData.fullName}
-                  onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium"
                   placeholder="Enter your full name"
                   required
@@ -153,7 +153,7 @@ export default function SignUp() {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium"
                   placeholder="your.email@company.com"
                   required
@@ -172,7 +172,7 @@ export default function SignUp() {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium"
                   placeholder="+1 (555) 000-0000"
                   required
@@ -191,7 +191,7 @@ export default function SignUp() {
                 <input
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium"
                   placeholder="Create a secure password"
                   required
@@ -217,7 +217,7 @@ export default function SignUp() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium"
                   placeholder="Confirm your password"
                   required
@@ -232,7 +232,7 @@ export default function SignUp() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               className="flex items-start gap-3 pt-2"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -257,7 +257,7 @@ export default function SignUp() {
             </motion.button>
           </form>
 
-          <motion.div 
+          <motion.div
             className="mt-6 text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

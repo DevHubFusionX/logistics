@@ -22,12 +22,12 @@ export default function Confirmation() {
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-6">
-        <motion.div 
+        <motion.div
           className="text-center mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <motion.div 
+          <motion.div
             className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6"
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
@@ -35,21 +35,21 @@ export default function Confirmation() {
           >
             <CheckCircle className="w-12 h-12 text-green-600" />
           </motion.div>
-          
+
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Booking Confirmed!</h1>
           <p className="text-lg text-gray-600">Your shipment has been successfully booked</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Booking Details */}
-          <motion.div 
+          <motion.div
             className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
             <h2 className="text-xl font-bold text-gray-900 mb-6">Booking Details</h2>
-            
+
             <div className="space-y-6">
               {/* Booking IDs */}
               <div className="grid md:grid-cols-2 gap-4">
@@ -139,7 +139,7 @@ export default function Confirmation() {
           </motion.div>
 
           {/* Action Panel */}
-          <motion.div 
+          <motion.div
             className="space-y-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -183,12 +183,12 @@ export default function Confirmation() {
                   <Download className="w-4 h-4" />
                   Download Receipt
                 </button>
-                
+
                 <button className="w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors">
                   <Share className="w-4 h-4" />
                   Share Tracking Info
                 </button>
-                
+
                 <Link to="/dashboard" className="block">
                   <button className="w-full flex items-center justify-center gap-2 border border-gray-300 text-gray-700 py-3 rounded-lg hover:bg-gray-50 transition-colors">
                     <Home className="w-4 h-4" />
@@ -206,10 +206,10 @@ export default function Confirmation() {
               </p>
               <div className="space-y-2">
                 <a href="tel:+18003672564" className="block text-sky-600 hover:text-sky-700 font-medium text-sm">
-                  📞 +1 (800) DORA-LOG
+                  📞 +1 (800) Dara-LOG
                 </a>
-                <a href="mailto:support@doralogistics.com" className="block text-sky-600 hover:text-sky-700 font-medium text-sm">
-                  ✉️ support@doralogistics.com
+                <a href="mailto:support@Daralogistics.com" className="block text-sky-600 hover:text-sky-700 font-medium text-sm">
+                  ✉️ support@Daralogistics.com
                 </a>
               </div>
             </div>

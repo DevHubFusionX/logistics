@@ -49,19 +49,19 @@ export default function DaraAbout() {
                 marginBottom: '1.5rem',
                 color: 'var(--text-secondary)'
               }}>
-                In 2019, we witnessed a critical gap in Nigeria's healthcare and agricultural supply chains. 
-                Life-saving vaccines spoiled in transit. Fresh produce lost its vitality before reaching markets. 
+                In 2019, we witnessed a critical gap in Nigeria's healthcare and agricultural supply chains.
+                Life-saving vaccines spoiled in transit. Fresh produce lost its vitality before reaching markets.
                 The cost wasn't just financial—it was human.
               </p>
-              
+
               <p style={{
                 fontSize: 'var(--text-lg)',
                 lineHeight: '1.8',
                 marginBottom: '1.5rem',
                 color: 'var(--text-secondary)'
               }}>
-                That's when Dara was born—not just as a logistics company, but as guardians of integrity. 
-                We understood that behind every temperature-controlled shipment lies someone's health, 
+                That's when Dara was born—not just as a logistics company, but as guardians of integrity.
+                We understood that behind every temperature-controlled shipment lies someone's health,
                 someone's livelihood, someone's future.
               </p>
 
@@ -70,7 +70,7 @@ export default function DaraAbout() {
                 lineHeight: '1.8',
                 color: 'var(--text-secondary)'
               }}>
-                Today, we've built Nigeria's most trusted cold chain network, connecting Lagos to Kano, 
+                Today, we've built Nigeria's most trusted cold chain network, connecting Lagos to Kano,
                 Abuja to Port Harcourt with unwavering precision. Every degree matters. Every delivery counts.
               </p>
             </div>
@@ -105,7 +105,7 @@ export default function DaraAbout() {
               className="w-full h-80 object-cover rounded-2xl"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent rounded-2xl" />
-            
+
             <div className="absolute bottom-6 left-6 right-6 text-white">
               <p style={{
                 fontSize: 'var(--text-sm)',
@@ -161,7 +161,7 @@ export default function DaraAbout() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.5 + index * 0.1 }}
                 viewport={{ once: true }}
-                className="p-6 rounded-xl" 
+                className="p-6 rounded-xl"
                 style={{ backgroundColor: 'var(--bg-primary)' }}
               >
                 <IconComponent className="w-8 h-8 mx-auto mb-4" style={{ color: 'var(--color-primary)' }} />

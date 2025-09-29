@@ -10,7 +10,7 @@ const features = [
   },
   {
     icon: Radar,
-    title: "Intelligent Monitoring Systems", 
+    title: "Intelligent Monitoring Systems",
     description: "Comprehensive IoT-enabled tracking infrastructure with real-time GPS positioning, temperature logging, and automated alert systems for immediate response to environmental deviations or route disruptions."
   },
   {
@@ -56,10 +56,10 @@ export default function DaraWhyUs() {
   }, [isMobile])
 
   return (
-    <section 
-      id="whyus" 
+    <section
+      id="whyus"
       className="py-20 relative"
-      style={{ 
+      style={{
         background: 'linear-gradient(135deg, var(--gray-900) 0%, var(--sky-900) 50%, var(--blue-900) 100%)'
       }}
     >
@@ -74,8 +74,8 @@ export default function DaraWhyUs() {
         >
           <div
             className="inline-block px-6 py-2 rounded-full"
-            style={{ 
-              backgroundColor: 'var(--bg-brand-subtle)', 
+            style={{
+              backgroundColor: 'var(--bg-brand-subtle)',
               color: 'var(--text-brand)',
               fontSize: 'var(--text-sm)',
               fontWeight: 'var(--font-medium)'
@@ -83,7 +83,7 @@ export default function DaraWhyUs() {
           >
             Working Process
           </div>
-          
+
           <h2 style={{
             fontSize: 'var(--text-4xl)',
             fontWeight: 'var(--font-bold)',
@@ -92,7 +92,7 @@ export default function DaraWhyUs() {
           }}>
             Operational Excellence Through Advanced Infrastructure
           </h2>
-          
+
           <p style={{
             fontSize: 'var(--text-xl)',
             color: 'var(--text-inverse)',
@@ -101,8 +101,8 @@ export default function DaraWhyUs() {
             margin: '0 auto',
             opacity: 0.9
           }}>
-            Our sophisticated cold chain methodology integrates cutting-edge technology, 
-            regulatory compliance, and operational expertise to deliver unparalleled 
+            Our sophisticated cold chain methodology integrates cutting-edge technology,
+            regulatory compliance, and operational expertise to deliver unparalleled
             temperature-controlled logistics solutions across Nigeria's diverse commercial landscape.
           </p>
         </motion.div>
@@ -133,7 +133,7 @@ export default function DaraWhyUs() {
                       <>
                         <div
                           className="w-16 h-16 rounded-xl flex items-center justify-center mb-6"
-                          style={{ 
+                          style={{
                             backgroundColor: 'var(--color-primary)',
                             color: 'var(--text-inverse)'
                           }}
@@ -164,7 +164,7 @@ export default function DaraWhyUs() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            
+
             {/* Navigation */}
             <div className="flex justify-between items-center mt-6">
               <button
@@ -173,19 +173,18 @@ export default function DaraWhyUs() {
               >
                 <ChevronLeft className="w-6 h-6" />
               </button>
-              
+
               <div className="flex gap-2">
                 {features.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      index === currentSlide ? 'bg-white' : 'bg-white/40'
-                    }`}
+                    className={`w-2 h-2 rounded-full transition-all ${index === currentSlide ? 'bg-white' : 'bg-white/40'
+                      }`}
                   />
                 ))}
               </div>
-              
+
               <button
                 onClick={() => setCurrentSlide((prev) => (prev + 1) % features.length)}
                 className="p-2 rounded-full bg-white/20 text-white hover:bg-white/30 transition-all"
@@ -212,14 +211,14 @@ export default function DaraWhyUs() {
                     border: '1px solid rgba(255, 255, 255, 0.2)',
                     borderRadius: 'var(--radius-2xl)'
                   }}
-                  whileHover={{ 
+                  whileHover={{
                     y: -5,
                     backgroundColor: 'rgba(255, 255, 255, 0.15)'
                   }}
                 >
                   <motion.div
                     className="w-16 h-16 rounded-xl flex items-center justify-center mb-6"
-                    style={{ 
+                    style={{
                       backgroundColor: 'var(--color-primary)',
                       color: 'var(--text-inverse)'
                     }}

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 export default function Invoice() {
   const navigate = useNavigate()
-  
+
   const invoiceData = {
     invoiceNumber: 'INV-2024-001',
     bookingId: 'DL-1001',
@@ -53,19 +53,19 @@ export default function Invoice() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-6">
         {/* Header Actions */}
-        <motion.div 
+        <motion.div
           className="flex items-center justify-between mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <button 
+          <button
             onClick={() => navigate('/dashboard')}
             className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
           >
             <ArrowLeft className="w-5 h-5" />
             Back to Dashboard
           </button>
-          
+
           <div className="flex gap-3">
             <motion.button
               onClick={handlePrint}
@@ -76,7 +76,7 @@ export default function Invoice() {
               <Printer className="w-4 h-4" />
               Print
             </motion.button>
-            
+
             <motion.button
               onClick={handleDownload}
               className="flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600"
@@ -90,7 +90,7 @@ export default function Invoice() {
         </motion.div>
 
         {/* Invoice */}
-        <motion.div 
+        <motion.div
           className="bg-white rounded-2xl shadow-lg p-8 print:shadow-none print:rounded-none"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -104,18 +104,18 @@ export default function Invoice() {
                   <span className="text-white font-bold text-xl">D</span>
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Dora Logistics</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">Dara Logistics</h1>
                   <p className="text-gray-600">Global Shipping Solutions</p>
                 </div>
               </div>
               <div className="text-sm text-gray-600">
                 <p>500 Logistics Blvd</p>
                 <p>New York, NY 10001</p>
-                <p>+1 (800) DORA-LOG</p>
-                <p>billing@doralogistics.com</p>
+                <p>+1 (800) Dara-LOG</p>
+                <p>billing@Daralogistics.com</p>
               </div>
             </div>
-            
+
             <div className="text-right">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
               <div className="space-y-1 text-sm">
@@ -123,9 +123,8 @@ export default function Invoice() {
                 <p><span className="font-semibold">Booking ID:</span> {invoiceData.bookingId}</p>
                 <p><span className="font-semibold">Date:</span> {invoiceData.date}</p>
                 <p><span className="font-semibold">Due Date:</span> {invoiceData.dueDate}</p>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
-                  invoiceData.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                }`}>
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${invoiceData.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
+                  }`}>
                   {invoiceData.status}
                 </span>
               </div>
@@ -213,13 +212,13 @@ export default function Invoice() {
 
           {/* Footer */}
           <div className="border-t pt-6 text-center text-sm text-gray-600">
-            <p className="mb-2">Thank you for choosing Dora Logistics!</p>
-            <p>For questions about this invoice, contact us at billing@doralogistics.com or +1 (800) DORA-LOG</p>
+            <p className="mb-2">Thank you for choosing Dara Logistics!</p>
+            <p>For questions about this invoice, contact us at billing@Daralogistics.com or +1 (800) Dara-LOG</p>
           </div>
         </motion.div>
 
         {/* Actions */}
-        <motion.div 
+        <motion.div
           className="mt-8 text-center print:hidden"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

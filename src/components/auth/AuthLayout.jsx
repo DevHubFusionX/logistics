@@ -28,14 +28,14 @@ export default function AuthLayout({ children }) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex">
       {/* Left Side - Features */}
-      <motion.div 
+      <motion.div
         className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sky-600 to-blue-700 p-12 flex-col justify-center"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="max-w-md">
-          <motion.div 
+          <motion.div
             className="flex items-center gap-3 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -44,10 +44,10 @@ export default function AuthLayout({ children }) {
             <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
               <span className="text-sky-600 font-bold text-xl">D</span>
             </div>
-            <span className="text-white text-2xl font-bold">Dora Logistics</span>
+            <span className="text-white text-2xl font-bold">Dara Logistics</span>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             className="text-4xl font-bold text-white mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -55,8 +55,8 @@ export default function AuthLayout({ children }) {
           >
             Streamline Your Global Logistics
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             className="text-sky-100 text-lg mb-12"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -64,10 +64,10 @@ export default function AuthLayout({ children }) {
           >
             Join thousands of businesses worldwide who trust us with their shipping and logistics needs.
           </motion.p>
-          
+
           <div className="space-y-6">
             {features.map((feature, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 className="flex items-center gap-4"
                 initial={{ opacity: 0, x: -20 }}

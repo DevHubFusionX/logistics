@@ -12,7 +12,7 @@ const stats = [
 
 const features = [
   'WHO-Compliant Infrastructure',
-  'Real-Time Temperature Monitoring', 
+  'Real-Time Temperature Monitoring',
   'Nationwide Distribution Network',
   'Pharmaceutical-Grade Standards'
 ]
@@ -27,8 +27,8 @@ export default function DaraHero() {
     return () => clearInterval(interval)
   }, [])
   return (
-    <section 
-      id="home" 
+    <section
+      id="home"
       className="min-h-screen flex items-center relative overflow-hidden"
       style={{
         backgroundImage: 'linear-gradient(rgba(14, 165, 233, 0.8), rgba(37, 99, 235, 0.7)), url("/assets/img/slider.jpg")',
@@ -126,7 +126,7 @@ export default function DaraHero() {
                 opacity: 0.9
               }}
             >
-              Orchestrating Nigeria's most sophisticated temperature-controlled logistics infrastructure 
+              Orchestrating Nigeria's most sophisticated temperature-controlled logistics infrastructure
               with precision monitoring, regulatory compliance, and enterprise-grade scalability.
             </motion.p>
 
@@ -173,7 +173,7 @@ export default function DaraHero() {
                   backgroundColor: 'rgba(255, 255, 255, 0.1)',
                   backdropFilter: 'blur(10px)'
                 }}
-                whileHover={{ 
+                whileHover={{
                   scale: 1.02,
                   backgroundColor: 'rgba(255, 255, 255, 0.2)'
                 }}
@@ -207,7 +207,7 @@ export default function DaraHero() {
               >
                 Operational Excellence Metrics
               </motion.h3>
-              
+
               <div className="grid grid-cols-2 gap-6">
                 {stats.map((stat, index) => {
                   const IconComponent = stat.icon

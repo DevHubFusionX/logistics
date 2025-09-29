@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom'
 export default function KYCPending() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
-      <motion.div 
+      <motion.div
         className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 text-center"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div 
+        <motion.div
           className="w-20 h-20 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-6"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
@@ -20,7 +20,7 @@ export default function KYCPending() {
           <Clock className="w-10 h-10 text-yellow-600" />
         </motion.div>
 
-        <motion.h1 
+        <motion.h1
           className="text-3xl font-bold text-gray-900 mb-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ export default function KYCPending() {
           Account Under Review
         </motion.h1>
 
-        <motion.p 
+        <motion.p
           className="text-lg text-gray-600 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -38,7 +38,7 @@ export default function KYCPending() {
           Thank you for submitting your company information. Our team is currently reviewing your documents for KYC compliance.
         </motion.p>
 
-        <motion.div 
+        <motion.div
           className="bg-sky-50 rounded-xl p-6 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -48,7 +48,7 @@ export default function KYCPending() {
             <FileCheck className="w-6 h-6 text-sky-600" />
             <h3 className="text-lg font-semibold text-gray-900">Review Process</h3>
           </div>
-          
+
           <div className="space-y-3 text-left">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 bg-green-500 rounded-full"></div>
@@ -65,7 +65,7 @@ export default function KYCPending() {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="grid md:grid-cols-2 gap-4 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -75,14 +75,14 @@ export default function KYCPending() {
             <h4 className="font-semibold text-gray-900 mb-2">Expected Timeline</h4>
             <p className="text-gray-600 text-sm">2-3 business days</p>
           </div>
-          
+
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-2">Status Updates</h4>
             <p className="text-gray-600 text-sm">Via email & SMS</p>
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className="space-y-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,8 +95,8 @@ export default function KYCPending() {
                 Edit Information
               </button>
             </Link>
-            
-            <a href="mailto:support@doralogistics.com">
+
+            <a href="mailto:support@Daralogistics.com">
               <button className="flex items-center gap-2 px-6 py-3 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors">
                 <Mail className="w-4 h-4" />
                 Contact Support
@@ -108,7 +108,7 @@ export default function KYCPending() {
             <p className="text-gray-600 text-sm mb-2">Need immediate assistance?</p>
             <a href="tel:+18003672564" className="flex items-center justify-center gap-2 text-sky-600 hover:text-sky-700 font-medium">
               <Phone className="w-4 h-4" />
-              +1 (800) DORA-LOG
+              +1 (800) Dara-LOG
             </a>
           </div>
         </motion.div>

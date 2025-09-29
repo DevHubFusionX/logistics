@@ -58,11 +58,11 @@ export default function About() {
       <section className="bg-white py-20">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
-            About Dora Logistics
+            About Dara Logistics
           </h1>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Since 2015, we've been transforming global commerce through intelligent logistics solutions. 
-            Our commitment to innovation, sustainability, and customer success has made us a trusted partner 
+            Since 2015, we've been transforming global commerce through intelligent logistics solutions.
+            Our commitment to innovation, sustainability, and customer success has made us a trusted partner
             for businesses of all sizes across the world.
           </p>
         </div>
@@ -119,7 +119,7 @@ export default function About() {
               Leadership Team
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Meet the experienced professionals leading Dora Logistics into the future of global commerce.
+              Meet the experienced professionals leading Dara Logistics into the future of global commerce.
             </p>
           </div>
 
@@ -145,7 +145,7 @@ export default function About() {
             Ready to Work Together?
           </h2>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of businesses that trust Dora Logistics for their global shipping needs. 
+            Join thousands of businesses that trust Dara Logistics for their global shipping needs.
             Let's build something great together.
           </p>
           <button className="inline-flex items-center gap-2 bg-sky-500 hover:bg-sky-600 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors">

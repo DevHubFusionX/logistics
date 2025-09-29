@@ -25,8 +25,8 @@ export default function DaraContact() {
   }
 
   return (
-    <section 
-      id="contact" 
+    <section
+      id="contact"
       className="py-32"
       style={{ backgroundColor: 'var(--bg-primary)' }}
     >
@@ -41,8 +41,8 @@ export default function DaraContact() {
         >
           <div
             className="inline-block px-6 py-3 rounded-full"
-            style={{ 
-              backgroundColor: 'var(--bg-brand-subtle)', 
+            style={{
+              backgroundColor: 'var(--bg-brand-subtle)',
               color: 'var(--text-brand)',
               fontSize: 'var(--text-sm)',
               fontWeight: 'var(--font-medium)'
@@ -50,7 +50,7 @@ export default function DaraContact() {
           >
             Get In Touch
           </div>
-          
+
           <h2 style={{
             fontSize: 'clamp(var(--text-3xl), 4vw, var(--text-5xl))',
             fontWeight: 'var(--font-bold)',
@@ -188,12 +188,12 @@ export default function DaraContact() {
               {
                 icon: Phone,
                 title: "Phone",
-                content: "+234 (0) 1-327-2564\n+234 (0) 1-DARA-LOG"
+                content: "+234 (0) 1-327-2564\n+234 (0) 1-Dara-LOG"
               },
               {
                 icon: Mail,
                 title: "Email",
-                content: "info@daralogistics.ng\npartnerships@daralogistics.ng"
+                content: "info@Daralogistics.ng\npartnerships@Daralogistics.ng"
               },
               {
                 icon: Clock,

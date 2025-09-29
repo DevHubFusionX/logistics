@@ -26,14 +26,14 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-white flex">
       {/* Left Column - Content */}
-      <motion.div 
+      <motion.div
         className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sky-600 to-blue-700 p-12 flex-col justify-center"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
       >
         <div className="max-w-lg">
-          <motion.div 
+          <motion.div
             className="flex items-center gap-3 mb-8"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -42,10 +42,10 @@ export default function Login() {
             <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
               <span className="text-sky-600 font-bold text-xl">D</span>
             </div>
-            <span className="text-white text-2xl font-bold">Dora Logistics</span>
+            <span className="text-white text-2xl font-bold">Dara Logistics</span>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             className="text-4xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -53,8 +53,8 @@ export default function Login() {
           >
             Welcome Back to Your Logistics Command Center
           </motion.h1>
-          
-          <motion.p 
+
+          <motion.p
             className="text-sky-100 text-lg mb-8 leading-relaxed"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,12 +62,12 @@ export default function Login() {
           >
             Access your comprehensive dashboard to manage shipments, track deliveries, and optimize your supply chain operations with real-time insights and analytics.
           </motion.p>
-          
+
           <div className="grid grid-cols-2 gap-6 mb-8">
             {stats.map((stat, index) => {
               const IconComponent = stat.icon
               return (
-                <motion.div 
+                <motion.div
                   key={index}
                   className="text-center"
                   initial={{ opacity: 0, y: 20 }}
@@ -83,8 +83,8 @@ export default function Login() {
               )
             })}
           </div>
-          
-          <motion.div 
+
+          <motion.div
             className="p-6 bg-sky-500/20 rounded-xl border border-sky-400/30"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,13 +100,13 @@ export default function Login() {
 
       {/* Right Column - Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <motion.div 
+        <motion.div
           className="max-w-md w-full"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.div 
+          <motion.div
             className="text-center mb-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -128,7 +128,7 @@ export default function Login() {
                 <input
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   className="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg"
                   placeholder="your.email@company.com"
                   required
@@ -147,7 +147,7 @@ export default function Login() {
                 <input
                   type={showPassword ? "text" : "password"}
                   value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   className="w-full pl-10 pr-12 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg"
                   placeholder="Enter your password"
                   required
@@ -162,7 +162,7 @@ export default function Login() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               className="flex items-center justify-between"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -190,14 +190,14 @@ export default function Login() {
             </motion.button>
           </form>
 
-          <motion.div 
+          <motion.div
             className="mt-8 text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
           >
             <p className="text-gray-600">
-              New to Dora Logistics?{' '}
+              New to Dara Logistics?{' '}
               <Link to="/auth/signup" className="text-sky-500 hover:text-sky-600 font-semibold">
                 Create your account
               </Link>
@@ -205,7 +205,7 @@ export default function Login() {
             <p className="text-sm text-gray-500 mt-4">
               Need help? Contact our support team at{' '}
               <a href="tel:+18003672564" className="text-sky-500 hover:text-sky-600 font-medium">
-                +1 (800) DORA-LOG
+                +1 (800) Dara-LOG
               </a>
             </p>
           </motion.div>

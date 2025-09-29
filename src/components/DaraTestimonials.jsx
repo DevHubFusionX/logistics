@@ -13,7 +13,7 @@ const testimonials = [
   {
     rating: 5,
     content: "Their WHO-compliant infrastructure provides the reliability essential for pharmaceutical distribution across Nigeria.",
-    author: "Prof. Kemi Adeleke", 
+    author: "Prof. Kemi Adeleke",
     position: "Director, MedSupply West Africa",
     image: "/assets/img/testimonial-2.jpeg"
   },
@@ -21,7 +21,7 @@ const testimonials = [
     rating: 5,
     content: "Dara's scalable logistics and route optimization have become indispensable to our FMCG supply chain strategy.",
     author: "Emeka Nwosu",
-    position: "Supply Chain Director, FreshMart", 
+    position: "Supply Chain Director, FreshMart",
     image: "/assets/img/testimonial-3.jpeg"
   }
 ]
@@ -59,8 +59,8 @@ export default function DaraTestimonials() {
         >
           <div
             className="inline-block px-6 py-3 rounded-full"
-            style={{ 
-              backgroundColor: 'var(--bg-brand-subtle)', 
+            style={{
+              backgroundColor: 'var(--bg-brand-subtle)',
               color: 'var(--text-brand)',
               fontSize: 'var(--text-sm)',
               fontWeight: 'var(--font-medium)'
@@ -68,7 +68,7 @@ export default function DaraTestimonials() {
           >
             Client Success Stories
           </div>
-          
+
           <h2 style={{
             fontSize: 'clamp(var(--text-3xl), 4vw, var(--text-5xl))',
             fontWeight: 'var(--font-bold)',
@@ -121,9 +121,9 @@ export default function DaraTestimonials() {
                         </div>
                         <div className="flex items-center gap-1 mb-6">
                           {[...Array(testimonial.rating)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className="w-5 h-5 fill-current" 
+                            <Star
+                              key={i}
+                              className="w-5 h-5 fill-current"
                               style={{ color: 'var(--warning-500)' }}
                             />
                           ))}
@@ -157,7 +157,7 @@ export default function DaraTestimonials() {
                 </motion.div>
               </AnimatePresence>
             </div>
-            
+
             <div className="flex justify-between items-center mt-6">
               <button
                 onClick={() => setCurrentSlide((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
@@ -165,7 +165,7 @@ export default function DaraTestimonials() {
               >
                 <ChevronLeft className="w-6 h-6" style={{ color: 'var(--text-primary)' }} />
               </button>
-              
+
               <div className="flex gap-2">
                 {testimonials.map((_, index) => (
                   <button
@@ -178,7 +178,7 @@ export default function DaraTestimonials() {
                   />
                 ))}
               </div>
-              
+
               <button
                 onClick={() => setCurrentSlide((prev) => (prev + 1) % testimonials.length)}
                 className="p-2 rounded-full glass hover:bg-white/20 transition-all"
@@ -222,9 +222,9 @@ export default function DaraTestimonials() {
                 </div>
                 <div className="flex items-center gap-1 mb-6">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className="w-5 h-5 fill-current" 
+                    <Star
+                      key={i}
+                      className="w-5 h-5 fill-current"
                       style={{ color: 'var(--warning-500)' }}
                     />
                   ))}

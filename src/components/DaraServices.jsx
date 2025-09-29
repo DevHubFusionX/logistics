@@ -92,7 +92,7 @@ export default function DaraServices() {
           {services.map((service, index) => {
             const IconComponent = service.icon
             const isEven = index % 2 === 0
-            
+
             return (
               <motion.div
                 key={index}
