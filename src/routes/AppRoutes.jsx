@@ -5,6 +5,7 @@ import About from '../pages/About'
 import Services from '../pages/Services'
 import SignUp from '../pages/auth/SignUp'
 import Login from '../pages/auth/Login'
+import ForgotPassword from '../pages/auth/ForgotPassword'
 import VerifyOTP from '../pages/auth/VerifyOTP'
 import ProfileSetup from '../pages/onboarding/ProfileSetup'
 import KYCPending from '../pages/onboarding/KYCPending'
@@ -18,6 +19,7 @@ import TrackShipment from '../pages/tracking/TrackShipment'
 import Invoice from '../pages/tracking/Invoice'
 import ManageProfile from '../pages/ManageProfile'
 import Reports from '../pages/Reports'
+import ProtectedRoute from '../components/ProtectedRoute'
 
 export default function AppRoutes() {
   return (
@@ -28,20 +30,21 @@ export default function AppRoutes() {
       <Route path="/about" element={<About />} />
       <Route path="/auth/signup" element={<SignUp />} />
       <Route path="/auth/login" element={<Login />} />
+      <Route path="/auth/forgot-password" element={<ForgotPassword />} />
       <Route path="/auth/verify-otp" element={<VerifyOTP />} />
       <Route path="/onboarding/profile-setup" element={<ProfileSetup />} />
       <Route path="/onboarding/kyc-pending" element={<KYCPending />} />
       <Route path="/onboarding/kyc-rejected" element={<KYCRejected />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/booking/request" element={<BookingRequest />} />
-      <Route path="/booking/quotation" element={<Quotation />} />
-      <Route path="/booking/payment" element={<Payment />} />
-      <Route path="/booking/confirmation" element={<Confirmation />} />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/booking/request" element={<ProtectedRoute><BookingRequest /></ProtectedRoute>} />
+      <Route path="/booking/quotation" element={<ProtectedRoute><Quotation /></ProtectedRoute>} />
+      <Route path="/booking/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
+      <Route path="/booking/confirmation" element={<ProtectedRoute><Confirmation /></ProtectedRoute>} />
       <Route path="/track" element={<TrackShipment />} />
       <Route path="/tracking" element={<TrackShipment />} />
-      <Route path="/invoice/:id" element={<Invoice />} />
-      <Route path="/profile" element={<ManageProfile />} />
-      <Route path="/reports" element={<Reports />} />
+      <Route path="/invoice/:id" element={<ProtectedRoute><Invoice /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><ManageProfile /></ProtectedRoute>} />
+      <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
     </Routes>
   )
 }

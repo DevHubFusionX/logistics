@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import LoadingScreen from './components/LoadingScreen'
 import AppRoutes from './routes/AppRoutes'
+import { AuthProvider } from './hooks/useAuth.jsx'
 
 function AppContent() {
   const location = useLocation()
@@ -38,9 +39,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <AuthProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </AuthProvider>
   )
 }
 
