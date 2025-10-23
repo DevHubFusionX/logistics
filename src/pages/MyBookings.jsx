@@ -7,8 +7,10 @@ import BookingsStats from '../components/booking/BookingsStats';
 import BookingsEmptyState from '../components/booking/BookingsEmptyState';
 import BookingsLoadingState from '../components/booking/BookingsLoadingState';
 import bookingService from '../services/bookingService';
+import { useAuth } from '../hooks/useAuth';
 
 const MyBookings = () => {
+  const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -23,14 +25,16 @@ const MyBookings = () => {
   const fetchBookings = async (page = 1) => {
     try {
       setLoading(true);
-      const response = await bookingService.getBookings(page, 10);
+      const response = await bookingService.getBookings(page, 100);
       
       if (response.error) {
         setError(response.message || 'Failed to fetch bookings');
         return;
       }
 
-      setBookings(response.data?.records || []);
+      const allBookings = response.data?.records || [];
+      const userBookings = allBookings.filter(booking => booking.createdBy === user?._id);
+      setBookings(userBookings);
       setPagination(response.data?.pagination || {});
       setError(null);
     } catch (err) {
@@ -42,8 +46,10 @@ const MyBookings = () => {
   };
 
   useEffect(() => {
-    fetchBookings(currentPage);
-  }, [currentPage]);
+    if (user) {
+      fetchBookings(currentPage);
+    }
+  }, [currentPage, user]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

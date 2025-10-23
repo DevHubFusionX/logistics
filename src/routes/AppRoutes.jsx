@@ -3,6 +3,10 @@ import Home from '../pages/Home'
 import Pricing from '../pages/Pricing'
 import About from '../pages/About'
 import Services from '../pages/Services'
+import Portfolio from '../pages/Portfolio'
+import Team from '../pages/Team'
+import Blog from '../pages/Blog'
+import Contact from '../pages/Contact'
 import SignUp from '../pages/auth/SignUp'
 import Login from '../pages/auth/Login'
 import ForgotPassword from '../pages/auth/ForgotPassword'
@@ -30,6 +34,10 @@ export default function AppRoutes() {
       <Route path="/services" element={<Services />} />
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/about" element={<About />} />
+      <Route path="/portfolio" element={<Portfolio />} />
+      <Route path="/team" element={<Team />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="/auth/signup" element={<SignUp />} />
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/forgot-password" element={<ForgotPassword />} />

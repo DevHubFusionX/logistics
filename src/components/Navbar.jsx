@@ -23,8 +23,11 @@ export default function Navbar() {
 
   const navLinks = [
     { path: '/services', label: 'Services' },
-    { path: '/pricing', label: 'Pricing' },
     { path: '/about', label: 'About' },
+    { path: '/portfolio', label: 'Portfolio' },
+    { path: '/team', label: 'Team' },
+    { path: '/blog', label: 'Blog' },
+    { path: '/contact', label: 'Contact' },
   ]
 
   return (
