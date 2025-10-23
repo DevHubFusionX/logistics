@@ -8,15 +8,20 @@ import { AuthProvider } from './hooks/useAuth.jsx'
 
 function AppContent() {
   const location = useLocation()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(() => {
+    return !sessionStorage.getItem('hasVisited')
+  })
   const isAuthPage = location.pathname.startsWith('/auth') || location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/booking') || location.pathname.startsWith('/invoice') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/reports') ||location.pathname.startsWith('/tracking')
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 3500)
-    return () => clearTimeout(timer)
-  }, [])
+    if (isLoading) {
+      const timer = setTimeout(() => {
+        setIsLoading(false)
+        sessionStorage.setItem('hasVisited', 'true')
+      }, 3500)
+      return () => clearTimeout(timer)
+    }
+  }, [isLoading])
 
   useEffect(() => {
     window.scrollTo(0, 0)
