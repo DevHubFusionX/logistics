@@ -56,6 +56,19 @@ export default function PickupStep({ data, onChange }) {
                 />
               </div>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                value={data.pickupPerson.email}
+                onChange={(e) => handlePersonChange('email', e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                placeholder="pickup@company.com"
+                required
+              />
+            </div>
           </div>
         </div>
 

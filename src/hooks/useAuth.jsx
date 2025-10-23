@@ -1,5 +1,5 @@
 import { useState, useEffect, createContext, useContext } from 'react'
-import { authService } from '../services/api'
+import authService from '../services/authService'
 
 const AuthContext = createContext()
 
@@ -16,27 +16,41 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    const userData = localStorage.getItem('user')
-    
-    if (token && userData) {
-      setUser(JSON.parse(userData))
+    const initAuth = async () => {
+      const token = localStorage.getItem('token')
+      
+      if (token) {
+        try {
+          const response = await authService.getProfile()
+          if (response.data?.user) {
+            setUser(response.data.user)
+            localStorage.setItem('user', JSON.stringify(response.data.user))
+          }
+        } catch (err) {
+          console.error('Failed to fetch profile:', err)
+          localStorage.clear()
+        }
+      }
+      setLoading(false)
     }
-    setLoading(false)
+    
+    initAuth()
   }, [])
 
   const login = async (credentials) => {
     const response = await authService.login(credentials)
-    if (response.success) {
-      localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data))
-      setUser(response.data)
+    if (response.data?.token) {
+      setUser(response.data.user)
     }
     return response
   }
 
   const register = async (userData) => {
-    return await authService.register(userData)
+    const response = await authService.register(userData)
+    if (response.data?.token) {
+      setUser(response.data.user)
+    }
+    return response
   }
 
   const logout = () => {

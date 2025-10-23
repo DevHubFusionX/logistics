@@ -2,21 +2,39 @@ import httpClient from './httpClient'
 
 class AuthService {
   async register(userData) {
-    return httpClient.request('/auth/register', {
+    localStorage.clear();
+    
+    const response = await httpClient.request('/auth/sign-up', {
       method: 'POST',
       body: JSON.stringify(userData),
     })
+    
+    if (response.data?.token) {
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+    }
+    
+    return response
   }
 
   async login(credentials) {
-    return httpClient.request('/auth/login', {
+    localStorage.clear();
+    
+    const response = await httpClient.request('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     })
+    
+    if (response.data?.token) {
+      localStorage.setItem('token', response.data.token)
+      localStorage.setItem('user', JSON.stringify(response.data.user))
+    }
+    
+    return response
   }
 
   async getProfile() {
-    return httpClient.request('/auth/me')
+    return httpClient.request('/user/')
   }
 
   async forgotPassword(email) {

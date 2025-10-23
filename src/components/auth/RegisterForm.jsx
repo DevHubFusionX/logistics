@@ -14,27 +14,62 @@ export default function RegisterForm() {
     phoneNumber: '',
     address: '',
     companyName: '',
+    clientCategory: 'Enterprise',
+    verified: false,
     password: ''
   })
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({})
+  const [passwordStrength, setPasswordStrength] = useState(0)
+
+  const validatePassword = (password) => {
+    let strength = 0
+    if (password.length >= 8) strength++
+    if (/[A-Z]/.test(password)) strength++
+    if (/[a-z]/.test(password)) strength++
+    if (/[0-9]/.test(password)) strength++
+    if (/[^A-Za-z0-9]/.test(password)) strength++
+    return strength
+  }
+
+  const handlePasswordChange = (password) => {
+    setFormData({ ...formData, password })
+    setPasswordStrength(validatePassword(password))
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setSuccess('')
 
     try {
+      setFieldErrors({})
       const response = await register(formData)
       
-      if (response.success) {
-        navigate('/auth/login', { 
-          state: { message: 'Registration successful! Please login.' }
-        })
+      if (response.data?.token) {
+        setSuccess('Account created successfully! Redirecting to dashboard...')
+        setError('')
+        setTimeout(() => {
+          navigate('/dashboard', { 
+            state: { message: 'Welcome to Dara Logistics!' }
+          })
+        }, 1500)
       }
     } catch (error) {
-      setError(error.message || 'Registration failed')
+      if (error.message.includes('email') && error.message.includes('exists')) {
+        setFieldErrors({ email: 'Email already registered' })
+        setError('An account with this email already exists. Please use a different email or try logging in.')
+      } else if (error.message.includes('validation')) {
+        setError('Please check all fields and try again.')
+      } else if (error.message.includes('network')) {
+        setError('Connection error. Please check your internet and try again.')
+      } else {
+        setError(error.message || 'Registration failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -58,9 +93,25 @@ export default function RegisterForm() {
       </motion.div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+        <motion.div 
+          className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="w-4 h-4 bg-red-500 rounded-full flex-shrink-0"></div>
           {error}
-        </div>
+        </motion.div>
+      )}
+
+      {success && (
+        <motion.div 
+          className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm flex items-center gap-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="w-4 h-4 bg-green-500 rounded-full flex-shrink-0"></div>
+          {success}
+        </motion.div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -162,7 +213,7 @@ export default function RegisterForm() {
             <input
               type={showPassword ? "text" : "password"}
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              onChange={(e) => handlePasswordChange(e.target.value)}
               className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
               placeholder="Create password"
               required
@@ -175,6 +226,34 @@ export default function RegisterForm() {
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
+          {formData.password && (
+            <div className="mt-2">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs text-gray-600">Password strength:</span>
+                <div className="flex gap-1">
+                  {[1,2,3,4,5].map((level) => (
+                    <div 
+                      key={level}
+                      className={`w-4 h-1 rounded-full ${
+                        passwordStrength >= level 
+                          ? passwordStrength <= 2 ? 'bg-red-400' 
+                            : passwordStrength <= 3 ? 'bg-yellow-400' 
+                            : 'bg-green-400'
+                          : 'bg-gray-200'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span className={`text-xs ${
+                  passwordStrength <= 2 ? 'text-red-500' 
+                    : passwordStrength <= 3 ? 'text-yellow-500' 
+                    : 'text-green-500'
+                }`}>
+                  {passwordStrength <= 2 ? 'Weak' : passwordStrength <= 3 ? 'Medium' : 'Strong'}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         <motion.button
@@ -184,7 +263,18 @@ export default function RegisterForm() {
           whileHover={{ scale: loading ? 1 : 1.02 }}
           whileTap={{ scale: loading ? 1 : 0.98 }}
         >
-          {loading ? 'Creating Account...' : 'Create Account'}
+          {loading ? (
+            <div className="flex items-center justify-center gap-3">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              </div>
+              <span className="opacity-90">Creating Account</span>
+            </div>
+          ) : (
+            'Create Account'
+          )}
         </motion.button>
       </form>
 

@@ -4,7 +4,7 @@ import { useLocation, Link } from 'react-router-dom'
 
 export default function Confirmation() {
   const location = useLocation()
-  const { bookingData, quote, bookingId, paymentId } = location.state || {}
+  const bookingData = location.state?.bookingData || location.state
 
   if (!bookingData) {
     return (
@@ -17,6 +17,15 @@ export default function Confirmation() {
         </div>
       </div>
     )
+  }
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A'
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    })
   }
 
   return (
@@ -55,11 +64,11 @@ export default function Confirmation() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="p-4 bg-sky-50 rounded-lg">
                   <h3 className="font-semibold text-gray-900 mb-1">Booking ID</h3>
-                  <p className="font-mono text-sky-600 text-lg">{bookingId}</p>
+                  <p className="font-mono text-sky-600 text-lg">{bookingData._id || 'N/A'}</p>
                 </div>
                 <div className="p-4 bg-green-50 rounded-lg">
-                  <h3 className="font-semibold text-gray-900 mb-1">Payment ID</h3>
-                  <p className="font-mono text-green-600 text-lg">{paymentId}</p>
+                  <h3 className="font-semibold text-gray-900 mb-1">Status</h3>
+                  <p className="font-medium text-green-600 text-lg capitalize">{bookingData.status || 'Pending'}</p>
                 </div>
               </div>
 
@@ -72,13 +81,19 @@ export default function Confirmation() {
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <h4 className="font-semibold text-gray-900 mb-2">Pickup Location</h4>
-                    <p className="text-gray-600 text-sm">{bookingData.fromAddress}</p>
-                    <p className="text-sky-600 text-sm mt-2">Date: {bookingData.pickupDate}</p>
+                    <p className="text-gray-600 text-sm">
+                      {bookingData.pickupLocation?.address}, {bookingData.pickupLocation?.city}, {bookingData.pickupLocation?.state}
+                    </p>
+                    <p className="text-sky-600 text-sm mt-2">Contact: {bookingData.pickupPerson?.name}</p>
+                    <p className="text-gray-500 text-xs mt-1">Date: {formatDate(bookingData.estimatedPickupDate)}</p>
                   </div>
                   <div className="p-4 border border-gray-200 rounded-lg">
                     <h4 className="font-semibold text-gray-900 mb-2">Delivery Location</h4>
-                    <p className="text-gray-600 text-sm">{bookingData.toAddress}</p>
-                    <p className="text-sky-600 text-sm mt-2">Expected: {bookingData.deliveryDate}</p>
+                    <p className="text-gray-600 text-sm">
+                      {bookingData.dropoffLocation?.address}, {bookingData.dropoffLocation?.city}, {bookingData.dropoffLocation?.state}
+                    </p>
+                    <p className="text-green-600 text-sm mt-2">Contact: {bookingData.receiverPerson?.name}</p>
+                    <p className="text-gray-500 text-xs mt-1">Expected: {formatDate(bookingData.estimatedDeliveryDate)}</p>
                   </div>
                 </div>
               </div>
@@ -91,16 +106,29 @@ export default function Confirmation() {
                 </h3>
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-1">Type</h4>
-                    <p className="text-gray-600 capitalize">{bookingData.packageType}</p>
+                    <h4 className="font-semibold text-gray-900 mb-1">Goods Type</h4>
+                    <p className="text-gray-600 capitalize">{bookingData.goodsType}</p>
                   </div>
                   <div className="p-4 bg-gray-50 rounded-lg">
                     <h4 className="font-semibold text-gray-900 mb-1">Weight</h4>
-                    <p className="text-gray-600">{bookingData.weight} kg</p>
+                    <p className="text-gray-600">{bookingData.cargoWeightKg} kg</p>
                   </div>
                   <div className="p-4 bg-gray-50 rounded-lg">
-                    <h4 className="font-semibold text-gray-900 mb-1">Value</h4>
-                    <p className="text-gray-600">${bookingData.value}</p>
+                    <h4 className="font-semibold text-gray-900 mb-1">Quantity</h4>
+                    <p className="text-gray-600">{bookingData.quantity} items</p>
+                  </div>
+                </div>
+                
+                {/* Additional Info */}
+                <div className="grid md:grid-cols-2 gap-4 mt-4">
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-1">Vehicle Type</h4>
+                    <p className="text-gray-600 capitalize">{bookingData.vehicleType}</p>
+                  </div>
+                  <div className="p-4 bg-purple-50 rounded-lg">
+                    <h4 className="font-semibold text-gray-900 mb-1">Customer</h4>
+                    <p className="text-gray-600">{bookingData.fullNameOrBusiness}</p>
+                    <p className="text-gray-500 text-xs mt-1">{bookingData.email}</p>
                   </div>
                 </div>
               </div>
@@ -123,7 +151,7 @@ export default function Confirmation() {
                     <div className="w-6 h-6 bg-sky-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
                     <div>
                       <p className="font-semibold text-gray-900">Package Collection</p>
-                      <p className="text-gray-600 text-sm">Your package will be collected on {bookingData.pickupDate}</p>
+                      <p className="text-gray-600 text-sm">Your package will be collected on {formatDate(bookingData.estimatedPickupDate)}</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -145,32 +173,34 @@ export default function Confirmation() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            {/* Payment Summary */}
+            {/* Booking Summary */}
             <div className="bg-white rounded-2xl shadow-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Payment Summary</h3>
-              <div className="space-y-2 mb-4">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Shipping</span>
-                  <span>${quote.basePrice}</span>
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Booking Summary</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Created</span>
+                  <span className="font-medium">{formatDate(bookingData.createdAt)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Insurance</span>
-                  <span>${quote.insurance}</span>
+                <div className="flex justify-between text-sm">
+                  <span className="text-gray-600">Customer Type</span>
+                  <span className="font-medium capitalize">{bookingData.customerType}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Handling</span>
-                  <span>${quote.handling}</span>
-                </div>
-                <div className="border-t pt-2">
-                  <div className="flex justify-between font-bold text-lg">
-                    <span>Total Paid</span>
-                    <span className="text-green-600">${quote.total}</span>
+                {bookingData.isFragile && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Special</span>
+                    <span className="font-medium text-red-600">Fragile</span>
                   </div>
-                </div>
+                )}
+                {bookingData.isPerishable && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Temperature</span>
+                    <span className="font-medium text-blue-600">{bookingData.tempControlCelsius}°C</span>
+                  </div>
+                )}
               </div>
-              <div className="text-center">
+              <div className="mt-4 pt-4 border-t text-center">
                 <span className="inline-block px-3 py-1 bg-green-100 text-green-800 text-sm font-medium rounded-full">
-                  Payment Successful
+                  Booking Confirmed
                 </span>
               </div>
             </div>

@@ -43,8 +43,8 @@ export default function CargoStep({ data, onChange }) {
           </label>
           <input
             type="number"
-            value={data.cargoWeightKg}
-            onChange={(e) => handleChange('cargoWeightKg', parseFloat(e.target.value))}
+            value={data.cargoWeightKg || ''}
+            onChange={(e) => handleChange('cargoWeightKg', parseFloat(e.target.value) || 0)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
             placeholder="50"
             min="0.1"
@@ -59,8 +59,8 @@ export default function CargoStep({ data, onChange }) {
           </label>
           <input
             type="number"
-            value={data.quantity}
-            onChange={(e) => handleChange('quantity', parseInt(e.target.value))}
+            value={data.quantity || ''}
+            onChange={(e) => handleChange('quantity', parseInt(e.target.value) || 0)}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
             placeholder="3"
             min="1"
@@ -99,8 +99,8 @@ export default function CargoStep({ data, onChange }) {
                 </label>
                 <input
                   type="number"
-                  value={data.tempControlCelsius}
-                  onChange={(e) => handleChange('tempControlCelsius', parseFloat(e.target.value))}
+                  value={data.tempControlCelsius || ''}
+                  onChange={(e) => handleChange('tempControlCelsius', parseFloat(e.target.value) || 20)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
                   placeholder="5"
                   step="0.1"
@@ -108,6 +108,48 @@ export default function CargoStep({ data, onChange }) {
               </div>
             )}
           </div>
+        </div>
+
+
+
+        <div className="grid md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Estimated Pickup Date *
+            </label>
+            <input
+              type="datetime-local"
+              value={data.estimatedPickupDate}
+              onChange={(e) => handleChange('estimatedPickupDate', e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Estimated Delivery Date *
+            </label>
+            <input
+              type="datetime-local"
+              value={data.estimatedDeliveryDate}
+              onChange={(e) => handleChange('estimatedDeliveryDate', e.target.value)}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+              required
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Additional Notes
+          </label>
+          <textarea
+            value={data.notes}
+            onChange={(e) => handleChange('notes', e.target.value)}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+            placeholder="Any special instructions or requirements..."
+            rows="3"
+          />
         </div>
       </div>
     </div>

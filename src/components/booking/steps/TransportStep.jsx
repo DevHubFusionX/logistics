@@ -26,8 +26,8 @@ export default function TransportStep({ data, onChange }) {
     }
   ]
 
-  const handleSelect = (transportMode) => {
-    onChange({ transportMode })
+  const handleSelect = (vehicleType) => {
+    onChange({ vehicleType })
   }
 
   return (
@@ -40,7 +40,7 @@ export default function TransportStep({ data, onChange }) {
       <div className="space-y-4">
         {transportModes.map((mode) => {
           const IconComponent = mode.icon
-          const isSelected = data.transportMode === mode.id
+          const isSelected = data.vehicleType === mode.id
           
           return (
             <motion.div

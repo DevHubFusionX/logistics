@@ -18,10 +18,10 @@ export default function ReviewStep({ data, onSubmit, loading, onChange }) {
         <div className="bg-blue-50 p-4 rounded-lg">
           <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
             <Package className="w-5 h-5 text-blue-500" />
-            Transport Mode
+            Vehicle Type
           </h4>
           <div className="text-sm">
-            <span className="font-medium capitalize">{data.transportMode?.replace('_', ' ')}</span>
+            <span className="font-medium capitalize">{data.vehicleType?.replace('_', ' ')}</span>
           </div>
         </div>
 

@@ -2,40 +2,31 @@ import httpClient from './httpClient'
 
 class BookingService {
   async createBooking(bookingData) {
-    return httpClient.request('/api/bookings', {
+    return httpClient.request('/bookings/', {
       method: 'POST',
       body: JSON.stringify(bookingData),
     })
   }
 
-  async getAllBookings(params = {}) {
-    const queryString = new URLSearchParams(params).toString()
-    return httpClient.request(`/api/bookings${queryString ? '?' + queryString : ''}`)
+  async getBookings(page = 1, limit = 10) {
+    return httpClient.request(`/bookings/?limit=${limit}&page=${page}`)
   }
 
   async getBooking(id) {
-    return httpClient.request(`/api/bookings/${id}`)
+    return httpClient.request(`/bookings/${id}`)
   }
 
-  async updateBooking(id, updateData) {
-    return httpClient.request(`/api/bookings/${id}`, {
+  async updateBooking(id, bookingData) {
+    return httpClient.request(`/bookings/${id}`, {
       method: 'PATCH',
-      body: JSON.stringify(updateData),
+      body: JSON.stringify(bookingData),
     })
   }
 
   async cancelBooking(id) {
-    return httpClient.request(`/api/bookings/${id}`, {
-      method: 'DELETE',
+    return httpClient.request(`/bookings/cancel/${id}`, {
+      method: 'PATCH',
     })
-  }
-
-  async getBookingStatus(id) {
-    return httpClient.request(`/api/bookings/${id}/status`)
-  }
-
-  async trackBooking(trackingNumber) {
-    return httpClient.request(`/api/bookings/track/${trackingNumber}`)
   }
 }
 

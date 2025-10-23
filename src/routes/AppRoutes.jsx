@@ -18,6 +18,8 @@ import Confirmation from '../pages/booking/Confirmation'
 import TrackShipment from '../pages/tracking/TrackShipment'
 import Invoice from '../pages/tracking/Invoice'
 import ManageProfile from '../pages/ManageProfile'
+import MyBookings from '../pages/MyBookings'
+import BookingDetail from '../pages/BookingDetail'
 import Reports from '../pages/Reports'
 import ProtectedRoute from '../components/ProtectedRoute'
 
@@ -44,6 +46,8 @@ export default function AppRoutes() {
       <Route path="/tracking" element={<TrackShipment />} />
       <Route path="/invoice/:id" element={<ProtectedRoute><Invoice /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><ManageProfile /></ProtectedRoute>} />
+      <Route path="/bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
+      <Route path="/bookings/:id" element={<ProtectedRoute><BookingDetail /></ProtectedRoute>} />
       <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
     </Routes>
   )

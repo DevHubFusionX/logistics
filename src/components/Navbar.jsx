@@ -40,10 +40,10 @@ export default function Navbar() {
                 <Link to="/dashboard" className="text-gray-700 hover:text-sky-600 px-3 py-2 text-sm font-medium">
                   Dashboard
                 </Link>
-                <div className="flex items-center space-x-2">
+                <Link to="/profile" className="flex items-center space-x-2 hover:text-sky-600 transition-colors">
                   <User className="w-4 h-4 text-gray-500" />
                   <span className="text-sm text-gray-700">{user.firstName}</span>
-                </div>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-1 text-gray-700 hover:text-red-600 px-3 py-2 text-sm font-medium"
@@ -95,9 +95,9 @@ export default function Navbar() {
                 <Link to="/dashboard" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-sky-600">
                   Dashboard
                 </Link>
-                <div className="px-3 py-2 text-sm text-gray-500">
-                  Welcome, {user.firstName}
-                </div>
+                <Link to="/profile" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-sky-600">
+                  Profile
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="block w-full text-left px-3 py-2 text-base font-medium text-red-600 hover:text-red-700"

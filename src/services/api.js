@@ -12,12 +12,8 @@ class ApiService {
 
   // Booking methods
   createBooking = bookingService.createBooking.bind(bookingService)
-  getAllBookings = bookingService.getAllBookings.bind(bookingService)
+  getBookings = bookingService.getBookings.bind(bookingService)
   getBooking = bookingService.getBooking.bind(bookingService)
-  updateBooking = bookingService.updateBooking.bind(bookingService)
-  cancelBooking = bookingService.cancelBooking.bind(bookingService)
-  getBookingStatus = bookingService.getBookingStatus.bind(bookingService)
-  trackBooking = bookingService.trackBooking.bind(bookingService)
 }
 
 export default new ApiService()

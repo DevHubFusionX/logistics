@@ -14,6 +14,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -23,11 +24,30 @@ export default function LoginForm() {
     try {
       const response = await login(formData)
       
-      if (response.success) {
-        navigate('/dashboard')
+      if (response.data?.token) {
+        // Handle remember me functionality
+        if (rememberMe) {
+          localStorage.setItem('rememberMe', 'true')
+        } else {
+          localStorage.removeItem('rememberMe')
+        }
+        
+        // Show success feedback before redirect
+        setError('')
+        setTimeout(() => {
+          navigate('/dashboard')
+        }, 500)
+      } else {
+        setError('Invalid credentials. Please check your email and password.')
       }
     } catch (error) {
-      setError(error.message || 'Login failed')
+      if (error.message.includes('401') || error.message.includes('unauthorized')) {
+        setError('Invalid email or password. Please try again.')
+      } else if (error.message.includes('network') || error.message.includes('fetch')) {
+        setError('Connection error. Please check your internet and try again.')
+      } else {
+        setError(error.message || 'Login failed. Please try again.')
+      }
     } finally {
       setLoading(false)
     }
@@ -51,9 +71,14 @@ export default function LoginForm() {
       </motion.div>
 
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+        <motion.div 
+          className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <div className="w-4 h-4 bg-red-500 rounded-full flex-shrink-0"></div>
           {error}
-        </div>
+        </motion.div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -69,7 +94,7 @@ export default function LoginForm() {
               type="email"
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg"
+              className="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400"
               placeholder="your.email@company.com"
               required
             />
@@ -88,7 +113,7 @@ export default function LoginForm() {
               type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full pl-10 pr-12 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg"
+              className="w-full pl-10 pr-12 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400"
               placeholder="Enter your password"
               required
             />
@@ -108,11 +133,16 @@ export default function LoginForm() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <label className="flex items-center">
-            <input type="checkbox" className="rounded border-gray-300 text-sky-500 focus:ring-sky-500" />
+          <label className="flex items-center cursor-pointer">
+            <input 
+              type="checkbox" 
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              className="rounded border-gray-300 text-sky-500 focus:ring-sky-500" 
+            />
             <span className="ml-2 text-sm text-gray-600 font-medium">Keep me signed in</span>
           </label>
-          <Link to="/auth/forgot-password" className="text-sm text-sky-500 hover:text-sky-600 font-semibold">
+          <Link to="/auth/forgot-password" className="text-sm text-sky-500 hover:text-sky-600 font-semibold transition-colors">
             Forgot password?
           </Link>
         </motion.div>
@@ -127,7 +157,18 @@ export default function LoginForm() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          {loading ? 'Signing In...' : 'Access Dashboard'}
+          {loading ? (
+            <div className="flex items-center justify-center gap-3">
+              <div className="flex gap-1">
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+              </div>
+              <span className="opacity-90">Signing In</span>
+            </div>
+          ) : (
+            'Access Dashboard'
+          )}
         </motion.button>
       </form>
 
