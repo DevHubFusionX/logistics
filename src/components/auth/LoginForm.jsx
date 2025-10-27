@@ -67,7 +67,7 @@ export default function LoginForm() {
         transition={{ delay: 0.2 }}
       >
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-        <p className="text-gray-600">Sign in to access your logistics dashboard</p>
+        <p className="text-gray-600">Access your logistics command center</p>
       </motion.div>
 
       {error && (
@@ -95,7 +95,7 @@ export default function LoginForm() {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400"
-              placeholder="your.email@company.com"
+              placeholder="Enter your email address"
               required
             />
           </div>
@@ -142,7 +142,7 @@ export default function LoginForm() {
             />
             <span className="ml-2 text-sm text-gray-600 font-medium">Keep me signed in</span>
           </label>
-          <Link to="/auth/forgot-password" className="text-sm text-sky-500 hover:text-sky-600 font-semibold transition-colors">
+          <Link to="/auth/forgot-password" className="text-sm text-sky-600 hover:text-sky-700 font-semibold transition-colors">
             Forgot password?
           </Link>
         </motion.div>
@@ -150,7 +150,7 @@ export default function LoginForm() {
         <motion.button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-sky-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-sky-600 to-blue-700 text-white py-4 rounded-lg font-semibold text-lg hover:from-sky-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           whileHover={{ scale: loading ? 1 : 1.02 }}
           whileTap={{ scale: loading ? 1 : 0.98 }}
           initial={{ opacity: 0, y: 20 }}
@@ -167,7 +167,7 @@ export default function LoginForm() {
               <span className="opacity-90">Signing In</span>
             </div>
           ) : (
-            'Access Dashboard'
+            'Sign In to Dashboard'
           )}
         </motion.button>
       </form>
@@ -180,7 +180,7 @@ export default function LoginForm() {
       >
         <p className="text-gray-600">
           New to Dara Logistics?{' '}
-          <Link to="/auth/signup" className="text-sky-500 hover:text-sky-600 font-semibold">
+          <Link to="/auth/signup" className="text-sky-600 hover:text-sky-700 font-semibold transition-colors">
             Create your account
           </Link>
         </p>

@@ -1,44 +1,63 @@
 import { motion } from 'framer-motion'
-import { BarChart3, Users, TrendingUp, Award } from 'lucide-react'
+import { Truck, Shield, Clock, Users, CheckCircle } from 'lucide-react'
 
 export default function AuthLayout({ children, title, subtitle }) {
-  const stats = [
-    { icon: BarChart3, value: "99.9%", label: "Delivery Success Rate" },
-    { icon: Users, value: "10K+", label: "Active Businesses" },
-    { icon: TrendingUp, value: "40%", label: "Cost Reduction" },
-    { icon: Award, value: "#1", label: "Logistics Platform" }
+  const features = [
+    { icon: Truck, title: "Real-Time Tracking", desc: "Monitor every shipment" },
+    { icon: Shield, title: "Secure Operations", desc: "Enterprise-grade security" },
+    { icon: Clock, title: "24/7 Support", desc: "Round-the-clock assistance" },
+    { icon: Users, title: "Trusted by 10K+", desc: "Businesses nationwide" }
+  ]
+
+  const achievements = [
+    "99.9% On-Time Delivery Rate",
+    "ISO 9001:2015 Certified",
+    "24/7 Customer Support",
+    "Real-Time GPS Tracking"
   ]
 
   return (
-    <div className="min-h-screen bg-white flex">
-      {/* Left Column - Content */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex">
+      {/* Left Column - Branding & Features */}
       <motion.div
-        className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sky-600 to-blue-700 p-12 flex-col justify-center"
+        className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-sky-600 via-sky-700 to-blue-800 p-12 flex-col justify-center relative overflow-hidden"
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="max-w-lg">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-20 left-20 w-32 h-32 border border-white rounded-full"></div>
+          <div className="absolute bottom-32 right-16 w-24 h-24 border border-white rounded-full"></div>
+          <div className="absolute top-1/2 right-32 w-16 h-16 border border-white rounded-full"></div>
+        </div>
+
+        <div className="max-w-lg relative z-10">
+          {/* Logo Section */}
           <motion.div
-            className="flex items-center gap-3 mb-8"
+            className="flex items-center gap-4 mb-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center">
-              <span className="text-sky-600 font-bold text-xl">D</span>
-            </div>
-            <span className="text-white text-2xl font-bold">Dara Logistics</span>
+            <img 
+              src="/src/assets/img/logo/DARA 1.png" 
+              alt="Dara Logistics" 
+              className="w-48 h-48 object-contain filter brightness-0 invert"
+            />
           </motion.div>
 
-          <motion.h1
+          {/* Main Content */}
+          <motion.h2
             className="text-4xl font-bold text-white mb-6 leading-tight"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
-            {title || "Welcome to Your Logistics Command Center"}
-          </motion.h1>
+            Nigeria's Leading
+            <br />
+            <span className="text-sky-200">Logistics Platform</span>
+          </motion.h2>
 
           <motion.p
             className="text-sky-100 text-lg mb-8 leading-relaxed"
@@ -46,47 +65,70 @@ export default function AuthLayout({ children, title, subtitle }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
           >
-            {subtitle || "Access your comprehensive dashboard to manage shipments, track deliveries, and optimize your supply chain operations with real-time insights and analytics."}
+            Streamline your supply chain with our comprehensive logistics management system. 
+            From last-mile delivery to enterprise solutions.
           </motion.p>
 
-          <div className="grid grid-cols-2 gap-6 mb-8">
-            {stats.map((stat, index) => {
-              const IconComponent = stat.icon
+          {/* Features Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-8">
+            {features.map((feature, index) => {
+              const IconComponent = feature.icon
               return (
                 <motion.div
                   key={index}
-                  className="text-center"
+                  className="bg-sky-500/20 backdrop-blur-sm p-4 rounded-xl border border-sky-400/30"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
                 >
-                  <div className="w-12 h-12 bg-sky-500 rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <IconComponent className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
-                  <div className="text-sky-200 text-sm">{stat.label}</div>
+                  <IconComponent className="w-8 h-8 text-sky-200 mb-2" />
+                  <h4 className="text-white font-semibold text-sm mb-1">{feature.title}</h4>
+                  <p className="text-sky-200 text-xs">{feature.desc}</p>
                 </motion.div>
               )
             })}
           </div>
 
+          {/* Achievements */}
           <motion.div
-            className="p-6 bg-sky-500/20 rounded-xl border border-sky-400/30"
+            className="space-y-3"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
           >
-            <h3 className="text-white font-semibold mb-2">Secure & Compliant</h3>
-            <p className="text-sky-100 text-sm">
-              Your data is protected with enterprise-grade security, SOC 2 compliance, and end-to-end encryption for complete peace of mind.
-            </p>
+            {achievements.map((achievement, index) => (
+              <motion.div
+                key={index}
+                className="flex items-center gap-3"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 1 + index * 0.1 }}
+              >
+                <CheckCircle className="w-5 h-5 text-sky-300" />
+                <span className="text-sky-100 text-sm font-medium">{achievement}</span>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
       </motion.div>
 
       {/* Right Column - Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        {children}
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 lg:p-12">
+        <div className="w-full max-w-md">
+          {/* Mobile Logo */}
+          <motion.div
+            className="lg:hidden flex items-center justify-center gap-3 mb-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <img 
+              src="/src/assets/img/logo/DARA 1.png" 
+              alt="Dara Logistics" 
+              className="w-32 h-32 object-contain filter brightness-0 invert"
+            />
+          </motion.div>
+          {children}
+        </div>
       </div>
     </div>
   )

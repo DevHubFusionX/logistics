@@ -89,7 +89,7 @@ export default function RegisterForm() {
         transition={{ delay: 0.2 }}
       >
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
-        <p className="text-gray-600">Join Dara Logistics today</p>
+        <p className="text-gray-600">Start shipping smarter today</p>
       </motion.div>
 
       {error && (
@@ -155,7 +155,7 @@ export default function RegisterForm() {
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-              placeholder="your.email@company.com"
+              placeholder="Enter your business email"
               required
             />
           </div>
@@ -170,7 +170,7 @@ export default function RegisterForm() {
               value={formData.phoneNumber}
               onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
-              placeholder="0909998998"
+              placeholder="Enter phone number"
               required
             />
           </div>
@@ -259,7 +259,7 @@ export default function RegisterForm() {
         <motion.button
           type="submit"
           disabled={loading}
-          className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white py-4 rounded-lg font-semibold text-lg hover:from-sky-400 hover:to-blue-500 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50"
+          className="w-full bg-gradient-to-r from-sky-600 to-blue-700 text-white py-4 rounded-lg font-semibold text-lg hover:from-sky-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
           whileHover={{ scale: loading ? 1 : 1.02 }}
           whileTap={{ scale: loading ? 1 : 0.98 }}
         >
@@ -273,7 +273,7 @@ export default function RegisterForm() {
               <span className="opacity-90">Creating Account</span>
             </div>
           ) : (
-            'Create Account'
+            'Join Dara Logistics'
           )}
         </motion.button>
       </form>
@@ -286,7 +286,7 @@ export default function RegisterForm() {
       >
         <p className="text-gray-600">
           Already have an account?{' '}
-          <Link to="/auth/login" className="text-sky-500 hover:text-sky-600 font-semibold">
+          <Link to="/auth/login" className="text-sky-600 hover:text-sky-700 font-semibold transition-colors">
             Sign in
           </Link>
         </p>

@@ -1,14 +1,20 @@
-/* Dara Logistics Theme Variables - White & Sky Blue */
+/* Dara Logistics Theme Variables - Blue, White & Green */
 :root {
-  /* Primary Colors - Sky Blue */
+  /* Primary Colors - Blue */
+  --primary-blue: #1e40af;
+  --primary-blue-light: #3b82f6;
+  --primary-blue-dark: #1e3a8a;
   --primary-sky: #0ea5e9;
   --primary-sky-light: #38bdf8;
   --primary-sky-dark: #0284c7;
 
-  /* Secondary Colors - Light Blues */
-  --secondary-blue: #3b82f6;
-  --secondary-blue-light: #60a5fa;
-  --secondary-blue-dark: #2563eb;
+  /* Secondary Colors - Green */
+  --secondary-green: #059669;
+  --secondary-green-light: #10b981;
+  --secondary-green-dark: #047857;
+  --accent-green: #22c55e;
+  --accent-green-light: #4ade80;
+  --accent-green-dark: #16a34a;
 
   /* Neutral Colors - White & Grays */
   --white: #ffffff;
@@ -30,24 +36,41 @@
   --glass-border: rgba(14, 165, 233, 0.2);
   --glass-blur: blur(16px);
 
-  /* Gradients */
+  /* Brand Gradients */
   --gradient-primary: linear-gradient(
     135deg,
-    var(--primary-sky),
-    var(--secondary-blue)
+    var(--primary-blue),
+    var(--primary-sky)
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--secondary-green),
+    var(--accent-green)
+  );
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--primary-blue) 0%,
+    var(--primary-sky) 50%,
+    var(--secondary-green) 100%
   );
   --gradient-light: linear-gradient(135deg, var(--white), var(--gray-50));
 
   /* Shadows */
   --shadow-glass: 0 25px 50px -12px rgba(14, 165, 233, 0.15);
   --shadow-button: 0 10px 25px -5px rgba(14, 165, 233, 0.3);
+  --shadow-green: 0 10px 25px -5px rgba(5, 150, 105, 0.3);
+  --shadow-brand: 0 20px 40px -10px rgba(30, 64, 175, 0.2);
 
   /* Typography */
-  --font-primary: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  --font-primary: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-weight-light: 300;
   --font-weight-normal: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
 
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -86,7 +109,7 @@
 }
 
 .btn-primary {
-  background: var(--primary-sky);
+  background: var(--gradient-primary);
   color: white;
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-lg);
@@ -96,13 +119,28 @@
 }
 
 .btn-primary:hover {
-  background: var(--primary-sky-light);
+  background: var(--gradient-brand);
+  transform: scale(1.05);
+}
+
+.btn-secondary {
+  background: var(--gradient-secondary);
+  color: white;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-green);
+}
+
+.btn-secondary:hover {
+  background: var(--accent-green);
   transform: scale(1.05);
 }
 
 .btn-outline {
-  border: 2px solid var(--primary-sky);
-  color: var(--primary-sky);
+  border: 2px solid var(--primary-blue);
+  color: var(--primary-blue);
   background: transparent;
   padding: var(--spacing-md) var(--spacing-xl);
   border-radius: var(--radius-lg);
@@ -111,7 +149,22 @@
 }
 
 .btn-outline:hover {
-  background: var(--primary-sky);
+  background: var(--primary-blue);
+  color: white;
+}
+
+.btn-outline-green {
+  border: 2px solid var(--secondary-green);
+  color: var(--secondary-green);
+  background: transparent;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  font-weight: var(--font-weight-semibold);
+  transition: all var(--transition-normal);
+}
+
+.btn-outline-green:hover {
+  background: var(--secondary-green);
   color: white;
 }
 
@@ -120,4 +173,35 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.text-gradient-brand {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-green {
+  background: var(--gradient-secondary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Brand Accent Classes */
+.accent-green {
+  color: var(--secondary-green);
+}
+
+.bg-brand-gradient {
+  background: var(--gradient-brand);
+}
+
+.border-brand {
+  border-color: var(--primary-blue);
+}
+
+.border-green {
+  border-color: var(--secondary-green);
 }

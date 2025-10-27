@@ -23,40 +23,37 @@ export default function Navbar() {
 
   const navLinks = [
     { path: '/services', label: 'Services' },
+    { path: '/tracking', label: 'Track Shipment' },
+    { path: '/pricing', label: 'Pricing' },
     { path: '/about', label: 'About' },
-    { path: '/portfolio', label: 'Portfolio' },
-    { path: '/team', label: 'Team' },
-    { path: '/blog', label: 'Blog' },
     { path: '/contact', label: 'Contact' },
   ]
 
   return (
     <>
-      <nav className="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
+      <nav role="navigation" aria-label="Main navigation" className="bg-white/95 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all">
-                <span className="text-white font-bold text-xl">D</span>
-              </div>
-              <div className="flex flex-col">
-                <span className="text-xl font-bold text-gray-900">Dara Express</span>
-                <span className="text-xs text-gray-500 -mt-1">Global Logistics</span>
-              </div>
+              <img
+                src="/src/assets/img/logo/DARA 1.png"
+                alt="Dara Express Logo"
+                className="h-12 w-auto object-contain group-hover:scale-105 transition-transform"
+              />
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-1">
+            <div className="hidden lg:flex items-center gap-2">
               {navLinks.map(({ path, label }) => (
                 <Link
                   key={path}
                   to={path}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                    isActive(path)
-                      ? 'bg-sky-50 text-sky-600'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-sky-600'
-                  }`}
+                  aria-current={isActive(path) ? 'page' : undefined}
+                  className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${isActive(path)
+                      ? 'bg-gradient-to-r from-sky-500 to-blue-600 text-white shadow-md'
+                      : 'text-gray-700 hover:bg-sky-50 hover:text-sky-600'
+                    }`}
                 >
                   {label}
                 </Link>
@@ -93,15 +90,16 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/auth/login"
-                    className="px-4 py-2 text-gray-700 hover:text-sky-600 rounded-lg hover:bg-gray-50 text-sm font-medium transition-all"
+                    className="px-5 py-2.5 text-gray-700 hover:text-sky-600 rounded-lg hover:bg-sky-50 text-sm font-semibold transition-all"
                   >
-                    Login
+                    Sign In
                   </Link>
                   <Link
-                    to="/auth/signup"
-                    className="px-6 py-2.5 bg-gradient-to-r from-sky-500 to-blue-600 text-white rounded-lg text-sm font-semibold hover:from-sky-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all"
+                    to="/booking/request"
+                    className="px-6 py-2.5 bg-gradient-to-r from-secondary-green to-accent-green  rounded-lg text-sm font-bold hover:shadow-lg transition-all"
+                    aria-label="Book a shipment"
                   >
-                    Get Started
+                    Ship Now
                   </Link>
                 </>
               )}
@@ -110,6 +108,8 @@ export default function Navbar() {
             {/* Mobile Menu Button */}
             <button
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              aria-label={isSidebarOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isSidebarOpen}
               className="lg:hidden p-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-all"
             >
               <Menu className="w-6 h-6" />
@@ -128,27 +128,25 @@ export default function Navbar() {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed top-0 right-0 h-full w-80 bg-gradient-to-b from-white to-gray-50 shadow-2xl z-50 transform transition-transform duration-300 lg:hidden ${
-          isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
+        className={`fixed top-0 right-0 h-full w-80 bg-gradient-to-b from-white to-gray-50 shadow-2xl z-50 transform transition-transform duration-300 lg:hidden ${isSidebarOpen ? 'translate-x-0' : 'translate-x-full'
+          }`}
       >
         <div className="flex flex-col h-full">
           {/* Sidebar Header */}
           <div className="relative p-6 bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-600">
             <button
               onClick={() => setIsSidebarOpen(false)}
+              aria-label="Close navigation"
               className="absolute top-4 right-4 p-2 rounded-lg hover:bg-white/20 transition-all"
             >
               <X className="w-5 h-5 text-white" />
             </button>
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-2xl">D</span>
-              </div>
-              <div>
-                <div className="text-xl font-bold text-white">Dara Express</div>
-                <div className="text-xs text-sky-100">Global Logistics Solutions</div>
-              </div>
+              <img
+                src="/src/assets/img/logo/DARA 1.png"
+                alt="Dara Express Logo"
+                className="h-10 w-auto object-contain filter brightness-0 invert"
+              />
             </div>
             {user && (
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20">
@@ -220,17 +218,17 @@ export default function Navbar() {
 
             {/* Navigation Links */}
             <div className="mb-5">
-              <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Explore</div>
+              <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Explore Services</div>
               <div className="space-y-1">
                 {navLinks.map(({ path, label }) => (
                   <Link
                     key={path}
                     to={path}
-                    className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                      isActive(path)
+                    aria-current={isActive(path) ? 'page' : undefined}
+                    className={`block px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${isActive(path)
                         ? 'bg-sky-50 text-sky-600 shadow-sm'
                         : 'text-gray-700 hover:bg-white hover:shadow-sm'
-                    }`}
+                      }`}
                   >
                     {label}
                   </Link>
@@ -250,7 +248,7 @@ export default function Navbar() {
                     <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
                       <Package className="w-4 h-4" />
                     </div>
-                    <span className="font-semibold">New Shipment</span>
+                    <span className="font-semibold">Book shipment</span>
                   </Link>
                   <Link
                     to="/tracking"
@@ -259,7 +257,7 @@ export default function Navbar() {
                     <div className="w-8 h-8 bg-sky-50 rounded-lg flex items-center justify-center">
                       <MapPin className="w-4 h-4 text-sky-600" />
                     </div>
-                    <span className="font-semibold">Track Shipment</span>
+                    <span className="font-semibold">Track a shipment</span>
                   </Link>
                 </div>
               </div>
@@ -271,7 +269,7 @@ export default function Navbar() {
               <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
                 <div className="flex items-center gap-2 mb-3">
                   <HelpCircle className="w-5 h-5 text-sky-600" />
-                  <span className="font-semibold text-gray-900 text-sm">Need Help?</span>
+                  <span className="font-semibold text-gray-900 text-sm">Need help with shipping?</span>
                 </div>
                 <div className="space-y-2 text-xs text-gray-600">
                   <div className="flex items-center gap-2">
@@ -284,7 +282,7 @@ export default function Navbar() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="w-3.5 h-3.5 text-gray-400" />
-                    <span>24/7 Available</span>
+                    <span>24/7 availability</span>
                   </div>
                 </div>
                 <Link
@@ -303,13 +301,13 @@ export default function Navbar() {
                   to="/auth/login"
                   className="block w-full px-4 py-3 text-center text-gray-700 bg-white border-2 border-gray-200 rounded-xl hover:border-sky-300 hover:bg-sky-50 font-semibold transition-all"
                 >
-                  Login
+                  Sign in
                 </Link>
                 <Link
-                  to="/auth/signup"
+                  to="/booking/request"
                   className="block w-full px-4 py-3 text-center text-white bg-gradient-to-r from-sky-500 to-blue-600 rounded-xl hover:from-sky-600 hover:to-blue-700 font-bold shadow-lg hover:shadow-xl transition-all"
                 >
-                  Get Started Free
+                  Get a quote
                 </Link>
                 <div className="text-center text-xs text-gray-500 mt-2">
                   ✓ No credit card required

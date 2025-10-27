@@ -1,4 +1,4 @@
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://dera-api-age1.onrender.com/api/v1'
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
 
 class HttpClient {
   async request(endpoint, options = {}) {

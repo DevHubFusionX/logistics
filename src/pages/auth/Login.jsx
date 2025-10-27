@@ -4,8 +4,8 @@ import LoginForm from '../../components/auth/LoginForm'
 export default function Login() {
   return (
     <AuthLayout 
-      title="Welcome Back to Your Logistics Command Center"
-      subtitle="Access your comprehensive dashboard to manage shipments, track deliveries, and optimize your supply chain operations with real-time insights and analytics."
+      title="Secure Access Portal"
+      subtitle="Sign in to manage your shipments, track deliveries in real-time, and access powerful logistics analytics from your personalized dashboard."
     >
       <LoginForm />
     </AuthLayout>

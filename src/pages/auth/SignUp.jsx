@@ -4,8 +4,8 @@ import RegisterForm from '../../components/auth/RegisterForm'
 export default function SignUp() {
   return (
     <AuthLayout 
-      title="Join Nigeria's Leading Logistics Platform"
-      subtitle="Transform your business with our comprehensive cold chain solutions. Get access to real-time tracking, competitive pricing, and nationwide coverage from day one."
+      title="Start Your Logistics Journey"
+      subtitle="Join thousands of businesses transforming their supply chain with our comprehensive logistics platform. Get instant access to real-time tracking and nationwide coverage."
     >
       <RegisterForm />
     </AuthLayout>
