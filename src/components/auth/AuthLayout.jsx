@@ -41,7 +41,7 @@ export default function AuthLayout({ children, title, subtitle }) {
             transition={{ delay: 0.2 }}
           >
             <img 
-              src="/src/assets/img/logo/DARA 1.png" 
+              src="/assets/img/dara-logo.png" 
               alt="Dara Logistics" 
               className="w-48 h-48 object-contain filter brightness-0 invert"
             />
@@ -122,7 +122,7 @@ export default function AuthLayout({ children, title, subtitle }) {
             animate={{ opacity: 1, y: 0 }}
           >
             <img 
-              src="/src/assets/img/logo/DARA 1.png" 
+              src="/assets/img/dara-logo.png" 
               alt="Dara Logistics" 
               className="w-32 h-32 object-contain filter brightness-0 invert"
             />

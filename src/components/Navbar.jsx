@@ -37,7 +37,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3 group">
               <img
-                src="/src/assets/img/logo/DARA 1.png"
+                src="/assets/img/dara-logo.png"
                 alt="Dara Express Logo"
                 className="h-12 w-auto object-contain group-hover:scale-105 transition-transform"
               />
@@ -143,7 +143,7 @@ export default function Navbar() {
             </button>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/src/assets/img/logo/DARA 1.png"
+                src="/assets/img/dara-logo.png"
                 alt="Dara Express Logo"
                 className="h-10 w-auto object-contain filter brightness-0 invert"
               />

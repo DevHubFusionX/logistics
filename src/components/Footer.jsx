@@ -10,7 +10,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <img 
-                src="/src/assets/img/logo/DARA 1.png" 
+                src="/assets/img/dara-logo.png" 
                 alt="Dara Express Logo" 
                 className="h-8 w-auto object-contain filter brightness-0 invert"
               />
