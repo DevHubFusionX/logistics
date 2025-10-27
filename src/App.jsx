@@ -11,7 +11,31 @@ function AppContent() {
   const [isLoading, setIsLoading] = useState(() => {
     return !sessionStorage.getItem('hasVisited')
   })
-  const isAuthPage = location.pathname.startsWith('/auth') || location.pathname.startsWith('/onboarding') || location.pathname.startsWith('/dashboard') || location.pathname.startsWith('/booking') || location.pathname.startsWith('/invoice') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/reports') ||location.pathname.startsWith('/tracking')
+  const isDashboardPage = location.pathname.startsWith('/dashboard') || 
+    location.pathname.startsWith('/shipments') || 
+    location.pathname.startsWith('/fleet') || 
+    location.pathname.startsWith('/routes') || 
+    location.pathname.startsWith('/warehouses') || 
+    location.pathname.startsWith('/orders') || 
+    location.pathname.startsWith('/customers') || 
+    location.pathname.startsWith('/drivers') || 
+    location.pathname.startsWith('/analytics') || 
+    location.pathname.startsWith('/alerts') || 
+    location.pathname.startsWith('/tasks') || 
+    location.pathname.startsWith('/integrations') || 
+    location.pathname.startsWith('/settings') || 
+    location.pathname.startsWith('/help') || 
+    location.pathname.startsWith('/booking') || 
+    location.pathname.startsWith('/invoice') || 
+    location.pathname.startsWith('/profile') || 
+    location.pathname.startsWith('/reports') || 
+    location.pathname.startsWith('/tracking') || 
+    location.pathname.startsWith('/user')
+
+  const isAuthPage = location.pathname.startsWith('/auth') || 
+    location.pathname.startsWith('/onboarding')
+
+  const hideNavbarAndFooter = isAuthPage || isDashboardPage
 
   useEffect(() => {
     if (isLoading) {
@@ -33,11 +57,11 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {!isAuthPage && <Navbar />}
+      {!hideNavbarAndFooter && <Navbar />}
       <main className="flex-1">
         <AppRoutes />
       </main>
-      {!isAuthPage && <Footer />}
+      {!hideNavbarAndFooter && <Footer />}
     </div>
   )
 }

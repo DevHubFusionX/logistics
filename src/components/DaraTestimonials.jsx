@@ -1,90 +1,8 @@
-import { motion, AnimatePresence } from 'framer-motion'
-import { Star, ChevronLeft, ChevronRight, Quote, Users, TrendingUp } from 'lucide-react'
-import { useState, useEffect } from 'react'
-
-const featuredTestimonials = [
-  {
-    rating: 5,
-    content: "Dara revolutionized our e-commerce operations. Same-day delivery in Lagos increased our customer satisfaction by 85% and repeat orders by 60%. They're not just a logistics partner—they're a growth enabler.",
-    author: "Adunni Bankole",
-    position: "CEO, ShopNaija",
-    company: "ShopNaija",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-    impact: "85% increase in customer satisfaction",
-    businessType: "E-commerce"
-  },
-  {
-    rating: 5,
-    content: "As a small business owner, I thought reliable logistics was only for big companies. Dara proved me wrong. Their affordable rates and professional service helped us expand from Lagos to 12 states in just 8 months.",
-    author: "Chinedu Okafor",
-    position: "Founder, Afro Crafts",
-    company: "Afro Crafts",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-    impact: "Expanded to 12 states in 8 months",
-    businessType: "SME"
-  },
-  {
-    rating: 5,
-    content: "Dara's enterprise solution transformed our supply chain efficiency. Real-time tracking, API integration, and dedicated support reduced our logistics costs by 35% while improving delivery times by 50%.",
-    author: "Fatima Al-Hassan",
-    position: "Supply Chain Director, MegaMart Nigeria",
-    company: "MegaMart",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
-    impact: "35% cost reduction, 50% faster delivery",
-    businessType: "Enterprise"
-  }
-]
-
-const marqueeTestimonials = [
-  {
-    content: "Dara's tracking system is incredible. I always know exactly where my packages are.",
-    author: "Kemi Adebayo",
-    position: "Fashion Designer",
-    rating: 5
-  },
-  {
-    content: "Same-day delivery in Abuja? Dara made it possible for our restaurant supplies.",
-    author: "Ibrahim Musa",
-    position: "Restaurant Owner",
-    rating: 5
-  },
-  {
-    content: "Professional, reliable, and affordable. Dara is our go-to logistics partner.",
-    author: "Grace Okonkwo",
-    position: "Online Store Owner",
-    rating: 5
-  },
-  {
-    content: "From Lagos to Kano in 24 hours. Dara delivers on their promises every time.",
-    author: "Ahmed Bello",
-    position: "Electronics Retailer",
-    rating: 5
-  },
-  {
-    content: "The API integration was seamless. Our customers love the real-time updates.",
-    author: "Tolu Adeyemi",
-    position: "Tech Startup Founder",
-    rating: 5
-  },
-  {
-    content: "Dara helped us scale from 50 to 500 orders per day without missing a beat.",
-    author: "Blessing Okoro",
-    position: "E-commerce Manager",
-    rating: 5
-  },
-  {
-    content: "Their customer service is outstanding. Always responsive and helpful.",
-    author: "David Ogundimu",
-    position: "Wholesale Distributor",
-    rating: 5
-  },
-  {
-    content: "Cost-effective logistics that actually works. Dara exceeded our expectations.",
-    author: "Amina Yusuf",
-    position: "Import/Export Business",
-    rating: 5
-  }
-]
+import { motion } from 'framer-motion'
+import { Star, Quote, Users, TrendingUp } from 'lucide-react'
+import SectionHeader from './ui/SectionHeader'
+import Button from './ui/Button'
+import { TESTIMONIALS_DATA, MARQUEE_TESTIMONIALS_DATA, TRUST_STATS_DATA } from '../constants/mockData'
 
 export default function DaraTestimonials() {
   // No state needed for the new design
@@ -92,69 +10,37 @@ export default function DaraTestimonials() {
   return (
     <section className="py-24 bg-white">
       <div className="container mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-sky-50 rounded-full mb-8"
-          >
-            <Users className="w-4 h-4 text-sky-600" />
-            <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">Customer Stories</span>
-          </motion.div>
+        <SectionHeader
+          badge={{ icon: Users, text: 'Customer Stories' }}
+          title="Trusted by 1000+"
+          subtitle="Growing Businesses"
+          description="From startups to enterprises, see how businesses across Nigeria are achieving remarkable growth with Dara's logistics solutions."
+        />
 
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-8"
-          >
-            Trusted by 1000+
-            <br />
-            <span className="text-sky-600">Growing Businesses</span>
-          </motion.h2>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12"
-          >
-            From startups to enterprises, see how businesses across Nigeria are achieving 
-            remarkable growth with Dara's logistics solutions.
-          </motion.p>
-
-          {/* Trust Stats */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mb-16"
-          >
-            {[
-              { number: '4.9/5', label: 'Average Rating' },
-              { number: '98%', label: 'Customer Retention' },
-              { number: '1000+', label: 'Happy Businesses' },
-              { number: '50K+', label: 'Successful Deliveries' }
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
-                className="text-center"
-              >
-                <div className="text-2xl md:text-3xl font-black text-sky-600 mb-1">{stat.number}</div>
-                <div className="text-sm font-semibold text-gray-600">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+        {/* Trust Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto mb-16"
+        >
+          {TRUST_STATS_DATA.map((stat, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.8 + index * 0.1 }}
+              className="text-center"
+            >
+              <div className="text-2xl md:text-3xl font-black text-sky-600 mb-1">{stat.number}</div>
+              <div className="text-sm font-semibold text-gray-600">{stat.label}</div>
+            </motion.div>
+          ))}
+        </motion.div>
 
         {/* Featured Testimonials */}
         <div className="grid lg:grid-cols-3 gap-8 mb-20">
-          {featuredTestimonials.map((testimonial, index) => (
+          {TESTIMONIALS_DATA.map((testimonial, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, y: 50, scale: 0.9 }}
@@ -256,7 +142,7 @@ export default function DaraTestimonials() {
           {/* Marquee Container */}
           <div className="relative">
             <div className="flex animate-marquee gap-6">
-              {[...marqueeTestimonials, ...marqueeTestimonials].map((testimonial, index) => (
+              {[...MARQUEE_TESTIMONIALS_DATA, ...MARQUEE_TESTIMONIALS_DATA].map((testimonial, index) => (
                 <div
                   key={index}
                   className="flex-shrink-0 w-80 bg-white p-6 rounded-2xl shadow-sm border border-gray-100"
@@ -293,20 +179,12 @@ export default function DaraTestimonials() {
               Your success story could be next.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.button
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 bg-white text-sky-600 font-bold rounded-xl hover:bg-gray-100 transition-colors"
-              >
+              <Button className=" text-sky-600 hover:bg-gray-100">
                 Start Your Success Story
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-xl hover:bg-white/10 transition-all"
-              >
+              </Button>
+              <Button variant="secondary">
                 Read More Reviews
-              </motion.button>
+              </Button>
             </div>
           </div>
         </motion.div>

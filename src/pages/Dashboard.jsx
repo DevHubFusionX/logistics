@@ -1,51 +1,88 @@
-import { useState, useEffect } from 'react';
-import DashboardHeader from '../components/dashboard/DashboardHeader'
-import PerformanceStats from '../components/dashboard/PerformanceStats'
-import ActiveShipments from '../components/dashboard/ActiveShipments'
-import OperationsPanel from '../components/dashboard/OperationsPanel'
-import bookingService from '../services/bookingService';
-import { useAuth } from '../hooks/useAuth';
+import {
+  PageHeader,
+  KPIRibbon,
+  LiveMap,
+  ActivityFeed,
+  OperationalInsights,
+  useDashboardData
+} from '../components/dashboard'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { KPI_ROUTES } from '../constants/mockData'
+import { LoadingSkeleton, useToast } from '../components/ui/advanced'
+import { useLogisticsShortcuts } from '../hooks/useKeyboardShortcuts'
 
 export default function Dashboard() {
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const { user } = useAuth();
+  const { loading } = useDashboardData()
+  const [filters, setFilters] = useState({})
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    const fetchBookings = async () => {
-      setLoading(true);
-      setBookings([]);
-      try {
-        const response = await bookingService.getBookings(1, 100);
-        if (!response.error) {
-          const allBookings = response.data?.records || [];
-          const userBookings = allBookings.filter(booking => booking.createdBy === user?._id);
-          setBookings(userBookings);
-        }
-      } catch (err) {
-        console.error('Error fetching bookings:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const handleFilterChange = (key, value) => {
+    setFilters(prev => ({ ...prev, [key]: value }))
+  }
 
-    if (user) {
-      fetchBookings();
+  const handleKPIClick = (kpiId) => {
+    const route = KPI_ROUTES[kpiId]
+    if (route) {
+      navigate(route)
     }
-  }, [user]);
+  }
+
+  const { showToast, ToastContainer } = useToast()
+
+  useLogisticsShortcuts({
+    onNewShipment: () => navigate('/shipments'),
+    onSearch: () => document.querySelector('input[type="search"]')?.focus(),
+    onRefresh: () => window.location.reload()
+  })
+
+  if (loading) {
+    return (
+      <>
+        <LoadingSkeleton type="card" />
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <LoadingSkeleton key={i} type="card" />
+          ))}
+        </div>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <LoadingSkeleton type="map" />
+          <LoadingSkeleton type="list" items={5} />
+        </div>
+      </>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
-      <DashboardHeader />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <PerformanceStats bookings={bookings} loading={loading} />
-        
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
-          <ActiveShipments bookings={bookings} loading={loading} />
-          <OperationsPanel />
+    <div className="pb-4 sm:pb-6">
+      <PageHeader
+        title="Overview"
+        subtitle="Executive summary of your logistics operations and key performance indicators."
+        showFilters={true}
+        filters={filters}
+        onFilterChange={handleFilterChange}
+      />
+
+      {/* KPI Ribbon */}
+      <div className="mb-4 sm:mb-6 lg:mb-8">
+        <KPIRibbon onKPIClick={handleKPIClick} />
+      </div>
+
+      {/* Central Area - Map + Activity */}
+      <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-4 sm:mb-6 lg:mb-8 lg:grid-cols-2">
+        <div className="order-2 lg:order-1">
+          <LiveMap />
+        </div>
+        <div className="order-1 lg:order-2">
+          <ActivityFeed />
         </div>
       </div>
+
+      {/* Operational Insights */}
+      <div className="mt-4 sm:mt-6">
+        <OperationalInsights />
+      </div>
+      <ToastContainer />
     </div>
   )
 }

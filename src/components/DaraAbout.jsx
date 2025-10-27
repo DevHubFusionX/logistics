@@ -1,5 +1,8 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Truck, Users, Target, Award, MapPin, TrendingUp } from 'lucide-react'
+import { Truck, Users, Target, Award, MapPin, TrendingUp } from 'lucide-react'
+import Badge from './ui/Badge'
+import Button from './ui/Button'
+import { fadeInUp, fadeInLeft, fadeInRight, rotateIn, hoverLift } from '../utils/animations'
 
 export default function DaraAbout() {
   return (
@@ -7,16 +10,10 @@ export default function DaraAbout() {
       <div className="container mx-auto px-6 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-sky-50 rounded-full mb-6"
-          >
+          <Badge className="mb-6">
             <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
             <span className="text-sm font-semibold text-gray-700">Our Journey</span>
-          </motion.div>
+          </Badge>
           
           <motion.h2
             initial={{ opacity: 0, y: 50 }}
@@ -160,34 +157,17 @@ export default function DaraAbout() {
             </div>
 
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
+              {...fadeInUp}
+              transition={{ ...fadeInUp.transition, delay: 1.0 }}
               viewport={{ once: true }}
               className="flex gap-4"
             >
-              <motion.button
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 1.2 }}
-                viewport={{ once: true }}
-                className="px-8 py-4 bg-sky-500 text-white font-bold rounded-xl hover:shadow-lg transition-all"
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
+              <Button className="bg-sky-500 hover:shadow-lg">
                 Our Mission & Values
-              </motion.button>
-              <motion.button
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 1.4 }}
-                viewport={{ once: true }}
-                className="px-8 py-4 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-sky-300 hover:bg-sky-50 transition-all"
-                whileHover={{ scale: 1.02, y: -1 }}
-                whileTap={{ scale: 0.98 }}
-              >
+              </Button>
+              <Button variant="outline">
                 Join Our Team
-              </motion.button>
+              </Button>
             </motion.div>
           </motion.div>
 

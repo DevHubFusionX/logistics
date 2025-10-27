@@ -120,26 +120,26 @@ export default function DaraContact() {
           </motion.div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
           {/* Contact Form */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="lg:col-span-2 bg-white p-10 rounded-3xl shadow-lg border border-gray-100"
+            className="lg:col-span-2 bg-white p-6 sm:p-8 lg:p-10 rounded-3xl shadow-lg border border-gray-100"
           >
-            <div className="mb-8">
-              <h3 className="text-3xl font-bold text-gray-900 mb-4">
+            <div className="mb-6 sm:mb-8">
+              <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
                 Get Your Custom Quote
               </h3>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
                 Tell us about your shipping needs and we'll provide a personalized solution 
                 with transparent pricing and delivery timelines.
               </p>
               
               {/* Form Benefits */}
-              <div className="grid grid-cols-2 gap-4 mt-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-6">
                 {[
                   "Free consultation",
                   "Custom pricing",
@@ -147,22 +147,22 @@ export default function DaraContact() {
                   "No hidden fees"
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-center gap-2">
-                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
                     <span className="text-sm text-gray-600">{benefit}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
                   type="text"
                   name="firstName"
                   placeholder="First Name"
                   value={formData.firstName}
                   onChange={handleInputChange}
-                  className="w-full p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all"
+                  className="w-full p-3 sm:p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all text-sm sm:text-base"
                 />
                 <input
                   type="text"
@@ -170,18 +170,18 @@ export default function DaraContact() {
                   placeholder="Last Name"
                   value={formData.lastName}
                   onChange={handleInputChange}
-                  className="w-full p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all"
+                  className="w-full p-3 sm:p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all text-sm sm:text-base"
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <input
                   type="tel"
                   name="phone"
                   placeholder="Phone Number"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all"
+                  className="w-full p-3 sm:p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all text-sm sm:text-base"
                 />
                 <input
                   type="email"
@@ -189,7 +189,7 @@ export default function DaraContact() {
                   placeholder="Email Address"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all"
+                  className="w-full p-3 sm:p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all text-sm sm:text-base"
                 />
               </div>
 
@@ -197,7 +197,7 @@ export default function DaraContact() {
                 name="serviceType"
                 value={formData.serviceType}
                 onChange={handleInputChange}
-                className="w-full p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition-all"
+                className="w-full p-3 sm:p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 transition-all text-sm sm:text-base"
               >
                 <option value="">Select Service Type</option>
                 <option value="express">Express Delivery</option>
@@ -214,17 +214,18 @@ export default function DaraContact() {
                 rows="4"
                 value={formData.message}
                 onChange={handleInputChange}
-                className="w-full p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all resize-none"
+                className="w-full p-3 sm:p-4 rounded-xl border-2 border-gray-300 bg-white text-gray-900 focus:border-blue-500 transition-all resize-none text-sm sm:text-base"
               />
 
               <motion.button
                 type="submit"
-                className="w-full inline-flex items-center justify-center gap-3 px-8 py-4 bg-sky-500 text-white text-lg font-bold rounded-xl hover:bg-sky-600 shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-sky-500 text-white text-base sm:text-lg font-bold rounded-xl hover:bg-sky-600 shadow-lg hover:shadow-xl transition-all duration-300"
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Get My Custom Quote
-                <ArrowRight className="w-5 h-5" />
+                <span className="hidden sm:inline">Get My Custom Quote</span>
+                <span className="sm:hidden">Get Quote</span>
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
               </motion.button>
               
               <p className="text-center text-sm text-gray-500 mt-4">
@@ -242,8 +243,8 @@ export default function DaraContact() {
             className="space-y-8"
           >
             {/* Contact Methods */}
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
-              <h3 className="text-2xl font-bold text-gray-900 mb-6">Contact Information</h3>
+            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-gray-100">
+              <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Contact Information</h3>
               <div className="space-y-6">
                 {[
                   {
@@ -273,14 +274,14 @@ export default function DaraContact() {
                       whileInView={{ opacity: 1, x: 0 }}
                       transition={{ duration: 0.6, delay: index * 0.1 }}
                       viewport={{ once: true }}
-                      className="flex items-start gap-4"
+                      className="flex items-start gap-3 sm:gap-4"
                     >
-                      <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                        <IconComponent className="w-6 h-6 text-white" />
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 ${item.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                        <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                       </div>
                       <div>
-                        <h4 className="text-lg font-bold text-gray-900 mb-1">{item.title}</h4>
-                        <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{item.content}</p>
+                        <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1">{item.title}</h4>
+                        <p className="text-gray-600 text-xs sm:text-sm leading-relaxed whitespace-pre-line">{item.content}</p>
                       </div>
                     </motion.div>
                   )
@@ -289,12 +290,12 @@ export default function DaraContact() {
             </div>
 
             {/* Business Hours */}
-            <div className="bg-sky-50 p-8 rounded-3xl border border-sky-100">
-              <div className="flex items-center gap-3 mb-4">
-                <Clock className="w-6 h-6 text-sky-600" />
-                <h3 className="text-xl font-bold text-gray-900">Business Hours</h3>
+            <div className="bg-sky-50 p-6 sm:p-8 rounded-3xl border border-sky-100">
+              <div className="flex items-center gap-2 sm:gap-3 mb-4">
+                <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-sky-600" />
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">Business Hours</h3>
               </div>
-              <div className="space-y-2 text-gray-700">
+              <div className="space-y-2 text-gray-700 text-sm sm:text-base">
                 <div className="flex justify-between">
                   <span>Monday - Friday</span>
                   <span className="font-semibold">8:00 AM - 6:00 PM</span>
@@ -308,18 +309,18 @@ export default function DaraContact() {
                   <span className="font-semibold text-red-600">Closed</span>
                 </div>
                 <div className="mt-4 p-3 bg-green-100 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Headphones className="w-4 h-4 text-green-600" />
-                    <span className="text-sm font-semibold text-green-800">24/7 Emergency Support Available</span>
+                  <div className="flex items-start sm:items-center gap-2">
+                    <Headphones className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5 sm:mt-0" />
+                    <span className="text-xs sm:text-sm font-semibold text-green-800">24/7 Emergency Support Available</span>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Quick Stats */}
-            <div className="bg-white p-8 rounded-3xl shadow-lg border border-gray-100">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">Why Choose Dara?</h3>
-              <div className="grid grid-cols-2 gap-4">
+            <div className="bg-white p-6 sm:p-8 rounded-3xl shadow-lg border border-gray-100">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-6">Why Choose Dara?</h3>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 {[
                   { icon: Users, number: "1000+", label: "Happy Clients" },
                   { icon: Zap, number: "99.2%", label: "On-Time Rate" },
@@ -334,10 +335,10 @@ export default function DaraContact() {
                       whileInView={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.5, delay: index * 0.1 }}
                       viewport={{ once: true }}
-                      className="text-center p-4 bg-gray-50 rounded-xl"
+                      className="text-center p-3 sm:p-4 bg-gray-50 rounded-xl"
                     >
-                      <IconComponent className="w-6 h-6 text-sky-600 mx-auto mb-2" />
-                      <div className="text-2xl font-black text-gray-900">{stat.number}</div>
+                      <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-sky-600 mx-auto mb-2" />
+                      <div className="text-lg sm:text-2xl font-black text-gray-900">{stat.number}</div>
                       <div className="text-xs text-gray-600">{stat.label}</div>
                     </motion.div>
                   )

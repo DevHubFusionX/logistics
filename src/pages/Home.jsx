@@ -5,15 +5,21 @@ import DaraWhyUs from '../components/DaraWhyUs'
 import DaraTestimonials from '../components/DaraTestimonials'
 import DaraContact from '../components/DaraContact'
 
+const homeComponents = [
+  DaraHero,
+  DaraAbout,
+  DaraServices,
+  DaraWhyUs,
+  DaraTestimonials,
+  DaraContact
+]
+
 export default function Home() {
   return (
     <>
-      <DaraHero />
-      <DaraAbout />
-      <DaraServices />
-      <DaraWhyUs />
-      <DaraTestimonials />
-      <DaraContact />
+      {homeComponents.map((Component, index) => (
+        <Component key={index} />
+      ))}
     </>
   )
 }
