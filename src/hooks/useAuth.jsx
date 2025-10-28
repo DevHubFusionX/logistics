@@ -12,8 +12,13 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [user, setUser] = useState({
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john@daralogistics.com',
+    role: 'Super Admin'
+  })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const initAuth = async () => {
@@ -34,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(false)
     }
     
-    initAuth()
+    // initAuth()
   }, [])
 
   const login = async (credentials) => {
@@ -59,12 +64,19 @@ export const AuthProvider = ({ children }) => {
     setUser(null)
   }
 
+  const hasPermission = (allowedRoles) => {
+    if (!allowedRoles || allowedRoles.length === 0) return true
+    return allowedRoles.includes(user?.role)
+  }
+
   const value = {
     user,
+    setUser,
     login,
     register,
     logout,
-    loading
+    loading,
+    hasPermission
   }
 
   return (

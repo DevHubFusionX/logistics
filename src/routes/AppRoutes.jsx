@@ -19,37 +19,45 @@ import ForgotPassword from '../pages/auth/ForgotPassword'
 import VerifyOTP from '../pages/auth/VerifyOTP'
 
 // Onboarding Pages
-import ProfileSetup from '../pages/onboarding/ProfileSetup'
-import KYCPending from '../pages/onboarding/KYCPending'
-import KYCRejected from '../pages/onboarding/KYCRejected'
+
 
 // Dashboard Pages
 import Dashboard from '../pages/Dashboard'
 import Shipments from '../pages/shipments/Shipments'
-import Fleet from '../pages/fleet/Fleet'
+import Fleet from '../pages/Fleet'
 import RoutesPage from '../pages/Routes'
 import Warehouses from '../pages/Warehouses'
 import Orders from '../pages/Orders'
 import Customers from '../pages/Customers'
 
-// Booking Pages
+
+// Booking & Tracking Pages
 import BookingRequest from '../pages/booking/BookingRequest'
 import Quotation from '../pages/booking/Quotation'
 import Payment from '../pages/booking/Payment'
 import Confirmation from '../pages/booking/Confirmation'
-
-// Tracking Pages
 import TrackShipment from '../pages/tracking/TrackShipment'
 import Invoice from '../pages/tracking/Invoice'
 
 // User Pages
 import ManageProfile from '../pages/ManageProfile'
-import MyBookings from '../pages/MyBookings'
-import BookingDetail from '../pages/BookingDetail'
 import Reports from '../pages/Reports'
 import Alerts from '../pages/Alerts'
 import Tasks from '../pages/Tasks'
+import Drivers from '../pages/Drivers'
+import Trips from '../pages/Trips'
 import User from '../pages/User'
+import Temperature from '../pages/Temperature'
+import Payments from '../pages/Payments'
+import Reconciliation from '../pages/Reconciliation'
+import Settings from '../pages/Settings'
+import UserRoles from '../pages/UserRoles'
+import PricingManagement from '../pages/PricingManagement'
+import BookingsManagement from '../pages/BookingsManagement'
+import ShipmentTracking from '../pages/tracking/ShipmentTracking'
+import DriverApp from '../pages/DriverApp'
+import MyBookings from '../pages/MyBookings'
+import BookingStatusGuide from '../pages/BookingStatusGuide'
 
 const DashboardRoute = ({ children }) => (
   <ProtectedRoute>
@@ -76,10 +84,19 @@ export default function AppRoutes() {
       <Route path="/auth/forgot-password" element={<ForgotPassword />} />
       <Route path="/auth/verify-otp" element={<VerifyOTP />} />
       
-      {/* Onboarding Routes */}
-      <Route path="/onboarding/profile-setup" element={<ProfileSetup />} />
-      <Route path="/onboarding/kyc-pending" element={<KYCPending />} />
-      <Route path="/onboarding/kyc-rejected" element={<KYCRejected />} />
+      {/* Booking Routes */}
+      <Route path="/booking/request" element={<DashboardRoute><BookingRequest /></DashboardRoute>} />
+      <Route path="/booking/quotation" element={<DashboardRoute><Quotation /></DashboardRoute>} />
+      <Route path="/booking/payment" element={<DashboardRoute><Payment /></DashboardRoute>} />
+      <Route path="/booking/confirmation" element={<DashboardRoute><Confirmation /></DashboardRoute>} />
+      
+      {/* Tracking Routes */}
+      <Route path="/tracking/track" element={<DashboardRoute><TrackShipment /></DashboardRoute>} />
+      <Route path="/tracking/:id" element={<DashboardRoute><ShipmentTracking /></DashboardRoute>} />
+      <Route path="/driver-app" element={<DashboardRoute><DriverApp /></DashboardRoute>} />
+      <Route path="/tracking/invoice" element={<DashboardRoute><Invoice /></DashboardRoute>} />
+      <Route path="/tracking/invoice/:id" element={<DashboardRoute><Invoice /></DashboardRoute>} />
+      
       
       {/* Dashboard Routes */}
       <Route path="/dashboard" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
@@ -91,32 +108,32 @@ export default function AppRoutes() {
       <Route path="/warehouses/*" element={<DashboardRoute><Warehouses /></DashboardRoute>} />
       <Route path="/orders" element={<DashboardRoute><Orders /></DashboardRoute>} />
       <Route path="/customers" element={<DashboardRoute><Customers /></DashboardRoute>} />
-      <Route path="/drivers" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
+      <Route path="/drivers" element={<DashboardRoute><Drivers /></DashboardRoute>} />
+      <Route path="/trips" element={<DashboardRoute><Trips /></DashboardRoute>} />
       <Route path="/analytics" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
+      <Route path="/reports" element={<DashboardRoute><Reports /></DashboardRoute>} />
       <Route path="/alerts" element={<DashboardRoute><Alerts /></DashboardRoute>} />
       <Route path="/tasks" element={<DashboardRoute><Tasks /></DashboardRoute>} />
+      <Route path="/temperature" element={<DashboardRoute><Temperature /></DashboardRoute>} />
+      <Route path="/payments" element={<DashboardRoute><Payments /></DashboardRoute>} />
+      <Route path="/payments/reconciliation" element={<DashboardRoute><Reconciliation /></DashboardRoute>} />
+      <Route path="/pricing-management" element={<DashboardRoute><PricingManagement /></DashboardRoute>} />
+      <Route path="/bookings-management" element={<DashboardRoute><BookingsManagement /></DashboardRoute>} />
       <Route path="/integrations" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
-      <Route path="/settings" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
-      <Route path="/settings/*" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
+      <Route path="/settings" element={<DashboardRoute><Settings /></DashboardRoute>} />
+      <Route path="/settings/*" element={<DashboardRoute><Settings /></DashboardRoute>} />
+      <Route path="/settings/roles" element={<DashboardRoute><UserRoles /></DashboardRoute>} />
       <Route path="/help" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
       <Route path="/user" element={<DashboardRoute><User /></DashboardRoute>} />
+     
       
-      {/* Booking Routes */}
-      <Route path="/booking/request" element={<ProtectedRoute><BookingRequest /></ProtectedRoute>} />
-      <Route path="/booking/quotation" element={<ProtectedRoute><Quotation /></ProtectedRoute>} />
-      <Route path="/booking/payment" element={<ProtectedRoute><Payment /></ProtectedRoute>} />
-      <Route path="/booking/confirmation" element={<ProtectedRoute><Confirmation /></ProtectedRoute>} />
-      
-      {/* Tracking Routes */}
-      <Route path="/track" element={<TrackShipment />} />
-      <Route path="/tracking" element={<TrackShipment />} />
-      <Route path="/invoice/:id" element={<ProtectedRoute><Invoice /></ProtectedRoute>} />
+     
       
       {/* User Routes */}
       <Route path="/profile" element={<ProtectedRoute><ManageProfile /></ProtectedRoute>} />
-      <Route path="/bookings" element={<ProtectedRoute><MyBookings /></ProtectedRoute>} />
-      <Route path="/bookings/:id" element={<ProtectedRoute><BookingDetail /></ProtectedRoute>} />
-      <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
+      <Route path="/my-bookings" element={<DashboardRoute><MyBookings /></DashboardRoute>} />
+      <Route path="/booking-status-guide" element={<DashboardRoute><BookingStatusGuide /></DashboardRoute>} />
+      
     </Routes>
   )
 }

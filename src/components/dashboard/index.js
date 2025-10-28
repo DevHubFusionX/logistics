@@ -18,6 +18,7 @@ export { default as OperationalInsights } from './sections/OperationalInsights'
 // Widgets
 export { default as StatsCard } from './widgets/StatsCard'
 export { default as KPICard } from './widgets/KPICard'
+export { default as TemperatureWidget } from './widgets/TemperatureWidget'
 
 // Hooks
 export { useDashboardData } from './hooks/useDashboardData'

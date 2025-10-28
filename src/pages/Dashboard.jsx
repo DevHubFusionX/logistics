@@ -4,6 +4,7 @@ import {
   LiveMap,
   ActivityFeed,
   OperationalInsights,
+  TemperatureWidget,
   useDashboardData
 } from '../components/dashboard'
 import { useState } from 'react'
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const { loading } = useDashboardData()
   const [filters, setFilters] = useState({})
   const navigate = useNavigate()
+  const { showToast, ToastContainer } = useToast()
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }))
@@ -23,12 +25,8 @@ export default function Dashboard() {
 
   const handleKPIClick = (kpiId) => {
     const route = KPI_ROUTES[kpiId]
-    if (route) {
-      navigate(route)
-    }
+    if (route) navigate(route)
   }
-
-  const { showToast, ToastContainer } = useToast()
 
   useLogisticsShortcuts({
     onNewShipment: () => navigate('/shipments'),
@@ -38,50 +36,42 @@ export default function Dashboard() {
 
   if (loading) {
     return (
-      <>
+      <div className="space-y-6">
         <LoadingSkeleton type="card" />
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <LoadingSkeleton key={i} type="card" />
           ))}
         </div>
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <LoadingSkeleton type="map" />
           <LoadingSkeleton type="list" items={5} />
         </div>
-      </>
+      </div>
     )
   }
 
   return (
-    <div className="pb-4 sm:pb-6">
+    <div className="space-y-6 pb-6">
       <PageHeader
-        title="Overview"
-        subtitle="Executive summary of your logistics operations and key performance indicators."
+        title="Command Center"
+        subtitle="Real-time operations dashboard with live tracking, trip monitoring, and performance analytics"
         showFilters={true}
         filters={filters}
         onFilterChange={handleFilterChange}
       />
 
-      {/* KPI Ribbon */}
-      <div className="mb-4 sm:mb-6 lg:mb-8">
-        <KPIRibbon onKPIClick={handleKPIClick} />
+      <KPIRibbon onKPIClick={handleKPIClick} />
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <LiveMap />
+        <ActivityFeed />
       </div>
 
-      {/* Central Area - Map + Activity */}
-      <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-4 sm:mb-6 lg:mb-8 lg:grid-cols-2">
-        <div className="order-2 lg:order-1">
-          <LiveMap />
-        </div>
-        <div className="order-1 lg:order-2">
-          <ActivityFeed />
-        </div>
-      </div>
+      <TemperatureWidget />
 
-      {/* Operational Insights */}
-      <div className="mt-4 sm:mt-6">
-        <OperationalInsights />
-      </div>
+      <OperationalInsights />
+      
       <ToastContainer />
     </div>
   )

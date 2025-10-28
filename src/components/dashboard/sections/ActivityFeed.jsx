@@ -12,63 +12,69 @@ export default function ActivityFeed({ loading = false }) {
   const activities = [
     {
       id: 1,
-      type: 'delivery',
+      type: 'arrival',
       icon: CheckCircle,
-      title: 'Package Delivered',
-      description: 'SH001 delivered to Adebayo Industries, Lagos',
+      title: 'Trip Arrival',
+      description: 'V001 arrived at Lagos Distribution Center - ETA: 14:30',
       time: '2 mins ago',
       severity: 'success',
-      driver: 'Adebayo Ogun'
+      driver: 'Adebayo Ogun',
+      route: 'Lagos → Ibadan'
     },
     {
       id: 2,
-      type: 'pickup',
-      icon: Package,
-      title: 'Pickup Completed',
-      description: 'SH045 picked up from Kano Warehouse',
+      type: 'temp_alert',
+      icon: AlertTriangle,
+      title: 'Temperature Alert',
+      description: 'V002 temperature deviation detected: 28.2°C (Normal: 22°C)',
       time: '5 mins ago',
-      severity: 'info',
-      driver: 'Fatima Ahmed'
+      severity: 'warning',
+      driver: 'Fatima Ahmed',
+      route: 'Kano → Kaduna'
     },
     {
       id: 3,
-      type: 'delay',
-      icon: AlertTriangle,
-      title: 'Delivery Delayed',
-      description: 'SH023 delayed due to traffic congestion on Lagos-Ibadan Expressway',
+      type: 'departure',
+      icon: Truck,
+      title: 'Trip Departure',
+      description: 'V003 departed from Port Harcourt Warehouse - ETA: 15:20',
       time: '8 mins ago',
-      severity: 'warning',
-      driver: 'Chidi Okoro'
+      severity: 'info',
+      driver: 'Chidi Okoro',
+      route: 'Port Harcourt → Aba'
     },
     {
       id: 4,
-      type: 'exception',
+      type: 'deviation',
       icon: AlertTriangle,
-      title: 'Route Exception',
-      description: 'Vehicle V002 deviated from planned route',
+      title: 'Route Deviation',
+      description: 'V002 deviated from planned route - investigating cause',
       time: '12 mins ago',
       severity: 'error',
-      driver: 'Fatima Ahmed'
+      driver: 'Fatima Ahmed',
+      route: 'Kano → Kaduna'
     },
     {
       id: 5,
-      type: 'pickup',
-      icon: Package,
-      title: 'Pickup Scheduled',
-      description: 'SH046 scheduled for pickup at 15:30',
+      type: 'departure',
+      icon: Truck,
+      title: 'Trip Departure',
+      description: 'V004 departed from Abuja Hub - ETA: 13:45',
       time: '15 mins ago',
       severity: 'info',
-      driver: 'Adebayo Ogun'
+      driver: 'Amina Yusuf',
+      route: 'Abuja → Lokoja'
     },
     {
       id: 6,
-      type: 'delivery',
+      type: 'arrival',
       icon: CheckCircle,
-      title: 'Package Delivered',
-      description: 'SH019 delivered to Port Harcourt Distribution Center',
+      title: 'Trip Arrival',
+      description: 'V005 arrived at Enugu Distribution Center on schedule',
       time: '18 mins ago',
       severity: 'success',
-      driver: 'Chidi Okoro'
+      driver: 'Emeka Nwosu',
+      route: 'Onitsha → Enugu'
     }
   ]
 
@@ -93,7 +99,7 @@ export default function ActivityFeed({ loading = false }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-3 sm:p-4 lg:p-6 h-[300px] sm:h-[400px] lg:h-[500px] flex flex-col">
       <div className="flex items-center justify-between mb-3 sm:mb-4 gap-2">
-        <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">Activity Feed</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">Trip Timeline</h3>
         <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
           <Filter className="w-3 h-3 sm:w-4 sm:h-4 text-gray-500" />
           <select
@@ -102,10 +108,10 @@ export default function ActivityFeed({ loading = false }) {
             className="text-xs border border-gray-300 rounded-lg px-2 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           >
             <option value="all">All</option>
-            <option value="success">Deliveries</option>
-            <option value="info">Pickups</option>
-            <option value="warning">Delays</option>
-            <option value="error">Exceptions</option>
+            <option value="success">Arrivals</option>
+            <option value="info">Departures</option>
+            <option value="warning">Temp Alerts</option>
+            <option value="error">Deviations</option>
           </select>
         </div>
       </div>
@@ -130,9 +136,17 @@ export default function ActivityFeed({ loading = false }) {
                     <span className="text-xs text-gray-500 flex-shrink-0 whitespace-nowrap">{activity.time}</span>
                   </div>
                   <p className="text-xs text-gray-600 mb-1 sm:mb-2 line-clamp-2">{activity.description}</p>
-                  <div className="flex items-center gap-1 text-xs text-gray-500">
-                    <Truck className="w-3 h-3 flex-shrink-0" />
-                    <span className="truncate">{activity.driver}</span>
+                  <div className="flex items-center justify-between gap-2 text-xs text-gray-500">
+                    <div className="flex items-center gap-1">
+                      <Truck className="w-3 h-3 flex-shrink-0" />
+                      <span className="truncate">{activity.driver}</span>
+                    </div>
+                    {activity.route && (
+                      <div className="flex items-center gap-1 flex-shrink-0">
+                        <MapPin className="w-3 h-3" />
+                        <span className="text-xs">{activity.route}</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

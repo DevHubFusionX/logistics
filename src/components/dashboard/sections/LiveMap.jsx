@@ -13,43 +13,57 @@ export default function LiveMap({ loading = false }) {
     {
       id: 'V001',
       driver: 'Adebayo Ogun',
-      status: 'in_transit',
+      status: 'normal',
       speed: '65 km/h',
       location: 'Lagos-Ibadan Expressway',
       shipments: ['SH001', 'SH002', 'SH003'],
       eta: '14:30',
       lastUpdate: '2 mins ago',
-      fuel: 78
+      fuel: 78,
+      temp: 22.5
     },
     {
       id: 'V002',
       driver: 'Fatima Ahmed',
-      status: 'delayed',
+      status: 'alert',
       speed: '0 km/h',
       location: 'Kano Industrial Area',
       shipments: ['SH004', 'SH005'],
       eta: '16:45',
       lastUpdate: '5 mins ago',
-      fuel: 45
+      fuel: 45,
+      temp: 28.2
     },
     {
       id: 'V003',
       driver: 'Chidi Okoro',
-      status: 'active',
+      status: 'temp_deviation',
       speed: '45 km/h',
       location: 'Port Harcourt CBD',
       shipments: ['SH006'],
       eta: '15:20',
       lastUpdate: '1 min ago',
-      fuel: 92
+      fuel: 92,
+      temp: 25.8
+    },
+    {
+      id: 'V004',
+      driver: 'Amina Yusuf',
+      status: 'normal',
+      speed: '55 km/h',
+      location: 'Abuja Ring Road',
+      shipments: ['SH007', 'SH008'],
+      eta: '13:45',
+      lastUpdate: '3 mins ago',
+      fuel: 65,
+      temp: 21.8
     }
   ]
 
   const statusColors = {
-    active: 'bg-green-500',
-    in_transit: 'bg-blue-500',
-    delayed: 'bg-red-500',
-    idle: 'bg-gray-500'
+    normal: 'bg-green-500',
+    temp_deviation: 'bg-orange-500',
+    alert: 'bg-red-500'
   }
 
   return (
@@ -128,6 +142,10 @@ export default function LiveMap({ loading = false }) {
                 <div>
                   <span className="text-gray-500">Fuel:</span>
                   <p className="font-medium">{selectedVehicle.fuel}%</p>
+                </div>
+                <div>
+                  <span className="text-gray-500">Temp:</span>
+                  <p className="font-medium">{selectedVehicle.temp}°C</p>
                 </div>
                 <div>
                   <span className="text-gray-500">Shipments:</span>

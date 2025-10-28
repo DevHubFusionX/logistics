@@ -1,117 +1,215 @@
-import { useState, useEffect } from 'react';
-import BookingCard from '../components/booking/BookingCard';
-import BookingFilters from '../components/booking/BookingFilters';
-import Pagination from '../components/booking/Pagination';
-import BookingsHeader from '../components/booking/BookingsHeader';
-import BookingsStats from '../components/booking/BookingsStats';
-import BookingsEmptyState from '../components/booking/BookingsEmptyState';
-import BookingsLoadingState from '../components/booking/BookingsLoadingState';
-import bookingService from '../services/bookingService';
-import { useAuth } from '../hooks/useAuth';
+import { useState } from 'react'
+import { PageHeader } from '../components/dashboard'
+import { Package, MapPin, Clock, Eye, Download, Info } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
-const MyBookings = () => {
-  const { user } = useAuth();
-  const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [pagination, setPagination] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState({
-    status: '',
-    fromDate: '',
-    toDate: ''
-  });
+export default function MyBookings() {
+  const navigate = useNavigate()
+  const [filter, setFilter] = useState('all')
 
-  const fetchBookings = async (page = 1) => {
-    try {
-      setLoading(true);
-      const response = await bookingService.getBookings(page, 100);
-      
-      if (response.error) {
-        setError(response.message || 'Failed to fetch bookings');
-        return;
-      }
-
-      const allBookings = response.data?.records || [];
-      const userBookings = allBookings.filter(booking => booking.createdBy === user?._id);
-      setBookings(userBookings);
-      setPagination(response.data?.pagination || {});
-      setError(null);
-    } catch (err) {
-      setError('Failed to fetch bookings');
-      console.error('Error fetching bookings:', err);
-    } finally {
-      setLoading(false);
+  // Mock data - replace with API call filtered by logged-in user
+  const bookings = [
+    {
+      id: 'BK-1001',
+      pickupCity: 'Lagos',
+      deliveryCity: 'Abuja',
+      cargoType: 'Frozen Foods',
+      weight: '5 tons',
+      status: 'in_transit',
+      createdDate: '2024-01-15',
+      estimatedDelivery: '2024-01-16',
+      amount: 112.37,
+      driver: 'Adebayo Ogun',
+      trackingId: 'TR-5001'
+    },
+    {
+      id: 'BK-1002',
+      pickupCity: 'Kano',
+      deliveryCity: 'Port Harcourt',
+      cargoType: 'Perishable Goods',
+      weight: '3 tons',
+      status: 'pending',
+      createdDate: '2024-01-14',
+      estimatedDelivery: '2024-01-17',
+      amount: 245.80,
+      driver: null,
+      trackingId: null
+    },
+    {
+      id: 'BK-1003',
+      pickupCity: 'Abuja',
+      deliveryCity: 'Lagos',
+      cargoType: 'General Cargo',
+      weight: '2 tons',
+      status: 'delivered',
+      createdDate: '2024-01-10',
+      estimatedDelivery: '2024-01-12',
+      actualDelivery: '2024-01-12',
+      amount: 189.50,
+      driver: 'Chidi Okoro',
+      trackingId: 'TR-4998'
     }
-  };
+  ]
 
-  useEffect(() => {
-    if (user) {
-      fetchBookings(currentPage);
+  const filteredBookings = filter === 'all' 
+    ? bookings 
+    : bookings.filter(b => b.status === filter)
+
+  const getStatusBadge = (status) => {
+    const badges = {
+      pending: 'bg-yellow-100 text-yellow-700',
+      confirmed: 'bg-blue-100 text-blue-700',
+      in_transit: 'bg-green-100 text-green-700',
+      delivered: 'bg-gray-100 text-gray-700',
+      cancelled: 'bg-red-100 text-red-700'
     }
-  }, [currentPage, user]);
+    return badges[status] || 'bg-gray-100 text-gray-700'
+  }
 
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const filteredBookings = bookings.filter(booking => {
-    if (filters.status && booking.status !== filters.status) return false;
-    if (filters.fromDate && new Date(booking.createdAt) < new Date(filters.fromDate)) return false;
-    if (filters.toDate && new Date(booking.createdAt) > new Date(filters.toDate)) return false;
-    return true;
-  });
-
-  const handleClearFilters = () => {
-    setFilters({ status: '', fromDate: '', toDate: '' });
-  };
-
-  if (loading) {
-    return <BookingsLoadingState />;
+  const getStatusText = (status) => {
+    const texts = {
+      pending: 'Pending Review',
+      confirmed: 'Confirmed',
+      in_transit: 'In Transit',
+      delivered: 'Delivered',
+      cancelled: 'Cancelled'
+    }
+    return texts[status] || status
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 py-6 sm:py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <BookingsHeader totalCount={bookings.length} />
-        
-        {bookings.length > 0 && <BookingsStats bookings={bookings} />}
-        
-        <BookingFilters 
-          filters={filters} 
-          onFilterChange={setFilters}
-          onClearFilters={handleClearFilters}
-        />
+    <div className="space-y-6 pb-6">
+      <PageHeader
+        title="My Bookings"
+        subtitle="View and track all your shipment bookings"
+      />
 
-        {error && (
-          <div className="bg-red-50 border-2 border-red-200 rounded-xl p-4 mb-6 flex items-start">
-            <svg className="w-5 h-5 text-red-600 mr-3 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-            </svg>
-            <p className="text-red-800 text-sm sm:text-base">{error}</p>
-          </div>
-        )}
+      <div className="flex flex-wrap gap-3">
+        <button
+          onClick={() => navigate('/booking/request')}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm"
+        >
+          + New Booking
+        </button>
+        <button
+          onClick={() => navigate('/booking-status-guide')}
+          className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+        >
+          <Info className="w-4 h-4" />
+          Status Guide
+        </button>
+        
+        <div className="flex gap-2 ml-auto">
+          {['all', 'pending', 'in_transit', 'delivered'].map(status => (
+            <button
+              key={status}
+              onClick={() => setFilter(status)}
+              className={`px-4 py-2 rounded-lg transition-colors font-medium ${
+                filter === status
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+              }`}
+            >
+              {status === 'all' ? 'All' : getStatusText(status)}
+            </button>
+          ))}
+        </div>
+      </div>
 
-        {filteredBookings.length === 0 ? (
-          <BookingsEmptyState />
-        ) : (
-          <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {filteredBookings.map((booking, index) => (
-                <BookingCard key={booking._id} booking={booking} index={index} />
-              ))}
+      <div className="grid gap-4">
+        {filteredBookings.map(booking => (
+          <div key={booking.id} className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-3 bg-blue-100 rounded-lg">
+                  <Package className="w-6 h-6 text-blue-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">{booking.id}</h3>
+                  <p className="text-sm text-gray-600">{booking.cargoType} • {booking.weight}</p>
+                </div>
+              </div>
+              <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusBadge(booking.status)}`}>
+                {getStatusText(booking.status)}
+              </span>
             </div>
 
-            <Pagination
-              currentPage={pagination.currentPage || 1}
-              totalPages={pagination.totalPages || 1}
-              onPageChange={handlePageChange}
-            />
-          </>
-        )}
-      </div>
-    </div>
-  );
-};
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-green-600 mt-1" />
+                <div>
+                  <p className="text-xs text-gray-500">Pickup</p>
+                  <p className="font-semibold text-gray-900">{booking.pickupCity}</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-orange-600 mt-1" />
+                <div>
+                  <p className="text-xs text-gray-500">Delivery</p>
+                  <p className="font-semibold text-gray-900">{booking.deliveryCity}</p>
+                </div>
+              </div>
+            </div>
 
-export default MyBookings;
+            <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span>Created: {booking.createdDate}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span>ETA: {booking.estimatedDelivery}</span>
+              </div>
+              {booking.driver && (
+                <div className="flex items-center gap-1">
+                  <span>Driver: {booking.driver}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between pt-4 border-t">
+              <div>
+                <p className="text-sm text-gray-600">Total Amount</p>
+                <p className="text-xl font-bold text-gray-900">₦{booking.amount.toFixed(2)}</p>
+              </div>
+              <div className="flex gap-2">
+                {booking.trackingId && (
+                  <button
+                    onClick={() => navigate(`/tracking/${booking.trackingId}`)}
+                    className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Track
+                  </button>
+                )}
+                {booking.status === 'delivered' && (
+                  <button
+                    onClick={() => navigate(`/tracking/invoice/${booking.id}`)}
+                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                  >
+                    <Download className="w-4 h-4" />
+                    Invoice
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {filteredBookings.length === 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">No bookings found</h3>
+          <p className="text-gray-600 mb-4">You haven't created any bookings yet</p>
+          <button
+            onClick={() => navigate('/booking/request')}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
+            Create Your First Booking
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}

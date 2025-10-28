@@ -4,6 +4,7 @@ import ShipmentFilters from '../../components/shipments/components/ShipmentFilte
 import ShipmentTable from '../../components/shipments/views/ShipmentTable'
 import KanbanBoard from '../../components/shipments/views/KanbanBoard'
 import ShipmentSidebar from '../../components/shipments/components/ShipmentSidebar'
+import CreateShipmentModal from '../../components/shipments/CreateShipmentModal'
 import { VirtualizedTable, MetricCard, useToast } from '../../components/ui/advanced'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { List, Map, LayoutGrid, Plus } from 'lucide-react'
@@ -13,6 +14,7 @@ export default function Shipments() {
   const [filters, setFilters] = useState({})
   const [selectedShipment, setSelectedShipment] = useState(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { showToast, ToastContainer } = useToast()
 
   useLogisticsShortcuts({
@@ -166,7 +168,10 @@ export default function Shipments() {
           })}
         </div>
 
-        <button className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+        <button
+          onClick={() => setIsCreateModalOpen(true)}
+          className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+        >
           <Plus className="w-4 h-4" />
           <span>New Shipment</span>
         </button>
@@ -272,7 +277,8 @@ export default function Shipments() {
           onClick={() => setSidebarOpen(false)}
         />
       )}
-      
+
+      <CreateShipmentModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
       <ToastContainer />
     </>
   )

@@ -1,77 +1,37 @@
-import { 
-  Clock, 
-  DollarSign, 
-  Route, 
-  User, 
-  AlertTriangle, 
-  Package 
-} from 'lucide-react'
-
-export const prebuiltReports = [
-  {
-    id: 'on-time-delivery',
-    title: 'On-time Delivery',
-    description: 'Track delivery performance and punctuality metrics',
-    icon: Clock,
-    color: 'bg-green-500',
-    metrics: '94.2% on-time rate'
-  },
-  {
-    id: 'cost-per-shipment',
-    title: 'Cost per Shipment',
-    description: 'Analyze shipping costs and profitability trends',
-    icon: DollarSign,
-    color: 'bg-blue-500',
-    metrics: '$45.30 avg cost'
-  },
-  {
-    id: 'route-efficiency',
-    title: 'Route Efficiency',
-    description: 'Optimize routes and reduce fuel consumption',
-    icon: Route,
-    color: 'bg-purple-500',
-    metrics: '87% efficiency'
-  },
-  {
-    id: 'driver-performance',
-    title: 'Driver Performance',
-    description: 'Monitor driver metrics and safety scores',
-    icon: User,
-    color: 'bg-orange-500',
-    metrics: '4.8/5 avg rating'
-  },
-  {
-    id: 'exception-causes',
-    title: 'Exception Root Causes',
-    description: 'Identify and analyze delivery exceptions',
-    icon: AlertTriangle,
-    color: 'bg-red-500',
-    metrics: '12% exception rate'
-  },
-  {
-    id: 'warehouse-throughput',
-    title: 'Warehouse Throughput',
-    description: 'Track warehouse processing and capacity',
-    icon: Package,
-    color: 'bg-indigo-500',
-    metrics: '2,340 items/day'
-  }
-]
-
-export const dimensions = [
-  { id: 'date', label: 'Date', type: 'date' },
-  { id: 'location', label: 'Location', type: 'category' },
-  { id: 'driver', label: 'Driver', type: 'category' },
-  { id: 'vehicle', label: 'Vehicle', type: 'category' },
-  { id: 'route', label: 'Route', type: 'category' },
-  { id: 'customer', label: 'Customer', type: 'category' }
-]
-
-export const measures = [
-  { id: 'delivery_time', label: 'Delivery Time', type: 'numeric' },
-  { id: 'cost', label: 'Cost', type: 'currency' },
-  { id: 'distance', label: 'Distance', type: 'numeric' },
-  { id: 'fuel_consumption', label: 'Fuel Consumption', type: 'numeric' },
-  { id: 'shipment_count', label: 'Shipment Count', type: 'count' },
-  { id: 'revenue', label: 'Revenue', type: 'currency' }
-]
+export const reportsData = {
+  tripPerformance: { onTime: 92, delayed: 6, cancelled: 2 },
+  fleetUtilization: { active: 75, idle: 20, maintenance: 5 },
+  temperatureCompliance: 94,
+  maintenanceCost: 1250000,
+  
+  revenueTrend: [
+    { month: 'Jan', revenue: 5200000 },
+    { month: 'Feb', revenue: 5800000 },
+    { month: 'Mar', revenue: 6100000 },
+    { month: 'Apr', revenue: 6500000 },
+    { month: 'May', revenue: 7000000 },
+    { month: 'Jun', revenue: 7240000 }
+  ],
+  
+  tripCounts: [
+    { route: 'Lagos-Ibadan', count: 156 },
+    { route: 'Lagos-Kano', count: 89 },
+    { route: 'Lagos-Abuja', count: 234 },
+    { route: 'Port Harcourt-Aba', count: 145 },
+    { route: 'Kano-Kaduna', count: 67 }
+  ],
+  
+  revenueByClient: [
+    { client: 'Adebayo Industries', revenue: 2450000 },
+    { client: 'Port Harcourt Logistics', revenue: 3890000 },
+    { client: 'Kano Distribution', revenue: 1280000 },
+    { client: 'Abuja Enterprises', revenue: 670000 }
+  ],
+  
+  geographicPerformance: [
+    { region: 'Lagos', performance: 95, trips: 450 },
+    { region: 'Abuja', performance: 92, trips: 280 },
+    { region: 'Kano', performance: 88, trips: 190 },
+    { region: 'Port Harcourt', performance: 94, trips: 320 }
+  ]
+}

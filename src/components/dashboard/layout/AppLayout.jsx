@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import TopHeader from './TopHeader'
 import Sidebar from './Sidebar'
+import RoleSwitcher from '../../RoleSwitcher'
 
 export default function AppLayout({ children }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -43,7 +44,7 @@ export default function AppLayout({ children }) {
       {/* Mobile Overlay */}
       {isMobile && sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden transition-opacity"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
@@ -81,6 +82,9 @@ export default function AppLayout({ children }) {
           </div>
         </main>
       </div>
+
+      {/* Role Switcher for Testing */}
+      <RoleSwitcher />
     </div>
   )
 }

@@ -4,7 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import LoadingScreen from './components/LoadingScreen'
 import AppRoutes from './routes/AppRoutes'
-import { AuthProvider } from './hooks/useAuth.jsx'
+import { AuthProvider } from './hooks/useAuth'
 
 function AppContent() {
   const location = useLocation()
@@ -18,18 +18,27 @@ function AppContent() {
     location.pathname.startsWith('/warehouses') || 
     location.pathname.startsWith('/orders') || 
     location.pathname.startsWith('/customers') || 
+    location.pathname.startsWith('/clients') || 
     location.pathname.startsWith('/drivers') || 
+    location.pathname.startsWith('/trips') || 
     location.pathname.startsWith('/analytics') || 
     location.pathname.startsWith('/alerts') || 
     location.pathname.startsWith('/tasks') || 
+    location.pathname.startsWith('/temperature') || 
+    location.pathname.startsWith('/payments') || 
+    location.pathname.startsWith('/pricing-management') || 
+    location.pathname.startsWith('/bookings-management') || 
+    location.pathname.startsWith('/driver-app') || 
+    location.pathname.startsWith('/reports') || 
     location.pathname.startsWith('/integrations') || 
     location.pathname.startsWith('/settings') || 
+    location.pathname.startsWith('/setting') || 
     location.pathname.startsWith('/help') || 
     location.pathname.startsWith('/booking') || 
     location.pathname.startsWith('/invoice') || 
     location.pathname.startsWith('/profile') || 
-    location.pathname.startsWith('/reports') || 
     location.pathname.startsWith('/tracking') || 
+    location.pathname.startsWith('/my-bookings') || 
     location.pathname.startsWith('/user')
 
   const isAuthPage = location.pathname.startsWith('/auth') || 

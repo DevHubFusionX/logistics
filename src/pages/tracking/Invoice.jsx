@@ -1,234 +1,166 @@
-import { motion } from 'framer-motion'
-import { Download, Printer, Mail, ArrowLeft } from 'lucide-react'
+import { Download, Printer, Mail, ArrowLeft, FileText } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { PageHeader } from '../../components/dashboard'
 
 export default function Invoice() {
   const navigate = useNavigate()
 
   const invoiceData = {
     invoiceNumber: 'INV-2024-001',
-    bookingId: 'DL-1001',
+    bookingId: 'BK-1001',
     date: '2024-01-15',
     dueDate: '2024-01-30',
     status: 'Paid',
     company: {
       name: 'ABC Corporation',
-      address: '123 Business Ave\nNew York, NY 10001',
+      address: '123 Business Ave, Lagos',
       email: 'billing@abccorp.com',
-      phone: '+1 (555) 123-4567'
-    },
-    shipment: {
-      from: 'New York, NY 10001',
-      to: 'Los Angeles, CA 90210',
-      service: 'Ground Transport',
-      weight: '25 kg',
-      dimensions: '50 x 40 x 30 cm',
-      pickupDate: '2024-01-13',
-      deliveryDate: '2024-01-15'
+      phone: '+234 800 123 4567'
     },
     charges: [
-      { description: 'Base Shipping Rate', quantity: '25 kg', rate: '$2.50', amount: '$62.50' },
-      { description: 'Fuel Surcharge', quantity: '1', rate: '$15.00', amount: '$15.00' },
-      { description: 'Insurance (2%)', quantity: '1', rate: '$1.55', amount: '$1.55' },
-      { description: 'Handling Fee', quantity: '1', rate: '$25.00', amount: '$25.00' }
+      { description: 'Base Shipping Rate', quantity: '25 kg', rate: '₦2.50', amount: '₦62.50' },
+      { description: 'Fuel Surcharge', quantity: '1', rate: '₦15.00', amount: '₦15.00' },
+      { description: 'Insurance (2%)', quantity: '1', rate: '₦1.55', amount: '₦1.55' },
+      { description: 'Handling Fee', quantity: '1', rate: '₦25.00', amount: '₦25.00' }
     ],
-    subtotal: '$104.05',
-    tax: '$8.32',
-    total: '$112.37'
-  }
-
-  const handleDownload = () => {
-    // Simulate PDF download
-    const link = document.createElement('a')
-    link.href = '#'
-    link.download = `invoice-${invoiceData.invoiceNumber}.pdf`
-    link.click()
-  }
-
-  const handlePrint = () => {
-    window.print()
+    subtotal: '₦104.05',
+    tax: '₦8.32',
+    total: '₦112.37'
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-4xl mx-auto px-6">
-        {/* Header Actions */}
-        <motion.div
-          className="flex items-center justify-between mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back to Dashboard
+    <div className="space-y-6 pb-6">
+      <PageHeader
+        title="Invoice Details"
+        subtitle="View and manage invoice information"
+      />
+
+      <div className="flex items-center justify-between">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          <span className="text-sm font-medium">Back</span>
+        </button>
+        <div className="flex gap-3">
+          <button onClick={() => window.print()} className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            <Printer className="w-4 h-4" />
+            <span className="text-sm font-medium">Print</span>
           </button>
+          <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <Download className="w-4 h-4" />
+            <span className="text-sm font-medium">Download PDF</span>
+          </button>
+        </div>
+      </div>
 
-          <div className="flex gap-3">
-            <motion.button
-              onClick={handlePrint}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Printer className="w-4 h-4" />
-              Print
-            </motion.button>
-
-            <motion.button
-              onClick={handleDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-sky-500 text-white rounded-lg hover:bg-sky-600"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <Download className="w-4 h-4" />
-              Download PDF
-            </motion.button>
-          </div>
-        </motion.div>
-
-        {/* Invoice */}
-        <motion.div
-          className="bg-white rounded-2xl shadow-lg p-8 print:shadow-none print:rounded-none"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          {/* Invoice Header */}
-          <div className="flex justify-between items-start mb-8">
+      <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+        <div className="px-6 py-4 bg-gradient-to-r from-blue-50 via-cyan-50 to-indigo-50 border-b">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg shadow-md">
+              <FileText className="w-5 h-5 text-white" />
+            </div>
             <div>
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gradient-to-r from-sky-400 to-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">D</span>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">Dara Logistics</h1>
-                  <p className="text-gray-600">Global Shipping Solutions</p>
-                </div>
-              </div>
-              <div className="text-sm text-gray-600">
-                <p>500 Logistics Blvd</p>
-                <p>New York, NY 10001</p>
-                <p>+1 (800) Dara-LOG</p>
-                <p>billing@Daralogistics.com</p>
+              <h3 className="text-lg font-semibold text-gray-900">Invoice {invoiceData.invoiceNumber}</h3>
+              <p className="text-xs text-gray-600">Booking ID: {invoiceData.bookingId}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div>
+              <h4 className="text-sm font-semibold text-gray-900 mb-3">From:</h4>
+              <div className="bg-gradient-to-br from-gray-50 to-blue-50 p-4 rounded-lg border border-gray-200">
+                <p className="font-bold text-gray-900">Dara Logistics</p>
+                <p className="text-sm text-gray-600 mt-1">500 Logistics Blvd</p>
+                <p className="text-sm text-gray-600">Lagos, Nigeria</p>
+                <p className="text-sm text-gray-600">+234 800 LOGISTICS</p>
               </div>
             </div>
 
-            <div className="text-right">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">INVOICE</h2>
-              <div className="space-y-1 text-sm">
-                <p><span className="font-semibold">Invoice #:</span> {invoiceData.invoiceNumber}</p>
-                <p><span className="font-semibold">Booking ID:</span> {invoiceData.bookingId}</p>
-                <p><span className="font-semibold">Date:</span> {invoiceData.date}</p>
-                <p><span className="font-semibold">Due Date:</span> {invoiceData.dueDate}</p>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${invoiceData.status === 'Paid' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                  }`}>
-                  {invoiceData.status}
-                </span>
+            <div>
+              <h4 className="text-sm font-semibold text-gray-900 mb-3">Bill To:</h4>
+              <div className="bg-gradient-to-br from-gray-50 to-purple-50 p-4 rounded-lg border border-gray-200">
+                <p className="font-bold text-gray-900">{invoiceData.company.name}</p>
+                <p className="text-sm text-gray-600 mt-1">{invoiceData.company.address}</p>
+                <p className="text-sm text-gray-600">{invoiceData.company.email}</p>
+                <p className="text-sm text-gray-600">{invoiceData.company.phone}</p>
               </div>
             </div>
           </div>
 
-          {/* Bill To */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Bill To:</h3>
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <p className="font-semibold text-gray-900">{invoiceData.company.name}</p>
-              <div className="text-gray-600 text-sm mt-1">
-                {invoiceData.company.address.split('\n').map((line, index) => (
-                  <p key={index}>{line}</p>
-                ))}
-                <p className="mt-2">{invoiceData.company.email}</p>
-                <p>{invoiceData.company.phone}</p>
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-3 border border-blue-200">
+              <div className="text-xs font-medium text-gray-600 mb-1">Invoice Date</div>
+              <div className="text-lg font-bold text-gray-900">{invoiceData.date}</div>
+            </div>
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-3 border border-purple-200">
+              <div className="text-xs font-medium text-gray-600 mb-1">Due Date</div>
+              <div className="text-lg font-bold text-gray-900">{invoiceData.dueDate}</div>
+            </div>
+            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-3 border border-green-200">
+              <div className="text-xs font-medium text-gray-600 mb-1">Status</div>
+              <div className="inline-block px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800">
+                {invoiceData.status}
               </div>
             </div>
           </div>
 
-          {/* Shipment Details */}
-          <div className="mb-8">
-            <h3 className="text-lg font-semibold text-gray-900 mb-3">Shipment Details:</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="space-y-2 text-sm">
-                <p><span className="font-semibold">From:</span> {invoiceData.shipment.from}</p>
-                <p><span className="font-semibold">To:</span> {invoiceData.shipment.to}</p>
-                <p><span className="font-semibold">Service:</span> {invoiceData.shipment.service}</p>
-              </div>
-              <div className="space-y-2 text-sm">
-                <p><span className="font-semibold">Weight:</span> {invoiceData.shipment.weight}</p>
-                <p><span className="font-semibold">Dimensions:</span> {invoiceData.shipment.dimensions}</p>
-                <p><span className="font-semibold">Pickup:</span> {invoiceData.shipment.pickupDate}</p>
-                <p><span className="font-semibold">Delivery:</span> {invoiceData.shipment.deliveryDate}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Charges Table */}
-          <div className="mb-8">
+          <div className="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden mb-6">
             <table className="w-full">
               <thead>
-                <tr className="border-b-2 border-gray-200">
-                  <th className="text-left py-3 font-semibold text-gray-900">Description</th>
-                  <th className="text-center py-3 font-semibold text-gray-900">Qty</th>
-                  <th className="text-right py-3 font-semibold text-gray-900">Rate</th>
-                  <th className="text-right py-3 font-semibold text-gray-900">Amount</th>
+                <tr className="bg-gradient-to-r from-gray-100 to-gray-50 border-b border-gray-200">
+                  <th className="text-left py-3 px-4 font-semibold text-gray-900 text-sm">Description</th>
+                  <th className="text-center py-3 px-4 font-semibold text-gray-900 text-sm">Qty</th>
+                  <th className="text-right py-3 px-4 font-semibold text-gray-900 text-sm">Rate</th>
+                  <th className="text-right py-3 px-4 font-semibold text-gray-900 text-sm">Amount</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="bg-white">
                 {invoiceData.charges.map((charge, index) => (
-                  <tr key={index} className="border-b border-gray-100">
-                    <td className="py-3 text-gray-700">{charge.description}</td>
-                    <td className="py-3 text-center text-gray-700">{charge.quantity}</td>
-                    <td className="py-3 text-right text-gray-700">{charge.rate}</td>
-                    <td className="py-3 text-right font-semibold text-gray-900">{charge.amount}</td>
+                  <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <td className="py-3 px-4 text-sm text-gray-900">{charge.description}</td>
+                    <td className="py-3 px-4 text-center text-sm text-gray-600">{charge.quantity}</td>
+                    <td className="py-3 px-4 text-right text-sm text-gray-600">{charge.rate}</td>
+                    <td className="py-3 px-4 text-right text-sm font-semibold text-gray-900">{charge.amount}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          {/* Totals */}
-          <div className="flex justify-end mb-8">
-            <div className="w-64">
+          <div className="flex justify-end">
+            <div className="w-full lg:w-80 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
               <div className="space-y-2">
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm">
                   <span className="text-gray-700">Subtotal:</span>
-                  <span className="font-semibold">{invoiceData.subtotal}</span>
+                  <span className="font-semibold text-gray-900">{invoiceData.subtotal}</span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm">
                   <span className="text-gray-700">Tax (8%):</span>
-                  <span className="font-semibold">{invoiceData.tax}</span>
+                  <span className="font-semibold text-gray-900">{invoiceData.tax}</span>
                 </div>
-                <div className="border-t pt-2">
-                  <div className="flex justify-between text-lg">
+                <div className="border-t border-blue-200 pt-2 mt-2">
+                  <div className="flex justify-between">
                     <span className="font-bold text-gray-900">Total:</span>
-                    <span className="font-bold text-sky-600">{invoiceData.total}</span>
+                    <span className="font-bold text-xl text-blue-600">{invoiceData.total}</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Footer */}
-          <div className="border-t pt-6 text-center text-sm text-gray-600">
-            <p className="mb-2">Thank you for choosing Dara Logistics!</p>
-            <p>For questions about this invoice, contact us at billing@Daralogistics.com or +1 (800) Dara-LOG</p>
-          </div>
-        </motion.div>
+        <div className="px-6 py-4 bg-gradient-to-r from-gray-50 to-blue-50 border-t text-center">
+          <p className="text-sm text-gray-700 font-medium mb-1">Thank you for choosing Dara Logistics!</p>
+          <p className="text-xs text-gray-600">For questions, contact billing@daralogistics.com</p>
+        </div>
+      </div>
 
-        {/* Actions */}
-        <motion.div
-          className="mt-8 text-center print:hidden"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <button className="flex items-center gap-2 mx-auto px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
-            <Mail className="w-4 h-4" />
-            Email Invoice
-          </button>
-        </motion.div>
+      <div className="flex justify-center">
+        <button className="flex items-center gap-2 px-6 py-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors bg-white">
+          <Mail className="w-4 h-4" />
+          <span className="text-sm font-medium">Email Invoice</span>
+        </button>
       </div>
     </div>
   )

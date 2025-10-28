@@ -4,11 +4,10 @@ import { ChevronDown, ChevronRight, Star } from 'lucide-react'
 import { NAVIGATION_SECTIONS } from '../../../constants/navigation'
 import { COLORS, BADGE_COLORS, STATUS_COLORS } from '../../../constants'
 import { getColorClasses } from '../../../utils/helpers'
-
-const navigationSections = NAVIGATION_SECTIONS
-
+import { useAuth } from '../../../hooks/useAuth'
 
 export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
+  const { hasPermission } = useAuth()
   const [expandedItems, setExpandedItems] = useState({ shipments: true })
   const location = useLocation()
 
@@ -22,8 +21,6 @@ export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
   const isActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(path + '/')
   }
-
-  const allItems = navigationSections.flatMap(section => section.items)
 
   return (
     <aside 
@@ -47,7 +44,11 @@ export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto p-3 space-y-6">
-          {navigationSections.map((section) => (
+          {NAVIGATION_SECTIONS.map((section) => {
+            const visibleItems = section.items.filter(item => hasPermission(item.roles))
+            if (visibleItems.length === 0) return null
+            
+            return (
             <div key={section.title}>
               {/* Section Title */}
               {!collapsed && (
@@ -60,7 +61,7 @@ export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
 
               {/* Section Items */}
               <div className="space-y-1">
-                {section.items.map((item) => {
+                {visibleItems.map((item) => {
                   const Icon = item.icon
                   const hasSubItems = item.subItems && item.subItems.length > 0
                   const isExpanded = expandedItems[item.id]
@@ -185,7 +186,8 @@ export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
                 })}
               </div>
             </div>
-          ))}
+            )
+          })}
         </nav>
 
         {/* Sidebar Footer */}

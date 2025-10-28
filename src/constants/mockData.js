@@ -159,71 +159,67 @@ export const TRUST_STATS_DATA = [
 // KPI Data
 export const KPI_DATA = [
   {
-    id: 'ontime',
-    title: 'On-Time Delivery',
-    value: '94.2',
-    unit: '%',
+    id: 'active_trucks',
+    title: 'Active Trucks',
+    value: '48',
+    change: 8.3,
+    period: '24h',
+    sparklineData: [42, 44, 46, 45, 47, 49, 48],
+    color: 'blue'
+  },
+  {
+    id: 'ongoing_trips',
+    title: 'Ongoing Trips',
+    value: '127',
+    change: 5.2,
+    period: '24h',
+    sparklineData: [115, 118, 122, 120, 125, 128, 127],
+    color: 'blue'
+  },
+  {
+    id: 'completed',
+    title: 'Completed Deliveries',
+    value: '1,847',
+    change: 12.4,
+    period: '7d',
+    sparklineData: [1600, 1650, 1700, 1750, 1800, 1820, 1847],
+    color: 'green'
+  },
+  {
+    id: 'failed',
+    title: 'Failed Deliveries',
+    value: '23',
+    change: -15.2,
+    period: '7d',
+    sparklineData: [35, 32, 28, 26, 24, 25, 23],
+    color: 'green'
+  },
+  {
+    id: 'temperature',
+    title: 'Avg Truck Temperature',
+    value: '22.5',
+    unit: '°C',
     change: 2.1,
-    period: '7d',
-    sparklineData: [85, 88, 92, 89, 94, 96, 94],
+    period: '24h',
+    sparklineData: [21, 21.5, 22, 22.5, 23, 22.8, 22.5],
+    color: 'blue'
+  },
+  {
+    id: 'revenue',
+    title: 'Daily Revenue',
+    value: '₦2.4M',
+    change: 18.7,
+    period: '24h',
+    sparklineData: [1.8, 2.0, 2.1, 2.3, 2.2, 2.5, 2.4],
     color: 'green'
   },
   {
-    id: 'shipments',
-    title: 'Active Shipments',
-    value: '1,247',
-    change: -3.2,
+    id: 'alerts',
+    title: 'Active Alerts',
+    value: '8',
+    change: -25.0,
     period: '24h',
-    sparklineData: [1200, 1180, 1220, 1250, 1240, 1260, 1247],
-    color: 'blue'
-  },
-  {
-    id: 'fleet',
-    title: 'Fleet Utilization',
-    value: '78.5',
-    unit: '%',
-    change: 5.8,
-    period: '24h',
-    sparklineData: [70, 72, 75, 78, 76, 79, 78],
-    color: 'blue'
-  },
-  {
-    id: 'delivery_time',
-    title: 'Avg Delivery Time',
-    value: '2.4',
-    unit: 'hrs',
-    change: -8.1,
-    period: '7d',
-    sparklineData: [2.8, 2.6, 2.5, 2.7, 2.3, 2.2, 2.4],
-    color: 'green'
-  },
-  {
-    id: 'fuel_cost',
-    title: 'Fuel Cost Today',
-    value: '₦45.2K',
-    change: 12.3,
-    period: '24h',
-    sparklineData: [40, 42, 38, 45, 43, 46, 45],
-    color: 'yellow'
-  },
-  {
-    id: 'warehouse',
-    title: 'Warehouse Capacity',
-    value: '67.8',
-    unit: '%',
-    change: 4.2,
-    period: '24h',
-    sparklineData: [60, 62, 65, 68, 66, 69, 67],
-    color: 'blue'
-  },
-  {
-    id: 'satisfaction',
-    title: 'Customer Satisfaction',
-    value: '4.7',
-    unit: '/5',
-    change: 1.8,
-    period: '30d',
-    sparklineData: [4.5, 4.6, 4.8, 4.7, 4.9, 4.6, 4.7],
+    sparklineData: [15, 13, 11, 10, 9, 10, 8],
     color: 'green'
   }
 ]
