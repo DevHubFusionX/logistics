@@ -15,8 +15,8 @@ export default {
     body: JSON.stringify(bookingData)
   }),
 
-  updateBooking: (id, bookingData) => httpClient.request(`/bookings/${id}/`, {
-    method: 'PUT',
+  updateBooking: (id, bookingData) => httpClient.request(`/bookings/${id}`, {
+    method: 'PATCH',
     body: JSON.stringify(bookingData)
   }),
 

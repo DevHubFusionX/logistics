@@ -1,38 +1,91 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { PageHeader } from '../components/dashboard'
 import { TrendingUp, DollarSign, Package, Clock, Calendar, BarChart3 } from 'lucide-react'
+import bookingService from '../services/bookingService'
 
 export default function MyAnalytics() {
   const [period, setPeriod] = useState('month')
+  const [bookings, setBookings] = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const stats = {
-    totalSpend: 1245680,
-    totalShipments: 48,
-    avgCostPerShip: 25952,
-    avgDeliveryTime: 2.8,
-    onTimeRate: 95.8
+  useEffect(() => {
+    fetchBookings()
+  }, [])
+
+  const fetchBookings = async () => {
+    try {
+      const response = await bookingService.getBookings()
+      setBookings(response.data?.records || [])
+    } catch (error) {
+      console.error('Error fetching bookings:', error)
+    } finally {
+      setLoading(false)
+    }
   }
 
-  const monthlyData = [
-    { month: 'Jan', shipments: 12, cost: 298000 },
-    { month: 'Feb', shipments: 15, cost: 356000 },
-    { month: 'Mar', shipments: 18, cost: 425000 },
-    { month: 'Apr', shipments: 21, cost: 498000 }
-  ]
+  const calculatePrice = (booking) => {
+    if (booking.totalCost || booking.estimatedCost || booking.price) return booking.totalCost || booking.estimatedCost || booking.price
+    const baseRate = 5000
+    const weightRate = parseFloat(booking.cargoWeightKg || 0) * 50
+    const quantityRate = (booking.quantity || 1) * 500
+    const fragileCharge = booking.isFragile ? 2000 : 0
+    const perishableCharge = booking.isPerishable ? 3000 : 0
+    const vehicleRates = { 'Van': 0, 'Truck': 5000, 'Refrigerated Van': 8000 }
+    return baseRate + weightRate + quantityRate + fragileCharge + perishableCharge + (vehicleRates[booking.vehicleType] || 0)
+  }
 
-  const topRoutes = [
-    { route: 'Lagos → Abuja', shipments: 15, cost: 425000, avgTime: 2.5 },
-    { route: 'Kano → Port Harcourt', shipments: 12, cost: 356000, avgTime: 3.2 },
-    { route: 'Abuja → Lagos', shipments: 10, cost: 298000, avgTime: 2.8 },
-    { route: 'Lagos → Kano', shipments: 8, cost: 245000, avgTime: 3.5 }
-  ]
+  const stats = {
+    totalSpend: bookings.reduce((sum, b) => sum + calculatePrice(b), 0),
+    totalShipments: bookings.length,
+    avgCostPerShip: bookings.length > 0 ? bookings.reduce((sum, b) => sum + calculatePrice(b), 0) / bookings.length : 0,
+    avgDeliveryTime: 2.8,
+    onTimeRate: bookings.length > 0 ? (bookings.filter(b => b.status === 'delivered').length / bookings.length * 100) : 0
+  }
 
-  const cargoTypes = [
-    { type: 'Frozen Foods', shipments: 20, percentage: 42 },
-    { type: 'Pharmaceuticals', shipments: 15, percentage: 31 },
-    { type: 'Dairy Products', shipments: 8, percentage: 17 },
-    { type: 'General Cargo', shipments: 5, percentage: 10 }
-  ]
+  const monthlyData = bookings.reduce((acc, booking) => {
+    const month = new Date(booking.createdAt).toLocaleString('default', { month: 'short' })
+    const existing = acc.find(m => m.month === month)
+    if (existing) {
+      existing.shipments++
+      existing.cost += calculatePrice(booking)
+    } else {
+      acc.push({ month, shipments: 1, cost: calculatePrice(booking) })
+    }
+    return acc
+  }, [])
+
+  const routeCounts = bookings.reduce((acc, booking) => {
+    const route = `${booking.pickupLocation?.city} → ${booking.dropoffLocation?.city}`
+    if (!acc[route]) acc[route] = { route, shipments: 0, cost: 0, totalDays: 0 }
+    acc[route].shipments++
+    acc[route].cost += calculatePrice(booking)
+    const days = Math.abs(new Date(booking.estimatedDeliveryDate) - new Date(booking.estimatedPickupDate)) / (1000 * 60 * 60 * 24)
+    acc[route].totalDays += days
+    return acc
+  }, {})
+  const topRoutes = Object.values(routeCounts).map(r => ({ ...r, avgTime: r.totalDays / r.shipments })).sort((a, b) => b.shipments - a.shipments).slice(0, 5)
+
+  const cargoCounts = bookings.reduce((acc, booking) => {
+    const type = booking.goodsType
+    acc[type] = (acc[type] || 0) + 1
+    return acc
+  }, {})
+  const cargoTypes = Object.entries(cargoCounts).map(([type, count]) => ({
+    type,
+    shipments: count,
+    percentage: Math.round((count / bookings.length) * 100)
+  })).sort((a, b) => b.shipments - a.shipments)
+
+  if (loading) {
+    return (
+      <div className="space-y-6 pb-6">
+        <PageHeader title="My Analytics" subtitle="Track your shipping costs, trends, and performance" />
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 pb-6">

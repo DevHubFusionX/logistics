@@ -1,6 +1,15 @@
 import { User, Star, Truck, Phone, MessageCircle } from 'lucide-react'
 
 export default function DriverInfo({ driver }) {
+  if (!driver) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+        <h3 className="font-semibold text-gray-900 mb-4">Your Driver</h3>
+        <p className="text-gray-600 text-sm">Driver will be assigned soon</p>
+      </div>
+    )
+  }
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
       <h3 className="font-semibold text-gray-900 mb-4">Your Driver</h3>

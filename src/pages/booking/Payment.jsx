@@ -1,54 +1,53 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CreditCard, Lock, CheckCircle, XCircle, ArrowLeft, Loader, DollarSign, Shield } from 'lucide-react'
+import { CreditCard, CheckCircle, XCircle, ArrowLeft, Loader, DollarSign, Shield } from 'lucide-react'
 import { PageHeader } from '../../components/dashboard'
-import { useToast } from '../../components/ui/advanced'
+import toast from 'react-hot-toast'
+import PaystackPayment from '../../components/payments/PaystackPayment'
+import paymentService from '../../services/paymentService'
 
 export default function Payment() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { showToast } = useToast()
-  const [paymentMethod, setPaymentMethod] = useState('card')
   const [processing, setProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState(null)
-  const [cardData, setCardData] = useState({ number: '', expiry: '', cvv: '', name: '' })
 
-  const { bookingData, quote, bookingId, amount } = location.state || {}
+  const { bookingData, quote, bookingId, amount, email } = location.state || {}
 
-  // Handle payment from My Bookings (existing booking)
   const isExistingBooking = amount && bookingId && !bookingData
   const paymentAmount = isExistingBooking ? amount : quote?.total
+  const userEmail = email || bookingData?.email || localStorage.getItem('userEmail') || 'user@example.com'
 
   if (!isExistingBooking && (!bookingData || !quote)) {
     navigate('/booking/request')
     return null
   }
 
-  const handlePayment = async (e) => {
-    e.preventDefault()
+  const handlePaymentSuccess = async (reference) => {
     setProcessing(true)
-    showToast.info('Processing payment', 'Please wait...')
-    
-    setTimeout(() => {
-      const success = Math.random() > 0.2
-      setPaymentStatus(success ? 'success' : 'failed')
+    try {
+      const response = await paymentService.verifyPayment(reference.reference, bookingId)
+      setPaymentStatus('success')
+      toast.success('Payment verified successfully!')
+      setTimeout(() => {
+        if (isExistingBooking) {
+          navigate('/my-bookings', { state: { paymentSuccess: true } })
+        } else {
+          navigate('/booking/confirmation', {
+            state: { bookingData, quote, bookingId, paymentId: reference.reference }
+          })
+        }
+      }, 2000)
+    } catch (error) {
+      setPaymentStatus('failed')
+      toast.error('Payment verification failed. Please contact support.')
+    } finally {
       setProcessing(false)
-      
-      if (success) {
-        showToast.success('Payment successful', 'Redirecting...')
-        setTimeout(() => {
-          if (isExistingBooking) {
-            navigate('/my-bookings')
-          } else {
-            navigate('/booking/confirmation', {
-              state: { bookingData, quote, bookingId, paymentId: 'PAY-' + Date.now() }
-            })
-          }
-        }, 2000)
-      } else {
-        showToast.error('Payment failed', 'Please try again')
-      }
-    }, 3000)
+    }
+  }
+
+  const handlePaymentClose = () => {
+    toast.error('Payment cancelled')
   }
 
   return (
@@ -109,54 +108,22 @@ export default function Payment() {
                   <div className="p-2 bg-blue-100 rounded-lg">
                     <CreditCard className="w-5 h-5 text-blue-600" />
                   </div>
-                  <h2 className="text-xl font-bold text-gray-900">Payment Method</h2>
+                  <h2 className="text-xl font-bold text-gray-900">Secure Payment with Paystack</h2>
                 </div>
-                <div className="grid md:grid-cols-2 gap-4 mb-6">
-                  <div onClick={() => setPaymentMethod('card')} className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${paymentMethod === 'card' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
-                    <CreditCard className="w-6 h-6 text-blue-500 mb-2" />
-                    <h3 className="font-semibold text-gray-900">Credit/Debit Card</h3>
-                    <p className="text-xs text-gray-600 mt-1">Visa, Mastercard, Amex</p>
+                <div className="space-y-4">
+                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <p className="text-sm text-gray-700">
+                      You will be redirected to Paystack's secure payment page to complete your transaction.
+                    </p>
                   </div>
-                  <div onClick={() => setPaymentMethod('paypal')} className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${paymentMethod === 'paypal' ? 'border-blue-500 bg-blue-50' : 'border-gray-200 hover:border-gray-300'}`}>
-                    <div className="w-6 h-6 bg-blue-600 rounded mb-2"></div>
-                    <h3 className="font-semibold text-gray-900">PayPal</h3>
-                    <p className="text-xs text-gray-600 mt-1">Fast & secure</p>
-                  </div>
+                  <PaystackPayment
+                    amount={paymentAmount}
+                    email={userEmail}
+                    bookingId={bookingId}
+                    onSuccess={handlePaymentSuccess}
+                    onClose={handlePaymentClose}
+                  />
                 </div>
-
-                {paymentMethod === 'card' && (
-                  <form onSubmit={handlePayment} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Card Number</label>
-                      <input type="text" value={cardData.number} onChange={(e) => setCardData({...cardData, number: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="1234 5678 9012 3456" required />
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
-                        <input type="text" value={cardData.expiry} onChange={(e) => setCardData({...cardData, expiry: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="MM/YY" required />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">CVV</label>
-                        <input type="text" value={cardData.cvv} onChange={(e) => setCardData({...cardData, cvv: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="123" required />
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Cardholder Name</label>
-                      <input type="text" value={cardData.name} onChange={(e) => setCardData({...cardData, name: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe" required />
-                    </div>
-                    <button type="submit" className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-sm">
-                      <Lock className="w-5 h-5" /> Pay ₦{paymentAmount?.toFixed(2)}
-                    </button>
-                  </form>
-                )}
-
-                {paymentMethod === 'paypal' && (
-                  <div className="text-center py-8">
-                    <button onClick={handlePayment} className="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                      Continue with PayPal
-                    </button>
-                  </div>
-                )}
               </div>
             )}
           </div>

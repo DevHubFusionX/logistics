@@ -61,6 +61,7 @@ const MyTemperature = lazy(() => import('../pages/MyTemperature'))
 const Support = lazy(() => import('../pages/Support'))
 const MyAnalytics = lazy(() => import('../pages/MyAnalytics'))
 const DriverApp = lazy(() => import('../pages/DriverApp'))
+const PaymentHistory = lazy(() => import('../pages/PaymentHistory'))
 
 // Lazy Load Public Pages
 const Portfolio = lazy(() => import('../pages/Portfolio'))
@@ -145,6 +146,7 @@ export default function AppRoutes() {
       {/* User Routes */}
       <Route path="/profile" element={<ProtectedRoute><ManageProfile /></ProtectedRoute>} />
       <Route path="/my-bookings" element={<DashboardRoute><MyBookings /></DashboardRoute>} />
+      <Route path="/payment-history" element={<DashboardRoute><PaymentHistory /></DashboardRoute>} />
       <Route path="/my-temperature" element={<DashboardRoute><MyTemperature /></DashboardRoute>} />
       <Route path="/my-analytics" element={<DashboardRoute><MyAnalytics /></DashboardRoute>} />
       <Route path="/support" element={<DashboardRoute><Support /></DashboardRoute>} />

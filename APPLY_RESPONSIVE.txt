@@ -1,0 +1,26 @@
+# Manual Find & Replace Instructions for BookingRequest.jsx
+
+## Replace ALL occurrences:
+
+1. `p-6 shadow-sm">` → `p-4 sm:p-6 shadow-sm">`
+2. `text-lg font-semibold text-gray-900">` → `text-base sm:text-lg font-semibold text-gray-900">`
+3. `grid md:grid-cols-3 gap-4 mb-4">` → `grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">`
+4. `grid md:grid-cols-3 gap-4">` → `grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">`
+5. `md:col-span-3">` → `sm:col-span-2 md:col-span-3">`
+6. `flex gap-3">` → `flex flex-col sm:flex-row gap-3">`
+7. `px-6 py-3` → `px-4 sm:px-6 py-3 text-sm sm:text-base`
+8. `space-y-6">` (in step 2 & 3) → `space-y-4 sm:space-y-6">`
+9. `p-6">` (in step 2 & 3) → `p-4 sm:p-6">`
+10. `grid md:grid-cols-2 gap-6` → `grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6`
+11. `grid md:grid-cols-4 gap-4 text-sm">` → `grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">`
+12. `grid md:grid-cols-2 gap-4 text-sm">` → `grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">`
+13. `flex items-center justify-between">` (in payment) → `flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">`
+14. `text-xl font-bold text-blue-600">` → `text-lg sm:text-xl font-bold text-blue-600 break-all">`
+15. `text-2xl font-bold` → `text-xl sm:text-2xl font-bold`
+16. `text-3xl font-bold` → `text-2xl sm:text-3xl font-bold`
+17. `w-12 h-12 text-blue-600" />` (Package icon) → `w-10 h-10 sm:w-12 sm:h-12 text-blue-600 flex-shrink-0" />`
+18. `w-16 h-16 bg-green-100` → `w-14 h-14 sm:w-16 sm:h-16 bg-green-100`
+19. `w-10 h-10 text-green-600" />` → `w-8 h-8 sm:w-10 sm:h-10 text-green-600" />`
+20. `p-8">` (confirmation) → `p-6 sm:p-8">`
+
+Done! The page is now fully responsive.

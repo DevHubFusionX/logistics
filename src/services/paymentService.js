@@ -6,9 +6,9 @@ export default {
     body: JSON.stringify(paymentData)
   }),
 
-  verifyPayment: (reference) => httpClient.request('/payments/verify', {
+  verifyPayment: (reference, bookingId) => httpClient.request('/payments/verify', {
     method: 'POST',
-    body: JSON.stringify({ reference })
+    body: JSON.stringify({ reference, bookingId })
   }),
 
   payWithWallet: (bookingId) => httpClient.request('/payments/wallet', {

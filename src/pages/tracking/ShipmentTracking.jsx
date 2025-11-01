@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { PageHeader } from '../../components/dashboard'
 import { MapPin, Package, CheckCircle, Clock, Truck, User, Phone, Camera, FileText, Star } from 'lucide-react'
@@ -7,8 +7,9 @@ import StatusTimeline from '../../components/tracking/StatusTimeline'
 import DriverInfo from '../../components/tracking/DriverInfo'
 import ProofOfDelivery from '../../components/tracking/ProofOfDelivery'
 import RatingModal from '../../components/tracking/RatingModal'
+import bookingService from '../../services/bookingService'
 
-const mockShipment = {
+const mockShipmentTemplate = {
   id: 'BK-1705234567',
   status: 'in_transit',
   customerName: 'John Doe',
@@ -64,8 +65,73 @@ const mockShipment = {
 export default function ShipmentTracking() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [shipment] = useState(mockShipment)
+  const [shipment, setShipment] = useState(null)
+  const [loading, setLoading] = useState(true)
   const [showRating, setShowRating] = useState(false)
+
+  useEffect(() => {
+    fetchShipment()
+  }, [id])
+
+  const fetchShipment = async () => {
+    try {
+      const response = await bookingService.getBookingById(id)
+      const booking = response.data || response
+      setShipment({
+        id: booking.bookingId || booking._id,
+        status: booking.status,
+        customerName: booking.fullNameOrBusiness,
+        customerEmail: booking.email,
+        customerPhone: booking.contactPhone,
+        pickupAddress: `${booking.pickupLocation?.address}, ${booking.pickupLocation?.city}`,
+        deliveryAddress: `${booking.dropoffLocation?.address}, ${booking.dropoffLocation?.city}`,
+        weight: booking.cargoWeightKg,
+        cargoType: booking.goodsType,
+        serviceType: booking.vehicleType,
+        createdAt: new Date(booking.createdAt).toLocaleString(),
+        pickupDate: new Date(booking.estimatedPickupDate).toLocaleString(),
+        estimatedDelivery: new Date(booking.estimatedDeliveryDate).toLocaleString(),
+        driver: booking.assignedDriver || null,
+        currentLocation: booking.currentLocation || {},
+        timeline: [
+          { status: 'booking_created', label: 'Booking Created', timestamp: new Date(booking.createdAt).toLocaleString(), completed: true },
+          { status: 'pending', label: 'Pending Review', timestamp: null, completed: booking.status !== 'pending', current: booking.status === 'pending' },
+          { status: 'confirmed', label: 'Confirmed', timestamp: null, completed: ['confirmed', 'in_transit', 'delivered'].includes(booking.status), current: booking.status === 'confirmed' },
+          { status: 'in_transit', label: 'In Transit', timestamp: null, completed: ['in_transit', 'delivered'].includes(booking.status), current: booking.status === 'in_transit' },
+          { status: 'delivered', label: 'Delivered', timestamp: null, completed: booking.status === 'delivered', current: booking.status === 'delivered' }
+        ]
+      })
+    } catch (error) {
+      console.error('Error fetching shipment:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-6 pb-6">
+        <PageHeader title="Track Shipment" subtitle="Loading..." />
+        <div className="flex items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!shipment) {
+    return (
+      <div className="space-y-6 pb-6">
+        <PageHeader title="Track Shipment" subtitle="Booking not found" />
+        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+          <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Shipment Not Found</h3>
+          <p className="text-gray-600 mb-4">The tracking ID you entered could not be found</p>
+          <button onClick={() => navigate('/my-bookings')} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">View My Bookings</button>
+        </div>
+      </div>
+    )
+  }
 
   const isDelivered = shipment.status === 'delivered'
   const canRate = isDelivered && !shipment.rating

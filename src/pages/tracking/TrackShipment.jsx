@@ -1,28 +1,39 @@
 import { useState } from 'react'
 import { Search, MapPin, Package, Truck, CheckCircle, Clock } from 'lucide-react'
+import bookingService from '../../services/bookingService'
+import toast from 'react-hot-toast'
 
 export default function TrackShipment() {
   const [trackingId, setTrackingId] = useState('')
   const [shipment, setShipment] = useState(null)
+  const [loading, setLoading] = useState(false)
 
-  const handleTrack = (e) => {
+  const handleTrack = async (e) => {
     e.preventDefault()
-    // Mock shipment data
-    setShipment({
-      id: trackingId,
-      status: 'in_transit',
-      origin: 'Lagos, Nigeria',
-      destination: 'Abuja, Nigeria',
-      currentLocation: 'Ibadan, Nigeria',
-      estimatedDelivery: '2024-01-20',
-      timeline: [
-        { status: 'Booked', date: '2024-01-15 10:00 AM', completed: true },
-        { status: 'Picked Up', date: '2024-01-16 02:30 PM', completed: true },
-        { status: 'In Transit', date: '2024-01-18 09:15 AM', completed: true },
-        { status: 'Out for Delivery', date: 'Pending', completed: false },
-        { status: 'Delivered', date: 'Pending', completed: false }
-      ]
-    })
+    setLoading(true)
+    try {
+      const response = await bookingService.getBookingById(trackingId)
+      const booking = response.data || response
+      setShipment({
+        id: booking.bookingId || booking._id,
+        status: booking.status,
+        origin: `${booking.pickupLocation?.city || 'N/A'}`,
+        destination: `${booking.dropoffLocation?.city || 'N/A'}`,
+        currentLocation: booking.currentLocation?.city || 'Tracking will be available once driver is assigned',
+        estimatedDelivery: new Date(booking.estimatedDeliveryDate).toLocaleDateString(),
+        timeline: [
+          { status: 'Booked', date: new Date(booking.createdAt).toLocaleString(), completed: true },
+          { status: 'Confirmed', date: 'Pending', completed: ['confirmed', 'in_transit', 'delivered'].includes(booking.status) },
+          { status: 'In Transit', date: 'Pending', completed: ['in_transit', 'delivered'].includes(booking.status) },
+          { status: 'Delivered', date: 'Pending', completed: booking.status === 'delivered' }
+        ]
+      })
+    } catch (error) {
+      toast.error('Booking not found')
+      setShipment(null)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -43,9 +54,13 @@ export default function TrackShipment() {
               className="flex-1 px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500"
               required
             />
-            <button type="submit" className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold">
-              <Search className="w-5 h-5" />
-              Track
+            <button type="submit" disabled={loading} className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold disabled:opacity-50">
+              {loading ? (
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+              ) : (
+                <Search className="w-5 h-5" />
+              )}
+              {loading ? 'Tracking...' : 'Track'}
             </button>
           </div>
         </form>

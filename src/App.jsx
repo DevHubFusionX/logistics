@@ -38,6 +38,7 @@ function AppContent() {
     location.pathname.startsWith('/profile') || 
     location.pathname.startsWith('/tracking') || 
     location.pathname.startsWith('/my-bookings') || 
+    location.pathname.startsWith('/payment-history') || 
     location.pathname.startsWith('/my-temperature') || 
     location.pathname.startsWith('/my-analytics') || 
     location.pathname.startsWith('/support') || 

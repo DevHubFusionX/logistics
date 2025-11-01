@@ -27,6 +27,15 @@ export const NAVIGATION_SECTIONS = [
         roles: ['Customer']
       },
       {
+        id: 'payment-history',
+        label: 'Payment History',
+        icon: CreditCard,
+        path: '/payment-history',
+        description: 'View payment transactions',
+        color: 'green',
+        roles: ['Customer']
+      },
+      {
         id: 'bookings',
         label: 'New Booking',
         icon: Package,
@@ -238,6 +247,7 @@ export const NAVIGATION_SECTIONS = [
         roles: ['Super Admin', 'Finance'],
         subItems: [
           { label: 'All Payments', path: '/payments' },
+          { label: 'Payment History', path: '/payment-history' },
           { label: 'Invoices', path: '/tracking/invoice' },
           { label: 'Outstanding', path: '/payments?status=pending', count: '5', status: 'warning' },
           { label: 'Reconciliation', path: '/payments/reconciliation', status: 'success' }

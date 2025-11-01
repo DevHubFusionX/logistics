@@ -1,74 +1,144 @@
-export default function BookingEditModal({ booking, onClose, onSave, onUpdate, saving }) {
+import { X } from 'lucide-react'
+import { useState } from 'react'
+
+export default function BookingEditModal({ booking, onClose, onSave }) {
+  const [formData, setFormData] = useState({
+    estimatedPickupDate: booking?.estimatedPickupDate || '',
+    estimatedDeliveryDate: booking?.estimatedDeliveryDate || '',
+    notes: booking?.notes || '',
+    cargoWeightKg: booking?.cargoWeightKg || '',
+    quantity: booking?.quantity || 1,
+    isFragile: booking?.isFragile || false,
+    isPerishable: booking?.isPerishable || false,
+    tempControlCelsius: booking?.tempControlCelsius || 20
+  })
+
   if (!booking) return null
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const updateData = {
+      estimatedPickupDate: formData.estimatedPickupDate,
+      estimatedDeliveryDate: formData.estimatedDeliveryDate,
+      cargoWeightKg: parseFloat(formData.cargoWeightKg),
+      quantity: parseInt(formData.quantity),
+      isFragile: formData.isFragile,
+      isPerishable: formData.isPerishable,
+      tempControlCelsius: parseFloat(formData.tempControlCelsius),
+      notes: formData.notes
+    }
+    onSave(updateData)
+  }
+  
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm" onClick={onClose}>
-      <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-xl font-bold text-gray-900">Edit Booking</h3>
-            <p className="text-sm text-gray-600">{booking.bookingId || booking._id}</p>
-          </div>
-          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-            <span className="text-2xl text-gray-500">&times;</span>
+    <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl max-w-2xl w-full">
+        <div className="border-b px-6 py-4 flex items-center justify-between">
+          <h2 className="text-xl font-bold">Edit Booking</h2>
+          <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6 space-y-6">
-          <div>
-            <h4 className="font-semibold mb-3">Pickup Location</h4>
-            <div className="space-y-3">
-              <input type="text" placeholder="Address" value={booking.pickupLocation?.address || ''} onChange={(e) => onSave({...booking, pickupLocation: {...booking.pickupLocation, address: e.target.value}})} className="w-full px-3 py-2 border rounded-lg" />
-              <div className="grid grid-cols-2 gap-3">
-                <input type="text" placeholder="City" value={booking.pickupLocation?.city || ''} onChange={(e) => onSave({...booking, pickupLocation: {...booking.pickupLocation, city: e.target.value}})} className="w-full px-3 py-2 border rounded-lg" />
-                <input type="text" placeholder="State" value={booking.pickupLocation?.state || ''} onChange={(e) => onSave({...booking, pickupLocation: {...booking.pickupLocation, state: e.target.value}})} className="w-full px-3 py-2 border rounded-lg" />
-              </div>
+        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Date</label>
+              <input
+                type="datetime-local"
+                value={formData.estimatedPickupDate}
+                onChange={(e) => setFormData({ ...formData, estimatedPickupDate: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Date</label>
+              <input
+                type="datetime-local"
+                value={formData.estimatedDeliveryDate}
+                onChange={(e) => setFormData({ ...formData, estimatedDeliveryDate: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+              <input
+                type="number"
+                step="0.1"
+                value={formData.cargoWeightKg}
+                onChange={(e) => setFormData({ ...formData, cargoWeightKg: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+              <input
+                type="number"
+                value={formData.quantity}
+                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={formData.isFragile}
+                onChange={(e) => setFormData({ ...formData, isFragile: e.target.checked })}
+                className="rounded"
+              />
+              <label className="text-sm font-medium text-gray-700">Fragile</label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={formData.isPerishable}
+                onChange={(e) => setFormData({ ...formData, isPerishable: e.target.checked })}
+                className="rounded"
+              />
+              <label className="text-sm font-medium text-gray-700">Perishable</label>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Temp (°C)</label>
+              <input
+                type="number"
+                value={formData.tempControlCelsius}
+                onChange={(e) => setFormData({ ...formData, tempControlCelsius: e.target.value })}
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
             </div>
           </div>
 
           <div>
-            <h4 className="font-semibold mb-3">Delivery Location</h4>
-            <div className="space-y-3">
-              <input type="text" placeholder="Address" value={booking.dropoffLocation?.address || ''} onChange={(e) => onSave({...booking, dropoffLocation: {...booking.dropoffLocation, address: e.target.value}})} className="w-full px-3 py-2 border rounded-lg" />
-              <div className="grid grid-cols-2 gap-3">
-                <input type="text" placeholder="City" value={booking.dropoffLocation?.city || ''} onChange={(e) => onSave({...booking, dropoffLocation: {...booking.dropoffLocation, city: e.target.value}})} className="w-full px-3 py-2 border rounded-lg" />
-                <input type="text" placeholder="State" value={booking.dropoffLocation?.state || ''} onChange={(e) => onSave({...booking, dropoffLocation: {...booking.dropoffLocation, state: e.target.value}})} className="w-full px-3 py-2 border rounded-lg" />
-              </div>
-            </div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+            <textarea
+              value={formData.notes}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              rows="3"
+              className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              placeholder="Additional instructions..."
+            />
           </div>
 
-          <div>
-            <h4 className="font-semibold mb-3">Cargo Details</h4>
-            <div className="grid grid-cols-2 gap-3">
-              <input type="text" placeholder="Goods Type" value={booking.goodsType || ''} onChange={(e) => onSave({...booking, goodsType: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
-              <input type="number" placeholder="Weight (kg)" value={booking.cargoWeightKg || ''} onChange={(e) => onSave({...booking, cargoWeightKg: parseFloat(e.target.value)})} className="w-full px-3 py-2 border rounded-lg" />
-              <input type="number" placeholder="Quantity" value={booking.quantity || ''} onChange={(e) => onSave({...booking, quantity: parseInt(e.target.value)})} className="w-full px-3 py-2 border rounded-lg" />
-              <input type="text" placeholder="Vehicle Type" value={booking.vehicleType || ''} onChange={(e) => onSave({...booking, vehicleType: e.target.value})} className="w-full px-3 py-2 border rounded-lg" />
-            </div>
-            <div className="flex gap-4 mt-3">
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={booking.isFragile || false} onChange={(e) => onSave({...booking, isFragile: e.target.checked})} />
-                <span className="text-sm">Fragile</span>
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" checked={booking.isPerishable || false} onChange={(e) => onSave({...booking, isPerishable: e.target.checked})} />
-                <span className="text-sm">Perishable</span>
-              </label>
-            </div>
+          <div className="flex gap-3 pt-4">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2 border rounded-lg hover:bg-gray-50">
+              Cancel
+            </button>
+            <button type="submit" className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+              Save Changes
+            </button>
           </div>
-
-          <div>
-            <h4 className="font-semibold mb-3">Notes</h4>
-            <textarea value={booking.notes || ''} onChange={(e) => onSave({...booking, notes: e.target.value})} rows="3" className="w-full px-3 py-2 border rounded-lg" placeholder="Additional notes..." />
-          </div>
-        </div>
-
-        <div className="border-t px-6 py-4 flex gap-3">
-          <button onClick={onClose} className="px-6 py-2 border rounded-lg hover:bg-gray-50">Cancel</button>
-          <button onClick={onUpdate} disabled={saving} className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50">
-            {saving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </div>
+        </form>
       </div>
     </div>
   )
