@@ -1,63 +1,74 @@
-import { Routes, Route } from 'react-router-dom'
-import ProtectedRoute from '../components/ProtectedRoute'
-import AppLayout from '../components/dashboard/layout/AppLayout'
+import { lazy, Suspense } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { ProtectedRoute } from '../components/common'
+import { AppLayout } from '../components/dashboard'
 
-// Public Pages
+// Loading Component
+const LoadingSpinner = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+)
+
+// Public Pages (Eager load for SEO)
 import Home from '../pages/Home'
 import Services from '../pages/Services'
 import Pricing from '../pages/Pricing'
 import About from '../pages/About'
-import Portfolio from '../pages/Portfolio'
-import Team from '../pages/Team'
-import Blog from '../pages/Blog'
-import Contact from '../pages/Contact'
+import NotFound from '../pages/NotFound'
 
-// Auth Pages
+// Auth Pages (Eager load)
 import SignUp from '../pages/auth/SignUp'
 import Login from '../pages/auth/Login'
-import ForgotPassword from '../pages/auth/ForgotPassword'
-import VerifyOTP from '../pages/auth/VerifyOTP'
 
-// Onboarding Pages
+// Lazy Load Dashboard Pages
+const Dashboard = lazy(() => import('../pages/Dashboard'))
+const Shipments = lazy(() => import('../pages/shipments/Shipments'))
+const Fleet = lazy(() => import('../pages/Fleet'))
+const RoutesPage = lazy(() => import('../pages/Routes'))
+const Warehouses = lazy(() => import('../pages/Warehouses'))
+const Orders = lazy(() => import('../pages/Orders'))
+const Customers = lazy(() => import('../pages/Customers'))
+const Drivers = lazy(() => import('../pages/Drivers'))
+const Trips = lazy(() => import('../pages/Trips'))
+const Reports = lazy(() => import('../pages/Reports'))
+const Alerts = lazy(() => import('../pages/Alerts'))
+const Tasks = lazy(() => import('../pages/Tasks'))
+const Temperature = lazy(() => import('../pages/Temperature'))
+const Payments = lazy(() => import('../pages/Payments'))
+const Settings = lazy(() => import('../pages/Settings'))
+const UserRoles = lazy(() => import('../pages/UserRoles'))
+const PricingManagement = lazy(() => import('../pages/PricingManagement'))
+const BookingsManagement = lazy(() => import('../pages/BookingsManagement'))
+const Reconciliation = lazy(() => import('../pages/Reconciliation'))
+const User = lazy(() => import('../pages/User'))
 
+// Lazy Load Booking & Tracking
+const BookingRequest = lazy(() => import('../pages/booking/BookingRequest'))
+const Quotation = lazy(() => import('../pages/booking/Quotation'))
+const Payment = lazy(() => import('../pages/booking/Payment'))
+const Confirmation = lazy(() => import('../pages/booking/Confirmation'))
+const TrackShipment = lazy(() => import('../pages/tracking/TrackShipment'))
+const Invoice = lazy(() => import('../pages/tracking/Invoice'))
+const ShipmentTracking = lazy(() => import('../pages/tracking/ShipmentTracking'))
 
-// Dashboard Pages
-import Dashboard from '../pages/Dashboard'
-import Shipments from '../pages/shipments/Shipments'
-import Fleet from '../pages/Fleet'
-import RoutesPage from '../pages/Routes'
-import Warehouses from '../pages/Warehouses'
-import Orders from '../pages/Orders'
-import Customers from '../pages/Customers'
+// Lazy Load User Pages
+const ManageProfile = lazy(() => import('../pages/ManageProfile'))
+const MyBookings = lazy(() => import('../pages/MyBookings'))
+const BookingStatusGuide = lazy(() => import('../pages/BookingStatusGuide'))
+const AddressBook = lazy(() => import('../pages/AddressBook'))
+const MyTemperature = lazy(() => import('../pages/MyTemperature'))
+const Support = lazy(() => import('../pages/Support'))
+const MyAnalytics = lazy(() => import('../pages/MyAnalytics'))
+const DriverApp = lazy(() => import('../pages/DriverApp'))
 
-
-// Booking & Tracking Pages
-import BookingRequest from '../pages/booking/BookingRequest'
-import Quotation from '../pages/booking/Quotation'
-import Payment from '../pages/booking/Payment'
-import Confirmation from '../pages/booking/Confirmation'
-import TrackShipment from '../pages/tracking/TrackShipment'
-import Invoice from '../pages/tracking/Invoice'
-
-// User Pages
-import ManageProfile from '../pages/ManageProfile'
-import Reports from '../pages/Reports'
-import Alerts from '../pages/Alerts'
-import Tasks from '../pages/Tasks'
-import Drivers from '../pages/Drivers'
-import Trips from '../pages/Trips'
-import User from '../pages/User'
-import Temperature from '../pages/Temperature'
-import Payments from '../pages/Payments'
-import Reconciliation from '../pages/Reconciliation'
-import Settings from '../pages/Settings'
-import UserRoles from '../pages/UserRoles'
-import PricingManagement from '../pages/PricingManagement'
-import BookingsManagement from '../pages/BookingsManagement'
-import ShipmentTracking from '../pages/tracking/ShipmentTracking'
-import DriverApp from '../pages/DriverApp'
-import MyBookings from '../pages/MyBookings'
-import BookingStatusGuide from '../pages/BookingStatusGuide'
+// Lazy Load Public Pages
+const Portfolio = lazy(() => import('../pages/Portfolio'))
+const Team = lazy(() => import('../pages/Team'))
+const Blog = lazy(() => import('../pages/Blog'))
+const Contact = lazy(() => import('../pages/Contact'))
+const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'))
+const VerifyOTP = lazy(() => import('../pages/auth/VerifyOTP'))
 
 const DashboardRoute = ({ children }) => (
   <ProtectedRoute>
@@ -67,6 +78,7 @@ const DashboardRoute = ({ children }) => (
 
 export default function AppRoutes() {
   return (
+    <Suspense fallback={<LoadingSpinner />}>
     <Routes>
       {/* Public Routes */}
       <Route path="/" element={<Home />} />
@@ -99,7 +111,8 @@ export default function AppRoutes() {
       
       
       {/* Dashboard Routes */}
-      <Route path="/dashboard" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
+      <Route path="/dashboard" element={<Navigate to="/my-bookings" replace />} />
+      <Route path="/dashboard/overview" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
       <Route path="/shipments" element={<DashboardRoute><Shipments /></DashboardRoute>} />
       <Route path="/shipments/*" element={<DashboardRoute><Shipments /></DashboardRoute>} />
       <Route path="/fleet" element={<DashboardRoute><Fleet /></DashboardRoute>} />
@@ -132,8 +145,15 @@ export default function AppRoutes() {
       {/* User Routes */}
       <Route path="/profile" element={<ProtectedRoute><ManageProfile /></ProtectedRoute>} />
       <Route path="/my-bookings" element={<DashboardRoute><MyBookings /></DashboardRoute>} />
+      <Route path="/my-temperature" element={<DashboardRoute><MyTemperature /></DashboardRoute>} />
+      <Route path="/my-analytics" element={<DashboardRoute><MyAnalytics /></DashboardRoute>} />
+      <Route path="/support" element={<DashboardRoute><Support /></DashboardRoute>} />
       <Route path="/booking-status-guide" element={<DashboardRoute><BookingStatusGuide /></DashboardRoute>} />
+      <Route path="/address-book" element={<DashboardRoute><AddressBook /></DashboardRoute>} />
       
+      {/* 404 Not Found - Catch all */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
+    </Suspense>
   )
 }

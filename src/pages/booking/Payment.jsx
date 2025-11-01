@@ -13,9 +13,13 @@ export default function Payment() {
   const [paymentStatus, setPaymentStatus] = useState(null)
   const [cardData, setCardData] = useState({ number: '', expiry: '', cvv: '', name: '' })
 
-  const { bookingData, quote, bookingId } = location.state || {}
+  const { bookingData, quote, bookingId, amount } = location.state || {}
 
-  if (!bookingData || !quote) {
+  // Handle payment from My Bookings (existing booking)
+  const isExistingBooking = amount && bookingId && !bookingData
+  const paymentAmount = isExistingBooking ? amount : quote?.total
+
+  if (!isExistingBooking && (!bookingData || !quote)) {
     navigate('/booking/request')
     return null
   }
@@ -33,9 +37,13 @@ export default function Payment() {
       if (success) {
         showToast.success('Payment successful', 'Redirecting...')
         setTimeout(() => {
-          navigate('/booking/confirmation', {
-            state: { bookingData, quote, bookingId, paymentId: 'PAY-' + Date.now() }
-          })
+          if (isExistingBooking) {
+            navigate('/my-bookings')
+          } else {
+            navigate('/booking/confirmation', {
+              state: { bookingData, quote, bookingId, paymentId: 'PAY-' + Date.now() }
+            })
+          }
         }, 2000)
       } else {
         showToast.error('Payment failed', 'Please try again')
@@ -50,9 +58,16 @@ export default function Payment() {
         subtitle="Complete your booking with secure payment processing"
       />
 
-      <button onClick={() => navigate('/booking/quotation', { state: { bookingData, bookingId } })} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-        <ArrowLeft className="w-5 h-5" /> Back to Quote
-      </button>
+      {!isExistingBooking && (
+        <button onClick={() => navigate('/booking/quotation', { state: { bookingData, bookingId } })} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <ArrowLeft className="w-5 h-5" /> Back to Quote
+        </button>
+      )}
+      {isExistingBooking && (
+        <button onClick={() => navigate('/my-bookings')} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+          <ArrowLeft className="w-5 h-5" /> Back to My Bookings
+        </button>
+      )}
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
@@ -130,7 +145,7 @@ export default function Payment() {
                       <input type="text" value={cardData.name} onChange={(e) => setCardData({...cardData, name: e.target.value})} className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="John Doe" required />
                     </div>
                     <button type="submit" className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white py-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-sm">
-                      <Lock className="w-5 h-5" /> Pay ${quote.total}
+                      <Lock className="w-5 h-5" /> Pay ₦{paymentAmount?.toFixed(2)}
                     </button>
                   </form>
                 )}
@@ -172,29 +187,43 @@ export default function Payment() {
                 <span className="text-gray-600">Booking ID</span>
                 <span className="font-mono text-sm font-semibold">{bookingId}</span>
               </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Service</span>
-                <span className="font-semibold capitalize">{bookingData.serviceType}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Weight</span>
-                <span className="font-semibold">{bookingData.weight} kg</span>
-              </div>
+              {!isExistingBooking && (
+                <>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Service</span>
+                    <span className="font-semibold capitalize">{bookingData.serviceType}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Weight</span>
+                    <span className="font-semibold">{bookingData.weight} kg</span>
+                  </div>
+                </>
+              )}
             </div>
-            <div className="border-t pt-4 space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span className="font-semibold">${quote.subtotal}</span>
+            {!isExistingBooking && quote && (
+              <div className="border-t pt-4 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Subtotal</span>
+                  <span className="font-semibold">₦{quote.subtotal}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Tax (8%)</span>
+                  <span className="font-semibold">₦{quote.tax}</span>
+                </div>
+                <div className="flex justify-between text-lg font-bold border-t pt-3 mt-3">
+                  <span>Total Amount</span>
+                  <span className="text-blue-600">₦{quote.total}</span>
+                </div>
               </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tax (8%)</span>
-                <span className="font-semibold">${quote.tax}</span>
+            )}
+            {isExistingBooking && (
+              <div className="border-t pt-4">
+                <div className="flex justify-between text-lg font-bold">
+                  <span>Total Amount</span>
+                  <span className="text-blue-600">₦{amount?.toFixed(2)}</span>
+                </div>
               </div>
-              <div className="flex justify-between text-lg font-bold border-t pt-3 mt-3">
-                <span>Total Amount</span>
-                <span className="text-blue-600">${quote.total}</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

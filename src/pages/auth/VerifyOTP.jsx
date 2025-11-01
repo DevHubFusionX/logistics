@@ -1,12 +1,17 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Shield, RefreshCw } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useToast } from '../../components/ui/advanced'
 
 export default function VerifyOTP() {
+  const navigate = useNavigate()
+  const { showToast, ToastContainer } = useToast()
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
   const [timeLeft, setTimeLeft] = useState(300) // 5 minutes
   const [isResending, setIsResending] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
   const inputRefs = useRef([])
 
   useEffect(() => {
@@ -17,10 +22,11 @@ export default function VerifyOTP() {
   }, [])
 
   const handleOtpChange = (index, value) => {
-    if (value.length <= 1) {
+    if (value.length <= 1 && /^[0-9]*$/.test(value)) {
       const newOtp = [...otp]
       newOtp[index] = value
       setOtp(newOtp)
+      setError('')
       
       // Auto-focus next input
       if (value && index < 5) {
@@ -35,18 +41,38 @@ export default function VerifyOTP() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     const otpCode = otp.join('')
-    console.log('OTP:', otpCode)
+    
+    // Validation
+    if (otpCode.length !== 6) {
+      setError('Please enter all 6 digits')
+      showToast.error('Incomplete OTP', 'Please enter all 6 digits')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+
+    // Simulate API call
+    setTimeout(() => {
+      setLoading(false)
+      showToast.success('Verification successful', 'Redirecting to dashboard...')
+      setTimeout(() => {
+        navigate('/dashboard')
+      }, 1000)
+    }, 2000)
   }
 
   const handleResend = async () => {
     setIsResending(true)
+    setError('')
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000))
     setIsResending(false)
     setTimeLeft(300)
+    showToast.success('Code resent', 'Check your email for the new code')
   }
 
   const formatTime = (seconds) => {
@@ -74,6 +100,15 @@ export default function VerifyOTP() {
           </div>
           <h2 className="text-2xl font-bold text-gray-800">Verify Your Account</h2>
           <p className="text-gray-600 mt-2">Enter the 6-digit code sent to your email</p>
+          {error && (
+            <motion.p 
+              className="mt-3 text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {error}
+            </motion.p>
+          )}
         </motion.div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -91,8 +126,12 @@ export default function VerifyOTP() {
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className="w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-lg focus:border-sky-500 focus:ring-2 focus:ring-sky-200"
+                className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-lg focus:border-sky-500 focus:ring-2 focus:ring-sky-200 ${
+                  error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
                 maxLength={1}
+                inputMode="numeric"
+                pattern="[0-9]*"
               />
             ))}
           </motion.div>
@@ -117,14 +156,26 @@ export default function VerifyOTP() {
 
           <motion.button
             type="submit"
-            className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-sky-400 hover:to-blue-500 transition-all duration-300"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-sky-400 hover:to-blue-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+            whileHover={{ scale: loading ? 1 : 1.02 }}
+            whileTap={{ scale: loading ? 1 : 0.98 }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
           >
-            Verify Account
+            {loading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="flex gap-1">
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                </div>
+                <span>Verifying...</span>
+              </div>
+            ) : (
+              'Verify Account'
+            )}
           </motion.button>
         </form>
 
@@ -139,6 +190,7 @@ export default function VerifyOTP() {
           </Link>
         </motion.div>
       </motion.div>
+      <ToastContainer />
     </div>
   )
 }

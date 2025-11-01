@@ -1,10 +1,9 @@
 import { BrowserRouter as Router, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import Navbar from './components/Navbar'
-import Footer from './components/Footer'
-import LoadingScreen from './components/LoadingScreen'
+import { Navbar, Footer, LoadingScreen } from './components/common'
 import AppRoutes from './routes/AppRoutes'
-import { AuthProvider } from './hooks/useAuth'
+import { AuthProvider } from './hooks'
+import { Toaster } from 'react-hot-toast'
 
 function AppContent() {
   const location = useLocation()
@@ -39,6 +38,11 @@ function AppContent() {
     location.pathname.startsWith('/profile') || 
     location.pathname.startsWith('/tracking') || 
     location.pathname.startsWith('/my-bookings') || 
+    location.pathname.startsWith('/my-temperature') || 
+    location.pathname.startsWith('/my-analytics') || 
+    location.pathname.startsWith('/support') || 
+    location.pathname.startsWith('/booking-status-guide') || 
+    location.pathname.startsWith('/address-book') || 
     location.pathname.startsWith('/user')
 
   const isAuthPage = location.pathname.startsWith('/auth') || 
@@ -66,6 +70,7 @@ function AppContent() {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Toaster position="top-right" />
       {!hideNavbarAndFooter && <Navbar />}
       <main className="flex-1">
         <AppRoutes />

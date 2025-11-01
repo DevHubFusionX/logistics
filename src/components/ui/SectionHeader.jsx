@@ -20,14 +20,15 @@ export default function SectionHeader({
       <motion.h2
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-8"
+        className="font-heading text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-8"
       >
         {title}
         {subtitle && (
           <>
             <br />
-            <span className="text-sky-600">{subtitle}</span>
+            <span className="text-primary">{subtitle}</span>
           </>
         )}
       </motion.h2>
@@ -36,6 +37,7 @@ export default function SectionHeader({
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
           className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
         >

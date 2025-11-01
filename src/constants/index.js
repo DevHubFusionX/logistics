@@ -1,16 +1,15 @@
 // Color system constants
-export const COLORS = {
-  blue: { bg: 'bg-blue-50', text: 'text-blue-600', icon: 'text-blue-500', border: 'border-blue-200' },
-  green: { bg: 'bg-green-50', text: 'text-green-600', icon: 'text-green-500', border: 'border-green-200' },
-  indigo: { bg: 'bg-indigo-50', text: 'text-indigo-600', icon: 'text-indigo-500', border: 'border-indigo-200' },
-  purple: { bg: 'bg-purple-50', text: 'text-purple-600', icon: 'text-purple-500', border: 'border-purple-200' },
-  emerald: { bg: 'bg-emerald-50', text: 'text-emerald-600', icon: 'text-emerald-500', border: 'border-emerald-200' },
-  orange: { bg: 'bg-orange-50', text: 'text-orange-600', icon: 'text-orange-500', border: 'border-orange-200' },
-  violet: { bg: 'bg-violet-50', text: 'text-violet-600', icon: 'text-violet-500', border: 'border-violet-200' },
-  red: { bg: 'bg-red-50', text: 'text-red-600', icon: 'text-red-500', border: 'border-red-200' },
-  gray: { bg: 'bg-gray-50', text: 'text-gray-600', icon: 'text-gray-500', border: 'border-gray-200' },
-  yellow: { bg: 'bg-yellow-50', text: 'text-yellow-600', icon: 'text-yellow-500', border: 'border-yellow-200' }
-}
+const createColorClasses = (color) => ({
+  bg: `bg-${color}-50`,
+  text: `text-${color}-600`,
+  icon: `text-${color}-500`,
+  border: `border-${color}-200`
+})
+
+export const COLORS = Object.fromEntries(
+  ['blue', 'green', 'indigo', 'purple', 'emerald', 'orange', 'violet', 'red', 'gray', 'yellow']
+    .map(color => [color, createColorClasses(color)])
+)
 
 export const BADGE_COLORS = {
   info: 'bg-blue-500 text-white',

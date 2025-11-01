@@ -7,7 +7,7 @@ import {
   TemperatureWidget,
   useDashboardData
 } from '../components/dashboard'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { KPI_ROUTES } from '../constants/mockData'
 import { LoadingSkeleton, useToast } from '../components/ui/advanced'
@@ -21,18 +21,34 @@ export default function Dashboard() {
 
   const handleFilterChange = (key, value) => {
     setFilters(prev => ({ ...prev, [key]: value }))
+    showToast.info('Filter Applied', `${key}: ${value || 'All'}`)
   }
 
   const handleKPIClick = (kpiId) => {
     const route = KPI_ROUTES[kpiId]
-    if (route) navigate(route)
+    if (route) {
+      showToast.success('Navigating', `Opening ${kpiId} details`)
+      navigate(route)
+    }
   }
 
   useLogisticsShortcuts({
-    onNewShipment: () => navigate('/shipments'),
+    onNewShipment: () => {
+      showToast.info('Shortcut', 'Opening new shipment')
+      navigate('/booking/request')
+    },
     onSearch: () => document.querySelector('input[type="search"]')?.focus(),
-    onRefresh: () => window.location.reload()
+    onRefresh: () => {
+      showToast.info('Refreshing', 'Reloading dashboard data')
+      window.location.reload()
+    }
   })
+
+  useEffect(() => {
+    if (Object.keys(filters).length > 0) {
+      console.log('Active filters:', filters)
+    }
+  }, [filters])
 
   if (loading) {
     return (

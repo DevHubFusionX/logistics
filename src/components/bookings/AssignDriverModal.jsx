@@ -54,7 +54,7 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0  backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-xl">
         <div className="sticky top-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-blue-200 flex items-center justify-between">
           <div>
@@ -95,11 +95,10 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
               <div
                 key={driver.id}
                 onClick={() => setSelectedDriver(driver)}
-                className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${
-                  selectedDriver?.id === driver.id
+                className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${selectedDriver?.id === driver.id
                     ? 'border-blue-500 bg-blue-50'
                     : 'border-gray-200 hover:border-gray-300 bg-white'
-                }`}
+                  }`}
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-3">

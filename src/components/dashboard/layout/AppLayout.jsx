@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import TopHeader from './TopHeader'
 import Sidebar from './Sidebar'
-import RoleSwitcher from '../../RoleSwitcher'
+import { RoleSwitcher } from '../../common'
 
 export default function AppLayout({ children }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)

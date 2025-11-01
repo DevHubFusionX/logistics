@@ -26,6 +26,7 @@ export default function ServiceCard({ service, index }) {
         <motion.div
           initial={{ scale: 0, rotate: -180 }}
           whileInView={{ scale: 1, rotate: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.6, delay: index * 0.1 + 0.3, type: "spring", stiffness: 200 }}
           className="absolute top-4 left-4 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center"
         >
@@ -38,6 +39,7 @@ export default function ServiceCard({ service, index }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
           className="mb-6"
         >
@@ -50,6 +52,7 @@ export default function ServiceCard({ service, index }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5, delay: index * 0.1 + 0.5 }}
           className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-xl"
         >
@@ -71,6 +74,7 @@ export default function ServiceCard({ service, index }) {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5, delay: index * 0.1 + 0.6 }}
           className="space-y-3 mb-6"
         >

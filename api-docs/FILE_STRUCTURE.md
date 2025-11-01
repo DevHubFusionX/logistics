@@ -14,16 +14,18 @@ api-docs/
 ├── 03-dashboard.md                    # Dashboard endpoints
 ├── 04-fleet-management.md             # Vehicles, maintenance, telemetry
 ├── 05-temperature-monitoring.md       # Temperature data, alerts, compliance
-├── 06-clients-orders.md               # Clients, orders, shipments
-├── 07-drivers-staff.md                # Drivers, performance, documents
-├── 08-trips-management.md             # Trips CRUD, tracking, timeline
-├── 09-payments-invoicing.md           # Payments, invoices, Paystack
-├── 10-reports-analytics.md            # All reports and analytics
-├── 11-settings.md                     # System, integrations, notifications
-├── 12-user-roles.md                   # Users, roles, permissions
-├── 13-webhooks.md                     # Webhook configuration and events
-├── 14-error-codes.md                  # Error codes and formats
-└── 15-rate-limiting.md                # Rate limits and best practices
+├── 06-bookings.md                     # Customer bookings, tracking, status
+├── 07-clients-orders.md               # Clients, orders, shipments
+├── 08-drivers-staff.md                # Drivers, performance, documents
+├── 09-trips-management.md             # Trips CRUD, tracking, timeline
+├── 10-payments-invoicing.md           # Payments, invoices, Paystack
+├── 11-reconciliation.md               # Financial reconciliation
+├── 12-reports-analytics.md            # All reports and analytics
+├── 13-settings.md                     # System, integrations, notifications
+├── 14-user-roles.md                   # Users, roles, permissions
+├── 15-webhooks.md                     # Webhook configuration and events
+├── 16-error-codes.md                  # Error codes and formats
+└── 17-rate-limiting.md                # Rate limits and best practices
 ```
 
 ## File Contents
@@ -60,35 +62,49 @@ api-docs/
 - Compliance reports
 - Thresholds
 
-### 06-clients-orders.md
+### 06-bookings.md
+- Customer booking creation
+- Booking tracking
+- Booking status updates
+- Driver information
+- Address management
+
+### 07-clients-orders.md
 - Client CRUD operations
 - Client details
 - Shipments
 - Payment history
 - Order creation
 
-### 07-drivers-staff.md
+### 08-drivers-staff.md
 - Driver CRUD operations
 - Driver performance
 - Trip history
 - Leave management
 - Document uploads
 
-### 08-trips-management.md
+### 09-trips-management.md
 - Trip CRUD operations
 - Trip tracking
 - Timeline
 - Documents generation
 - Analytics
 
-### 09-payments-invoicing.md
+### 10-payments-invoicing.md
 - Payment CRUD operations
 - Invoice generation
 - Paystack integration
 - Revenue data
 - Outstanding payments
 
-### 10-reports-analytics.md
+### 11-reconciliation.md
+- Reconciliation dashboard
+- Match bookings to trips
+- Match trips to payments
+- Mismatch detection
+- Financial verification
+
+### 12-reports-analytics.md
 - Revenue reports
 - Trip performance
 - Fleet utilization
@@ -98,7 +114,7 @@ api-docs/
 - Financial reports
 - Export functionality
 
-### 11-settings.md
+### 13-settings.md
 - System settings
 - Temperature thresholds
 - Integration settings
@@ -106,7 +122,7 @@ api-docs/
 - Audit logs
 - Backup/restore
 
-### 12-user-roles.md
+### 14-user-roles.md
 - User CRUD operations
 - Role management
 - Permissions
@@ -114,20 +130,20 @@ api-docs/
 - Sessions
 - Bulk operations
 
-### 13-webhooks.md
+### 15-webhooks.md
 - Webhook registration
 - Event types
 - Security/signatures
 - Retry policy
 - Webhook logs
 
-### 14-error-codes.md
+### 16-error-codes.md
 - HTTP status codes
 - Application error codes
 - Error response formats
 - Validation errors
 
-### 15-rate-limiting.md
+### 17-rate-limiting.md
 - Rate limit tiers
 - Headers
 - Best practices

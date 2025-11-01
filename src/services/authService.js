@@ -1,55 +1,44 @@
 import httpClient from './httpClient'
+import { sanitizeObject } from '../utils/sanitize'
 
-class AuthService {
-  async register(userData) {
-    localStorage.clear();
-    
+export default {
+  register: async (userData) => {
+    localStorage.clear()
     const response = await httpClient.request('/auth/sign-up', {
       method: 'POST',
-      body: JSON.stringify(userData),
+      body: JSON.stringify(userData)
     })
-    
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
+      const sanitizedUser = sanitizeObject(response.data.user)
+      localStorage.setItem('user', JSON.stringify(sanitizedUser))
     }
-    
     return response
-  }
+  },
 
-  async login(credentials) {
-    localStorage.clear();
-    
+  login: async (credentials) => {
+    localStorage.clear()
     const response = await httpClient.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(credentials)
     })
-    
     if (response.data?.token) {
       localStorage.setItem('token', response.data.token)
-      localStorage.setItem('user', JSON.stringify(response.data.user))
+      const sanitizedUser = sanitizeObject(response.data.user)
+      localStorage.setItem('user', JSON.stringify(sanitizedUser))
     }
-    
     return response
-  }
+  },
 
-  async getProfile() {
-    return httpClient.request('/user/')
-  }
+  getProfile: () => httpClient.request('/user/'),
 
-  async forgotPassword(email) {
-    return httpClient.request('/auth/forgot-password', {
-      method: 'POST',
-      body: JSON.stringify({ email }),
-    })
-  }
+  forgotPassword: (email) => httpClient.request('/auth/forgot-password', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  }),
 
-  async resetPassword(token, password) {
-    return httpClient.request('/auth/reset-password', {
-      method: 'POST',
-      body: JSON.stringify({ token, password }),
-    })
-  }
+  resetPassword: (token, password) => httpClient.request('/auth/reset-password', {
+    method: 'POST',
+    body: JSON.stringify({ token, password })
+  })
 }
-
-export default new AuthService()

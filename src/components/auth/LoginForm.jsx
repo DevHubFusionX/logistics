@@ -3,10 +3,12 @@ import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
+import { useToast } from '../ui/advanced'
 
 export default function LoginForm() {
   const navigate = useNavigate()
   const { login } = useAuth()
+  const { showToast, ToastContainer } = useToast()
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -15,38 +17,58 @@ export default function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
+  const [fieldErrors, setFieldErrors] = useState({})
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setFieldErrors({})
+
+    // Validation
+    const errors = {}
+    if (!formData.email) errors.email = 'Email is required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email format'
+    if (!formData.password) errors.password = 'Password is required'
+    else if (formData.password.length < 8) errors.password = 'Password must be at least 8 characters'
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setError('Please fix the errors below')
+      showToast.error('Validation failed', 'Please check your input')
+      setLoading(false)
+      return
+    }
 
     try {
       const response = await login(formData)
       
       if (response.data?.token) {
-        // Handle remember me functionality
         if (rememberMe) {
           localStorage.setItem('rememberMe', 'true')
         } else {
           localStorage.removeItem('rememberMe')
         }
         
-        // Show success feedback before redirect
         setError('')
+        showToast.success('Login successful', 'Redirecting to dashboard...')
         setTimeout(() => {
           navigate('/dashboard')
         }, 500)
       } else {
         setError('Invalid credentials. Please check your email and password.')
+        showToast.error('Login failed', 'Invalid credentials')
       }
     } catch (error) {
       if (error.message.includes('401') || error.message.includes('unauthorized')) {
         setError('Invalid email or password. Please try again.')
+        showToast.error('Login failed', 'Invalid credentials')
       } else if (error.message.includes('network') || error.message.includes('fetch')) {
         setError('Connection error. Please check your internet and try again.')
+        showToast.error('Connection error', 'Please check your internet')
       } else {
         setError(error.message || 'Login failed. Please try again.')
+        showToast.error('Login failed', error.message || 'Please try again')
       }
     } finally {
       setLoading(false)
@@ -93,12 +115,20 @@ export default function LoginForm() {
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400"
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value })
+                setFieldErrors({ ...fieldErrors, email: '' })
+              }}
+              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${
+                fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Enter your email address"
               required
             />
           </div>
+          {fieldErrors.email && (
+            <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>
+          )}
         </motion.div>
 
         <motion.div
@@ -112,8 +142,13 @@ export default function LoginForm() {
             <input
               type={showPassword ? "text" : "password"}
               value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full pl-10 pr-12 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400"
+              onChange={(e) => {
+                setFormData({ ...formData, password: e.target.value })
+                setFieldErrors({ ...fieldErrors, password: '' })
+              }}
+              className={`w-full pl-10 pr-12 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${
+                fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Enter your password"
               required
             />
@@ -185,6 +220,7 @@ export default function LoginForm() {
           </Link>
         </p>
       </motion.div>
+      <ToastContainer />
     </motion.div>
   )
 }

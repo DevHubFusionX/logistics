@@ -12,18 +12,15 @@ export const useAuth = () => {
 }
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState({
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john@daralogistics.com',
-    role: 'Super Admin'
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem('user')
+    return savedUser ? JSON.parse(savedUser) : null
   })
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const initAuth = async () => {
       const token = localStorage.getItem('token')
-      
       if (token) {
         try {
           const response = await authService.getProfile()
@@ -38,8 +35,7 @@ export const AuthProvider = ({ children }) => {
       }
       setLoading(false)
     }
-    
-    // initAuth()
+    initAuth()
   }, [])
 
   const login = async (credentials) => {
@@ -54,6 +50,15 @@ export const AuthProvider = ({ children }) => {
     const response = await authService.register(userData)
     if (response.data?.token) {
       setUser(response.data.user)
+    } else if (import.meta.env.DEV) {
+      const mockUser = {
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        role: 'Customer'
+      }
+      setUser(mockUser)
+      return { data: { token: 'mock-token', user: mockUser } }
     }
     return response
   }
@@ -66,7 +71,8 @@ export const AuthProvider = ({ children }) => {
 
   const hasPermission = (allowedRoles) => {
     if (!allowedRoles || allowedRoles.length === 0) return true
-    return allowedRoles.includes(user?.role)
+    const userRole = user?.role || 'Customer'
+    return allowedRoles.includes(userRole)
   }
 
   const value = {

@@ -3,10 +3,12 @@ import { motion } from 'framer-motion'
 import { Mail, Lock, User, Phone, MapPin, Building, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
+import { useToast } from '../ui/advanced'
 
 export default function RegisterForm() {
   const navigate = useNavigate()
   const { register } = useAuth()
+  const { showToast, ToastContainer } = useToast()
   const [formData, setFormData] = useState({
     email: '',
     firstName: '',
@@ -45,14 +47,36 @@ export default function RegisterForm() {
     setLoading(true)
     setError('')
     setSuccess('')
+    setFieldErrors({})
+
+    // Validation
+    const errors = {}
+    if (!formData.firstName) errors.firstName = 'First name is required'
+    if (!formData.lastName) errors.lastName = 'Last name is required'
+    if (!formData.email) errors.email = 'Email is required'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email format'
+    if (!formData.phoneNumber) errors.phoneNumber = 'Phone number is required'
+    if (!formData.companyName) errors.companyName = 'Company name is required'
+    if (!formData.address) errors.address = 'Address is required'
+    if (!formData.password) errors.password = 'Password is required'
+    else if (formData.password.length < 8) errors.password = 'Password must be at least 8 characters'
+    else if (passwordStrength < 3) errors.password = 'Password is too weak'
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors)
+      setError('Please fix the errors below')
+      showToast.error('Validation failed', 'Please check all required fields')
+      setLoading(false)
+      return
+    }
 
     try {
-      setFieldErrors({})
       const response = await register(formData)
       
       if (response.data?.token) {
         setSuccess('Account created successfully! Redirecting to dashboard...')
         setError('')
+        showToast.success('Account created', 'Welcome to Dara Logistics!')
         setTimeout(() => {
           navigate('/dashboard', { 
             state: { message: 'Welcome to Dara Logistics!' }
@@ -63,12 +87,16 @@ export default function RegisterForm() {
       if (error.message.includes('email') && error.message.includes('exists')) {
         setFieldErrors({ email: 'Email already registered' })
         setError('An account with this email already exists. Please use a different email or try logging in.')
+        showToast.error('Email exists', 'This email is already registered')
       } else if (error.message.includes('validation')) {
         setError('Please check all fields and try again.')
+        showToast.error('Validation error', 'Please check all fields')
       } else if (error.message.includes('network')) {
         setError('Connection error. Please check your internet and try again.')
+        showToast.error('Connection error', 'Please check your internet')
       } else {
         setError(error.message || 'Registration failed. Please try again.')
+        showToast.error('Registration failed', error.message || 'Please try again')
       }
     } finally {
       setLoading(false)
@@ -123,12 +151,20 @@ export default function RegisterForm() {
               <input
                 type="text"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                onChange={(e) => {
+                  setFormData({ ...formData, firstName: e.target.value })
+                  setFieldErrors({ ...fieldErrors, firstName: '' })
+                }}
+                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                  fieldErrors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
                 placeholder="First name"
                 required
               />
             </div>
+            {fieldErrors.firstName && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.firstName}</p>
+            )}
           </div>
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
@@ -137,12 +173,20 @@ export default function RegisterForm() {
               <input
                 type="text"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+                onChange={(e) => {
+                  setFormData({ ...formData, lastName: e.target.value })
+                  setFieldErrors({ ...fieldErrors, lastName: '' })
+                }}
+                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                  fieldErrors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
                 placeholder="Last name"
                 required
               />
             </div>
+            {fieldErrors.lastName && (
+              <p className="mt-1 text-xs text-red-600">{fieldErrors.lastName}</p>
+            )}
           </div>
         </div>
 
@@ -153,12 +197,20 @@ export default function RegisterForm() {
             <input
               type="email"
               value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              onChange={(e) => {
+                setFormData({ ...formData, email: e.target.value })
+                setFieldErrors({ ...fieldErrors, email: '' })
+              }}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Enter your business email"
               required
             />
           </div>
+          {fieldErrors.email && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>
+          )}
         </div>
 
         <div>
@@ -168,12 +220,20 @@ export default function RegisterForm() {
             <input
               type="tel"
               value={formData.phoneNumber}
-              onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              onChange={(e) => {
+                setFormData({ ...formData, phoneNumber: e.target.value })
+                setFieldErrors({ ...fieldErrors, phoneNumber: '' })
+              }}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                fieldErrors.phoneNumber ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Enter phone number"
               required
             />
           </div>
+          {fieldErrors.phoneNumber && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.phoneNumber}</p>
+          )}
         </div>
 
         <div>
@@ -183,12 +243,20 @@ export default function RegisterForm() {
             <input
               type="text"
               value={formData.companyName}
-              onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              onChange={(e) => {
+                setFormData({ ...formData, companyName: e.target.value })
+                setFieldErrors({ ...fieldErrors, companyName: '' })
+              }}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                fieldErrors.companyName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Your company name"
               required
             />
           </div>
+          {fieldErrors.companyName && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.companyName}</p>
+          )}
         </div>
 
         <div>
@@ -198,12 +266,20 @@ export default function RegisterForm() {
             <input
               type="text"
               value={formData.address}
-              onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              onChange={(e) => {
+                setFormData({ ...formData, address: e.target.value })
+                setFieldErrors({ ...fieldErrors, address: '' })
+              }}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                fieldErrors.address ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Your address"
               required
             />
           </div>
+          {fieldErrors.address && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.address}</p>
+          )}
         </div>
 
         <div>
@@ -213,8 +289,13 @@ export default function RegisterForm() {
             <input
               type={showPassword ? "text" : "password"}
               value={formData.password}
-              onChange={(e) => handlePasswordChange(e.target.value)}
-              className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent"
+              onChange={(e) => {
+                handlePasswordChange(e.target.value)
+                setFieldErrors({ ...fieldErrors, password: '' })
+              }}
+              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
+                fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="Create password"
               required
             />
@@ -226,6 +307,9 @@ export default function RegisterForm() {
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
+          {fieldErrors.password && (
+            <p className="mt-1 text-xs text-red-600">{fieldErrors.password}</p>
+          )}
           {formData.password && (
             <div className="mt-2">
               <div className="flex items-center gap-2 mb-1">
@@ -291,6 +375,7 @@ export default function RegisterForm() {
           </Link>
         </p>
       </motion.div>
+      <ToastContainer />
     </motion.div>
   )
 }

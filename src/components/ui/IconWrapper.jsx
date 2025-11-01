@@ -26,6 +26,7 @@ export default function IconWrapper({
   const animationProps = animate ? {
     initial: { scale: 0, rotate: -180 },
     whileInView: { scale: 1, rotate: 0 },
+    viewport: { once: true },
     transition: { duration: 0.6, type: "spring", stiffness: 200 },
     whileHover: { rotate: 5, scale: 1.1 }
   } : {}

@@ -3,20 +3,38 @@ import { motion } from 'framer-motion'
 import { Mail, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import AuthLayout from '../../components/auth/AuthLayout'
+import { useToast } from '../../components/ui/advanced'
 
 function ForgotPasswordForm() {
+  const { showToast, ToastContainer } = useToast()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [sent, setSent] = useState(false)
+  const [error, setError] = useState('')
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setError('')
+
+    // Validation
+    if (!email) {
+      setError('Email is required')
+      showToast.error('Validation error', 'Please enter your email')
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setError('Invalid email format')
+      showToast.error('Validation error', 'Please enter a valid email')
+      return
+    }
+
     setLoading(true)
     
     // Simulate API call
     setTimeout(() => {
       setLoading(false)
       setSent(true)
+      showToast.success('Email sent', 'Check your inbox for reset instructions')
     }, 2000)
   }
 
@@ -66,12 +84,20 @@ function ForgotPasswordForm() {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full pl-10 pr-4 py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg"
+              onChange={(e) => {
+                setEmail(e.target.value)
+                setError('')
+              }}
+              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg ${
+                error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              }`}
               placeholder="your.email@company.com"
               required
             />
           </div>
+          {error && (
+            <p className="mt-2 text-sm text-red-600">{error}</p>
+          )}
         </div>
 
         <motion.button
@@ -94,6 +120,7 @@ function ForgotPasswordForm() {
           Back to Login
         </Link>
       </div>
+      <ToastContainer />
     </motion.div>
   )
 }

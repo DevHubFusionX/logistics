@@ -1,0 +1,5 @@
+export { default as ChatWidget } from './ChatWidget'
+export { default as CompanyInfo } from './CompanyInfo'
+export { default as ContactInfo } from './ContactInfo'
+export { default as QuickLinks } from './QuickLinks'
+export { default as ServicesLinks } from './ServicesLinks'

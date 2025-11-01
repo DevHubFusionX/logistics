@@ -34,7 +34,7 @@ export default function TemperatureGraph() {
               <p className="text-xs text-gray-600">Real-time monitoring</p>
             </div>
           </div>
-          <select 
+          <select
             value={selectedTruck}
             onChange={(e) => setSelectedTruck(e.target.value)}
             className="text-sm border-2 border-blue-200 rounded-lg px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white font-semibold text-gray-700 shadow-sm hover:border-blue-300 transition-colors"
@@ -44,7 +44,7 @@ export default function TemperatureGraph() {
           </select>
         </div>
       </div>
-      
+
       <div className="p-6">
         <div className="grid grid-cols-3 gap-3 mb-6">
           <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-3 border border-blue-200">
@@ -74,7 +74,7 @@ export default function TemperatureGraph() {
                 <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.05" />
               </linearGradient>
             </defs>
-            
+
             {[0, 25, 50, 75, 100].map((percent) => (
               <g key={percent}>
                 <line x1="5%" y1={`${percent}%`} x2="95%" y2={`${percent}%`} stroke="#e5e7eb" strokeWidth="1" strokeDasharray="4 4" />
@@ -83,7 +83,7 @@ export default function TemperatureGraph() {
                 </text>
               </g>
             ))}
-            
+
             <polygon
               points={`5%,100% ${data.map((d, i) => {
                 const x = 5 + (i / (data.length - 1)) * 90
@@ -92,7 +92,7 @@ export default function TemperatureGraph() {
               }).join(' ')} 95%,100%`}
               fill="url(#tempGradient)"
             />
-            
+
             <polyline
               points={data.map((d, i) => {
                 const x = 5 + (i / (data.length - 1)) * 90
@@ -105,7 +105,7 @@ export default function TemperatureGraph() {
               strokeLinecap="round"
               strokeLinejoin="round"
             />
-            
+
             {data.map((d, i) => {
               const x = 5 + (i / (data.length - 1)) * 90
               const y = 100 - ((d.temp - minTemp) / range) * 100
@@ -136,7 +136,7 @@ export default function TemperatureGraph() {
               )
             })}
           </svg>
-          
+
           <div className="flex justify-between mt-3 px-2">
             {data.map((d, i) => (
               <span key={i} className="text-xs font-medium text-gray-600">{d.time}</span>

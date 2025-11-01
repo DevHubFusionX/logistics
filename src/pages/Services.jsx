@@ -1,10 +1,6 @@
 import { useEffect } from 'react'
-import HeroSection from '../components/services/HeroSection'
-import StatsSection from '../components/services/StatsSection'
-import CoreServicesSection from '../components/services/CoreServicesSection'
-import ProcessSection from '../components/services/ProcessSection'
-import SpecializedServicesSection from '../components/services/SpecializedServicesSection'
-import CTASection from '../components/services/CTASection'
+import {motion} from 'framer-motion'
+import { HeroSection, StatsSection, CoreServicesSection, ProcessSection, SpecializedServicesSection, CTASection } from '../components/landing'
 
 export default function Services() {
   useEffect(() => {
@@ -14,6 +10,32 @@ export default function Services() {
 
   return (
     <main className="pt-20 ">
+
+       {/* Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-blue-50"></div>
+            
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 overflow-hidden">
+              {[...Array(15)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-2 h-2 bg-sky-200 rounded-full opacity-30"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`
+                  }}
+                  animate={{
+                    y: [-20, 20, -20],
+                    opacity: [0.3, 0.7, 0.3]
+                  }}
+                  transition={{
+                    duration: 3 + Math.random() * 2,
+                    repeat: Infinity,
+                    delay: Math.random() * 2
+                  }}
+                />
+              ))}
+            </div>
       {/* Services page content */}
       <HeroSection />
 

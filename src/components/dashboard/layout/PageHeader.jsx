@@ -1,4 +1,5 @@
 import { Calendar, MapPin, Filter, RefreshCw } from 'lucide-react'
+import { t } from '../../../i18n'
 
 export default function PageHeader({ 
   title, 
@@ -7,6 +8,7 @@ export default function PageHeader({
   filters = {},
   onFilterChange = () => {} 
 }) {
+  const handleRefresh = () => window.location.reload()
   return (
     <div>
       <div className="mb-4">
@@ -24,11 +26,11 @@ export default function PageHeader({
                 onChange={(e) => onFilterChange('location', e.target.value)}
                 className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
               >
-                <option value="">All Locations</option>
-                <option value="lagos">Lagos</option>
-                <option value="abuja">Abuja</option>
-                <option value="kano">Kano</option>
-                <option value="port-harcourt">Port Harcourt</option>
+                <option value="">{t('common.allLocations')}</option>
+                <option value="lagos">{t('locations.lagos')}</option>
+                <option value="abuja">{t('locations.abuja')}</option>
+                <option value="kano">{t('locations.kano')}</option>
+                <option value="port-harcourt">{t('locations.portHarcourt')}</option>
               </select>
             </div>
 
@@ -39,11 +41,11 @@ export default function PageHeader({
                 onChange={(e) => onFilterChange('dateRange', e.target.value)}
                 className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
               >
-                <option value="">All Time</option>
-                <option value="today">Today</option>
-                <option value="week">This Week</option>
-                <option value="month">This Month</option>
-                <option value="quarter">This Quarter</option>
+                <option value="">{t('common.allTime')}</option>
+                <option value="today">{t('common.today')}</option>
+                <option value="week">{t('common.thisWeek')}</option>
+                <option value="month">{t('common.thisMonth')}</option>
+                <option value="quarter">{t('common.thisQuarter')}</option>
               </select>
             </div>
 
@@ -54,19 +56,19 @@ export default function PageHeader({
                 onChange={(e) => onFilterChange('warehouse', e.target.value)}
                 className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
               >
-                <option value="">All Warehouses</option>
-                <option value="main">Main Warehouse</option>
-                <option value="north">North Hub</option>
-                <option value="south">South Hub</option>
+                <option value="">{t('common.allWarehouses')}</option>
+                <option value="main">{t('common.mainWarehouse')}</option>
+                <option value="north">{t('common.northHub')}</option>
+                <option value="south">{t('common.southHub')}</option>
               </select>
             </div>
 
             <button 
-              onClick={() => window.location.reload()}
+              onClick={handleRefresh}
               className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors flex items-center gap-2"
             >
               <RefreshCw className="w-4 h-4" />
-              <span className="hidden sm:inline text-sm font-medium">Refresh</span>
+              <span className="hidden sm:inline text-sm font-medium">{t('common.refresh')}</span>
             </button>
           </div>
         </div>

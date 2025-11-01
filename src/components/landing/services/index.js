@@ -1,0 +1,7 @@
+export { default as CoreServicesSection } from './CoreServicesSection'
+export { default as CTASection } from './CTASection'
+export { default as HeroSection } from './HeroSection'
+export { default as ProcessSection } from './ProcessSection'
+export { default as SpecializedServicesSection } from './SpecializedServicesSection'
+export { default as StatsSection } from './StatsSection'
+export { stats, mainServices, additionalServices, process } from './servicesData'

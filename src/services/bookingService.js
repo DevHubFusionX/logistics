@@ -1,33 +1,30 @@
 import httpClient from './httpClient'
 
-class BookingService {
-  async createBooking(bookingData) {
-    return httpClient.request('/bookings/', {
-      method: 'POST',
-      body: JSON.stringify(bookingData),
-    })
-  }
+export default {
+  createBooking: (bookingData) => httpClient.request('/bookings/', {
+    method: 'POST',
+    body: JSON.stringify(bookingData)
+  }),
 
-  async getBookings(page = 1, limit = 10) {
-    return httpClient.request(`/bookings/?limit=${limit}&page=${page}`)
-  }
+  getBookings: (params = { limit: 100, page: 1 }) => httpClient.request('/bookings/users', {}, params),
 
-  async getBooking(id) {
-    return httpClient.request(`/bookings/${id}`)
-  }
+  getBookingById: (id) => httpClient.request(`/bookings/${id}/`),
 
-  async updateBooking(id, bookingData) {
-    return httpClient.request(`/bookings/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify(bookingData),
-    })
-  }
+  calculatePrice: (bookingData) => httpClient.request('/bookings/calculate-price', {
+    method: 'POST',
+    body: JSON.stringify(bookingData)
+  }),
 
-  async cancelBooking(id) {
-    return httpClient.request(`/bookings/cancel/${id}`, {
-      method: 'PATCH',
-    })
-  }
+  updateBooking: (id, bookingData) => httpClient.request(`/bookings/${id}/`, {
+    method: 'PUT',
+    body: JSON.stringify(bookingData)
+  }),
+
+  cancelBooking: (id) => httpClient.request(`/bookings/cancel/${id}/`, {
+    method: 'PATCH'
+  }),
+
+  deleteBooking: (id) => httpClient.request(`/bookings/${id}/`, {
+    method: 'DELETE'
+  })
 }
-
-export default new BookingService()

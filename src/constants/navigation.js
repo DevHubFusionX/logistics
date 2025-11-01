@@ -1,7 +1,7 @@
 import { 
   Home, Package, Truck, Map, Warehouse, ShoppingCart, Users, 
   UserCheck, BarChart3, AlertTriangle, Clipboard, Puzzle, 
-  Settings, HelpCircle, Thermometer, CreditCard, MapPin, FileText, DollarSign, ClipboardList, Navigation, Info
+  Settings, HelpCircle, Thermometer, CreditCard, MapPin, FileText, DollarSign, ClipboardList, Navigation, Info, BookOpen, MessageSquare, TrendingUp
 } from 'lucide-react'
 
 export const NAVIGATION_SECTIONS = [
@@ -62,6 +62,42 @@ export const NAVIGATION_SECTIONS = [
         path: '/booking-status-guide',
         description: 'Understand booking status',
         color: 'purple',
+        roles: ['Customer']
+      },
+      {
+        id: 'address-book',
+        label: 'Address Book',
+        icon: BookOpen,
+        path: '/address-book',
+        description: 'Manage saved addresses',
+        color: 'indigo',
+        roles: ['Customer']
+      },
+      {
+        id: 'my-temperature',
+        label: 'Temperature Monitor',
+        icon: Thermometer,
+        path: '/my-temperature',
+        description: 'Cold chain tracking',
+        color: 'cyan',
+        roles: ['Customer']
+      },
+      {
+        id: 'my-analytics',
+        label: 'My Analytics',
+        icon: TrendingUp,
+        path: '/my-analytics',
+        description: 'Cost & performance insights',
+        color: 'purple',
+        roles: ['Customer']
+      },
+      {
+        id: 'support',
+        label: 'Support Center',
+        icon: MessageSquare,
+        path: '/support',
+        description: 'Get help & create tickets',
+        color: 'blue',
         roles: ['Customer']
       },
       {

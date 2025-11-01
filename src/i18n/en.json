@@ -1,0 +1,21 @@
+{
+  "common": {
+    "allLocations": "All Locations",
+    "allTime": "All Time",
+    "allWarehouses": "All Warehouses",
+    "refresh": "Refresh",
+    "today": "Today",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "thisQuarter": "This Quarter",
+    "mainWarehouse": "Main Warehouse",
+    "northHub": "North Hub",
+    "southHub": "South Hub"
+  },
+  "locations": {
+    "lagos": "Lagos",
+    "abuja": "Abuja",
+    "kano": "Kano",
+    "portHarcourt": "Port Harcourt"
+  }
+}

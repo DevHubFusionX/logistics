@@ -1,96 +1,133 @@
-import { Package, MapPin, Calendar, DollarSign, User, UserCheck, AlertCircle } from 'lucide-react'
+import { Package, MapPin, Clock, Eye, Download, Info, Edit, X, CreditCard, Truck, Phone, User } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
-export default function BookingCard({ booking, onAssignDriver }) {
-  const getStatusBadge = (status) => {
-    const styles = {
-      pending_assignment: 'bg-orange-100 text-orange-700 border-orange-200',
-      driver_assigned: 'bg-blue-100 text-blue-700 border-blue-200',
-      in_transit: 'bg-purple-100 text-purple-700 border-purple-200',
-      delivered: 'bg-green-100 text-green-700 border-green-200'
-    }
-    const labels = {
-      pending_assignment: 'Pending Assignment',
-      driver_assigned: 'Driver Assigned',
-      in_transit: 'In Transit',
-      delivered: 'Delivered'
-    }
-    return (
-      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${styles[status]}`}>
-        {labels[status]}
-      </span>
-    )
-  }
+export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, getStatusBadge, getStatusText }) {
+  const navigate = useNavigate()
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-4">
-        <div>
-          <p className="font-mono text-sm font-bold text-gray-900">{booking.id}</p>
-          <p className="text-xs text-gray-500 mt-1">{booking.createdAt}</p>
-        </div>
-        {getStatusBadge(booking.status)}
-      </div>
-
-      <div className="space-y-3 mb-4">
-        <div className="flex items-center gap-2">
-          <User className="w-4 h-4 text-gray-400" />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">{booking.customerName}</p>
-            <p className="text-xs text-gray-500 truncate">{booking.customerEmail}</p>
+        <div className="flex items-center gap-3">
+          <div className="p-3 bg-blue-100 rounded-lg">
+            <Package className="w-6 h-6 text-blue-600" />
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-gray-900">{booking.bookingId || booking._id}</h3>
+            <p className="text-sm text-gray-600">{booking.goodsType} • {booking.cargoWeightKg}kg</p>
           </div>
         </div>
+        <span className={`px-3 py-1 rounded-full text-xs font-bold ${getStatusBadge(booking.status)}`}>
+          {getStatusText(booking.status)}
+        </span>
+      </div>
 
+      <div className="grid md:grid-cols-2 gap-4 mb-4">
         <div className="flex items-start gap-2">
-          <MapPin className="w-4 h-4 text-gray-400 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-gray-600">
-              <span className="font-semibold">{booking.pickupCity}</span> → <span className="font-semibold">{booking.deliveryCity}</span>
-            </p>
+          <MapPin className="w-4 h-4 text-green-600 mt-1" />
+          <div>
+            <p className="text-xs text-gray-500">Pickup</p>
+            <p className="font-semibold text-gray-900">{booking.pickupLocation?.city || booking.pickupLocation?.address}</p>
           </div>
         </div>
-
-        <div className="flex items-center gap-2">
-          <Package className="w-4 h-4 text-gray-400" />
-          <p className="text-xs text-gray-600">
-            {booking.weight} kg • <span className="capitalize">{booking.cargoType}</span> • <span className="capitalize">{booking.serviceType}</span>
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-gray-400" />
-          <p className="text-xs text-gray-600">Pickup: {booking.pickupDate}</p>
-        </div>
-
-        {booking.driverName && (
-          <div className="flex items-center gap-2 bg-blue-50 rounded-lg p-2">
-            <UserCheck className="w-4 h-4 text-blue-600" />
-            <p className="text-xs font-semibold text-blue-900">Driver: {booking.driverName}</p>
+        <div className="flex items-start gap-2">
+          <MapPin className="w-4 h-4 text-orange-600 mt-1" />
+          <div>
+            <p className="text-xs text-gray-500">Delivery</p>
+            <p className="font-semibold text-gray-900">{booking.dropoffLocation?.city || booking.dropoffLocation?.address}</p>
           </div>
-        )}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-gray-200">
+      <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
         <div className="flex items-center gap-1">
-          <DollarSign className="w-4 h-4 text-green-600" />
-          <span className="text-lg font-bold text-gray-900">${booking.amount}</span>
+          <Clock className="w-4 h-4" />
+          <span>Created: {new Date(booking.createdAt).toLocaleDateString()}</span>
         </div>
+        <div className="flex items-center gap-1">
+          <Clock className="w-4 h-4" />
+          <span>ETA: {new Date(booking.estimatedDeliveryDate).toLocaleDateString()}</span>
+        </div>
+      </div>
 
-        {booking.status === 'pending_assignment' && (
-          <button
-            onClick={() => onAssignDriver(booking)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-semibold"
-          >
-            <UserCheck className="w-4 h-4" />
-            Assign Driver
-          </button>
-        )}
-
-        {booking.status === 'pending_assignment' && (
-          <div className="flex items-center gap-1 text-orange-600">
-            <AlertCircle className="w-4 h-4" />
-            <span className="text-xs font-semibold">Action Required</span>
+      {booking.assignedDriver && (booking.status === 'confirmed' || booking.status === 'in_transit') && (
+        <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg p-3 mb-4 border border-blue-200">
+          <p className="text-xs font-semibold text-gray-700 mb-2">Driver Information</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-sm">
+            <div className="flex items-center gap-2">
+              <User className="w-4 h-4 text-blue-600" />
+              <div>
+                <p className="text-xs text-gray-500">Driver</p>
+                <p className="font-semibold text-gray-900">{booking.assignedDriver.name || 'N/A'}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-blue-600" />
+              <div>
+                <p className="text-xs text-gray-500">Contact</p>
+                <a href={`tel:${booking.assignedDriver.phone}`} className="font-semibold text-blue-600 hover:underline">
+                  {booking.assignedDriver.phone || 'N/A'}
+                </a>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Truck className="w-4 h-4 text-blue-600" />
+              <div>
+                <p className="text-xs text-gray-500">Vehicle</p>
+                <p className="font-semibold text-gray-900">{booking.assignedVehicle?.plateNumber || 'N/A'}</p>
+              </div>
+            </div>
           </div>
-        )}
+        </div>
+      )}
+
+      <div className="flex items-center justify-between pt-4 border-t">
+        <div>
+          <p className="text-sm text-gray-600">Total Amount</p>
+          <div className="flex items-center gap-2">
+            <p className="text-xl font-bold text-gray-900">₦{(booking.totalCost || booking.estimatedCost || booking.price || 0).toFixed(2)}</p>
+            {booking.paymentStatus === 'paid' ? (
+              <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Paid</span>
+            ) : (
+              <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-bold">Unpaid</span>
+            )}
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <button onClick={() => onViewDetails(booking)} className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+            <Info className="w-4 h-4" />
+            Details
+          </button>
+          {booking.status === 'pending' && (
+            <>
+              <button onClick={() => onEdit(booking)} className="flex items-center gap-2 px-4 py-2 border border-blue-300 text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium">
+                <Edit className="w-4 h-4" />
+                Edit
+              </button>
+              <button onClick={() => onCancel(booking._id)} className="flex items-center gap-2 px-4 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium">
+                <X className="w-4 h-4" />
+                Cancel
+              </button>
+            </>
+          )}
+          {booking.paymentStatus === 'unpaid' && (
+            <button onClick={() => onPayNow(booking)} className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium">
+              <CreditCard className="w-4 h-4" />
+              Pay Now
+            </button>
+          )}
+          {booking.trackingNumber && (
+            <button onClick={() => navigate(`/tracking/${booking.trackingNumber}`)} className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
+              <Eye className="w-4 h-4" />
+              Track
+            </button>
+          )}
+          {booking.status === 'delivered' && booking.paymentStatus === 'paid' && (
+            <button onClick={() => navigate(`/tracking/invoice/${booking.bookingId || booking._id}`)} className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+              <Download className="w-4 h-4" />
+              Invoice
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

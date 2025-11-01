@@ -23,7 +23,7 @@ POST /auth/register
 - `phone`: Optional, valid phone format
 - `password`: Required, min 8 chars, must contain uppercase, lowercase, number, special char
 - `confirmPassword`: Required, must match password
-- `role`: Optional, enum: `Fleet Officer|Dispatcher|Finance|Support` (default: `Support`)
+- `role`: Optional, enum: `Super Admin|Fleet Officer|Dispatcher|Finance|Support|Customer` (default: `Customer`)
 
 **Success Response (201):**
 ```json
@@ -101,7 +101,9 @@ POST /auth/login
       "role": "Super Admin",
       "permissions": ["all"],
       "avatar": "https://cdn.daraexpress.com/avatars/usr_001.jpg",
-      "lastLogin": "2024-01-15T10:30:00Z"
+      "lastLogin": "2024-01-15T10:30:00Z",
+      "company": "Dara Express",
+      "department": "Administration"
     }
   },
   "message": "Login successful"

@@ -1,4 +1,6 @@
-export default function KPICard({ 
+import { memo } from 'react'
+
+function KPICard({ 
   title, 
   value, 
   unit = '', 
@@ -78,3 +80,5 @@ export default function KPICard({
     </div>
   )
 }
+
+export default memo(KPICard)

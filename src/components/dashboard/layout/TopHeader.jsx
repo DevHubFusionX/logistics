@@ -10,7 +10,7 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
   const [searchQuery, setSearchQuery] = useState('')
   const { user, logout, hasPermission } = useAuth()
   const navigate = useNavigate()
-  
+
   const userMenuRef = useRef(null)
   const quickAddRef = useRef(null)
   const notificationsRef = useRef(null)
@@ -54,9 +54,9 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
 
         {/* Logo */}
         <div className="flex-shrink-0 hidden sm:block">
-          <img 
-            src="/assets/img/dara-logo.png" 
-            alt="Dara Express" 
+          <img
+            src="/assets/img/dara_logo.svg"
+            alt="Dara Express"
             className="h-8 sm:h-10 w-auto object-contain"
           />
         </div>
@@ -92,14 +92,14 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
             >
               <Plus className="w-5 h-5" />
             </button>
-            
+
             {showQuickAdd && (
               <div className="absolute right-0 top-14 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 animate-fadeIn">
                 <div className="px-3 py-2 border-b border-gray-100">
                   <p className="text-xs font-semibold text-gray-500 uppercase">Quick Actions</p>
                 </div>
                 {hasPermission(['Super Admin', 'Support']) && (
-                  <button 
+                  <button
                     onClick={() => { navigate('/booking/request'); setShowQuickAdd(false); }}
                     className="w-full px-4 py-2.5 text-left hover:bg-blue-50 text-sm flex items-center gap-3 transition-colors"
                   >
@@ -108,7 +108,7 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
                   </button>
                 )}
                 {hasPermission(['Super Admin', 'Fleet Officer']) && (
-                  <button 
+                  <button
                     onClick={() => { navigate('/fleet'); setShowQuickAdd(false); }}
                     className="w-full px-4 py-2.5 text-left hover:bg-blue-50 text-sm flex items-center gap-3 transition-colors"
                   >
@@ -123,7 +123,7 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
 
         {/* Notifications */}
         <div className="relative" ref={notificationsRef}>
-          <button 
+          <button
             onClick={() => setShowNotifications(!showNotifications)}
             className="p-2 rounded-lg hover:bg-gray-100 active:bg-gray-200 transition-all relative"
           >
@@ -190,14 +190,14 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
                   {user?.role || 'Member'}
                 </span>
               </div>
-              <button 
+              <button
                 onClick={() => { navigate('/user'); setShowUserMenu(false); }}
                 className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-sm flex items-center gap-3 transition-colors"
               >
                 <User className="w-4 h-4 text-gray-600" />
                 <span className="font-medium">My Profile</span>
               </button>
-              <button 
+              <button
                 onClick={() => { navigate('/user'); setShowUserMenu(false); }}
                 className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-sm flex items-center gap-3 transition-colors"
               >
@@ -205,7 +205,7 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
                 <span className="font-medium">Settings</span>
               </button>
               <hr className="my-2" />
-              <button 
+              <button
                 onClick={logout}
                 className="w-full px-4 py-2.5 text-left hover:bg-red-50 text-sm flex items-center gap-3 text-red-600 transition-colors"
               >

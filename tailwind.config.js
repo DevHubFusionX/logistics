@@ -7,7 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['Inter', 'Roboto', 'sans-serif'],
+        heading: ['Montserrat', 'sans-serif'],
       },
       fontSize: {
         'body': '14px',
@@ -23,21 +24,8 @@ export default {
         'lg': '32px',
       },
       colors: {
-        primary: {
-          DEFAULT: '#2563eb',
-          hover: '#1d4ed8',
-        },
-        success: '#059669',
-        warning: '#d97706',
-        error: '#dc2626',
-        neutral: {
-          50: '#f9fafb',
-          100: '#f3f4f6',
-          200: '#e5e7eb',
-          500: '#6b7280',
-          700: '#374151',
-          900: '#111827',
-        }
+        primary: '#0056B8',
+        accent: '#00843D',
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease-out',
