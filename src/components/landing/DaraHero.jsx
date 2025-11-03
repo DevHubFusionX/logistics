@@ -55,10 +55,10 @@ export default function DaraHero() {
             {/* Dynamic Heading */}
             <div className="space-y-4 sm:space-y-6">
               <motion.h1
-                initial={{ opacity: 0, y: 50 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8, delay: 0.3 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-white leading-[1.1] tracking-tight"
               >
                 Nigeria's Leading
@@ -71,15 +71,15 @@ export default function DaraHero() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.5 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
                 className="h-14 sm:h-16 lg:h-20 overflow-hidden"
               >
                 <motion.p
                   key={currentFeature}
-                  initial={{ y: 40, opacity: 0 }}
+                  initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -40, opacity: 0 }}
-                  transition={{ duration: 0.6 }}
+                  exit={{ y: -30, opacity: 0 }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
                   className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 font-medium leading-relaxed tracking-wide px-2"
                   aria-live="polite"
                 >
@@ -93,7 +93,7 @@ export default function DaraHero() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.6 }}
+              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
               className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-normal leading-relaxed tracking-wide px-4"
             >
               Fast, reliable delivery across Nigeria.
@@ -103,8 +103,10 @@ export default function DaraHero() {
 
             {/* Action Buttons */}
             <motion.div
-              {...fadeInUp}
-              transition={{ ...fadeInUp.transition, delay: 0.7 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
               className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
             >
               <Button to="/booking/request" size="lg" className="shadow-2xl">
@@ -120,20 +122,29 @@ export default function DaraHero() {
 
             {/* Trust Indicators & Stats */}
             <motion.div
-              {...fadeInUp}
-              transition={{ ...fadeInUp.transition, delay: 0.8 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
               className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto px-2"
             >
               {HERO_STATS.map((stat, index) => {
                 const IconComponent = { Truck, Clock, MapPin }[stat.icon]
                 return (
-                  <div key={index} className="flex flex-col items-center text-center text-white/90">
+                  <motion.div 
+                    key={index}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: 0.6 + (index * 0.1), ease: "easeOut" }}
+                    className="flex flex-col items-center text-center text-white/90"
+                  >
                     <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 backdrop-blur-sm">
                       <IconComponent className="w-6 h-6 sm:w-8 sm:h-8" />
                     </div>
                     <div className="text-2xl sm:text-3xl font-black mb-1">{stat.value}</div>
                     <div className="text-xs sm:text-sm font-medium opacity-80">{stat.label}</div>
-                  </div>
+                  </motion.div>
                 )
               })}
             </motion.div>
