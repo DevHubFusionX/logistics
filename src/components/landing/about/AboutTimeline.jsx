@@ -2,11 +2,11 @@ import { motion } from 'framer-motion'
 
 export default function AboutTimeline() {
   const timeline = [
-    { year: "2020", title: "Founded", description: "Dara Logistics launched with a vision to transform Nigerian commerce" },
-    { year: "2021", title: "Nationwide Expansion", description: "Expanded operations to cover all 36 Nigerian states" },
-    { year: "2022", title: "Tech Innovation", description: "Launched real-time tracking and mobile app for Nigerian customers" },
-    { year: "2023", title: "Enterprise Solutions", description: "Introduced dedicated enterprise services for large Nigerian businesses" },
-    { year: "2024", title: "Market Leader", description: "Became Nigeria's fastest-growing logistics company" }
+    { year: "2023", title: "Founded", description: "Dara Cold Chain Logistics established with focus on temperature-controlled transportation" },
+    { year: "2024", title: "Tech Integration", description: "Deployed real-time GPS and temperature monitoring systems across fleet" },
+    { year: "2025", title: "Enterprise Solutions", description: "Launched dedicated cold chain services for pharmaceutical and food industries" },
+    { year: "2026", title: "Nationwide Expansion", description: "Extended coverage to major cities across Nigeria with GIT insurance" },
+    { year: "2027", title: "Market Leader", description: "Positioned as Nigeria's trusted cold chain logistics partner" }
   ]
 
   return (

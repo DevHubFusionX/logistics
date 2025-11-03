@@ -13,7 +13,6 @@ const LoadingSpinner = () => (
 // Public Pages (Eager load for SEO)
 import Home from '../pages/Home'
 import Services from '../pages/Services'
-import Pricing from '../pages/Pricing'
 import About from '../pages/About'
 import NotFound from '../pages/NotFound'
 
@@ -84,7 +83,6 @@ export default function AppRoutes() {
       {/* Public Routes */}
       <Route path="/" element={<Home />} />
       <Route path="/services" element={<Services />} />
-      <Route path="/pricing" element={<Pricing />} />
       <Route path="/about" element={<About />} />
       <Route path="/portfolio" element={<Portfolio />} />
       <Route path="/team" element={<Team />} />

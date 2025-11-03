@@ -25,7 +25,6 @@ export default function Navbar() {
   const navLinks = [
     { path: '/services', label: 'Services' },
     { path: '/tracking', label: 'Track Shipment' },
-    { path: '/pricing', label: 'Pricing' },
     { path: '/about', label: 'About' },
     { path: '/contact', label: 'Contact' },
   ]

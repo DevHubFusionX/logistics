@@ -1,12 +1,12 @@
 import { motion } from 'framer-motion'
-import { MapPin, Package, Users, TrendingUp } from 'lucide-react'
+import { Thermometer, Package, Shield, TrendingUp } from 'lucide-react'
 
 export default function AboutStats() {
   const stats = [
-    { icon: MapPin, number: "36", label: "States Covered" },
-    { icon: Package, number: "50K+", label: "Successful Deliveries" },
-    { icon: Users, number: "1K+", label: "Happy Businesses" },
-    { icon: TrendingUp, number: "99.2%", label: "On-Time Performance" }
+    { icon: Thermometer, number: "24/7", label: "Temperature Monitoring" },
+    { icon: Package, number: "10K+", label: "Cold Chain Deliveries" },
+    { icon: Shield, number: "100%", label: "GIT Insurance Coverage" },
+    { icon: TrendingUp, number: "99.5%", label: "Product Integrity Rate" }
   ]
 
   return (

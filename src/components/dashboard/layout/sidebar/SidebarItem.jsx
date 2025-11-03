@@ -16,15 +16,15 @@ export default function SidebarItem({ item, collapsed, isExpanded, toggleExpande
       <div className="relative group">
         <Link
           to={item.path}
-          className={`flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 group relative ${
+          className={`flex items-center gap-2.5 px-2.5 py-2.5 rounded-lg transition-all duration-200 group relative ${
             itemIsActive 
-              ? `${colors.bg} ${colors.text} shadow-sm border-l-4 ${colors.border}` 
-              : 'text-gray-700 hover:bg-white hover:shadow-sm'
+              ? `${colors.bg} ${colors.text} shadow-sm font-semibold` 
+              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
           }`}
           title={collapsed ? item.label : ''}
         >
-          <div className={`relative flex-shrink-0 ${itemIsActive ? colors.icon : 'text-gray-500 group-hover:text-gray-700'}`}>
-            <Icon className="w-5 h-5" />
+          <div className={`relative flex-shrink-0 ${itemIsActive ? colors.icon : 'text-gray-400 group-hover:text-gray-600'}`}>
+            <Icon className="w-4 h-4" />
             {item.isNew && <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full"></div>}
           </div>
           
@@ -32,14 +32,14 @@ export default function SidebarItem({ item, collapsed, isExpanded, toggleExpande
             <>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold truncate">{item.label}</span>
+                  <span className="text-sm truncate">{item.label}</span>
                   {item.isNew && (
                     <span className="bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full font-bold flex-shrink-0">
                       NEW
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-500 truncate">{item.description}</p>
+                {item.description && <p className="text-[10px] text-gray-400 truncate mt-0.5">{item.description}</p>}
               </div>
               
               <div className="flex items-center gap-2 flex-shrink-0">

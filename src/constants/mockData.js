@@ -21,64 +21,64 @@ export const HERO_STATS = [
 
 export const SERVICES_DATA = [
   {
-    icon: 'Clock',
-    image: "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    title: "Express Delivery",
-    subtitle: "Speed that drives success",
-    description: "When time is money, we deliver both. Same-day delivery in major cities, next-day nationwide coverage, and emergency logistics for urgent shipments.",
+    icon: 'Package',
+    image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    title: "Pharmaceutical Logistics",
+    subtitle: "Temperature-controlled precision",
+    description: "Specialized cold chain transportation for vaccines, medicines, and medical supplies. Real-time temperature monitoring ensures product integrity from pickup to delivery.",
     features: [
-      "Same-day delivery in Lagos, Abuja, Port Harcourt",
-      "Next-day delivery to 36 states nationwide",
-      "Emergency logistics for urgent shipments",
-      "Real-time tracking and delivery updates"
+      "Temperature range: 2°C to 8°C monitoring",
+      "Real-time GPS and temperature tracking",
+      "Goods-in-Transit (GIT) insurance included",
+      "Compliance with pharmaceutical standards"
     ],
-    pricing: "From ₦2,500",
-    deliveryTime: "2-24 hours",
+    pricing: "Custom quotes",
+    deliveryTime: "Same-day available",
     coverage: "Nationwide"
   },
   {
-    icon: 'Package',
-    image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    title: "Standard Shipping",
-    subtitle: "Reliable, affordable, everywhere",
-    description: "Our most popular service combines reliability with affordability. Perfect for e-commerce, retail, and regular business shipments across Nigeria.",
+    icon: 'Clock',
+    image: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    title: "Frozen Foods Transport",
+    subtitle: "Keeping freshness locked in",
+    description: "Reliable frozen food logistics with temperature-controlled vehicles. Perfect for ice cream, frozen meats, seafood, and other frozen products requiring -18°C or below.",
     features: [
-      "Door-to-door delivery service",
-      "Flexible pickup scheduling",
-      "Package insurance included",
-      "SMS and email notifications"
+      "Sub-zero temperature maintenance",
+      "Insulated refrigerated trucks",
+      "Quick loading and unloading protocols",
+      "24/7 temperature monitoring alerts"
     ],
-    pricing: "From ₦1,200",
-    deliveryTime: "2-5 days",
-    coverage: "All 36 states"
+    pricing: "From ₦15,000",
+    deliveryTime: "1-3 days",
+    coverage: "Major cities"
   },
   {
     icon: 'Truck',
-    image: "https://images.unsplash.com/photo-1494412651409-8963ce7935a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    title: "Freight & Cargo",
-    subtitle: "Moving big, thinking bigger",
-    description: "Heavy-duty logistics for businesses that need to move large volumes. From pallets to containers, we handle the heavy lifting so you can focus on growth.",
+    image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    title: "Fresh Produce Delivery",
+    subtitle: "Farm to market, fresh guaranteed",
+    description: "Temperature-controlled transport for fresh fruits, vegetables, dairy, and perishable goods. Maintaining optimal freshness throughout the supply chain.",
     features: [
-      "Full truckload (FTL) and less-than-truckload (LTL)",
-      "Specialized equipment for different cargo types",
-      "Warehouse and distribution services",
-      "Cross-docking and consolidation"
+      "Climate-controlled environment (0°C to 15°C)",
+      "Rapid transit for maximum freshness",
+      "Specialized handling for delicate produce",
+      "Direct farm-to-market distribution"
     ],
-    pricing: "Custom quotes",
-    deliveryTime: "1-7 days",
-    coverage: "Major routes"
+    pricing: "From ₦8,500",
+    deliveryTime: "12-48 hours",
+    coverage: "All regions"
   },
   {
     icon: 'Users',
-    image: "https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    title: "Enterprise Solutions",
-    subtitle: "Logistics that scale with you",
-    description: "Comprehensive logistics partnerships for growing businesses. Custom solutions, dedicated support, and technology integration that grows with your success.",
+    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    title: "Enterprise Cold Chain",
+    subtitle: "End-to-end solutions for scale",
+    description: "Comprehensive cold chain partnerships for pharmaceutical manufacturers, food distributors, and agricultural exporters. Custom solutions with dedicated fleet and support.",
     features: [
       "Dedicated account management",
-      "API integration and custom solutions",
+      "Custom temperature requirements",
       "Volume discounts and flexible contracts",
-      "Advanced analytics and reporting"
+      "Advanced analytics and compliance reporting"
     ],
     pricing: "Custom pricing",
     deliveryTime: "Flexible",

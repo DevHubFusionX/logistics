@@ -5,15 +5,15 @@ export default function SidebarSection({ section, collapsed, expandedItems, togg
   if (!section?.items) return null
 
   return (
-    <div>
+    <div className="mb-4">
       {!collapsed && (
-        <div className="px-3 mb-3">
-          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider truncate">
+        <div className="px-3 mb-2">
+          <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest truncate">
             {section.title}
           </h3>
         </div>
       )}
-      <div className="space-y-1">
+      <div className="space-y-0.5">
         {section.items.map((item) => (
           <SidebarItem
             key={item.id}

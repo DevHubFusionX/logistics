@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
-import { Search, Bell, Plus, Menu, HelpCircle, Globe, User, Settings, LogOut, Package, Truck } from 'lucide-react'
+import { Search, Bell, Plus, Menu, HelpCircle, Globe, User, Settings, LogOut, Package, Truck, Home } from 'lucide-react'
 import { useAuth } from '../../../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -53,13 +53,13 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
         </button>
 
         {/* Logo */}
-        <div className="flex-shrink-0 hidden sm:block">
+        <Link to="/" className="flex-shrink-0 hidden sm:block hover:opacity-80 transition-opacity">
           <img
             src="/public/assets/img/dara-logo.png"
             alt="Dara Express"
             className="h-8 sm:h-10 w-auto object-contain"
           />
-        </div>
+        </Link>
 
         {/* Global Search */}
         <form onSubmit={handleSearch} className="hidden md:flex relative flex-1 max-w-xl">
@@ -190,6 +190,13 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
                   {user?.role || 'Member'}
                 </span>
               </div>
+              <button
+                onClick={() => { navigate('/'); setShowUserMenu(false); }}
+                className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-sm flex items-center gap-3 transition-colors"
+              >
+                <Home className="w-4 h-4 text-gray-600" />
+                <span className="font-medium">Homepage</span>
+              </button>
               <button
                 onClick={() => { navigate('/user'); setShowUserMenu(false); }}
                 className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-sm flex items-center gap-3 transition-colors"

@@ -48,7 +48,7 @@ export default function DaraAbout() {
             viewport={{ once: true }}
             className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
           >
-            From a bold vision to Nigeria's most trusted logistics network—discover how we're revolutionizing the way businesses move, ship, and scale across Africa.
+            A technology-driven cold chain logistics company delivering reliable, temperature-controlled transportation for Nigeria's pharmaceutical, healthcare, and perishable goods industries.
           </motion.p>
         </div>
 
@@ -86,10 +86,9 @@ export default function DaraAbout() {
                   transition={{ duration: 0.6, delay: 0.5 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">The Vision (2020)</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Founded (2023)</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    We saw Nigerian businesses struggling with unreliable logistics—delayed shipments, 
-                    poor tracking, and limited coverage. We knew technology could bridge this gap.
+                    Dara Cold Chain Logistics was established to address the critical need for reliable temperature-controlled transportation in Nigeria's pharmaceutical and perishable goods sectors.
                   </p>
                 </motion.div>
               </motion.div>
@@ -116,10 +115,9 @@ export default function DaraAbout() {
                   transition={{ duration: 0.6, delay: 0.7 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">The Foundation (2021)</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Tech Integration (2024)</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Starting with 5 vehicles and a dream, we built our first logistics hub in Lagos. 
-                    Our focus: real-time tracking, transparent pricing, and exceptional service.
+                    Equipped our fleet with real-time GPS and temperature monitoring systems, ensuring every shipment maintains optimal conditions. Added Goods-in-Transit insurance for complete peace of mind.
                   </p>
                 </motion.div>
               </motion.div>
@@ -136,7 +134,8 @@ export default function DaraAbout() {
                   whileInView={{ scale: 1, rotate: 0 }}
                   transition={{ duration: 0.6, delay: 0.8, type: "spring", stiffness: 200 }}
                   viewport={{ once: true }}
-                  className="flex-shrink-0 w-12 h-12 bg-accent rounded-full flex items-center justify-center"
+                  className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
+                  style={{ backgroundColor: '#00843D' }}
                 >
                   <TrendingUp className="w-6 h-6 text-white" />
                 </motion.div>
@@ -146,10 +145,9 @@ export default function DaraAbout() {
                   transition={{ duration: 0.6, delay: 0.9 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">The Growth (2022-2024)</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Nationwide Expansion (2026)</h3>
                   <p className="text-gray-600 leading-relaxed">
-                    Today, we operate across 36 states with 200+ vehicles, serving 1000+ businesses. 
-                    From startups to enterprises, we're the logistics backbone of Nigeria's economy.
+                    Expanding enterprise solutions and coverage nationwide. From vaccines and medical supplies to frozen foods and fresh produce—we're your trusted partner for end-to-end cold-chain transportation.
                   </p>
                 </motion.div>
               </motion.div>
@@ -210,7 +208,7 @@ export default function DaraAbout() {
                   viewport={{ once: true }}
                   className="text-lg font-medium italic mb-3"
                 >
-                  "We don't just move packages—we move dreams, ambitions, and the future of Nigerian commerce."
+                  "Cold-chain logistics isn't just about transportation—it's about trust, precision, and product integrity. We preserve quality and deliver consistency."
                 </motion.blockquote>
                 <motion.cite
                   initial={{ opacity: 0, x: 20 }}
