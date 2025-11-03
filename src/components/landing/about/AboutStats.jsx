@@ -4,7 +4,7 @@ import { Thermometer, Package, Shield, TrendingUp } from 'lucide-react'
 export default function AboutStats() {
   const stats = [
     { icon: Thermometer, number: "24/7", label: "Temperature Monitoring" },
-    { icon: Package, number: "10K+", label: "Cold Chain Deliveries" },
+    { icon: Package, number: "600K", label: "Cold Chain Deliveries" },
     { icon: Shield, number: "100%", label: "GIT Insurance Coverage" },
     { icon: TrendingUp, number: "99.5%", label: "Product Integrity Rate" }
   ]
