@@ -7,7 +7,7 @@ export default function ContactInfo() {
       icon: Phone,
       title: "Call Us",
       content: "+2348115779007\n+2349121168485",
-      color: "bg-accent"
+      color: "bg-green-600"
     },
     {
       icon: Mail,
@@ -44,8 +44,8 @@ export default function ContactInfo() {
                 viewport={{ once: true }}
                 className="flex items-start gap-3 sm:gap-4"
               >
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${item.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
-                  <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                <div className={`w-10 h-10 sm:w-12 sm:h-12 ${item.color} rounded-xl flex items-center justify-center flex-shrink-0 shadow-md`}>
+                  <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-white" strokeWidth={2} />
                 </div>
                 <div>
                   <h4 className="text-base sm:text-lg font-bold text-gray-900 mb-1">{item.title}</h4>

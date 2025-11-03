@@ -40,6 +40,7 @@ export default function ContactInfo({ itemVariants }) {
           </motion.div>
           <div>
             <p className="text-white font-medium">+234 811 577 9007</p>
+            <p className="text-white font-medium">+234 912 116 8485</p>
             <p className="text-gray-400 text-sm">24/7 Customer Support</p>
           </div>
         </motion.div>
@@ -61,6 +62,7 @@ export default function ContactInfo({ itemVariants }) {
           </motion.div>
           <div>
             <p className="text-white font-medium">hello@daraexpress.com</p>
+            <p className="text-white font-medium">contact@daraexpress.com</p>
             <p className="text-gray-400 text-sm">General Inquiries</p>
           </div>
         </motion.div>
@@ -81,8 +83,9 @@ export default function ContactInfo({ itemVariants }) {
             <MapPin className="w-5 h-5 text-sky-400" />
           </motion.div>
           <div>
-            <p className="text-white font-medium">Head Office</p>
-            <p className="text-gray-400 text-sm">35, Lateef Jakande Road, Agidigbi Lagos</p>
+            <p className="text-white font-medium">35, Lateef Jakande Road, Agidigbi Lagos</p>
+            <p className="text-white font-medium">10, Hughes Avenue, Yaba, Lagos State</p>
+            <p className="text-gray-400 text-sm">Visit Us</p>
           </div>
         </motion.div>
       </motion.div>

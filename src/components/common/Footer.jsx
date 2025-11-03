@@ -50,17 +50,26 @@ export default function Footer() {
           <div>
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Contact</h3>
             <div className="space-y-2 sm:space-y-3">
-              <div className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-primary" />
-                <span className="text-gray-400 text-sm">+234 800 DARA-LOG</span>
+              <div className="flex items-start gap-2">
+                <Phone className="w-4 h-4 text-primary mt-0.5" />
+                <div className="text-gray-400 text-sm">
+                  <div>+234 811 577 9007</div>
+                  <div>+234 912 116 8485</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-primary" />
-                <span className="text-gray-400 text-sm">hello@daralogistics.ng</span>
+              <div className="flex items-start gap-2">
+                <Mail className="w-4 h-4 text-primary mt-0.5" />
+                <div className="text-gray-400 text-sm">
+                  <div>hello@daraexpress.com</div>
+                  <div>contact@daraexpress.com</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-primary" />
-                <span className="text-gray-400 text-sm">Lagos, Nigeria</span>
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 text-primary mt-0.5" />
+                <div className="text-gray-400 text-sm">
+                  <div>35, Lateef Jakande Road, Agidigbi Lagos</div>
+                  <div>10, Hughes Avenue, Yaba, Lagos State</div>
+                </div>
               </div>
             </div>
           </div>

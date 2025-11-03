@@ -55,7 +55,7 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
         {/* Logo */}
         <div className="flex-shrink-0 hidden sm:block">
           <img
-            src="/assets/img/dara_logo.svg"
+            src="/public/assets/img/dara-logo.png"
             alt="Dara Express"
             className="h-8 sm:h-10 w-auto object-contain"
           />
