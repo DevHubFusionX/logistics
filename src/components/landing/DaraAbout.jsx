@@ -266,7 +266,7 @@ export default function DaraAbout() {
                   viewport={{ once: true }}
                   className="text-3xl font-black text-accent mb-1"
                 >
-                  50K+
+                  600K+
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: 10 }}
