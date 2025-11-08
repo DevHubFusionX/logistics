@@ -3,7 +3,7 @@ import AnimatedCounter from './AnimatedCounter'
 
 export default function ImpactStats() {
   const stats = [
-    { number: '50K+', label: 'Successful Deliveries' },
+    { number: '600K+', label: 'Successful Deliveries' },
     { number: '1000+', label: 'Business Partners' },
     { number: '36', label: 'States Covered' },
     { number: '99.2%', label: 'On-Time Performance' }

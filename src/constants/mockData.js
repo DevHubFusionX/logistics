@@ -14,7 +14,7 @@ export const HERO_BACKGROUND_IMAGES = [
 ]
 
 export const HERO_STATS = [
-  { icon: 'Truck', value: '50K+', label: 'Successful Deliveries' },
+  { icon: 'Truck', value: '600K+', label: 'Successful Deliveries' },
   { icon: 'Clock', value: '99.2%', label: 'On-Time Performance' },
   { icon: 'MapPin', value: '36', label: 'States Coverage' }
 ]
@@ -153,7 +153,7 @@ export const TRUST_STATS_DATA = [
   { number: '4.9/5', label: 'Average Rating' },
   { number: '98%', label: 'Customer Retention' },
   { number: '1000+', label: 'Happy Businesses' },
-  { number: '50K+', label: 'Successful Deliveries' }
+  { number: '600K+', label: 'Successful Deliveries' }
 ]
 
 // KPI Data
