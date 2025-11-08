@@ -15,6 +15,7 @@ import Home from '../pages/Home'
 import Services from '../pages/Services'
 import About from '../pages/About'
 import NotFound from '../pages/NotFound'
+import Tracking from '../pages/Tracking'
 
 // Auth Pages (Eager load)
 import SignUp from '../pages/auth/SignUp'
@@ -94,6 +95,9 @@ export default function AppRoutes() {
       <Route path="/auth/login" element={<Login />} />
       <Route path="/auth/forgot-password" element={<ForgotPassword />} />
       <Route path="/auth/verify-otp" element={<VerifyOTP />} />
+      
+      {/* Public Tracking Route */}
+      <Route path="/tracking" element={<Tracking />} />
       
       {/* Booking Routes */}
       <Route path="/booking/request" element={<DashboardRoute><BookingRequest /></DashboardRoute>} />

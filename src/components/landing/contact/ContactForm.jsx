@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 export default function ContactForm({ formData: externalFormData, handleInputChange: externalHandleChange, handleSubmit: externalHandleSubmit }) {
   const [internalFormData, setInternalFormData] = useState({
@@ -21,9 +22,11 @@ export default function ContactForm({ formData: externalFormData, handleInputCha
     })
   })
 
+  const navigate = useNavigate()
+
   const handleSubmit = externalHandleSubmit || ((e) => {
     e.preventDefault()
-    console.log('Form submitted:', internalFormData)
+    navigate('/booking/request')
   })
   return (
     <motion.div

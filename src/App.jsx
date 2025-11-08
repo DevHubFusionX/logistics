@@ -36,7 +36,7 @@ function AppContent() {
     location.pathname.startsWith('/booking') || 
     location.pathname.startsWith('/invoice') || 
     location.pathname.startsWith('/profile') || 
-    location.pathname.startsWith('/tracking') || 
+    (location.pathname.startsWith('/tracking') && location.pathname !== '/tracking') || 
     location.pathname.startsWith('/my-bookings') || 
     location.pathname.startsWith('/payment-history') || 
     location.pathname.startsWith('/my-temperature') || 
