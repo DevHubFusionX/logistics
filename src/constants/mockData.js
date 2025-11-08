@@ -22,7 +22,7 @@ export const HERO_STATS = [
 export const SERVICES_DATA = [
   {
     icon: 'Package',
-    image: "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/assets/img/pharmaceutical.jpg",
     title: "Pharmaceutical Logistics",
     subtitle: "Temperature-controlled precision",
     description: "Specialized cold chain transportation for vaccines, medicines, and medical supplies. Real-time temperature monitoring ensures product integrity from pickup to delivery.",
@@ -32,13 +32,13 @@ export const SERVICES_DATA = [
       "Goods-in-Transit (GIT) insurance included",
       "Compliance with pharmaceutical standards"
     ],
-    pricing: "Custom quotes",
+    pricing: "Custom Quote",
     deliveryTime: "Same-day available",
     coverage: "Nationwide"
   },
   {
     icon: 'Clock',
-    image: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/assets/img/frozen-foods.jpg",
     title: "Frozen Foods Transport",
     subtitle: "Keeping freshness locked in",
     description: "Reliable frozen food logistics with temperature-controlled vehicles. Perfect for ice cream, frozen meats, seafood, and other frozen products requiring -18°C or below.",
@@ -48,13 +48,13 @@ export const SERVICES_DATA = [
       "Quick loading and unloading protocols",
       "24/7 temperature monitoring alerts"
     ],
-    pricing: "From ₦15,000",
+    pricing: "Custom Quote",
     deliveryTime: "1-3 days",
     coverage: "Major cities"
   },
   {
     icon: 'Truck',
-    image: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/assets/img/fresh-produce.jpg",
     title: "Fresh Produce Delivery",
     subtitle: "Farm to market, fresh guaranteed",
     description: "Temperature-controlled transport for fresh fruits, vegetables, dairy, and perishable goods. Maintaining optimal freshness throughout the supply chain.",
@@ -64,13 +64,13 @@ export const SERVICES_DATA = [
       "Specialized handling for delicate produce",
       "Direct farm-to-market distribution"
     ],
-    pricing: "From ₦8,500",
+    pricing: "Custom Quote",
     deliveryTime: "12-48 hours",
     coverage: "All regions"
   },
   {
     icon: 'Users',
-    image: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    image: "/assets/img/enterprise.jpg",
     title: "Enterprise Cold Chain",
     subtitle: "End-to-end solutions for scale",
     description: "Comprehensive cold chain partnerships for pharmaceutical manufacturers, food distributors, and agricultural exporters. Custom solutions with dedicated fleet and support.",
@@ -80,7 +80,7 @@ export const SERVICES_DATA = [
       "Volume discounts and flexible contracts",
       "Advanced analytics and compliance reporting"
     ],
-    pricing: "Custom pricing",
+    pricing: "Custom Quote",
     deliveryTime: "Flexible",
     coverage: "Nationwide+"
   }
@@ -116,7 +116,7 @@ export const TESTIMONIALS_DATA = [
     author: "Adunni Bankole",
     position: "CEO, ShopNaija",
     company: "ShopNaija",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    image: "/assets/img/adunni.jpg",
     impact: "85% increase in customer satisfaction",
     businessType: "E-commerce"
   },
@@ -126,7 +126,7 @@ export const TESTIMONIALS_DATA = [
     author: "Chinedu Okafor",
     position: "Founder, Afro Crafts",
     company: "Afro Crafts",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    image: "/assets/img/chinedu.jpg",
     impact: "Expanded to 12 states in 8 months",
     businessType: "SME"
   },
@@ -136,7 +136,7 @@ export const TESTIMONIALS_DATA = [
     author: "Fatima Al-Hassan",
     position: "Supply Chain Director, MegaMart Nigeria",
     company: "MegaMart",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+    image: "/assets/img/fatima.jpg",
     impact: "35% cost reduction, 50% faster delivery",
     businessType: "Enterprise"
   }
