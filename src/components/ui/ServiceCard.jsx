@@ -25,6 +25,7 @@ export default function ServiceCard({ service, index }) {
         <motion.img
           src={service.image}
           alt={service.title}
+          loading="lazy"
           className="w-full h-full object-cover"
           whileHover={{ scale: 1.05 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -116,7 +117,7 @@ export default function ServiceCard({ service, index }) {
           viewport={{ once: true }}
           transition={{ duration: 0.3, delay: index * 0.15 + 0.7 }}
         >
-          <Button className="w-full group/btn" variant="primary">
+          <Button to="/booking/request" className="w-full group/btn" variant="primary">
             <span>Get Quote</span>
             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
           </Button>

@@ -7,10 +7,10 @@ export const HERO_FEATURES = [
 ]
 
 export const HERO_BACKGROUND_IMAGES = [
-  'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-  'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+  '/assets/img/hero-bg-1.jpg',
+  '/assets/img/hero-bg-2.jpg',
+  '/assets/img/hero-bg-3.jpg',
+  '/assets/img/hero-bg-4.jpg'
 ]
 
 export const HERO_STATS = [

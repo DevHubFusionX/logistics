@@ -270,17 +270,26 @@ export default function Navbar() {
                   <span className="font-semibold text-gray-900 text-sm">Need help with shipping?</span>
                 </div>
                 <div className="space-y-2 text-xs text-gray-600">
-                  <div className="flex items-center gap-2">
-                    <Phone className="w-3.5 h-3.5 text-gray-400" />
-                    <span>+1 (555) 123-4567</span>
+                  <div className="flex items-start gap-2">
+                    <Phone className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
+                    <div>
+                      <div>+2348115779007</div>
+                      <div>+2349121168485</div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Mail className="w-3.5 h-3.5 text-gray-400" />
-                    <span>support@daraexpress.com</span>
+                  <div className="flex items-start gap-2">
+                    <Mail className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
+                    <div>
+                      <div>hello@daraexpress.com</div>
+                      <div>contact@daraexpress.com</div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-gray-400" />
-                    <span>24/7 availability</span>
+                  <div className="flex items-start gap-2">
+                    <MapPin className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
+                    <div className="leading-relaxed">
+                      <div>35, Lateef Jakande Road,</div>
+                      <div>Agidigbi Lagos</div>
+                    </div>
                   </div>
                 </div>
                 <Link
