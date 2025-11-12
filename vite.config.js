@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://dera-api-age1.onrender.com',
+        target: 'http://dera-api.daraexpress.com',
         changeOrigin: true,
         secure: true
       }
