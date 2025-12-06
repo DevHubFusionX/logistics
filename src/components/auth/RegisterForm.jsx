@@ -58,8 +58,9 @@ export default function RegisterForm() {
     if (!formData.phoneNumber) errors.phoneNumber = 'Phone number is required'
     if (!formData.companyName) errors.companyName = 'Company name is required'
     if (!formData.address) errors.address = 'Address is required'
+    const MIN_PASSWORD_LENGTH = 8
     if (!formData.password) errors.password = 'Password is required'
-    else if (formData.password.length < 8) errors.password = 'Password must be at least 8 characters'
+    else if (formData.password.length < MIN_PASSWORD_LENGTH) errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
     else if (passwordStrength < 3) errors.password = 'Password is too weak'
 
     if (Object.keys(errors).length > 0) {

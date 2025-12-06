@@ -26,7 +26,7 @@ export default function Payment() {
   const handlePaymentSuccess = async (reference) => {
     setProcessing(true)
     try {
-      const response = await paymentService.verifyPayment(reference.reference, bookingId)
+      const response = await paymentService.verifyPayment(bookingId)
       setPaymentStatus('success')
       toast.success('Payment verified successfully!')
       setTimeout(() => {

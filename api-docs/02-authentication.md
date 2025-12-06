@@ -11,8 +11,8 @@ POST /auth/register
   "name": "John Doe",
   "email": "john@example.com",
   "phone": "+234-801-234-5678",
-  "password": "SecurePass123!",
-  "confirmPassword": "SecurePass123!",
+  "password": "<your_secure_password>",
+  "confirmPassword": "<your_secure_password>",
   "role": "Fleet Officer"
 }
 ```
@@ -74,8 +74,8 @@ POST /auth/login
 **Request Body:**
 ```json
 {
-  "email": "admin@daraexpress.com",
-  "password": "SecurePass123!",
+  "email": "<user_email>",
+  "password": "<user_password>",
   "rememberMe": false
 }
 ```
@@ -309,8 +309,8 @@ POST /auth/2fa/verify
 **Request Body:**
 ```json
 {
-  "email": "user@daraexpress.com",
-  "password": "SecurePass123!",
-  "code": "123456"
+  "email": "<user_email>",
+  "password": "<user_password>",
+  "code": "<2fa_code>"
 }
 ```

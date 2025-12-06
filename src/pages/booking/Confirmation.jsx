@@ -1,11 +1,27 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CheckCircle, Download, Mail, Home, Package, MapPin, Calendar, DollarSign, FileText } from 'lucide-react'
+import { useEffect } from 'react'
+import { CheckCircle, Home, Package, MapPin, Calendar, FileText } from 'lucide-react'
 import { PageHeader } from '../../components/dashboard'
+import { ReceiptDownload, InvoiceGenerator } from '../../components/payments'
+import { notificationService } from '../../services'
+import toast from 'react-hot-toast'
 
 export default function Confirmation() {
   const location = useLocation()
   const navigate = useNavigate()
   const { bookingData, quote, bookingId, paymentId } = location.state || {}
+
+  useEffect(() => {
+    if (bookingId && bookingData?.email) {
+      notificationService.sendBookingConfirmation(bookingId, bookingData.email)
+        .catch(err => console.error('Failed to send confirmation email:', err))
+      
+      if (bookingData?.contactPhone) {
+        notificationService.sendBookingSMS(bookingId, bookingData.contactPhone)
+          .catch(err => console.error('Failed to send SMS:', err))
+      }
+    }
+  }, [bookingId, bookingData])
 
   if (!bookingData) {
     navigate('/booking/request')
@@ -124,16 +140,20 @@ export default function Confirmation() {
           </ul>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-4">
-          <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-            <Download className="w-5 h-5" />
-            Download Receipt
-          </button>
-          <button className="flex-1 flex items-center justify-center gap-2 px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium">
-            <Mail className="w-5 h-5" />
-            Email Receipt
-          </button>
-          <button onClick={() => navigate('/tracking/track')} className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-sm">
+        <div className="grid md:grid-cols-2 gap-6">
+          <ReceiptDownload 
+            paymentId={paymentId} 
+            email={bookingData.email}
+            type="receipt"
+          />
+          <InvoiceGenerator 
+            bookingId={bookingId}
+            email={bookingData.email}
+          />
+        </div>
+
+        <div className="flex justify-center">
+          <button onClick={() => navigate('/tracking/track')} className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-sm">
             Track Shipment
           </button>
         </div>

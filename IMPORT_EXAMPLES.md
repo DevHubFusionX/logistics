@@ -1,483 +1,406 @@
-# 🎯 Import Examples - Quick Reference
+# Import Examples - Quick Reference
 
-## Real-World Examples from Your Project
+## 🎯 Common Import Patterns
 
-### Example 1: Drivers Page (✅ Already Updated)
+### Services Layer
 
-```jsx
-// File: src/pages/Drivers.jsx
-
-import { useState, useMemo } from 'react'
-import { PageHeader } from '../components/dashboard'
-import { useToast } from '../components/ui/advanced'
-import { useLogisticsShortcuts } from '../hooks'
-import { sanitizeInput } from '../utils'
+```javascript
+// ✅ Correct - Use barrel exports
 import { 
-  DriverStats, 
-  DriverFilters, 
-  DriverTable, 
-  DriverModal, 
-  AddDriverModal,
-  mockDrivers 
-} from '../components/drivers'
+  bookingService, 
+  authService, 
+  paymentService,
+  fleetService,
+  driverService,
+  httpClient 
+} from '@/services'
 
-export default function Drivers() {
-  // Component logic...
-}
+// Usage
+const bookings = await bookingService.getBookings()
+const price = await bookingService.calculatePrice(data)
 ```
 
-**Benefits:**
-- 6 import statements instead of 11 (45% reduction)
-- All driver-related imports in one place
-- Easy to see dependencies at a glance
+### Custom Hooks
 
----
-
-### Example 2: Fleet Page (To Be Updated)
-
-```jsx
-// File: src/pages/Fleet.jsx
-
-// ❌ BEFORE (Verbose)
-import { useState } from 'react'
-import PageHeader from '../components/dashboard/layout/PageHeader'
-import FleetMap from '../components/fleet/FleetMap'
-import FleetMetrics from '../components/fleet/FleetMetrics'
-import FleetFilters from '../components/fleet/FleetFilters'
-import VehicleCard from '../components/fleet/VehicleCard'
-import AddTruckModal from '../components/fleet/AddTruckModal'
-import TruckDetailModal from '../components/fleet/TruckDetailModal'
-import MaintenanceAlerts from '../components/fleet/MaintenanceAlerts'
-import { mockFleet } from '../components/fleet/fleetData'
-import { useToast } from '../components/ui/advanced/Toast'
-import { formatCurrency } from '../utils/formatters'
-
-// ✅ AFTER (Clean)
-import { useState } from 'react'
-import { PageHeader } from '../components/dashboard'
+```javascript
+// ✅ Correct - Named imports from hooks barrel
 import { 
-  FleetMap, 
-  FleetMetrics, 
-  FleetFilters,
-  VehicleCard,
-  AddTruckModal,
-  TruckDetailModal,
-  MaintenanceAlerts,
-  mockFleet 
-} from '../components/fleet'
-import { useToast } from '../components/ui/advanced'
-import { formatCurrency } from '../utils'
+  useAuth, 
+  useApi, 
+  useBookingDraft,
+  usePaymentStatus,
+  useRetry 
+} from '@/hooks'
+
+// Usage in component
+const { user, isAuthenticated } = useAuth()
+const { data, loading, error } = useApi('/bookings')
+const { saveDraft, loadDraft } = useBookingDraft()
 ```
 
----
+### Utility Functions
 
-### Example 3: Temperature Monitoring Page
-
-```jsx
-// File: src/pages/Temperature.jsx
-
-// ✅ NEW PATTERN
-import { useState, useEffect } from 'react'
-import { PageHeader } from '../components/dashboard'
+```javascript
+// ✅ Correct - Named imports from utils barrel
 import { 
-  TemperatureGraph, 
-  TemperatureTable,
-  AlertCenter,
-  ComplianceReport,
-  TemperatureTrend,
-  mockTemperatureData 
-} from '../components/temperature'
-import { useToast } from '../components/ui/advanced'
-import { formatTemperature, formatDate } from '../utils'
-import { temperatureService } from '../services'
+  formatCurrency, 
+  formatDate,
+  validateEmail,
+  handleError,
+  sanitizeInput 
+} from '@/utils'
 
-export default function Temperature() {
-  const [data, setData] = useState(mockTemperatureData)
-  const { showToast } = useToast()
-  
-  // Component logic...
-}
+// Usage
+const price = formatCurrency(1500)
+const date = formatDate(new Date())
+const isValid = validateEmail('user@example.com')
 ```
 
----
+### Constants
 
-### Example 4: Dashboard Page
-
-```jsx
-// File: src/pages/Dashboard.jsx
-
-// ✅ NEW PATTERN
-import { useState, useEffect } from 'react'
+```javascript
+// ✅ Correct - Named imports
 import { 
-  PageHeader,
-  StatsSection,
-  KPIRibbon,
+  COLORS, 
+  STATUS_COLORS, 
+  BADGE_COLORS,
+  PRIORITY_COLORS 
+} from '@/constants'
+
+// Usage
+<div className={STATUS_COLORS.active}>Active</div>
+<span className={BADGE_COLORS.success}>Success</span>
+```
+
+### Common Components
+
+```javascript
+// ✅ Correct - Named imports from common barrel
+import { 
+  Navbar, 
+  Footer, 
+  LoadingScreen,
+  ProtectedRoute,
+  ErrorFallback 
+} from '@/components/common'
+
+// Footer sub-components
+import { 
+  ChatWidget, 
+  CompanyInfo, 
+  ContactInfo 
+} from '@/components/common/footer'
+```
+
+### Dashboard Components
+
+```javascript
+// ✅ Correct - Named imports from dashboard barrel
+import { 
+  AppLayout, 
+  DashboardLayout,
+  Sidebar,
+  TopHeader,
+  PageHeader 
+} from '@/components/dashboard'
+
+// Dashboard widgets
+import { 
+  StatsCard, 
+  KPICard, 
+  TemperatureWidget 
+} from '@/components/dashboard'
+
+// Dashboard sections
+import { 
+  StatsSection, 
+  KPIRibbon, 
   LiveMap,
-  ActivityFeed,
-  OperationalInsights,
-  useDashboardData 
-} from '../components/dashboard'
-import { LoadingSkeleton } from '../components/ui/advanced'
-import { dashboardService } from '../services'
-
-export default function Dashboard() {
-  const { stats, loading } = useDashboardData()
-  
-  if (loading) return <LoadingSkeleton />
-  
-  return (
-    <div>
-      <PageHeader title="Dashboard" />
-      <StatsSection data={stats} />
-      <KPIRibbon />
-      <LiveMap />
-      <ActivityFeed />
-      <OperationalInsights />
-    </div>
-  )
-}
+  ActivityFeed 
+} from '@/components/dashboard'
 ```
 
----
+### Feature Components
 
-### Example 5: Shipments Page
-
-```jsx
-// File: src/pages/shipments/Shipments.jsx
-
-// ✅ NEW PATTERN
-import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard'
+```javascript
+// Bookings
 import { 
-  ShipmentTable, 
-  KanbanBoard,
-  ShipmentFilters,
-  ShipmentSidebar,
-  CreateShipmentModal 
-} from '../../components/shipments'
-import { useToast } from '../../components/ui/advanced'
-import { useAuth } from '../../hooks'
+  BookingCard, 
+  BookingFilters, 
+  BookingStats,
+  AssignDriverModal,
+  BookingDetailsModal 
+} from '@/components/bookings'
 
-export default function Shipments() {
-  const [view, setView] = useState('table')
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const { user } = useAuth()
-  
-  return (
-    <div>
-      <PageHeader title="Shipments" />
-      <ShipmentFilters />
-      {view === 'table' ? <ShipmentTable /> : <KanbanBoard />}
-      <CreateShipmentModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
-    </div>
-  )
-}
-```
+// Booking flow
+import { 
+  ShipmentDetailsForm, 
+  ReviewQuote, 
+  PaymentSelection,
+  BookingConfirmation,
+  ProgressSteps 
+} from '@/components/booking'
 
----
+// Fleet
+import { 
+  VehicleCard, 
+  FleetMap, 
+  FleetMetrics,
+  AddTruckModal,
+  TruckDetailModal 
+} from '@/components/fleet'
 
-### Example 6: Payments Page
+// Drivers
+import { 
+  DriverCard, 
+  DriverTable, 
+  DriverStats,
+  AddDriverModal,
+  DriverFilters 
+} from '@/components/drivers'
 
-```jsx
-// File: src/pages/Payments.jsx
+// Trips
+import { 
+  TripTable, 
+  TripFilters, 
+  TripDetailModal,
+  TripFormModal 
+} from '@/components/trips'
 
-// ✅ NEW PATTERN
-import { useState, useEffect } from 'react'
-import { PageHeader } from '../components/dashboard'
+// Payments
 import { 
   PaymentsTable, 
+  PaystackPayment, 
+  BankTransferForm,
   RevenueChart,
-  OutstandingPayments,
-  mockPayments 
-} from '../components/payments'
-import { Chart, useToast } from '../components/ui/advanced'
-import { formatCurrency, formatDate } from '../utils'
-import { paymentService } from '../services'
+  OutstandingPayments 
+} from '@/components/payments'
 
-export default function Payments() {
-  const [payments, setPayments] = useState(mockPayments)
-  const { showToast } = useToast()
-  
-  const handlePayment = async (id) => {
-    try {
-      await paymentService.processPayment(id)
-      showToast.success('Payment processed')
-    } catch (error) {
-      showToast.error('Payment failed')
-    }
-  }
-  
-  return (
-    <div>
-      <PageHeader title="Payments" />
-      <RevenueChart data={payments} />
-      <OutstandingPayments />
-      <PaymentsTable 
-        data={payments} 
-        onProcess={handlePayment} 
-      />
-    </div>
-  )
-}
-```
-
----
-
-### Example 7: Reports Page
-
-```jsx
-// File: src/pages/Reports.jsx
-
-// ✅ NEW PATTERN
-import { useState } from 'react'
-import { PageHeader } from '../components/dashboard'
+// Temperature
 import { 
-  FleetUsageChart,
-  RevenueTrendChart,
-  RevenueByClientChart,
-  TripCountsChart,
-  GeographicHeatmap,
-  mockReportsData 
-} from '../components/reports'
-import { Chart } from '../components/ui/advanced'
-import { reportService } from '../services'
+  TemperatureGraph, 
+  TemperatureTable, 
+  AlertCenter,
+  ComplianceReport 
+} from '@/components/temperature'
 
-export default function Reports() {
-  const [dateRange, setDateRange] = useState('30d')
-  const [data, setData] = useState(mockReportsData)
-  
-  return (
-    <div className="space-y-6">
-      <PageHeader title="Reports & Analytics" />
-      
-      <div className="grid grid-cols-2 gap-6">
-        <RevenueTrendChart data={data.revenue} />
-        <FleetUsageChart data={data.fleet} />
-        <RevenueByClientChart data={data.clients} />
-        <TripCountsChart data={data.trips} />
-      </div>
-      
-      <GeographicHeatmap data={data.locations} />
-    </div>
-  )
-}
-```
-
----
-
-### Example 8: Settings Page
-
-```jsx
-// File: src/pages/Settings.jsx
-
-// ✅ NEW PATTERN
-import { useState } from 'react'
-import { PageHeader } from '../components/dashboard'
+// Tracking
 import { 
-  SystemSettings,
-  NotificationsSettings,
-  IntegrationsSettings,
-  TemperatureThresholds,
-  AuditLogs 
-} from '../components/settings'
-import { useAuth } from '../hooks'
+  TrackingMap, 
+  StatusTimeline, 
+  DriverInfo,
+  ProofOfDelivery 
+} from '@/components/tracking'
 
-export default function Settings() {
-  const [activeTab, setActiveTab] = useState('system')
-  const { user } = useAuth()
-  
-  const tabs = {
-    system: <SystemSettings />,
-    notifications: <NotificationsSettings />,
-    integrations: <IntegrationsSettings />,
-    temperature: <TemperatureThresholds />,
-    audit: <AuditLogs />
-  }
-  
-  return (
-    <div>
-      <PageHeader title="Settings" />
-      {tabs[activeTab]}
-    </div>
-  )
-}
-```
-
----
-
-### Example 9: Booking Request Page
-
-```jsx
-// File: src/pages/booking/BookingRequest.jsx
-
-// ✅ NEW PATTERN
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { PageHeader } from '../../components/dashboard'
-import { BookingCard, MetricCard } from '../../components/bookings'
-import { useToast } from '../../components/ui/advanced'
-import { validateEmail, validatePhone } from '../../utils'
-import { bookingService } from '../../services'
-
-export default function BookingRequest() {
-  const navigate = useNavigate()
-  const { showToast } = useToast()
-  const [formData, setFormData] = useState({})
-  
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    
-    if (!validateEmail(formData.email)) {
-      showToast.error('Invalid email')
-      return
-    }
-    
-    try {
-      const result = await bookingService.createBooking(formData)
-      showToast.success('Booking created')
-      navigate('/booking/quotation', { state: { booking: result } })
-    } catch (error) {
-      showToast.error('Booking failed')
-    }
-  }
-  
-  return (
-    <div>
-      <PageHeader title="New Booking Request" />
-      <BookingCard onSubmit={handleSubmit} />
-    </div>
-  )
-}
-```
-
----
-
-### Example 10: User Profile Page
-
-```jsx
-// File: src/pages/User.jsx
-
-// ✅ NEW PATTERN
-import { useState } from 'react'
-import { PageHeader } from '../components/dashboard'
+// Shipments
 import { 
-  ProfileSection,
-  SecuritySection,
-  NotificationSettings,
-  BillingSection 
-} from '../components/user'
-import { useAuth } from '../hooks'
-import { useToast } from '../components/ui/advanced'
-
-export default function User() {
-  const { user, updateProfile } = useAuth()
-  const { showToast } = useToast()
-  const [activeTab, setActiveTab] = useState('profile')
-  
-  const handleUpdate = async (data) => {
-    try {
-      await updateProfile(data)
-      showToast.success('Profile updated')
-    } catch (error) {
-      showToast.error('Update failed')
-    }
-  }
-  
-  return (
-    <div>
-      <PageHeader title="My Profile" />
-      
-      {activeTab === 'profile' && <ProfileSection user={user} onUpdate={handleUpdate} />}
-      {activeTab === 'security' && <SecuritySection />}
-      {activeTab === 'notifications' && <NotificationSettings />}
-      {activeTab === 'billing' && <BillingSection />}
-    </div>
-  )
-}
+  ShipmentTable, 
+  KanbanBoard, 
+  ShipmentFilters,
+  CreateShipmentModal 
+} from '@/components/shipments'
 ```
 
----
+### UI Components
 
-## 🎨 Import Pattern Summary
+```javascript
+// Basic UI
+import { 
+  Button, 
+  Badge, 
+  FeatureCard,
+  ServiceCard,
+  SectionHeader 
+} from '@/components/ui'
 
-### Pattern 1: Single Feature
-```jsx
-import { Component1, Component2, data } from '../components/feature'
+// Advanced UI
+import { 
+  Chart, 
+  LoadingSkeleton, 
+  MetricCard,
+  Toast,
+  VirtualizedTable 
+} from '@/components/ui'
 ```
 
-### Pattern 2: Multiple Features
-```jsx
-import { PageHeader } from '../components/dashboard'
-import { FeatureComponent } from '../components/feature'
-import { useCustomHook } from '../hooks'
-import { utilFunction } from '../utils'
+### Landing Page Components
+
+```javascript
+// Main landing components
+import { 
+  DaraHero, 
+  DaraAbout, 
+  DaraServices,
+  DaraTestimonials,
+  DaraWhyUs,
+  DaraContact 
+} from '@/components/landing'
+
+// Contact sub-components
+import { 
+  ContactForm, 
+  ContactInfo, 
+  OfficeLocations 
+} from '@/components/landing/contact'
+
+// Services sub-components
+import { 
+  CoreServicesSection, 
+  SpecializedServicesSection,
+  ProcessSection 
+} from '@/components/landing/services'
+
+// About sub-components
+import { 
+  AboutHero, 
+  AboutValues, 
+  AboutLeadership,
+  AboutTimeline 
+} from '@/components/landing/about'
 ```
 
-### Pattern 3: With Services
-```jsx
-import { Component } from '../components/feature'
-import { service } from '../services'
-import { useHook } from '../hooks'
+### Auth Components
+
+```javascript
+import { 
+  AuthLayout, 
+  LoginForm, 
+  RegisterForm 
+} from '@/components/auth'
 ```
 
-### Pattern 4: Complex Page
-```jsx
-// React & Router
+## 📝 Complete Component Example
+
+```javascript
+// BookingManagement.jsx
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-// Dashboard Layout
-import { PageHeader } from '../components/dashboard'
-
-// Feature Components
-import { 
-  Component1, 
-  Component2, 
-  Component3,
-  mockData 
-} from '../components/feature'
-
-// UI Components
-import { useToast, LoadingSkeleton } from '../components/ui/advanced'
-
-// Hooks & Utils
-import { useAuth } from '../hooks'
-import { formatDate, validateInput } from '../utils'
-
 // Services
-import { featureService } from '../services'
+import { bookingService, paymentService } from '@/services'
+
+// Hooks
+import { useAuth, useApi, useBookingMetrics } from '@/hooks'
+
+// Components
+import { AppLayout, PageHeader } from '@/components/dashboard'
+import { 
+  BookingCard, 
+  BookingFilters, 
+  BookingStats,
+  AssignDriverModal 
+} from '@/components/bookings'
+import { Button, Badge } from '@/components/ui'
+import { LoadingScreen } from '@/components/common'
+
+// Utils
+import { formatCurrency, formatDate, handleError } from '@/utils'
+
+// Constants
+import { STATUS_COLORS, BADGE_COLORS } from '@/constants'
+
+export default function BookingManagement() {
+  const navigate = useNavigate()
+  const { user } = useAuth()
+  const { data: bookings, loading } = useApi('/bookings')
+  const { metrics } = useBookingMetrics()
+  
+  // Component logic...
+  
+  return (
+    <AppLayout>
+      <PageHeader title="Bookings" />
+      <BookingStats metrics={metrics} />
+      <BookingFilters onFilter={handleFilter} />
+      {/* ... */}
+    </AppLayout>
+  )
+}
 ```
 
----
+## 🔄 Migration Examples
 
-## 💡 Pro Tips
+### Before (Old Pattern)
+```javascript
+import bookingService from '../../../services/bookingService'
+import authService from '../../../services/authService'
+import BookingCard from '../../bookings/BookingCard'
+import BookingFilters from '../../bookings/BookingFilters'
+import { formatCurrency } from '../../../utils/formatters'
+import { validateEmail } from '../../../utils/validators'
+import LoadingScreen from '../../common/LoadingScreen'
+```
 
-1. **Group by source** - Keep imports from the same folder together
-2. **Order matters** - React → Layout → Features → UI → Hooks → Utils → Services
-3. **One feature per line** - Makes it easy to add/remove
-4. **Include data** - Co-locate mock data with components
-5. **Use destructuring** - Import only what you need
+### After (New Pattern)
+```javascript
+import { bookingService, authService } from '@/services'
+import { BookingCard, BookingFilters } from '@/components/bookings'
+import { formatCurrency, validateEmail } from '@/utils'
+import { LoadingScreen } from '@/components/common'
+```
 
----
+## 🎨 Import Organization Template
 
-## 🚀 Quick Migration Checklist
+```javascript
+// 1. External dependencies (React, libraries)
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'react-hot-toast'
 
-For each page file:
-- [ ] Identify all component imports
-- [ ] Group by feature folder
-- [ ] Replace with barrel imports
-- [ ] Test the page
-- [ ] Commit changes
+// 2. Services
+import { bookingService, paymentService } from '@/services'
 
-**Estimated time per file:** 2-5 minutes
-**Total files to update:** ~20 pages
-**Total time:** 1-2 hours
+// 3. Hooks
+import { useAuth, useApi } from '@/hooks'
 
----
+// 4. Components (grouped by feature)
+import { AppLayout, PageHeader } from '@/components/dashboard'
+import { BookingCard, BookingFilters } from '@/components/bookings'
+import { Button, Badge } from '@/components/ui'
 
-## ✨ Result
+// 5. Utils
+import { formatCurrency, handleError } from '@/utils'
 
-Clean, maintainable, professional code that's easy to understand and modify!
+// 6. Constants
+import { STATUS_COLORS } from '@/constants'
+
+// 7. Types (if using TypeScript)
+// import type { Booking, Payment } from '@/types'
+```
+
+## ⚡ Quick Tips
+
+1. **Always use barrel exports** - Import from folder index, not individual files
+2. **Group imports logically** - External → Services → Hooks → Components → Utils → Constants
+3. **Use path aliases** - `@/` instead of relative paths `../../../`
+4. **Named imports only** - Avoid default imports when barrel exports exist
+5. **One import per category** - Combine multiple imports from same source
+
+## 🚫 Common Mistakes to Avoid
+
+```javascript
+// ❌ Don't mix import styles
+import { bookingService } from '@/services'
+import authService from '@/services/authService'  // Inconsistent!
+
+// ✅ Do use consistent barrel imports
+import { bookingService, authService } from '@/services'
+
+// ❌ Don't import from nested files directly
+import BookingCard from '@/components/bookings/BookingCard'
+
+// ✅ Do use barrel exports
+import { BookingCard } from '@/components/bookings'
+
+// ❌ Don't use relative paths for shared code
+import { formatCurrency } from '../../../utils/formatters'
+
+// ✅ Do use path aliases
+import { formatCurrency } from '@/utils'
+```
+
+## 📚 Additional Resources
+
+- See `CODEBASE_ORGANIZATION.md` for detailed structure
+- Check `PROJECT_STRUCTURE.md` for folder hierarchy
+- Review individual `index.js` files for available exports

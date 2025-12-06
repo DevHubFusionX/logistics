@@ -19,6 +19,14 @@ class HttpClient {
       throw new ApiError('Invalid endpoint', 400, null)
     }
     const url = `${BASE_URL}${this.buildUrl(endpoint, params)}`
+    
+    // Prevent SSRF by validating the final URL
+    const baseUrlObj = new URL(BASE_URL, window.location.origin)
+    const finalUrlObj = new URL(url, window.location.origin)
+    if (finalUrlObj.origin !== baseUrlObj.origin || !finalUrlObj.pathname.startsWith(baseUrlObj.pathname)) {
+      throw new ApiError('Invalid URL', 400, null)
+    }
+    
     const token = localStorage.getItem('token')
     
     const config = {
@@ -32,6 +40,13 @@ class HttpClient {
 
     try {
       const response = await fetch(url, config)
+      
+      // Validate response URL to prevent SSRF via redirects
+      const responseUrlObj = new URL(response.url)
+      if (responseUrlObj.origin !== baseUrlObj.origin || !responseUrlObj.pathname.startsWith(baseUrlObj.pathname)) {
+        throw new ApiError('Invalid redirect detected', 400, null)
+      }
+      
       const data = await response.json()
       
       if (!response.ok) {

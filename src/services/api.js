@@ -1,20 +1,16 @@
-import authService from './authService'
-import bookingService from './bookingService'
+import httpClient from './httpClient'
 
-// Main API service that combines all services
-class ApiService {
-  // Auth methods
-  register = authService.register.bind(authService)
-  login = authService.login.bind(authService)
-  getProfile = authService.getProfile.bind(authService)
-  forgotPassword = authService.forgotPassword.bind(authService)
-  resetPassword = authService.resetPassword.bind(authService)
-
-  // Booking methods
-  createBooking = bookingService.createBooking.bind(bookingService)
-  getBookings = bookingService.getBookings.bind(bookingService)
-  getBooking = bookingService.getBooking.bind(bookingService)
+const api = {
+  post: (url, data) => httpClient.request(url, {
+    method: 'POST',
+    body: JSON.stringify(data)
+  }),
+  get: (url, params) => httpClient.request(url, {}, params),
+  patch: (url, data) => httpClient.request(url, {
+    method: 'PATCH',
+    body: JSON.stringify(data)
+  }),
+  delete: (url) => httpClient.request(url, { method: 'DELETE' })
 }
 
-export default new ApiService()
-export { authService, bookingService }
+export default api

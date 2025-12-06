@@ -1,43 +1,44 @@
-import { useState } from 'react'
 import { Package, CheckCircle, CreditCard, Truck } from 'lucide-react'
 import { PageHeader } from '../../components/dashboard'
-import { useAuth } from '../../hooks/useAuth'
-import bookingService from '../../services/bookingService'
-import paymentService from '../../services/paymentService'
-import toast from 'react-hot-toast'
+import { useBookingFlow } from '../../hooks/useBookingFlow'
 import ProgressSteps from '../../components/booking/ProgressSteps'
 import ShipmentDetailsForm from '../../components/booking/ShipmentDetailsForm'
 import ReviewQuote from '../../components/booking/ReviewQuote'
 import PaymentSelection from '../../components/booking/PaymentSelection'
 import BookingConfirmation from '../../components/booking/BookingConfirmation'
+import DraftRecoveryBanner from '../../components/booking/DraftRecoveryBanner'
+import SaveDraftButton from '../../components/booking/SaveDraftButton'
+import ErrorFallback from '../../components/common/ErrorFallback'
+import RetryIndicator from '../../components/common/RetryIndicator'
+import NetworkStatus from '../../components/common/NetworkStatus'
 
 export default function BookingRequest() {
-  const { user } = useAuth()
-  const [step, setStep] = useState(1)
-  const [loading, setLoading] = useState(false)
-  const [bookingId, setBookingId] = useState(null)
-  const [estimatedCost, setEstimatedCost] = useState(null)
-  const [paymentMethod, setPaymentMethod] = useState('card')
-  const [formData, setFormData] = useState({
-    fullNameOrBusiness: user?.companyName || '',
-    contactPhone: user?.phoneNumber || '',
-    email: user?.email || '',
-    customerType: 'Business',
-    pickupPerson: { name: '', phone: '', email: '' },
-    receiverPerson: { name: '', phone: '', email: '' },
-    pickupLocation: { address: '', city: '', state: '' },
-    dropoffLocation: { address: '', city: '', state: '' },
-    goodsType: '',
-    cargoWeightKg: '',
-    quantity: 1,
-    isFragile: false,
-    isPerishable: false,
-    tempControlCelsius: 20,
-    vehicleType: '',
-    estimatedPickupDate: '',
-    estimatedDeliveryDate: '',
-    notes: ''
-  })
+  const {
+    step,
+    setStep,
+    loading,
+    error,
+    bookingId,
+    estimatedCost,
+    paymentMethod,
+    setPaymentMethod,
+    showDraftBanner,
+    formData,
+    retry,
+    draft,
+    handleRestoreDraft,
+    handleDiscardDraft,
+    handleSaveDraft,
+    handleNext,
+    handleConfirmBooking,
+    handleRetryBooking,
+    handleResetBooking,
+    handlePaymentSuccess,
+    handlePaymentClose,
+    handlePayLater,
+    handleChange,
+    handleNestedChange
+  } = useBookingFlow()
 
   const steps = [
     { num: 1, name: 'Shipment Details', icon: Package },
@@ -46,89 +47,58 @@ export default function BookingRequest() {
     { num: 4, name: 'Confirmation', icon: Truck }
   ]
 
-  const calculatePrice = () => {
-    const baseRate = 5000
-    const weightRate = parseFloat(formData.cargoWeightKg) * 50
-    const quantityRate = formData.quantity * 500
-    const fragileCharge = formData.isFragile ? 2000 : 0
-    const perishableCharge = formData.isPerishable ? 3000 : 0
-    const vehicleRates = { 'Van': 0, 'Truck': 5000, 'Refrigerated Van': 8000 }
-    const vehicleCharge = vehicleRates[formData.vehicleType] || 0
-    return baseRate + weightRate + quantityRate + fragileCharge + perishableCharge + vehicleCharge
-  }
-
-  const handleNext = (e) => {
-    e.preventDefault()
-    const price = calculatePrice()
-    setEstimatedCost(price)
-    setStep(2)
-  }
-
-  const handleConfirmBooking = async () => {
-    setLoading(true)
-    try {
-      const response = await bookingService.createBooking(formData)
-      const id = response?.data?.bookingId || response?.data?._id || response?.bookingId || response?._id
-      setBookingId(id || 'PENDING')
-      toast.success('Booking created successfully!')
-      setStep(3)
-    } catch (error) {
-      toast.error(error.message || 'Failed to create booking')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handlePaymentSuccess = async (reference) => {
-    setLoading(true)
-    try {
-      await paymentService.verifyPayment(reference.reference, bookingId)
-      toast.success('Payment verified successfully!')
-      setStep(4)
-    } catch (error) {
-      toast.error('Payment verification failed. Please contact support.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handlePaymentClose = () => {
-    toast.error('Payment cancelled')
-  }
-
-  const handlePayLater = () => {
-    toast.success('Booking confirmed! Pay on delivery')
-    setStep(4)
-  }
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value })
-  }
-
-  const handleNestedChange = (parent, field, value) => {
-    setFormData({
-      ...formData,
-      [parent]: { ...formData[parent], [field]: value }
-    })
+  // Show error fallback if there's an error on step 2
+  if (error && step === 2) {
+    return (
+      <div className="space-y-4 sm:space-y-6 pb-6 px-4 sm:px-0">
+        <PageHeader
+          title="Book a Shipment"
+          subtitle="Complete your logistics booking in 3 easy steps"
+        />
+        <ErrorFallback
+          error={error}
+          onRetry={handleRetryBooking}
+          onReset={handleResetBooking}
+        />
+      </div>
+    )
   }
 
   return (
     <div className="space-y-4 sm:space-y-6 pb-6 px-4 sm:px-0">
+      <NetworkStatus />
+      <RetryIndicator retryCount={retry.retryCount} retryDelay={retry.retryDelay} />
+
       <PageHeader
         title="Book a Shipment"
         subtitle="Complete your logistics booking in 3 easy steps"
       />
 
+      {showDraftBanner && (
+        <DraftRecoveryBanner
+          draftAge={draft.draftAge}
+          onRestore={handleRestoreDraft}
+          onDiscard={handleDiscardDraft}
+        />
+      )}
+
       <ProgressSteps steps={steps} currentStep={step} />
 
       {step === 1 && (
-        <ShipmentDetailsForm
-          formData={formData}
-          onChange={handleChange}
-          onNestedChange={handleNestedChange}
-          onSubmit={handleNext}
-        />
+        <>
+          <ShipmentDetailsForm
+            formData={formData}
+            onChange={handleChange}
+            onNestedChange={handleNestedChange}
+            onSubmit={handleNext}
+          />
+          <div className="flex justify-end">
+            <SaveDraftButton
+              onSave={handleSaveDraft}
+              lastSaved={draft.lastSaved}
+            />
+          </div>
+        </>
       )}
 
       {step === 2 && (

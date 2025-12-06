@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth.jsx'
 import { useToast } from '../ui/advanced'
 
+const MIN_PASSWORD_LENGTH = 8
+
 export default function LoginForm() {
   const navigate = useNavigate()
   const { login } = useAuth()
@@ -30,7 +32,7 @@ export default function LoginForm() {
     if (!formData.email) errors.email = 'Email is required'
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email format'
     if (!formData.password) errors.password = 'Password is required'
-    else if (formData.password.length < 8) errors.password = 'Password must be at least 8 characters'
+    else if (formData.password.length < MIN_PASSWORD_LENGTH) errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors)

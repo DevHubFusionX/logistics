@@ -29,8 +29,8 @@ export const useBookings = () => {
     }
   }
 
-  const cancelBooking = async (bookingId) => {
-    if (!confirm('Are you sure you want to cancel this booking?')) return
+  const cancelBooking = async (bookingId, confirmed = false) => {
+    if (!confirmed && !window.confirm('Are you sure you want to cancel this booking?')) return
     try {
       await bookingService.cancelBooking(bookingId)
       toast.success('Booking cancelled successfully!')

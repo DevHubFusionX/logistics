@@ -1,12 +1,15 @@
 import { useState, useMemo } from 'react'
 import { PageHeader } from '../components/dashboard'
 import { useNavigate } from 'react-router-dom'
-import BookingCard from '../components/bookings/BookingCard'
-import BookingStats from '../components/bookings/BookingStats'
-import BookingFilters from '../components/bookings/BookingFilters'
-import EmptyBookings from '../components/bookings/EmptyBookings'
-import BookingDetailsModal from '../components/bookings/BookingDetailsModal'
-import BookingEditModal from '../components/bookings/BookingEditModal'
+import { 
+  BookingCard, 
+  BookingStats, 
+  BookingFilters, 
+  EmptyBookings, 
+  BookingDetailsModal, 
+  BookingModification,
+  BookingCancellation 
+} from '../components/bookings'
 import { useBookings } from '../hooks/useBookings'
 import { getStatusBadge, getStatusText, calculateBookingPrice, getBookingStats } from '../utils/bookingUtils'
 
@@ -15,7 +18,8 @@ export default function MyBookings() {
   const [filter, setFilter] = useState('all')
   const [selectedBooking, setSelectedBooking] = useState(null)
   const [editBooking, setEditBooking] = useState(null)
-  const { bookings, loading, cancelBooking, updateBooking } = useBookings()
+  const [cancelBookingModal, setCancelBookingModal] = useState(null)
+  const { bookings, loading, refetch } = useBookings()
 
   const filteredBookings = useMemo(() => 
     filter === 'all' ? bookings : bookings.filter(b => b.status === filter),
@@ -61,7 +65,7 @@ export default function MyBookings() {
               booking={{...booking, calculatedPrice: calculateBookingPrice(booking)}}
               onViewDetails={setSelectedBooking}
               onEdit={setEditBooking}
-              onCancel={cancelBooking}
+              onCancel={setCancelBookingModal}
               onPayNow={handlePayNow}
               getStatusBadge={getStatusBadge}
               getStatusText={getStatusText}
@@ -77,14 +81,27 @@ export default function MyBookings() {
         getStatusText={getStatusText}
       />
 
-      <BookingEditModal
-        booking={editBooking}
-        onClose={() => setEditBooking(null)}
-        onSave={async (updateData) => {
-          await updateBooking(editBooking._id, updateData)
-          setEditBooking(null)
-        }}
-      />
+      {editBooking && (
+        <BookingModification
+          booking={editBooking}
+          onSuccess={() => {
+            setEditBooking(null)
+            refetch()
+          }}
+          onClose={() => setEditBooking(null)}
+        />
+      )}
+
+      {cancelBookingModal && (
+        <BookingCancellation
+          booking={cancelBookingModal}
+          onSuccess={() => {
+            setCancelBookingModal(null)
+            refetch()
+          }}
+          onClose={() => setCancelBookingModal(null)}
+        />
+      )}
     </div>
   )
 }

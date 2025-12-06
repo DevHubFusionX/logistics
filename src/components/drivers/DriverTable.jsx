@@ -45,7 +45,7 @@ export default function DriverTable({ drivers, onView, onEdit, onDelete, onExpor
       render: (value) => (
         <div className="flex items-center gap-1">
           <Truck className="w-4 h-4 text-gray-400" />
-          <span>{value || 'Unassigned'}</span>
+          <span>{value ? String(value).replace(/[<>"'&]/g, '') : 'Unassigned'}</span>
         </div>
       )
     },
@@ -71,7 +71,7 @@ export default function DriverTable({ drivers, onView, onEdit, onDelete, onExpor
       width: '120px',
       render: (value) => (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(value)}`}>
-          {value.replace('_', ' ')}
+          {String(value).replace(/[<>"'&]/g, '').replace('_', ' ')}
         </span>
       )
     },

@@ -9,7 +9,8 @@ export default {
       body: JSON.stringify(userData)
     })
     if (response.data?.token) {
-      localStorage.setItem('token', response.data.token)
+      const sanitizedToken = String(response.data.token).replace(/[<>"'&]/g, '')
+      localStorage.setItem('token', sanitizedToken)
       const sanitizedUser = sanitizeObject(response.data.user)
       localStorage.setItem('user', JSON.stringify(sanitizedUser))
     }
@@ -23,7 +24,8 @@ export default {
       body: JSON.stringify(credentials)
     })
     if (response.data?.token) {
-      localStorage.setItem('token', response.data.token)
+      const sanitizedToken = String(response.data.token).replace(/[<>"'&]/g, '')
+      localStorage.setItem('token', sanitizedToken)
       const sanitizedUser = sanitizeObject(response.data.user)
       localStorage.setItem('user', JSON.stringify(sanitizedUser))
     }

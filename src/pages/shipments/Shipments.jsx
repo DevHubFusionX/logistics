@@ -233,7 +233,7 @@ export default function Shipments() {
                   value === 'delayed' ? 'bg-red-100 text-red-700' :
                   'bg-gray-100 text-gray-700'
                 }`}>
-                  {value.replace('_', ' ')}
+                  {String(value).replace(/[<>"'&]/g, '').replace('_', ' ')}
                 </span>
               )
             },

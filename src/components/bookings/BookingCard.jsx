@@ -103,7 +103,7 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
                 <Edit className="w-4 h-4" />
                 <span className="hidden sm:inline">Edit</span>
               </button>
-              <button onClick={() => onCancel(booking._id)} className="flex items-center gap-1 px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm">
+              <button onClick={() => onCancel(booking)} className="flex items-center gap-1 px-3 py-2 border border-red-300 text-red-600 rounded-lg hover:bg-red-50 transition-colors font-medium text-sm">
                 <X className="w-4 h-4" />
                 <span className="hidden sm:inline">Cancel</span>
               </button>

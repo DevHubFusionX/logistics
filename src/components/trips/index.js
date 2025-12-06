@@ -1,1 +1,6 @@
-export { mockTrips } from './tripsData'
+export { default as TripAlerts } from './TripAlerts'
+export { default as TripDetailModal } from './TripDetailModal'
+export { default as TripFilters } from './TripFilters'
+export { default as TripFormModal } from './TripFormModal'
+export { default as TripTable } from './TripTable'
+export * from './tripsData'
