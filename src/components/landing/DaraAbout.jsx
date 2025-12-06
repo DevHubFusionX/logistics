@@ -86,7 +86,7 @@ export default function DaraAbout() {
                   transition={{ duration: 0.6, delay: 0.5 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Founded (2023)</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Founded (2025)</h3>
                   <p className="text-gray-600 leading-relaxed">
                     Dara Cold Chain Logistics was established to address the critical need for reliable temperature-controlled transportation in Nigeria's pharmaceutical and perishable goods sectors.
                   </p>
@@ -115,7 +115,7 @@ export default function DaraAbout() {
                   transition={{ duration: 0.6, delay: 0.7 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">Tech Integration (2024)</h3>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Tech Integration (2025)</h3>
                   <p className="text-gray-600 leading-relaxed">
                     Equipped our fleet with real-time GPS and temperature monitoring systems, ensuring every shipment maintains optimal conditions. Added Goods-in-Transit insurance for complete peace of mind.
                   </p>
