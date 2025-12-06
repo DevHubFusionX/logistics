@@ -1,12 +1,20 @@
+import logo1 from '../../assets/ClientLogo/image.svg'
+import logo2 from '../../assets/ClientLogo/image (1).svg'
+import logo3 from '../../assets/ClientLogo/image (2).svg'
+import logo4 from '../../assets/ClientLogo/image (3).svg'
+import logo5 from '../../assets/ClientLogo/image (4).svg'
+import logo6 from '../../assets/ClientLogo/image (5).svg'
+import logo7 from '../../assets/ClientLogo/image (6).svg'
+
 export default function DaraClients() {
   const clients = [
-    { name: 'Client 1', logo: '/src/assets/ClientLogo/image.svg' },
-    { name: 'Client 2', logo: '/src/assets/ClientLogo/image (1).svg' },
-    { name: 'Client 3', logo: '/src/assets/ClientLogo/image (2).svg' },
-    { name: 'Client 4', logo: '/src/assets/ClientLogo/image (3).svg' },
-    { name: 'Client 5', logo: '/src/assets/ClientLogo/image (4).svg' },
-    { name: 'Client 6', logo: '/src/assets/ClientLogo/image (5).svg' },
-    { name: 'Client 7', logo: '/src/assets/ClientLogo/image (6).svg' }
+    { name: 'Client 1', logo: logo1 },
+    { name: 'Client 2', logo: logo2 },
+    { name: 'Client 3', logo: logo3 },
+    { name: 'Client 4', logo: logo4 },
+    { name: 'Client 5', logo: logo5 },
+    { name: 'Client 6', logo: logo6 },
+    { name: 'Client 7', logo: logo7 }
   ]
 
   const row1 = clients.slice(0, 4)
