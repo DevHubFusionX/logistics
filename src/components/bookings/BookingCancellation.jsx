@@ -24,7 +24,7 @@ export default function BookingCancellation({ booking, onSuccess, onClose }) {
 
     setLoading(true)
     try {
-      await bookingService.cancelBooking(booking.id, reason)
+      await bookingService.cancelBooking(booking._id || booking.id, reason)
       toast.success('Booking cancelled successfully')
       onSuccess?.()
     } catch (error) {
@@ -57,7 +57,7 @@ export default function BookingCancellation({ booking, onSuccess, onClose }) {
         </div>
 
         <div className="mb-4">
-          <p className="text-sm text-gray-600 mb-2">Booking ID: <span className="font-mono font-semibold">{booking.id}</span></p>
+          <p className="text-sm text-gray-600 mb-2">Booking ID: <span className="font-mono font-semibold">{booking._id || booking.id}</span></p>
           <p className="text-sm text-gray-600">Amount: <span className="font-semibold">₦{booking.amount?.toLocaleString()}</span></p>
         </div>
 

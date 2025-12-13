@@ -1,6 +1,8 @@
 import { useState, useMemo } from 'react'
 import { PageHeader } from '../components/dashboard'
 import { useNavigate } from 'react-router-dom'
+import paymentService from '../services/paymentService'
+import toast from 'react-hot-toast'
 import { 
   BookingCard, 
   BookingStats, 
@@ -28,14 +30,30 @@ export default function MyBookings() {
 
   const stats = useMemo(() => getBookingStats(bookings), [bookings])
 
-  const handlePayNow = (booking) => {
-    navigate('/booking/payment', { 
-      state: { 
-        bookingId: booking._id || booking.bookingId, 
-        amount: booking.calculatedPrice || booking.totalCost || booking.estimatedCost,
-        email: booking.email
-      } 
-    })
+  const handlePayNow = async (booking) => {
+    const bookingId = booking._id || booking.bookingId
+    const amount = booking.calculatedPrice || booking.totalCost || booking.estimatedCost || booking.amount
+    
+    try {
+      const response = await paymentService.initializePayment(bookingId)
+      if (response.data && response.data.authorization_url) {
+        localStorage.setItem('currentBookingId', bookingId)
+        window.location.href = response.data.authorization_url
+      } else {
+        toast.error('Failed to initialize payment')
+      }
+    } catch (error) {
+      if (error.message === 'Payment already processing') {
+        toast.error('Payment session is active (expires in 15-30 min). Wait or contact support.', { duration: 8000 })
+        setTimeout(() => {
+          if (window.confirm('Payment is locked for this booking.\n\nOptions:\n1. Wait 15-30 minutes for it to expire\n2. Contact support to reset\n3. Create a new booking\n\nRefresh the page to check status?')) {
+            window.location.reload()
+          }
+        }, 1000)
+      } else {
+        toast.error(error.message || 'Could not initialize payment')
+      }
+    }
   }
 
   if (loading) {

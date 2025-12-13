@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CreditCard, CheckCircle, XCircle, ArrowLeft, Loader, DollarSign, Shield } from 'lucide-react'
 import { PageHeader } from '../../components/dashboard'
@@ -12,13 +12,50 @@ export default function Payment() {
   const [processing, setProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState(null)
 
-  const { bookingData, quote, bookingId, amount, email } = location.state || {}
+  // Handle URL params for verification
+  const queryParams = new URLSearchParams(location.search)
+  const reference = queryParams.get('reference') || queryParams.get('trxref')
+
+  const { bookingData, quote, bookingId: stateBookingId, amount, email } = location.state || {}
+
+  // Fallback to localStorage if state is lost after redirect
+  const bookingId = stateBookingId || localStorage.getItem('currentBookingId')
+
+  useEffect(() => {
+    if (reference && bookingId && !paymentStatus) {
+      verifyPaymentOnReturn()
+    }
+  }, [reference, bookingId])
+
+  const verifyPaymentOnReturn = async () => {
+    setProcessing(true)
+    try {
+      await paymentService.verifyPayment(bookingId)
+      setPaymentStatus('success')
+      toast.success('Payment verified successfully!')
+      // Clear storage
+      localStorage.removeItem('currentBookingId')
+
+      setTimeout(() => {
+        navigate('/booking/confirmation', {
+          state: { bookingId, paymentId: reference }
+        })
+      }, 2000)
+    } catch (error) {
+      console.error(error)
+      // Even if verification fails initially, we show failed state
+      setPaymentStatus('failed')
+    } finally {
+      setProcessing(false)
+    }
+  }
 
   const isExistingBooking = amount && bookingId && !bookingData
   const paymentAmount = isExistingBooking ? amount : quote?.total
   const userEmail = email || bookingData?.email || localStorage.getItem('userEmail') || 'user@example.com'
 
-  if (!isExistingBooking && (!bookingData || !quote)) {
+  // Allow access if processing a return from payment gateway
+  if (!reference && !isExistingBooking && (!bookingData || !quote)) {
     navigate('/booking/request')
     return null
   }
@@ -110,19 +147,86 @@ export default function Payment() {
                   </div>
                   <h2 className="text-xl font-bold text-gray-900">Secure Payment with Paystack</h2>
                 </div>
-                <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                    <p className="text-sm text-gray-700">
-                      You will be redirected to Paystack's secure payment page to complete your transaction.
-                    </p>
+                <div className="space-y-6">
+                  {/* Payment Method Selection */}
+                  <div className="border border-blue-200 bg-blue-50 rounded-xl p-4 flex items-center justify-between cursor-pointer ring-2 ring-blue-500 transition-all">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center border border-blue-100 shadow-sm">
+                        <CreditCard className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900">Pay with Card / Bank</h3>
+                        <p className="text-sm text-gray-600">Secured by Paystack</p>
+                      </div>
+                    </div>
+                    <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                      <div className="w-2.5 h-2.5 rounded-full bg-white" />
+                    </div>
                   </div>
-                  <PaystackPayment
-                    amount={paymentAmount}
-                    email={userEmail}
-                    bookingId={bookingId}
-                    onSuccess={handlePaymentSuccess}
-                    onClose={handlePaymentClose}
-                  />
+
+                  <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-3">
+                    <div className="flex items-start gap-3">
+                      <Shield className="w-5 h-5 text-gray-400 mt-0.5" />
+                      <div className="text-sm text-gray-500">
+                        Your transaction is secured with end-to-end encryption. You will be redirected to Paystack to complete the payment.
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={async () => {
+                      if (processing) return
+                      setProcessing(true)
+                      try {
+                        // Persist bookingId for return
+                        if (bookingId) localStorage.setItem('currentBookingId', bookingId)
+
+                        const response = await paymentService.initializePayment(bookingId)
+                        if (response.data && response.data.authorization_url) {
+                          window.location.href = response.data.authorization_url
+                        } else {
+                          toast.error('Failed to initialize payment')
+                          setProcessing(false)
+                        }
+                      } catch (error) {
+                        console.error('Payment init error:', error)
+                        if (error.message === 'Payment already processing') {
+                          toast.error('Payment session active. This expires in 15-30 minutes. Wait or contact support to reset.', { duration: 8000 })
+                          setTimeout(() => {
+                            if (window.confirm('Payment is locked. Options:\n\n1. Wait 15-30 minutes\n2. Contact support\n3. Create new booking\n\nGo back to My Bookings?')) {
+                              navigate('/my-bookings')
+                            }
+                          }, 1000)
+                        } else {
+                          toast.error(error.message || 'Could not initialize payment')
+                        }
+                        setProcessing(false)
+                      }
+                    }}
+                    disabled={processing}
+                    className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 transform active:scale-[0.99]"
+                  >
+                    {processing ? (
+                      <>
+                        <Loader className="w-6 h-6 animate-spin" />
+                        Processing Secure Payment...
+                      </>
+                    ) : (
+                      <>
+                        Pay ₦{paymentAmount?.toLocaleString()} Securely
+                        <ArrowLeft className="w-5 h-5 rotate-180" />
+                      </>
+                    )}
+                  </button>
+
+                  <div className="flex justify-center items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-300">
+                    {/* Placeholder for card logos if needed, for now just text/icons */}
+                    <div className="flex gap-2">
+                      <div className="h-6 w-10 bg-gray-200 rounded"></div>
+                      <div className="h-6 w-10 bg-gray-200 rounded"></div>
+                      <div className="h-6 w-10 bg-gray-200 rounded"></div>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}

@@ -13,20 +13,20 @@ const bookingService = {
   getBookingById: (id) => 
     httpClient.request(`/bookings/${id}/`),
 
-  calculatePrice: (bookingData) => 
-    httpClient.request('/bookings/calculate-price', {
-      method: 'POST',
-      body: JSON.stringify(bookingData)
-    }),
+  getPrices: (city, distance) => 
+    httpClient.request(`/bookings/prices/${city}/${distance}`),
 
-  updateBooking: (id, bookingData) => 
-    httpClient.request(`/bookings/${id}`, {
+  updateBooking: (id, bookingData) => {
+    console.log('bookingService.updateBooking called with id:', id)
+    console.log('bookingData:', bookingData)
+    return httpClient.request(`/bookings/${id}`, {
       method: 'PATCH',
       body: JSON.stringify(bookingData)
-    }),
+    })
+  },
 
   cancelBooking: (id, reason) => 
-    httpClient.request(`/bookings/cancel/${id}/`, {
+    httpClient.request(`/bookings/cancel/${id}`, {
       method: 'PATCH',
       body: JSON.stringify({ reason })
     }),

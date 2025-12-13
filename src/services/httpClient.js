@@ -1,7 +1,7 @@
 import { ApiError, handleApiError } from '../utils/errorHandler'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1'
-const ALLOWED_ENDPOINTS = ['/auth/', '/user/', '/shipments/', '/drivers/', '/fleet/', '/trips/', '/bookings/', '/analytics/', '/payments/']
+const ALLOWED_ENDPOINTS = ['/auth/', '/user/', '/shipments/', '/drivers/', '/fleet/', '/trips/', '/bookings/', '/analytics/', '/payments/', '/payment/']
 
 class HttpClient {
   validateEndpoint(endpoint) {
@@ -39,6 +39,8 @@ class HttpClient {
     }
 
     try {
+      console.log('HTTP Request:', config.method || 'GET', url)
+      console.log('Request body:', config.body)
       const response = await fetch(url, config)
       
       // Validate response URL to prevent SSRF via redirects
@@ -48,9 +50,12 @@ class HttpClient {
       }
       
       const data = await response.json()
+      console.log('Response status:', response.status)
+      console.log('Response data:', JSON.stringify(data, null, 2))
       
       if (!response.ok) {
-        const error = new ApiError(data.msg || 'Request failed', response.status, data)
+        console.error('API Error Response:', JSON.stringify(data, null, 2))
+        const error = new ApiError(data.msg || data.message || 'Request failed', response.status, data)
         handleApiError(error)
         throw error
       }

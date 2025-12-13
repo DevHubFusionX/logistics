@@ -10,8 +10,8 @@ export class ApiError extends Error {
 export const handleApiError = (error) => {
   if (error?.response?.status === 401 || error?.status === 401) {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       // Add other auth-related keys as needed
       window.location.href = "/login";
     }

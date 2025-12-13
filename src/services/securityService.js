@@ -38,15 +38,6 @@ const decryptData = (encrypted) => {
   }
 }
 
-// Server-side price calculation
-export const calculatePrice = async (bookingData) => {
-  if (!checkRateLimit('price-calc', 20, 60000)) {
-    throw new Error('Too many requests. Please try again later.')
-  }
-  
-  const response = await api.post('/bookings/calculate-price', bookingData)
-  return response.data
-}
 
 // Secure draft operations
 export const saveDraft = (key, data) => {
@@ -100,7 +91,6 @@ export const validateBookingData = (data) => {
 export const checkRateLimitPublic = checkRateLimit
 
 export default {
-  calculatePrice,
   saveDraft,
   loadDraft,
   clearDraft,
