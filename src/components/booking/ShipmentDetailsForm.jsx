@@ -122,7 +122,14 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <input type="text" value={formData.pickupLocation.city} onChange={(e) => handleNestedFieldChange('pickupLocation', 'city', e.target.value)} onBlur={() => handleBlur('pickupCity')} className={inputClass('pickupCity')} required />
+            <select value={formData.pickupLocation.city} onChange={(e) => handleNestedFieldChange('pickupLocation', 'city', e.target.value)} onBlur={() => handleBlur('pickupCity')} className={inputClass('pickupCity')} required>
+              <option value="">Select City...</option>
+              <option value="Abuja">Abuja</option>
+              <option value="Warri">Warri</option>
+              <option value="Benin City">Benin City</option>
+              <option value="Enugu">Enugu</option>
+              <option value="Port Harcourt">Port Harcourt</option>
+            </select>
             <ErrorMessage error={touched.pickupCity && errors.pickupCity} />
           </div>
           <div>
@@ -171,7 +178,14 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <input type="text" value={formData.dropoffLocation.city} onChange={(e) => handleNestedFieldChange('dropoffLocation', 'city', e.target.value)} onBlur={() => handleBlur('dropoffCity')} className={inputClass('dropoffCity')} required />
+            <select value={formData.dropoffLocation.city} onChange={(e) => handleNestedFieldChange('dropoffLocation', 'city', e.target.value)} onBlur={() => handleBlur('dropoffCity')} className={inputClass('dropoffCity')} required>
+              <option value="">Select City...</option>
+              <option value="Abuja">Abuja</option>
+              <option value="Warri">Warri</option>
+              <option value="Benin City">Benin City</option>
+              <option value="Enugu">Enugu</option>
+              <option value="Port Harcourt">Port Harcourt</option>
+            </select>
             <ErrorMessage error={touched.dropoffCity && errors.dropoffCity} />
           </div>
           <div>
