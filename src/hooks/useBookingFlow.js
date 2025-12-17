@@ -1,10 +1,8 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
-import { useBookingDraft } from '../hooks/useBookingDraft'
 import { useRetry } from '../hooks/useRetry'
 import bookingService from '../services/bookingService'
 import paymentService from '../services/paymentService'
-import { securityService } from '../services'
 import { extractBookingId, isValidBookingResponse } from '../utils/bookingValidation'
 import { getUserFriendlyMessage, isRetryableError } from '../utils/errorCodes'
 import toast from 'react-hot-toast'
@@ -12,7 +10,6 @@ import toast from 'react-hot-toast'
 export const useBookingFlow = () => {
   const auth = useAuth()
   const user = auth?.user || null
-  const draft = useBookingDraft()
   const retry = useRetry({
     maxRetries: 3,
     onRetry: (attempt, delay) => {
@@ -26,7 +23,6 @@ export const useBookingFlow = () => {
   const [bookingId, setBookingId] = useState(null)
   const [estimatedCost, setEstimatedCost] = useState(null)
   const [paymentMethod, setPaymentMethod] = useState('card')
-  const [showDraftBanner, setShowDraftBanner] = useState(false)
   
   const initialFormData = {
     fullNameOrBusiness: user?.companyName || '',
@@ -35,68 +31,29 @@ export const useBookingFlow = () => {
     customerType: 'Business',
     pickupPerson: { name: '', phone: '', email: '' },
     receiverPerson: { name: '', phone: '', email: '' },
-    pickupLocation: { address: '', city: '', state: '' },
-    dropoffLocation: { address: '', city: '', state: '' },
+    pickupLocation: { address: '', city: '', state: 'Nigeria' },
+    dropoffLocation: { address: '', city: '', state: 'Nigeria' },
     goodsType: '',
     cargoWeightKg: '',
     quantity: 1,
     isFragile: false,
     isPerishable: false,
     tempControlCelsius: 20,
-    vehicleType: '',
+    vehicleType: 'Van',
     estimatedPickupDate: '',
     estimatedDeliveryDate: '',
     notes: ''
   }
   
   const [formData, setFormData] = useState(initialFormData)
-  
-  // Check for draft on mount
-  useEffect(() => {
-    if (draft.draftAvailable && step === 1) {
-      setShowDraftBanner(true)
-    }
-  }, [draft.draftAvailable, step])
 
-  // Auto-save on form data change (debounced)
-  useEffect(() => {
-    if (step === 1 && formData.email) {
-      const timer = setTimeout(() => {
-        draft.autoSave(formData)
-      }, 2000)
-      return () => clearTimeout(timer)
-    }
-  }, [formData, step, draft])
-
-  const handleRestoreDraft = () => {
-    const savedDraft = draft.load()
-    if (savedDraft) {
-      setFormData(savedDraft)
-      toast.success('Draft restored successfully!')
-    }
-    setShowDraftBanner(false)
+  const handleLocationNext = () => {
+    setStep(2)
   }
 
-  const handleDiscardDraft = () => {
-    draft.clear()
-    setShowDraftBanner(false)
-    toast.success('Draft discarded')
-  }
-
-  const handleSaveDraft = () => {
-    if (draft.save(formData)) {
-      toast.success('Draft saved successfully!')
-    } else {
-      toast.error('Failed to save draft')
-    }
-  }
-
-  const handleNext = async (e) => {
-    if (e) e.preventDefault()
+  const handlePackageNext = async () => {
     setLoading(true)
-    
     try {
-      // TODO: Implement actual distance calculation
       const distance = 5
       const cityInput = formData.pickupLocation.city || 'Enugu'
       const city = encodeURIComponent(cityInput.trim())
@@ -108,12 +65,16 @@ export const useBookingFlow = () => {
       }
 
       setEstimatedCost(response.data.price)
-      setStep(2)
+      setStep(3)
     } catch (err) {
       toast.error(err.message || 'Failed to calculate price')
     } finally {
       setLoading(false)
     }
+  }
+
+  const handlePriceNext = () => {
+    setStep(4)
   }
 
   const handleConfirmBooking = async () => {
@@ -202,11 +163,8 @@ export const useBookingFlow = () => {
       const id = extractBookingId(response)
       setBookingId(id)
       
-      // Clear draft after successful booking
-      draft.clear()
-      
       toast.success('Booking created successfully!')
-      setStep(3)
+      setStep(5)
     } catch (err) {
       const friendlyMessage = getUserFriendlyMessage(err)
       
@@ -243,7 +201,7 @@ export const useBookingFlow = () => {
         paymentService.verifyPayment(bookingId)
       )
       toast.success('Payment verified successfully!')
-      setStep(4)
+      setStep(6)
     } catch (err) {
       const friendlyMessage = getUserFriendlyMessage(err)
       toast.error(friendlyMessage)
@@ -258,14 +216,12 @@ export const useBookingFlow = () => {
   }
 
   const handlePayLater = () => {
-    draft.clear()
     toast.success('Booking confirmed! Pay on delivery')
-    setStep(4)
+    setStep(6)
   }
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
-    setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value })
+  const handleSimpleChange = (name, value) => {
+    setFormData({ ...formData, [name]: value })
   }
 
   const handleNestedChange = (parent, field, value) => {
@@ -284,21 +240,17 @@ export const useBookingFlow = () => {
     estimatedCost,
     paymentMethod,
     setPaymentMethod,
-    showDraftBanner,
     formData,
-    retry,
-    draft,
-    handleRestoreDraft,
-    handleDiscardDraft,
-    handleSaveDraft,
-    handleNext,
+    handleLocationNext,
+    handlePackageNext,
+    handlePriceNext,
     handleConfirmBooking,
     handleRetryBooking,
     handleResetBooking,
     handlePaymentSuccess,
     handlePaymentClose,
     handlePayLater,
-    handleChange,
+    handleSimpleChange,
     handleNestedChange
   }
 }

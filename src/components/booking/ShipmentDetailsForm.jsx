@@ -124,6 +124,7 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
             <select value={formData.pickupLocation.city} onChange={(e) => handleNestedFieldChange('pickupLocation', 'city', e.target.value)} onBlur={() => handleBlur('pickupCity')} className={inputClass('pickupCity')} required>
               <option value="">Select City...</option>
+              <option value="Lagos">Lagos</option>
               <option value="Abuja">Abuja</option>
               <option value="Warri">Warri</option>
               <option value="Benin City">Benin City</option>
@@ -180,6 +181,7 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
             <select value={formData.dropoffLocation.city} onChange={(e) => handleNestedFieldChange('dropoffLocation', 'city', e.target.value)} onBlur={() => handleBlur('dropoffCity')} className={inputClass('dropoffCity')} required>
               <option value="">Select City...</option>
+              <option value="Lagos">Lagos</option>
               <option value="Abuja">Abuja</option>
               <option value="Warri">Warri</option>
               <option value="Benin City">Benin City</option>
@@ -214,6 +216,7 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <label className="block text-sm font-medium text-gray-700 mb-1">Goods Type</label>
             <select name="goodsType" value={formData.goodsType} onChange={handleFieldChange} onBlur={() => handleBlur('goodsType')} className={inputClass('goodsType')} required>
               <option value="">Select...</option>
+              <option value="Frozen Foods">Frozen Foods</option>
               <option value="Electronics">Electronics</option>
               <option value="Food">Food</option>
               <option value="Pharmaceuticals">Pharmaceuticals</option>
@@ -235,9 +238,9 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
             <select name="vehicleType" value={formData.vehicleType} onChange={handleFieldChange} onBlur={() => handleBlur('vehicleType')} className={inputClass('vehicleType')} required>
               <option value="">Select...</option>
+              <option value="Refrigerated Van">Refrigerated Van</option>
               <option value="Van">Van</option>
               <option value="Truck">Truck</option>
-              <option value="Refrigerated Van">Refrigerated Van</option>
             </select>
             <ErrorMessage error={touched.vehicleType && errors.vehicleType} />
           </div>
