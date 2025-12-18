@@ -202,16 +202,24 @@ export default function BookingDetailsStep({ formData, onChange, onNestedChange,
         <button
           type="button"
           onClick={onBack}
-          className="px-6 py-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 transition-all font-semibold flex items-center gap-2 shadow-sm"
+          disabled={loading}
+          className="px-6 py-4 border-2 border-gray-200 rounded-xl hover:bg-gray-50 hover:border-gray-300 active:scale-95 transition-all font-semibold flex items-center gap-2 shadow-sm disabled:opacity-50"
         >
           <ArrowLeft className="w-5 h-5" /> Back
         </button>
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 bg-gradient-to-r from-green-600 to-green-700 text-white py-4 rounded-xl hover:from-green-700 hover:to-green-800 hover:shadow-lg transition-all font-semibold shadow-md text-base disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-green-700 text-white py-4 rounded-xl hover:from-green-700 hover:to-green-800 hover:shadow-lg active:scale-[0.98] transition-all font-semibold shadow-md text-base disabled:opacity-50"
         >
-          {loading ? 'Processing...' : 'Confirm Booking'}
+          {loading ? (
+            <>
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Processing...
+            </>
+          ) : (
+            'Confirm Booking'
+          )}
         </button>
       </div>
     </form>

@@ -1,6 +1,6 @@
 import { Package, ArrowRight, ArrowLeft, Snowflake, Pill, Box, Truck } from 'lucide-react'
 
-export default function PackageStep({ formData, onChange, onNext, onBack }) {
+export default function PackageStep({ formData, onChange, onNext, onBack, loading }) {
   const truckSizes = [
     { label: '2 Tons', value: 2, tons: 2 },
     { label: '3 Tons', value: 3, tons: 3 },
@@ -44,10 +44,10 @@ export default function PackageStep({ formData, onChange, onNext, onBack }) {
                     key={pkg.type}
                     type="button"
                     onClick={() => onChange('goodsType', pkg.type)}
-                    className={`p-6 border-2 rounded-xl transition-all text-center group hover:scale-105 ${
+                    className={`p-6 border-2 rounded-xl transition-all duration-200 text-center group hover:scale-105 active:scale-95 ${
                       isSelected
-                        ? `border-${pkg.color}-600 bg-${pkg.color}-50 shadow-lg`
-                        : 'border-gray-200 hover:border-purple-300 bg-white'
+                        ? `border-${pkg.color}-600 bg-${pkg.color}-50 shadow-lg ring-2 ring-${pkg.color}-200`
+                        : 'border-gray-200 hover:border-purple-300 hover:shadow-md bg-white'
                     }`}
                   >
                     <div className={`inline-flex p-4 rounded-xl mb-3 ${
@@ -80,10 +80,10 @@ export default function PackageStep({ formData, onChange, onNext, onBack }) {
                       onChange('truckSize', truck.value)
                       onChange('cargoWeightKg', truck.value * 1000)
                     }}
-                    className={`p-4 border-2 rounded-xl transition-all hover:scale-105 ${
+                    className={`p-4 border-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
                       isSelected
-                        ? 'border-purple-600 bg-purple-50 shadow-lg'
-                        : 'border-gray-200 hover:border-purple-300 bg-white'
+                        ? 'border-purple-600 bg-purple-50 shadow-lg ring-2 ring-purple-200'
+                        : 'border-gray-200 hover:border-purple-300 hover:shadow-md bg-white'
                     }`}
                   >
                     <div className="text-base font-bold text-gray-800">{truck.label}</div>
@@ -105,10 +105,19 @@ export default function PackageStep({ formData, onChange, onNext, onBack }) {
         </button>
         <button
           type="submit"
-          disabled={!formData.goodsType || !formData.truckSize}
+          disabled={!formData.goodsType || !formData.truckSize || loading}
           className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 rounded-xl hover:from-purple-700 hover:to-purple-800 hover:shadow-lg transition-all font-semibold shadow-md text-base disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Check Prices <ArrowRight className="w-5 h-5" />
+          {loading ? (
+            <>
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              Calculating...
+            </>
+          ) : (
+            <>
+              Check Prices <ArrowRight className="w-5 h-5" />
+            </>
+          )}
         </button>
       </div>
     </form>

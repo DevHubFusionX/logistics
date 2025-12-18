@@ -28,7 +28,7 @@ export default function LocationStep({ formData, onChange, onNext }) {
             <select
               value={formData.pickupLocation.city}
               onChange={(e) => onChange('pickupLocation', 'city', e.target.value)}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white shadow-sm transition-all"
+              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white shadow-sm transition-all hover:border-gray-300 cursor-pointer"
               required
             >
               <option value="">Select pickup city...</option>
@@ -51,7 +51,7 @@ export default function LocationStep({ formData, onChange, onNext }) {
             <select
               value={formData.dropoffLocation.city}
               onChange={(e) => onChange('dropoffLocation', 'city', e.target.value)}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white shadow-sm transition-all"
+              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white shadow-sm transition-all hover:border-gray-300 cursor-pointer"
               required
             >
               <option value="">Select delivery city...</option>
@@ -69,7 +69,7 @@ export default function LocationStep({ formData, onChange, onNext }) {
       <button
         type="submit"
         disabled={!formData.pickupLocation.city || !formData.dropoffLocation.city}
-        className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-lg transition-all font-semibold shadow-md text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md"
+        className="w-full flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-lg active:scale-[0.98] transition-all font-semibold shadow-md text-base disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-md"
       >
         Continue <ArrowRight className="w-5 h-5" />
       </button>
