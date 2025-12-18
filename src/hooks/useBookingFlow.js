@@ -35,6 +35,7 @@ export const useBookingFlow = () => {
     dropoffLocation: { address: '', city: '', state: 'Nigeria' },
     goodsType: '',
     cargoWeightKg: '',
+    truckSize: '',
     quantity: 1,
     isFragile: false,
     isPerishable: false,
@@ -120,7 +121,7 @@ export const useBookingFlow = () => {
         tempControlCelsius: formData.tempControlCelsius ? Math.round(Number(formData.tempControlCelsius)) : 0,
         
         // Added truckSize as it appeared in the API docs example
-        truckSize: 5, // Placeholder/Default 
+        truckSize: formData.truckSize || 5, 
 
         // Removed price and distance as they are STRICTLY not in the doc
         // price: Number(estimatedCost), 
@@ -221,14 +222,14 @@ export const useBookingFlow = () => {
   }
 
   const handleSimpleChange = (name, value) => {
-    setFormData({ ...formData, [name]: value })
+    setFormData(prev => ({ ...prev, [name]: value }))
   }
 
   const handleNestedChange = (parent, field, value) => {
-    setFormData({
-      ...formData,
-      [parent]: { ...formData[parent], [field]: value }
-    })
+    setFormData(prev => ({
+      ...prev,
+      [parent]: { ...prev[parent], [field]: value }
+    }))
   }
 
   return {

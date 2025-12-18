@@ -39,7 +39,7 @@ export default function PriceResultsStep({ formData, estimatedCost, loading, onN
               </div>
               <span className="text-blue-100 font-medium">Package</span>
             </div>
-            <span className="font-bold text-lg">{formData.goodsType} ({formData.cargoWeightKg}kg)</span>
+            <span className="font-bold text-lg">{formData.goodsType} ({formData.truckSize} Tons)</span>
           </div>
         </div>
       </div>
