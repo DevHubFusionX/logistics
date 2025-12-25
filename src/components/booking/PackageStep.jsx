@@ -1,4 +1,5 @@
 import { Package, ArrowRight, ArrowLeft, Snowflake, Pill, Box, Truck } from 'lucide-react'
+import toast from 'react-hot-toast'
 
 export default function PackageStep({ formData, onChange, onNext, onBack, loading }) {
   const truckSizes = [
@@ -15,11 +16,23 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
+    if (!formData.goodsType) {
+      toast.error('Please select a package type')
+      return
+    }
+
+    if (!formData.truckSize) {
+      toast.error('Please select a truck size')
+      return
+    }
+
     onNext()
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 animate-fadeIn">
+      {/* ... (rest of the component remains the same until the submit button) ... */}
       <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-lg hover:shadow-xl transition-shadow">
         <div className="text-center mb-8">
           <div className="inline-flex p-4 bg-purple-600 rounded-2xl mb-4 shadow-lg">
@@ -98,7 +111,7 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
         </button>
         <button
           type="submit"
-          disabled={!formData.goodsType || !formData.truckSize || loading}
+          disabled={loading}
           className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-lg transition-all font-semibold shadow-md text-base disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (

@@ -9,25 +9,25 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
 
   const validateStep = (step) => {
     const newErrors = {}
-    
+
     if (step === 1) {
-      if (!formData.fullNameOrBusiness) newErrors.fullNameOrBusiness = true
-      if (!formData.email) newErrors.email = true
-      if (!formData.contactPhone) newErrors.contactPhone = true
+      if (!formData.fullNameOrBusiness) newErrors.fullNameOrBusiness = 'Full Name or Business Name is required'
+      if (!formData.email) newErrors.email = 'Email address is required'
+      if (!formData.contactPhone) newErrors.contactPhone = 'Phone number is required'
     } else if (step === 2) {
-      if (!formData.pickupPerson.name) newErrors.pickupPersonName = true
-      if (!formData.pickupPerson.phone) newErrors.pickupPersonPhone = true
-      if (!formData.pickupPerson.email) newErrors.pickupPersonEmail = true
-      if (!formData.pickupLocation.address) newErrors.pickupAddress = true
-      if (!formData.estimatedPickupDate) newErrors.estimatedPickupDate = true
+      if (!formData.pickupPerson.name) newErrors.pickupPersonName = 'Pickup contact name is required'
+      if (!formData.pickupPerson.phone) newErrors.pickupPersonPhone = 'Pickup contact phone is required'
+      if (!formData.pickupPerson.email) newErrors.pickupPersonEmail = 'Pickup contact email is required'
+      if (!formData.pickupLocation.address) newErrors.pickupAddress = 'Pickup street address is required'
+      if (!formData.estimatedPickupDate) newErrors.estimatedPickupDate = 'Pickup date & time is required'
     } else if (step === 3) {
-      if (!formData.receiverPerson.name) newErrors.receiverPersonName = true
-      if (!formData.receiverPerson.phone) newErrors.receiverPersonPhone = true
-      if (!formData.receiverPerson.email) newErrors.receiverPersonEmail = true
-      if (!formData.dropoffLocation.address) newErrors.dropoffAddress = true
-      if (!formData.estimatedDeliveryDate) newErrors.estimatedDeliveryDate = true
+      if (!formData.receiverPerson.name) newErrors.receiverPersonName = 'Receiver name is required'
+      if (!formData.receiverPerson.phone) newErrors.receiverPersonPhone = 'Receiver phone is required'
+      if (!formData.receiverPerson.email) newErrors.receiverPersonEmail = 'Receiver email is required'
+      if (!formData.dropoffLocation.address) newErrors.dropoffAddress = 'Delivery street address is required'
+      if (!formData.estimatedDeliveryDate) newErrors.estimatedDeliveryDate = 'Delivery date & time is required'
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -57,9 +57,8 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
         {[1, 2, 3].map((s) => (
           <div
             key={s}
-            className={`h-2 rounded-full transition-all ${
-              s === subStep ? 'w-8 bg-blue-600' : 'w-2 bg-gray-300'
-            }`}
+            className={`h-2 rounded-full transition-all ${s === subStep ? 'w-8 bg-blue-600' : 'w-2 bg-gray-300'
+              }`}
           />
         ))}
       </div>
