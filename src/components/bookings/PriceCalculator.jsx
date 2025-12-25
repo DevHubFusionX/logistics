@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Calculator, Truck, MapPin, AlertCircle, CheckCircle } from 'lucide-react'
 import { bookingService } from '@/services'
+import { NIGERIAN_CITIES } from '@/constants/cities'
 
 export default function PriceCalculator() {
     const [city, setCity] = useState('')
@@ -54,14 +55,17 @@ export default function PriceCalculator() {
                     </label>
                     <div className="relative">
                         <MapPin className="absolute left-3 top-2.5 w-5 h-5 text-gray-400" />
-                        <input
-                            type="text"
+                        <select
                             value={city}
                             onChange={(e) => setCity(e.target.value)}
-                            placeholder="e.g. Enugu"
-                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none"
                             required
-                        />
+                        >
+                            <option value="">Select City</option>
+                            {NIGERIAN_CITIES.map(c => (
+                                <option key={c} value={c}>{c}</option>
+                            ))}
+                        </select>
                     </div>
                 </div>
 

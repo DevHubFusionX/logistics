@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { User, MapPin, Truck, ArrowLeft, ArrowRight } from 'lucide-react'
+import FormSection from './FormSection'
+import FormInput from './FormInput'
 
 export default function BookingDetailsFlow({ formData, onChange, onNestedChange, onSubmit, onBack, loading }) {
   const [subStep, setSubStep] = useState(1)
@@ -62,207 +64,110 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
         ))}
       </div>
 
-      {/* Step 1: Contact Information */}
       {subStep === 1 && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="p-3 bg-blue-600 rounded-xl shadow-md">
-              <User className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">Your Contact Information</h3>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Full Name / Business</label>
-              <input
-                type="text"
-                value={formData.fullNameOrBusiness}
-                onChange={(e) => onChange('fullNameOrBusiness', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all ${
-                  errors.fullNameOrBusiness ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                value={formData.email}
-                onChange={(e) => onChange('email', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all ${
-                  errors.email ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-              <input
-                type="tel"
-                value={formData.contactPhone}
-                onChange={(e) => onChange('contactPhone', e.target.value)}
-                placeholder="+234XXXXXXXXXX"
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 transition-all ${
-                  errors.contactPhone ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-          </div>
-        </div>
+        <FormSection icon={User} title="Your Contact Information" colorScheme="blue">
+          <FormInput
+            label="Full Name / Business"
+            value={formData.fullNameOrBusiness}
+            onChange={(e) => onChange('fullNameOrBusiness', e.target.value)}
+            error={errors.fullNameOrBusiness}
+          />
+          <FormInput
+            label="Email"
+            type="email"
+            value={formData.email}
+            onChange={(e) => onChange('email', e.target.value)}
+            error={errors.email}
+          />
+          <FormInput
+            label="Phone"
+            type="tel"
+            value={formData.contactPhone}
+            onChange={(e) => onChange('contactPhone', e.target.value)}
+            placeholder="+234XXXXXXXXXX"
+            error={errors.contactPhone}
+          />
+        </FormSection>
       )}
 
-      {/* Step 2: Pickup Details */}
       {subStep === 2 && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="p-3 bg-green-600 rounded-xl shadow-md">
-              <MapPin className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">Pickup Details</h3>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Person Name</label>
-              <input
-                type="text"
-                value={formData.pickupPerson.name}
-                onChange={(e) => onNestedChange('pickupPerson', 'name', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-green-500 transition-all ${
-                  errors.pickupPersonName ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-              <input
-                type="tel"
-                value={formData.pickupPerson.phone}
-                onChange={(e) => onNestedChange('pickupPerson', 'phone', e.target.value)}
-                placeholder="+234XXXXXXXXXX"
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-green-500 transition-all ${
-                  errors.pickupPersonPhone ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                value={formData.pickupPerson.email}
-                onChange={(e) => onNestedChange('pickupPerson', 'email', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-green-500 transition-all ${
-                  errors.pickupPersonEmail ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Address</label>
-              <input
-                type="text"
-                value={formData.pickupLocation.address}
-                onChange={(e) => onNestedChange('pickupLocation', 'address', e.target.value)}
-                placeholder="Full street address"
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-green-500 transition-all ${
-                  errors.pickupAddress ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Date & Time</label>
-              <input
-                type="datetime-local"
-                value={formData.estimatedPickupDate}
-                onChange={(e) => onChange('estimatedPickupDate', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-green-500 transition-all ${
-                  errors.estimatedPickupDate ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-          </div>
-        </div>
+        <FormSection icon={MapPin} title="Pickup Details" colorScheme="green">
+          <FormInput
+            label="Pickup Person Name"
+            value={formData.pickupPerson.name}
+            onChange={(e) => onNestedChange('pickupPerson', 'name', e.target.value)}
+            error={errors.pickupPersonName}
+          />
+          <FormInput
+            label="Phone"
+            type="tel"
+            value={formData.pickupPerson.phone}
+            onChange={(e) => onNestedChange('pickupPerson', 'phone', e.target.value)}
+            placeholder="+234XXXXXXXXXX"
+            error={errors.pickupPersonPhone}
+          />
+          <FormInput
+            label="Email"
+            type="email"
+            value={formData.pickupPerson.email}
+            onChange={(e) => onNestedChange('pickupPerson', 'email', e.target.value)}
+            error={errors.pickupPersonEmail}
+          />
+          <FormInput
+            label="Pickup Address"
+            value={formData.pickupLocation.address}
+            onChange={(e) => onNestedChange('pickupLocation', 'address', e.target.value)}
+            placeholder="Full street address"
+            error={errors.pickupAddress}
+          />
+          <FormInput
+            label="Pickup Date & Time"
+            type="datetime-local"
+            value={formData.estimatedPickupDate}
+            onChange={(e) => onChange('estimatedPickupDate', e.target.value)}
+            error={errors.estimatedPickupDate}
+          />
+        </FormSection>
       )}
 
-      {/* Step 3: Delivery Details */}
       {subStep === 3 && (
-        <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-lg hover:shadow-xl transition-shadow">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="p-3 bg-orange-600 rounded-xl shadow-md">
-              <Truck className="w-6 h-6 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">Delivery Details</h3>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Receiver Name</label>
-              <input
-                type="text"
-                value={formData.receiverPerson.name}
-                onChange={(e) => onNestedChange('receiverPerson', 'name', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all ${
-                  errors.receiverPersonName ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-              <input
-                type="tel"
-                value={formData.receiverPerson.phone}
-                onChange={(e) => onNestedChange('receiverPerson', 'phone', e.target.value)}
-                placeholder="+234XXXXXXXXXX"
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all ${
-                  errors.receiverPersonPhone ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-              <input
-                type="email"
-                value={formData.receiverPerson.email}
-                onChange={(e) => onNestedChange('receiverPerson', 'email', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all ${
-                  errors.receiverPersonEmail ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Delivery Address</label>
-              <input
-                type="text"
-                value={formData.dropoffLocation.address}
-                onChange={(e) => onNestedChange('dropoffLocation', 'address', e.target.value)}
-                placeholder="Full street address"
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all ${
-                  errors.dropoffAddress ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Delivery Date & Time</label>
-              <input
-                type="datetime-local"
-                value={formData.estimatedDeliveryDate}
-                onChange={(e) => onChange('estimatedDeliveryDate', e.target.value)}
-                className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-orange-500 transition-all ${
-                  errors.estimatedDeliveryDate ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                }`}
-                required
-              />
-            </div>
-          </div>
-        </div>
+        <FormSection icon={Truck} title="Delivery Details" colorScheme="orange">
+          <FormInput
+            label="Receiver Name"
+            value={formData.receiverPerson.name}
+            onChange={(e) => onNestedChange('receiverPerson', 'name', e.target.value)}
+            error={errors.receiverPersonName}
+          />
+          <FormInput
+            label="Phone"
+            type="tel"
+            value={formData.receiverPerson.phone}
+            onChange={(e) => onNestedChange('receiverPerson', 'phone', e.target.value)}
+            placeholder="+234XXXXXXXXXX"
+            error={errors.receiverPersonPhone}
+          />
+          <FormInput
+            label="Email"
+            type="email"
+            value={formData.receiverPerson.email}
+            onChange={(e) => onNestedChange('receiverPerson', 'email', e.target.value)}
+            error={errors.receiverPersonEmail}
+          />
+          <FormInput
+            label="Delivery Address"
+            value={formData.dropoffLocation.address}
+            onChange={(e) => onNestedChange('dropoffLocation', 'address', e.target.value)}
+            placeholder="Full street address"
+            error={errors.dropoffAddress}
+          />
+          <FormInput
+            label="Delivery Date & Time"
+            type="datetime-local"
+            value={formData.estimatedDeliveryDate}
+            onChange={(e) => onChange('estimatedDeliveryDate', e.target.value)}
+            error={errors.estimatedDeliveryDate}
+          />
+        </FormSection>
       )}
 
       {/* Navigation Buttons */}

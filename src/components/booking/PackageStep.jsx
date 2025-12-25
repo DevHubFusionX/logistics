@@ -44,18 +44,15 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
                     key={pkg.type}
                     type="button"
                     onClick={() => onChange('goodsType', pkg.type)}
-                    className={`p-6 border-2 rounded-xl transition-all duration-200 text-center group hover:scale-105 active:scale-95 ${
-                      isSelected
-                        ? `border-${pkg.color}-600 bg-${pkg.color}-50 shadow-lg ring-2 ring-${pkg.color}-200`
-                        : 'border-gray-200 hover:border-purple-300 hover:shadow-md bg-white'
-                    }`}
+                    className={`p-6 border-2 rounded-xl transition-all duration-200 text-center group hover:scale-105 active:scale-95 ${isSelected
+                      ? `border-${pkg.color}-600 bg-${pkg.color}-50 shadow-lg ring-2 ring-${pkg.color}-200`
+                      : 'border-gray-200 hover:border-blue-300 hover:shadow-md bg-white'
+                      }`}
                   >
-                    <div className={`inline-flex p-4 rounded-xl mb-3 ${
-                      isSelected ? `bg-${pkg.color}-100` : 'bg-gray-100 group-hover:bg-purple-100'
-                    }`}>
-                      <Icon className={`w-8 h-8 ${
-                        isSelected ? `text-${pkg.color}-600` : 'text-gray-600 group-hover:text-purple-600'
-                      }`} />
+                    <div className={`inline-flex p-4 rounded-xl mb-3 ${isSelected ? `bg-${pkg.color}-100` : 'bg-gray-100 group-hover:bg-blue-100'
+                      }`}>
+                      <Icon className={`w-8 h-8 ${isSelected ? `text-${pkg.color}-600` : 'text-gray-600 group-hover:text-blue-600'
+                        }`} />
                     </div>
                     <div className="text-sm font-semibold text-gray-700">{pkg.label}</div>
                   </button>
@@ -80,11 +77,10 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
                       onChange('truckSize', truck.value)
                       onChange('cargoWeightKg', truck.value * 1000)
                     }}
-                    className={`p-4 border-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${
-                      isSelected
-                        ? 'border-purple-600 bg-purple-50 shadow-lg ring-2 ring-purple-200'
-                        : 'border-gray-200 hover:border-purple-300 hover:shadow-md bg-white'
-                    }`}
+                    className={`p-4 border-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${isSelected
+                      ? 'border-blue-600 bg-blue-50 shadow-lg ring-2 ring-blue-200'
+                      : 'border-gray-200 hover:border-blue-300 hover:shadow-md bg-white'
+                      }`}
                   >
                     <div className="text-base font-bold text-gray-800">{truck.label}</div>
                   </button>
@@ -106,7 +102,7 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
         <button
           type="submit"
           disabled={!formData.goodsType || !formData.truckSize || loading}
-          className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-purple-600 to-purple-700 text-white py-4 rounded-xl hover:from-purple-700 hover:to-purple-800 hover:shadow-lg transition-all font-semibold shadow-md text-base disabled:opacity-50 disabled:cursor-not-allowed"
+          className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-lg transition-all font-semibold shadow-md text-base disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

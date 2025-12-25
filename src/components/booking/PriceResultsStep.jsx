@@ -101,7 +101,7 @@ export default function PriceResultsStep({ formData, estimatedCost, loading, onN
         <button
           onClick={onNext}
           disabled={loading}
-          className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-green-600 to-green-700 text-white py-4 rounded-xl hover:from-green-700 hover:to-green-800 hover:shadow-lg active:scale-[0.98] transition-all font-semibold shadow-md text-base disabled:opacity-50"
+          className="flex-1 flex items-center justify-center gap-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-xl hover:from-blue-700 hover:to-blue-800 hover:shadow-lg active:scale-[0.98] transition-all font-semibold shadow-md text-base disabled:opacity-50"
         >
           {loading ? 'Processing...' : 'Book Now'} <ArrowRight className="w-5 h-5" />
         </button>

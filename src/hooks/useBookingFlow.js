@@ -31,7 +31,7 @@ export const useBookingFlow = () => {
     customerType: 'Business',
     pickupPerson: { name: '', phone: '', email: '' },
     receiverPerson: { name: '', phone: '', email: '' },
-    pickupLocation: { address: '', city: '', state: 'Nigeria' },
+    pickupLocation: { address: '', city: 'Lagos', state: 'Nigeria' },
     dropoffLocation: { address: '', city: '', state: 'Nigeria' },
     goodsType: '',
     cargoWeightKg: '',
@@ -56,7 +56,7 @@ export const useBookingFlow = () => {
     setLoading(true)
     try {
       const distance = 5
-      const cityInput = formData.pickupLocation.city || 'Enugu'
+      const cityInput = formData.dropoffLocation.city || ''
       const city = encodeURIComponent(cityInput.trim())
       
       const response = await bookingService.getPrices(city, distance)

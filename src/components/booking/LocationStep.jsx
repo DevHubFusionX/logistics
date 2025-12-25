@@ -1,4 +1,5 @@
 import { MapPin, ArrowRight, Navigation } from 'lucide-react'
+import { NIGERIAN_CITIES } from '@/constants/cities'
 
 export default function LocationStep({ formData, onChange, onNext }) {
   const handleSubmit = (e) => {
@@ -28,16 +29,10 @@ export default function LocationStep({ formData, onChange, onNext }) {
             <select
               value={formData.pickupLocation.city}
               onChange={(e) => onChange('pickupLocation', 'city', e.target.value)}
-              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-base bg-white shadow-sm transition-all hover:border-gray-300 cursor-pointer"
-              required
+              className="w-full px-5 py-4 border-2 border-gray-200 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed"
+              disabled
             >
-              <option value="">Select pickup city...</option>
               <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja</option>
-              <option value="Warri">Warri</option>
-              <option value="Benin City">Benin City</option>
-              <option value="Enugu">Enugu</option>
-              <option value="Port Harcourt">Port Harcourt</option>
             </select>
           </div>
 
@@ -55,12 +50,9 @@ export default function LocationStep({ formData, onChange, onNext }) {
               required
             >
               <option value="">Select delivery city...</option>
-              <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja</option>
-              <option value="Warri">Warri</option>
-              <option value="Benin City">Benin City</option>
-              <option value="Enugu">Enugu</option>
-              <option value="Port Harcourt">Port Harcourt</option>
+              {NIGERIAN_CITIES.filter(c => c !== 'Lagos').map(city => (
+                <option key={city} value={city}>{city}</option>
+              ))}
             </select>
           </div>
         </div>

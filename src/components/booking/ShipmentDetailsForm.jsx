@@ -15,7 +15,7 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
     e.target.value = sanitized
     onChange(e)
     setTouched({ ...touched, [name]: true })
-    
+
     const error = validateField(name, type === 'checkbox' ? checked : sanitized, formData)
     setErrors({ ...errors, [name]: error })
   }
@@ -25,7 +25,7 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
     onNestedChange(parent, field, sanitized)
     const fieldName = `${parent}${field.charAt(0).toUpperCase() + field.slice(1)}`
     setTouched({ ...touched, [fieldName]: true })
-    
+
     const error = validateField(fieldName, sanitized, formData)
     setErrors({ ...errors, [fieldName]: error })
   }
@@ -37,13 +37,13 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
   const handleSubmit = (e) => {
     e.preventDefault()
     const validationErrors = getValidationErrors(formData)
-    
+
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
       setTouched(Object.keys(validationErrors).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
       return
     }
-    
+
     onSubmit(e)
   }
 
@@ -56,9 +56,8 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
     ) : null
   )
 
-  const inputClass = (fieldName) => `w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${
-    touched[fieldName] && errors[fieldName] ? 'border-red-500 bg-red-50' : 'border-gray-300'
-  }`
+  const inputClass = (fieldName) => `w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${touched[fieldName] && errors[fieldName] ? 'border-red-500 bg-red-50' : 'border-gray-300'
+    }`
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
@@ -238,9 +237,10 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
             <select name="vehicleType" value={formData.vehicleType} onChange={handleFieldChange} onBlur={() => handleBlur('vehicleType')} className={inputClass('vehicleType')} required>
               <option value="">Select...</option>
-              <option value="Refrigerated Van">Refrigerated Van</option>
+              <option value="Frozen Truck">Frozen Truck</option>
+              <option value="Dry Truck">Dry Truck</option>
               <option value="Van">Van</option>
-              <option value="Truck">Truck</option>
+              <option value="Truck">Truck (Other)</option>
             </select>
             <ErrorMessage error={touched.vehicleType && errors.vehicleType} />
           </div>

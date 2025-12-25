@@ -1,4 +1,4 @@
-import { MapPin, Package, DollarSign, CheckCircle, CreditCard, Loader2 } from 'lucide-react'
+import { MapPin, Package, Banknote, CheckCircle, CreditCard, Loader2 } from 'lucide-react'
 import { useBookingFlow } from '../../hooks/useBookingFlow'
 import ProgressSteps from '../../components/booking/ProgressSteps'
 import LocationStep from '../../components/booking/LocationStep'
@@ -46,7 +46,7 @@ export default function BookingRequest() {
   const steps = [
     { num: 1, name: 'Locations', icon: MapPin },
     { num: 2, name: 'Package', icon: Package },
-    { num: 3, name: 'Price', icon: DollarSign },
+    { num: 3, name: 'Price', icon: Banknote },
     { num: 4, name: 'Details', icon: CheckCircle },
     { num: 5, name: 'Payment', icon: CreditCard }
   ]
@@ -68,7 +68,7 @@ export default function BookingRequest() {
   return (
     <>
       {loading && step === 2 && <LoadingOverlay />}
-      
+
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/20 to-purple-50/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <NetworkStatus />
