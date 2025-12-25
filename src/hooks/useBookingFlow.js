@@ -92,27 +92,79 @@ export const useBookingFlow = () => {
         throw new Error('Valid quantity is required')
       }
 
+      console.log('=== BOOKING PAYLOAD DEBUG START ===')
+      console.log('Original formData.contactPhone:', formData.contactPhone)
+      console.log('Original formData.pickupPerson.phone:', formData.pickupPerson?.phone)
+      console.log('Original formData.receiverPerson.phone:', formData.receiverPerson?.phone)
+
       // Helper to normalize phone numbers to international format (assuming NG +234)
       const normalizePhone = (phone) => {
-        if (!phone) return phone
+        if (!phone) {
+          console.log('Phone is empty/null:', phone)
+          return phone
+        }
         const p = phone.replace(/\s+/g, '')
-        if (p.startsWith('0')) return '+234' + p.slice(1)
-        if (!p.startsWith('+')) return '+234' + p // Assume local if no prefix
-        return p
+        console.log('Phone after removing spaces:', p)
+        
+        let normalized
+        if (p.startsWith('+')) {
+          normalized = p
+          console.log('Phone already has +, keeping as is:', normalized)
+        } else if (p.startsWith('0')) {
+          normalized = '+234' + p.slice(1)
+          console.log('Phone starts with 0, normalized to:', normalized)
+        } else if (p.startsWith('234')) {
+          normalized = '+' + p
+          console.log('Phone starts with 234, normalized to:', normalized)
+        } else {
+          normalized = '+234' + p
+          console.log('Phone has no prefix, normalized to:', normalized)
+        }
+        return normalized
       }
+
+      // Normalize and log phone numbers
+      const normalizedContactPhone = normalizePhone(formData.contactPhone)
+      const normalizedPickupPhone = normalizePhone(formData.pickupPerson?.phone)
+      const normalizedReceiverPhone = normalizePhone(formData.receiverPerson?.phone)
+
+      console.log('Final normalized contactPhone:', normalizedContactPhone)
+      console.log('Final normalized pickupPhone:', normalizedPickupPhone)
+      console.log('Final normalized receiverPhone:', normalizedReceiverPhone)
+
+      // Validate dates
+      console.log('Original estimatedPickupDate:', formData.estimatedPickupDate)
+      console.log('Original estimatedDeliveryDate:', formData.estimatedDeliveryDate)
+      
+      const pickupDate = new Date(formData.estimatedPickupDate || Date.now())
+      const deliveryDate = new Date(formData.estimatedDeliveryDate || Date.now() + 86400000)
+
+      console.log('Parsed pickupDate:', pickupDate.toISOString())
+      console.log('Parsed deliveryDate:', deliveryDate.toISOString())
+
+      if (deliveryDate <= pickupDate) {
+        console.error('Date validation failed: delivery <= pickup')
+        throw new Error('Delivery date must be after pickup date')
+      }
+
+      console.log('goodsType:', formData.goodsType)
+      console.log('vehicleType:', formData.vehicleType)
+      console.log('customerType:', formData.customerType)
+      console.log('cargoWeightKg:', formData.cargoWeightKg, '-> Number:', Number(formData.cargoWeightKg))
+      console.log('truckSize:', formData.truckSize)
 
       // Ensure proper type conversion and schema matching
       const payload = {
         ...formData,
         // Normalize phone numbers
-        contactPhone: normalizePhone(formData.contactPhone),
+        contactPhone: normalizedContactPhone,
         pickupPerson: {
           ...formData.pickupPerson,
-          phone: normalizePhone(formData.pickupPerson?.phone)
+          phone: normalizedPickupPhone
         },
         receiverPerson: {
           ...formData.receiverPerson,
-          phone: normalizePhone(formData.receiverPerson?.phone)
+          phone: normalizedReceiverPhone
         },
 
         // Numeric conversions with fallbacks
@@ -128,8 +180,8 @@ export const useBookingFlow = () => {
         // distance: 5,
 
         // Ensure dates are valid ISO strings
-        estimatedPickupDate: formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : new Date().toISOString(),
-        estimatedDeliveryDate: formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : new Date(Date.now() + 86400000).toISOString(),
+        estimatedPickupDate: pickupDate.toISOString(),
+        estimatedDeliveryDate: deliveryDate.toISOString(),
         
         // Ensure strings are not null/undefined
         vehicleType: formData.vehicleType || 'Van', // Fallback
@@ -137,18 +189,28 @@ export const useBookingFlow = () => {
         notes: formData.notes || 'None' // Ensure non-empty string if required
       }
 
-      // Format locations: pickupLocation as string, dropoffLocation as object without state
-      const formatPickupLocation = (loc) => {
-        const parts = [loc.address, loc.city, loc.state].filter(Boolean)
-        return parts.join(', ')
+      // Format locations based on API documentation cURL example:
+      // pickupLocation is a STRING
+      // dropoffLocation is an object with { address, city } only (NO state)
+      
+      console.log('Formatting pickupLocation as string...')
+      const pickupLocationString = `${payload.pickupLocation.address}, ${payload.pickupLocation.city}`
+      console.log('pickupLocation (string):', pickupLocationString)
+      
+      console.log('Formatting dropoffLocation as object (address + city only)...')
+      const dropoffLocationObject = {
+        address: payload.dropoffLocation.address,
+        city: payload.dropoffLocation.city
+        // NO state field per API example
       }
+      console.log('dropoffLocation (object):', dropoffLocationObject)
 
-      const formatDropoffLocation = (loc) => {
-        return { address: loc.address, city: loc.city }
-      }
+      payload.pickupLocation = pickupLocationString
+      payload.dropoffLocation = dropoffLocationObject
 
-      payload.pickupLocation = formatPickupLocation(payload.pickupLocation)
-      payload.dropoffLocation = formatDropoffLocation(payload.dropoffLocation)
+      console.log('=== FINAL PAYLOAD ===')
+      console.log(JSON.stringify(payload, null, 2))
+      console.log('=== BOOKING PAYLOAD DEBUG END ===')
 
       console.log('Sending Booking Payload:', JSON.stringify(payload, null, 2))
 

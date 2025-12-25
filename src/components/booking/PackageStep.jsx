@@ -2,12 +2,9 @@ import { Package, ArrowRight, ArrowLeft, Snowflake, Pill, Box, Truck } from 'luc
 
 export default function PackageStep({ formData, onChange, onNext, onBack, loading }) {
   const truckSizes = [
-    { label: '2 Tons', value: 2, tons: 2 },
-    { label: '3 Tons', value: 3, tons: 3 },
     { label: '5 Tons', value: 5, tons: 5 },
     { label: '10 Tons', value: 10, tons: 10 },
-    { label: '15 Tons', value: 15, tons: 15 },
-    { label: '20 Tons', value: 20, tons: 20 }
+    { label: '15 Tons', value: 15, tons: 15 }
   ]
 
   const packageTypes = [
@@ -44,14 +41,14 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
                     key={pkg.type}
                     type="button"
                     onClick={() => onChange('goodsType', pkg.type)}
-                    className={`p-6 border-2 rounded-xl transition-all duration-200 text-center group hover:scale-105 active:scale-95 ${isSelected
+                    className={`p-4 sm:p-6 border-2 rounded-xl transition-all duration-200 group hover:scale-105 active:scale-95 flex items-center sm:flex-col sm:justify-center text-left sm:text-center w-full ${isSelected
                       ? `border-${pkg.color}-600 bg-${pkg.color}-50 shadow-lg ring-2 ring-${pkg.color}-200`
                       : 'border-gray-200 hover:border-blue-300 hover:shadow-md bg-white'
                       }`}
                   >
-                    <div className={`inline-flex p-4 rounded-xl mb-3 ${isSelected ? `bg-${pkg.color}-100` : 'bg-gray-100 group-hover:bg-blue-100'
+                    <div className={`inline-flex p-3 sm:p-4 rounded-xl mr-4 sm:mr-0 sm:mb-3 shrink-0 ${isSelected ? `bg-${pkg.color}-100` : 'bg-gray-100 group-hover:bg-blue-100'
                       }`}>
-                      <Icon className={`w-8 h-8 ${isSelected ? `text-${pkg.color}-600` : 'text-gray-600 group-hover:text-blue-600'
+                      <Icon className={`w-6 h-6 sm:w-8 sm:h-8 ${isSelected ? `text-${pkg.color}-600` : 'text-gray-600 group-hover:text-blue-600'
                         }`} />
                     </div>
                     <div className="text-sm font-semibold text-gray-700">{pkg.label}</div>

@@ -3,13 +3,28 @@ export default function PaymentMethodButton({ icon: Icon, title, subtitle, isSel
     <button
       type="button"
       onClick={onClick}
-      className={`p-4 border-2 rounded-lg transition-all hover:scale-105 active:scale-95 ${
-        isSelected ? 'border-blue-600 bg-blue-50 shadow-md' : 'border-gray-200 hover:border-gray-300'
-      }`}
+      className={`relative w-full p-4 border rounded-xl transition-all duration-200 text-left sm:text-center group ${isSelected
+          ? 'border-blue-600 bg-blue-50/50 shadow-md ring-1 ring-blue-600'
+          : 'border-gray-200 hover:border-blue-400 hover:shadow-sm bg-white'
+        }`}
     >
-      <Icon className={`w-8 h-8 mx-auto mb-2 ${isSelected ? 'text-blue-600' : 'text-gray-400'}`} />
-      <p className="font-semibold text-sm">{title}</p>
-      <p className="text-xs text-gray-500">{subtitle}</p>
+      <div className="flex sm:flex-col items-center gap-4 sm:gap-3">
+        <div className={`p-3 rounded-full transition-colors ${isSelected ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-500 group-hover:bg-blue-50 group-hover:text-blue-500'
+          }`}>
+          <Icon className="w-6 h-6 sm:w-8 sm:h-8" />
+        </div>
+        <div>
+          <p className={`font-bold text-sm sm:text-base ${isSelected ? 'text-blue-900' : 'text-gray-900'
+            }`}>{title}</p>
+          <p className={`text-xs sm:text-sm mt-0.5 ${isSelected ? 'text-blue-700' : 'text-gray-500'
+            }`}>{subtitle}</p>
+        </div>
+
+        {/* Mobile checkmark indicator */}
+        {isSelected && (
+          <div className="ml-auto sm:hidden w-2 h-2 bg-blue-600 rounded-full" />
+        )}
+      </div>
     </button>
   )
 }
