@@ -14,7 +14,7 @@ const handleViewBrochure = () => {
 const CAROUSEL_SLIDES = [
   {
     id: 1,
-    image: "/src/assets/climateImage/image-3.jpeg",
+    image: "/climateImage/image-3.jpeg",
     title: "Solar-Powered Fleet",
     description: "Our hybrid solar containers harvest energy while in transit, drastically reducing fuel consumption and emissions.",
     icon: Sun,
@@ -22,7 +22,7 @@ const CAROUSEL_SLIDES = [
   },
   {
     id: 2,
-    image: "/src/assets/climateImage/image-1.png",
+    image: "/climateImage/image-1.png",
     title: "Cold Chain Integrity",
     description: "Advanced insulation and active cooling ensuring your perishable goods stay fresh from farm to fork.",
     icon: Snowflake,
@@ -30,7 +30,7 @@ const CAROUSEL_SLIDES = [
   },
   {
     id: 3,
-    image: "/src/assets/climateImage/image-2.png",
+    image: "/climateImage/image-2.png",
     title: "Global Reach",
     description: "Seamless international logistics network optimized for climate-sensitive cargo transport.",
     icon: Globe,
@@ -62,10 +62,10 @@ export default function DaraClimateTech() {
         />
 
         {/* Enhanced Bento Grid - Asymmetrical Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-16 auto-rows-[minmax(180px,auto)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-8 md:mt-16 auto-rows-[minmax(200px,auto)]">
 
           {/* Card 1: Hero Anchor (2x2) with Carousel */}
-          <div className="md:col-span-2 lg:col-span-2 lg:row-span-2 relative group overflow-hidden rounded-xl md:rounded-[2rem] shadow-xl bg-gray-900">
+          <div className="md:col-span-2 lg:col-span-2 lg:row-span-2 h-[400px] md:h-[500px] lg:h-[600px] relative group overflow-hidden rounded-xl md:rounded-[2rem] shadow-xl bg-gray-900">
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentSlide}
