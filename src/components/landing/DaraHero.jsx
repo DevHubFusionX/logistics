@@ -63,7 +63,7 @@ export default function DaraHero() {
               >
                 Nigeria's Leading
                 <br />
-                Logistics Platform
+                <span className="text-blue-400">Cold Chain</span> Logistics
               </motion.h1>
 
               {/* Rotating Features */}
@@ -96,9 +96,9 @@ export default function DaraHero() {
               transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
               className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-normal leading-relaxed tracking-wide px-4"
             >
-              Fast, reliable delivery across Nigeria.
+              Temperature-controlled logistics for pharmaceuticals, vaccines, and perishable goods.
               <br className="hidden sm:block" />
-              Track every shipment in real-time.
+              Reliable cold chain solutions across Nigeria.
             </motion.p>
 
             {/* Action Buttons */}

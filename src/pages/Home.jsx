@@ -1,9 +1,10 @@
-import { DaraHero, DaraAbout, DaraServices, DaraWhyUs, DaraClients, DaraTestimonials, DaraContact } from '../components/landing'
+import { DaraHero, DaraAbout, DaraServices, DaraClimateTech, DaraWhyUs, DaraClients, DaraTestimonials, DaraContact } from '../components/landing'
 
 const homeComponents = [
   DaraHero,
   DaraAbout,
   DaraServices,
+  DaraClimateTech,
   DaraWhyUs,
   DaraClients,
   DaraTestimonials,

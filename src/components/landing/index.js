@@ -1,5 +1,6 @@
 export { default as DaraAbout } from './DaraAbout'
 export { default as DaraClients } from './DaraClients'
+export { default as DaraClimateTech } from './DaraClimateTech'
 export { default as DaraContact } from './DaraContact'
 export { default as DaraHero } from './DaraHero'
 export { default as DaraServices } from './DaraServices'
