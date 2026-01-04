@@ -19,16 +19,10 @@ export default function Footer() {
               Nigeria's most trusted logistics partner, connecting businesses nationwide with reliable, fast, and affordable shipping solutions.
             </p>
             <div className="flex gap-2 sm:gap-3">
-              <a href="#" className="w-8 h-8 sm:w-9 sm:h-9 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors">
-                <Facebook className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 sm:w-9 sm:h-9 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors">
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a href="#" className="w-8 h-8 sm:w-9 sm:h-9 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors">
+              <a href="https://www.linkedin.com/company/darafort-global-services/" target="_blank" rel="noopener noreferrer" className="w-8 h-8 sm:w-9 sm:h-9 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors">
                 <Linkedin className="w-4 h-4" />
               </a>
-              <a href="#" className="w-8 h-8 sm:w-9 sm:h-9 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors">
+              <a href="https://instagram.com/dara.express" target="_blank" rel="noopener noreferrer" className="w-8 h-8 sm:w-9 sm:h-9 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center transition-colors">
                 <Instagram className="w-4 h-4" />
               </a>
             </div>
@@ -77,7 +71,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-4 sm:pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4">
           <p className="text-gray-400 text-sm">
-            &copy; 2024 Dara Logistics. All rights reserved.
+            &copy; 2026 Dara Logistics. All rights reserved.
           </p>
           <div className="flex items-center gap-2">
             <span className="text-gray-400 text-sm">Available 24/7</span>
