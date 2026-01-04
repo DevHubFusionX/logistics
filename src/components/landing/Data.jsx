@@ -35,7 +35,7 @@ export const heroData = {
         'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
     ],
     stats: [
-        { icon: 'Users', value: '1000+', label: 'Growing number of happy businesses' },
+        { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
         { icon: 'Truck', value: '69', label: 'Trucks on Network via partner model' },
         { icon: 'Clock', value: '137', label: 'Cold Chain Trips Completed' }
     ],
@@ -93,7 +93,7 @@ export const aboutData = {
         author: "— Dara Leadership Team"
     },
     stats: [
-        { value: "1000+", label: "Growing number of happy businesses", color: "blue" },
+        { value: "TrendingUp", label: "Growing number of happy businesses", color: "blue" },
         { value: "69", label: "Trucks on Network via partner model", color: "green" },
         { value: "137", label: "Cold Chain Trips Completed", color: "blue" }
     ]
@@ -270,14 +270,13 @@ export const climateTechData = {
 // Testimonials Data
 export const testimonialsData = {
     header: {
-        badge: "Customer Stories",
-        title: "Trusted by 1000+",
-        subtitle: "Growing Businesses",
-        description: "From startups to enterprises, see how businesses across Nigeria are achieving remarkable growth with Dara's logistics solutions."
+        badge: "Partner Success",
+        title: "Powering the Growth of",
+        subtitle: "Nigeria's Leading Businesses",
+        description: "From ambitious startups to national enterprises, see how we're delivering consistency and scaling impact for our partners nationwide."
     },
     stats: [
-        { number: '4.9/5', label: 'Average Rating' },
-        { number: '1000+', label: 'Growing number of happy businesses' },
+        { number: 'TrendingUp', label: 'Growing number of happy businesses' },
         { number: '69', label: 'Trucks on Network via partner model' },
         { number: '137', label: 'Cold Chain Trips Completed' }
     ],
@@ -314,10 +313,10 @@ export const testimonialsData = {
         }
     ],
     marquee: [
-        { content: "Dara's tracking system is incredible. I always know exactly where my packages are.", author: "Kemi Adebayo", position: "Fashion Designer", rating: 5 },
-        { content: "Same-day delivery in Abuja? Dara made it possible for our restaurant supplies.", author: "Ibrahim Musa", position: "Restaurant Owner", rating: 5 },
-        { content: "Professional, reliable, and affordable. Dara is our go-to logistics partner.", author: "Grace Okonkwo", position: "Online Store Owner", rating: 5 },
-        { content: "From Lagos to Kano in 24 hours. Dara delivers on their promises every time.", author: "Ahmed Bello", position: "Electronics Retailer", rating: 5 }
+        { content: "Dara's tracking system is incredible. I always know exactly where my packages are.", author: "Kemi Adebayo", position: "Fashion Designer", company: "Kemi Designs", businessType: "SME", rating: 5, image: null },
+        { content: "Same-day delivery in Abuja? Dara made it possible for our restaurant supplies.", author: "Ibrahim Musa", position: "Restaurant Owner", company: "Green Palate", businessType: "SME", rating: 5, image: null },
+        { content: "Professional, reliable, and affordable. Dara is our go-to logistics partner.", author: "Grace Okonkwo", position: "Online Store Owner", company: "Gracie's Boutique", businessType: "SME", rating: 5, image: null },
+        { content: "From Lagos to Kano in 24 hours. Dara delivers on their promises every time.", author: "Ahmed Bello", position: "Electronics Retailer", company: "Bello Tech", businessType: "SME", rating: 5, image: null }
     ]
 }
 

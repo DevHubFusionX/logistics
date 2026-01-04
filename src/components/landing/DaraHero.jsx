@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Package, Truck, MapPin, Clock, Users } from 'lucide-react'
+import { ArrowRight, Package, Truck, MapPin, Clock, Users, TrendingUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { heroData } from './Data'
 import { Button, Badge } from '../ui'
@@ -129,7 +129,7 @@ export default function DaraHero() {
               className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto px-2"
             >
               {heroData.stats.map((stat, index) => {
-                const IconComponent = { Truck, Clock, MapPin, Users }[stat.icon]
+                const IconComponent = { Truck, Clock, MapPin, Users, TrendingUp }[stat.icon]
                 return (
                   <motion.div
                     key={index}
@@ -142,7 +142,9 @@ export default function DaraHero() {
                     <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 backdrop-blur-sm">
                       <IconComponent className="w-6 h-6 sm:w-8 sm:h-8" />
                     </div>
-                    <div className="text-2xl sm:text-3xl font-black mb-1">{stat.value}</div>
+                    <div className="text-2xl sm:text-3xl font-black mb-1">
+                      {stat.value === 'TrendingUp' ? <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-white" /> : stat.value}
+                    </div>
                     <div className="text-xs sm:text-sm font-medium opacity-80">{stat.label}</div>
                   </motion.div>
                 )

@@ -52,7 +52,7 @@ export const aboutData = {
         }
     ],
     stats: [
-        { icon: Users, number: "1000+", label: "Growing number of happy businesses" },
+        { icon: "TrendingUp", number: "TrendingUp", label: "Growing number of happy businesses" },
         { icon: Truck, number: "69", label: "Trucks on Network via partner model" },
         { icon: Package, number: "137", label: "Cold Chain Trips Completed" }
     ],

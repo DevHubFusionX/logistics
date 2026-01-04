@@ -77,7 +77,7 @@ export const servicesData = {
         }
     ],
     stats: [
-        { value: "1000+", label: "Growing number of happy businesses" },
+        { value: "TrendingUp", label: "Growing number of happy businesses" },
         { value: "69", label: "Trucks on Network via partner model" },
         { value: "137", label: "Cold Chain Trips Completed" }
     ],

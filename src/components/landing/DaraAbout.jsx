@@ -188,9 +188,9 @@ export default function DaraAbout() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5, delay: 0.8 + (index * 0.2), type: "spring", stiffness: 200 }}
                     viewport={{ once: true }}
-                    className={`text-3xl font-black ${stat.color === 'blue' ? 'text-primary' : 'text-accent'} mb-1`}
+                    className={`text-3xl font-black ${stat.color === 'blue' ? 'text-primary' : 'text-accent'} mb-1 flex items-center gap-2`}
                   >
-                    {stat.value}
+                    {stat.value === 'TrendingUp' ? <TrendingUp className="w-8 h-8" /> : stat.value}
                   </motion.div>
                   <motion.div
                     initial={{ opacity: 0, x: index === 0 ? -10 : 10 }}

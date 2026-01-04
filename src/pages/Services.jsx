@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Truck, Warehouse, Globe, Users, CheckCircle, Thermometer, Shield, MapPin, Clock, Package } from 'lucide-react'
+import { Truck, Warehouse, Globe, Users, CheckCircle, Thermometer, Shield, MapPin, Clock, Package, TrendingUp } from 'lucide-react'
 import { servicesData } from './ServicesData'
 
 export default function Services() {
@@ -106,7 +106,9 @@ export default function Services() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
             {servicesData.stats.map((stat, idx) => (
               <div key={idx} className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold text-white mb-2">{stat.value}</div>
+                <div className="text-4xl sm:text-5xl font-bold text-white mb-2 flex justify-center items-center">
+                  {stat.value === 'TrendingUp' ? <TrendingUp className="w-12 h-12" /> : stat.value}
+                </div>
                 <div className="text-blue-200">{stat.label}</div>
               </div>
             ))}

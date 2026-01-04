@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { TrendingUp } from 'lucide-react'
 import { aboutData } from '../../../pages/AboutData'
 
 export default function AboutStats() {
@@ -22,7 +23,9 @@ export default function AboutStats() {
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4 shadow-lg">
                   <Icon className="w-8 h-8 text-white" />
                 </div>
-                <div className="text-3xl sm:text-4xl font-heading text-gray-900 mb-2">{stat.number}</div>
+                <div className="text-3xl sm:text-4xl font-heading text-gray-900 mb-2 flex justify-center items-center">
+                  {stat.number === 'TrendingUp' ? <TrendingUp className="w-10 h-10 text-primary" /> : stat.number}
+                </div>
                 <div className="text-sm font-semibold text-gray-600">{stat.label}</div>
               </motion.div>
             )
