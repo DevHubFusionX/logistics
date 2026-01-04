@@ -1,18 +1,13 @@
 import { motion } from 'framer-motion'
-import { Thermometer, Package, Shield, TrendingUp } from 'lucide-react'
+import { aboutData } from '../../../pages/AboutData'
 
 export default function AboutStats() {
-  const stats = [
-    { icon: Thermometer, number: "24/7", label: "Temperature Monitoring" },
-    { icon: Package, number: "600K", label: "Cold Chain Deliveries" },
-    { icon: Shield, number: "100%", label: "GIT Insurance Coverage" },
-    { icon: TrendingUp, number: "99.5%", label: "Product Integrity Rate" }
-  ]
+  const stats = aboutData.stats
 
   return (
     <section className="py-16 bg-white">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {stats.map((stat, index) => {
             const Icon = stat.icon
             return (

@@ -1,13 +1,8 @@
 import { motion } from 'framer-motion'
+import { aboutData } from '../../../pages/AboutData'
 
 export default function AboutTimeline() {
-  const timeline = [
-    { year: "2023", title: "Founded", description: "Dara Cold Chain Logistics established with focus on temperature-controlled transportation" },
-    { year: "2025", title: "Tech Integration", description: "Deployed real-time GPS and temperature monitoring systems across fleet" },
-    { year: "2025", title: "Enterprise Solutions", description: "Launched dedicated cold chain services for pharmaceutical and food industries" },
-    { year: "2026", title: "Nationwide Expansion", description: "Extended coverage to major cities across Nigeria with GIT insurance" },
-    { year: "2027", title: "Market Leader", description: "Positioned as Nigeria's trusted cold chain logistics partner" }
-  ]
+  const timeline = aboutData.timeline
 
   return (
     <section className="py-20 bg-white">
@@ -30,7 +25,7 @@ export default function AboutTimeline() {
         <div className="max-w-4xl mx-auto">
           <div className="relative">
             <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-primary rounded-full"></div>
-            
+
             <div className="space-y-12">
               {timeline.map((item, index) => (
                 <motion.div

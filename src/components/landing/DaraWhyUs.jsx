@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion'
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { impactAreas, ImpactStats, MobileCarousel, StickyImages, ImpactCard } from './whyus'
+import { ImpactStats, MobileCarousel, StickyImages, ImpactCard } from './whyus'
+import { whyUsData } from './Data'
 
 export default function DaraWhyUs() {
   const [currentSlide, setCurrentSlide] = useState(0)
@@ -18,7 +19,7 @@ export default function DaraWhyUs() {
   useEffect(() => {
     if (isMobile) {
       const timer = setInterval(() => {
-        setCurrentSlide((prev) => (prev + 1) % impactAreas.length)
+        setCurrentSlide((prev) => (prev + 1) % whyUsData.impactAreas.length)
       }, 4000)
       return () => clearInterval(timer)
     }
@@ -41,7 +42,7 @@ export default function DaraWhyUs() {
             className="inline-flex items-center gap-2 px-6 py-3 bg-blue-50 rounded-full mb-8"
           >
             <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-            <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">Our Impact</span>
+            <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">{whyUsData.header.badge}</span>
           </motion.div>
 
           <motion.h2
@@ -51,9 +52,9 @@ export default function DaraWhyUs() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="font-heading text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-6"
           >
-            Why businesses choose Dara
+            {whyUsData.header.title}
             <br />
-            <span className="text-primary">Fast, reliable logistics with local expertise</span>
+            <span className="text-primary">{whyUsData.header.subtitle}</span>
           </motion.h2>
 
           <motion.p
@@ -62,7 +63,7 @@ export default function DaraWhyUs() {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed mb-10"
           >
-            We deliver predictable logistics that reduce cost, save time, and help you scale — backed by tech, local teams and nationwide coverage.
+            {whyUsData.header.description}
           </motion.p>
 
           <ImpactStats />
@@ -70,25 +71,25 @@ export default function DaraWhyUs() {
 
         {/* Impact Areas Grid/Carousel */}
         {isMobile ? (
-          <MobileCarousel 
+          <MobileCarousel
             currentSlide={currentSlide}
             setCurrentSlide={setCurrentSlide}
-            impactAreas={impactAreas}
+            impactAreas={whyUsData.impactAreas}
           />
         ) : (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             className="grid lg:grid-cols-2 gap-16"
           >
-            <StickyImages 
+            <StickyImages
               activeImageIndex={activeImageIndex}
-              impactAreas={impactAreas}
+              impactAreas={whyUsData.impactAreas}
             />
             <div className="space-y-24">
-              {impactAreas.map((area, index) => (
-                <ImpactCard 
+              {whyUsData.impactAreas.map((area, index) => (
+                <ImpactCard
                   key={index}
                   area={area}
                   index={index}
@@ -106,29 +107,28 @@ export default function DaraWhyUs() {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="text-center mt-20"
         >
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="bg-blue-50 rounded-3xl p-12 max-w-4xl mx-auto"
           >
             <h3 className="font-heading text-3xl font-bold text-gray-900 mb-4">
-              Ready to Transform Your Business?
+              {whyUsData.cta.title}
             </h3>
             <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-              Join thousands of businesses already experiencing the Dara difference.
-              Let's build Nigeria's future together, one delivery at a time.
+              {whyUsData.cta.description}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.div whileHover={{ scale: 1.05, y: -2 }} whileTap={{ scale: 0.95 }}>
-                <Link to="/booking/request" className="px-8 py-4 text-white font-bold rounded-xl transition-colors inline-block" style={{ backgroundColor: '#00843D', color: '#fff' }}>
-                  Get a quote
+                <Link to={whyUsData.cta.primaryBtn.link} className="px-8 py-4 text-white font-bold rounded-xl transition-colors inline-block" style={{ backgroundColor: '#00843D', color: '#fff' }}>
+                  {whyUsData.cta.primaryBtn.text}
                 </Link>
               </motion.div>
 
               <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                <Link to="/services" className="px-8 py-4 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-primary hover:bg-blue-50 transition-all inline-block">
-                  Learn more
+                <Link to={whyUsData.cta.secondaryBtn.link} className="px-8 py-4 border-2 border-gray-200 text-gray-700 font-semibold rounded-xl hover:border-primary hover:bg-blue-50 transition-all inline-block">
+                  {whyUsData.cta.secondaryBtn.text}
                 </Link>
               </motion.div>
             </div>

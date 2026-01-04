@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Leaf, Sun, Zap, Thermometer, ArrowRight, FileText, Smartphone, Gauge, Snowflake, Globe } from 'lucide-react'
 import { SectionHeader, Button } from '../ui'
+import { climateTechData } from './Data'
 
 const handleLearnMore = () => {
   document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
@@ -11,39 +12,12 @@ const handleViewBrochure = () => {
   document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
 }
 
-const CAROUSEL_SLIDES = [
-  {
-    id: 1,
-    image: "/climateImage/image-3.jpeg",
-    title: "Solar-Powered Fleet",
-    description: "Our hybrid solar containers harvest energy while in transit, drastically reducing fuel consumption and emissions.",
-    icon: Sun,
-    color: "bg-green-500"
-  },
-  {
-    id: 2,
-    image: "/climateImage/image-1.png",
-    title: "Cold Chain Integrity",
-    description: "Advanced insulation and active cooling ensuring your perishable goods stay fresh from farm to fork.",
-    icon: Snowflake,
-    color: "bg-blue-500"
-  },
-  {
-    id: 3,
-    image: "/climateImage/image-2.png",
-    title: "Global Reach",
-    description: "Seamless international logistics network optimized for climate-sensitive cargo transport.",
-    icon: Globe,
-    color: "bg-amber-500"
-  }
-]
-
 export default function DaraClimateTech() {
   const [currentSlide, setCurrentSlide] = useState(0)
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % CAROUSEL_SLIDES.length)
+      setCurrentSlide((prev) => (prev + 1) % climateTechData.carouselSlides.length)
     }, 5000)
     return () => clearInterval(timer)
   }, [])
@@ -55,10 +29,10 @@ export default function DaraClimateTech() {
 
       <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10">
         <SectionHeader
-          badge={{ icon: Leaf, text: 'Climate Technology' }}
-          title="Sustainable Cold Chain"
-          subtitle="Solutions"
-          description="Pioneering eco-friendly logistics with solar-powered refrigeration systems that reduce carbon footprint while maintaining optimal temperature control."
+          badge={{ icon: Leaf, text: climateTechData.header.badge }}
+          title={climateTechData.header.title}
+          subtitle={climateTechData.header.subtitle}
+          description={climateTechData.header.description}
         />
 
         {/* Enhanced Bento Grid - Asymmetrical Layout */}
@@ -76,8 +50,8 @@ export default function DaraClimateTech() {
                 className="absolute inset-0"
               >
                 <img
-                  src={CAROUSEL_SLIDES[currentSlide].image}
-                  alt={CAROUSEL_SLIDES[currentSlide].title}
+                  src={climateTechData.carouselSlides[currentSlide].image}
+                  alt={climateTechData.carouselSlides[currentSlide].title}
                   className="w-full h-full object-cover transition-transform duration-[5000ms] ease-linear scale-105 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
@@ -88,15 +62,15 @@ export default function DaraClimateTech() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.2 }}
                   >
-                    <div className={`w-10 h-10 md:w-12 md:h-12 ${CAROUSEL_SLIDES[currentSlide].color} rounded-xl flex items-center justify-center mb-3 md:mb-4 shadow-lg`}>
+                    <div className={`w-10 h-10 md:w-12 md:h-12 ${climateTechData.carouselSlides[currentSlide].color} rounded-xl flex items-center justify-center mb-3 md:mb-4 shadow-lg`}>
                       {(() => {
-                        const Icon = CAROUSEL_SLIDES[currentSlide].icon
+                        const Icon = climateTechData.carouselSlides[currentSlide].icon
                         return <Icon className="w-5 h-5 md:w-6 md:h-6 text-white" />
                       })()}
                     </div>
-                    <h3 className="text-xl md:text-3xl font-bold mb-2">{CAROUSEL_SLIDES[currentSlide].title}</h3>
+                    <h3 className="text-xl md:text-3xl font-bold mb-2">{climateTechData.carouselSlides[currentSlide].title}</h3>
                     <p className="text-sm md:text-base text-gray-200 leading-relaxed max-w-md">
-                      {CAROUSEL_SLIDES[currentSlide].description}
+                      {climateTechData.carouselSlides[currentSlide].description}
                     </p>
                   </motion.div>
                 </div>
@@ -105,7 +79,7 @@ export default function DaraClimateTech() {
 
             {/* Carousel Indicators */}
             <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 flex gap-2 z-20">
-              {CAROUSEL_SLIDES.map((_, idx) => (
+              {climateTechData.carouselSlides.map((_, idx) => (
                 <button
                   key={idx}
                   onClick={() => setCurrentSlide(idx)}
@@ -132,8 +106,8 @@ export default function DaraClimateTech() {
               <span className="text-emerald-100 font-mono text-sm tracking-wider">EFFICIENCY</span>
             </div>
             <div>
-              <div className="text-3xl md:text-5xl font-black tracking-tight mb-1">70%</div>
-              <p className="text-emerald-100 text-xs md:text-sm font-medium">Energy Cost Reduction</p>
+              <div className="text-3xl md:text-5xl font-black tracking-tight mb-1">{climateTechData.stats.efficiency.value}</div>
+              <p className="text-emerald-100 text-xs md:text-sm font-medium">{climateTechData.stats.efficiency.label}</p>
             </div>
           </motion.div>
 
@@ -183,11 +157,11 @@ export default function DaraClimateTech() {
                 </p>
                 <div className="flex gap-6 md:gap-8">
                   <div>
-                    <div className="text-2xl md:text-3xl font-bold text-blue-400">±0.1°C</div>
+                    <div className="text-2xl md:text-3xl font-bold text-blue-400">{climateTechData.stats.precision.accuracy}</div>
                     <div className="text-xs text-slate-500 uppercase tracking-wider mt-1">Accuracy</div>
                   </div>
                   <div>
-                    <div className="text-2xl md:text-3xl font-bold text-blue-400">-30°C</div>
+                    <div className="text-2xl md:text-3xl font-bold text-blue-400">{climateTechData.stats.precision.minTemp}</div>
                     <div className="text-xs text-slate-500 uppercase tracking-wider mt-1">Min Temp</div>
                   </div>
                 </div>

@@ -1,26 +1,8 @@
 import { motion } from 'framer-motion'
+import { aboutData } from '../../../pages/AboutData'
 
 export default function AboutLeadership() {
-  const leadership = [
-    {
-      name: "Adebayo Ogundimu",
-      position: "Chief Executive Officer",
-      bio: "15+ years in Nigerian logistics, former operations director at major courier companies",
-      initials: "AO"
-    },
-    {
-      name: "Kemi Adebayo",
-      position: "Chief Technology Officer",
-      bio: "Tech innovator with deep understanding of Nigerian market and mobile-first solutions",
-      initials: "KA"
-    },
-    {
-      name: "Ibrahim Musa",
-      position: "Chief Operations Officer",
-      bio: "Operations expert with extensive knowledge of Nigerian transportation networks",
-      initials: "IM"
-    }
-  ]
+  const leadership = aboutData.leadership
 
   return (
     <section className="py-20 bg-white">

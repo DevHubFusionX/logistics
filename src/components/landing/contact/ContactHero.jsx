@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
+import { contactData } from '../Data'
 
 export default function ContactHero() {
   return (
@@ -12,7 +13,7 @@ export default function ContactHero() {
         className="inline-flex items-center gap-2 px-6 py-3  rounded-full mb-8"
       >
         <MessageCircle className="w-4 h-4 text-primary" />
-        <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">Get In Touch</span>
+        <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">{contactData.hero.badge}</span>
       </motion.div>
 
       <motion.h2
@@ -22,9 +23,9 @@ export default function ContactHero() {
         viewport={{ once: true }}
         className="text-4xl md:text-5xl lg:text-6xl font-heading text-gray-900 mb-8"
       >
-        Let's Start Your
+        {contactData.hero.title}
         <br />
-        <span className="text-primary">Logistics Journey</span>
+        <span className="text-primary">{contactData.hero.highlight}</span>
       </motion.h2>
 
       <motion.p
@@ -34,7 +35,7 @@ export default function ContactHero() {
         viewport={{ once: true }}
         className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
       >
-        Get in touch with our team for personalized logistics solutions.
+        {contactData.hero.description}
       </motion.p>
     </div>
   )

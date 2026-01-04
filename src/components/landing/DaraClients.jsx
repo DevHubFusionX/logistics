@@ -1,24 +1,8 @@
 import { motion } from 'framer-motion'
-import logo1 from '../../assets/ClientLogo/image.svg'
-import logo2 from '../../assets/ClientLogo/image (1).svg'
-import logo3 from '../../assets/ClientLogo/image (2).svg'
-import logo4 from '../../assets/ClientLogo/image (3).svg'
-import logo5 from '../../assets/ClientLogo/image (4).svg'
-import logo6 from '../../assets/ClientLogo/image (5).svg'
-import logo7 from '../../assets/ClientLogo/image (6).svg'
-
-const clients = [
-  { name: 'Client 1', logo: logo1 },
-  { name: 'Client 2', logo: logo2 },
-  { name: 'Client 3', logo: logo3 },
-  { name: 'Client 4', logo: logo4 },
-  { name: 'Client 5', logo: logo5 },
-  { name: 'Client 6', logo: logo6 },
-  { name: 'Client 7', logo: logo7 }
-]
+import { clientsData } from './Data'
 
 // Duplicate clients to ensure smooth infinite scroll
-const marqueeClients = [...clients, ...clients, ...clients, ...clients]
+const marqueeClients = [...clientsData, ...clientsData, ...clientsData, ...clientsData]
 
 function MarqueeLogo({ client }) {
   return (
@@ -69,7 +53,8 @@ export default function DaraClients() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @keyframes marquee-slow {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -82,7 +67,7 @@ export default function DaraClients() {
         .animate-marquee-slow:hover {
           animation-play-state: paused;
         }
-      `}</style>
+      `}} />
     </section>
   )
 }

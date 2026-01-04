@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { contactData } from '../Data'
 
 export default function ContactForm({ formData: externalFormData, handleInputChange: externalHandleChange, handleSubmit: externalHandleSubmit }) {
   const [internalFormData, setInternalFormData] = useState({
@@ -14,7 +15,7 @@ export default function ContactForm({ formData: externalFormData, handleInputCha
   })
 
   const formData = externalFormData || internalFormData
-  
+
   const handleInputChange = externalHandleChange || ((e) => {
     setInternalFormData({
       ...internalFormData,
@@ -38,11 +39,10 @@ export default function ContactForm({ formData: externalFormData, handleInputCha
     >
       <div className="mb-6 sm:mb-8">
         <h3 className="text-2xl sm:text-3xl font-heading text-gray-900 mb-4">
-          Get Your Custom Quote
+          {contactData.form.title}
         </h3>
         <p className="text-base sm:text-lg text-gray-600 leading-relaxed">
-          Tell us about your shipping needs and we'll provide a personalized solution 
-          with transparent pricing and delivery timelines.
+          {contactData.form.subtitle}
         </p>
       </div>
 
@@ -118,7 +118,7 @@ export default function ContactForm({ formData: externalFormData, handleInputCha
           <span className="sm:hidden">Get Quote</span>
           <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
-        
+
         <p className="text-center text-sm text-gray-500 mt-4">
           By submitting this form, you agree to our privacy policy. We'll respond within 24 hours.
         </p>

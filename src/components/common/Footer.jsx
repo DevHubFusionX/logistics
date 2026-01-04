@@ -67,7 +67,6 @@ export default function Footer() {
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 text-primary mt-0.5" />
                 <div className="text-gray-400 text-sm">
-                  <div>35, Lateef Jakande Road, Agidigbi Lagos</div>
                   <div>10, Hughes Avenue, Yaba, Lagos State</div>
                 </div>
               </div>

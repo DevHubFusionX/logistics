@@ -287,8 +287,7 @@ export default function Navbar() {
                   <div className="flex items-start gap-2">
                     <MapPin className="w-3.5 h-3.5 text-gray-400 mt-0.5" />
                     <div className="leading-relaxed">
-                      <div>35, Lateef Jakande Road,</div>
-                      <div>Agidigbi Lagos</div>
+                      <div>10, Hughes Avenue, Yaba, Lagos State</div>
                     </div>
                   </div>
                 </div>

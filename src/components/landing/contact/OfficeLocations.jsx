@@ -3,16 +3,10 @@ import { MapPin } from 'lucide-react'
 
 const offices = [
   {
-    city: 'Lagos - Agidigbi',
-    address: '35, Lateef Jakande Road, Agidigbi Lagos',
-    phone: '+234 811 577 9007',
-    type: 'Head Office'
-  },
-  {
     city: 'Lagos - Yaba',
     address: '10, Hughes Avenue, Yaba, Lagos State',
     phone: '+234 912 116 8485',
-    type: 'Branch Office'
+    type: 'Head Office'
   }
 ]
 

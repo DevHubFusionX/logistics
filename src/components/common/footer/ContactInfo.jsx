@@ -83,7 +83,6 @@ export default function ContactInfo({ itemVariants }) {
             <MapPin className="w-5 h-5 text-sky-400" />
           </motion.div>
           <div>
-            <p className="text-white font-medium">35, Lateef Jakande Road, Agidigbi Lagos</p>
             <p className="text-white font-medium">10, Hughes Avenue, Yaba, Lagos State</p>
             <p className="text-gray-400 text-sm">Visit Us</p>
           </div>

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { CheckCircle } from 'lucide-react'
+import { aboutData } from '../../../pages/AboutData'
 
 export default function AboutAchievements() {
   const achievements = [

@@ -1,12 +1,13 @@
 import { AboutStats, AboutValues, AboutTimeline, AboutAchievements, AboutCTA } from '../components/landing/about'
 import { motion } from "framer-motion"
 import { Thermometer, Shield, Zap, Users } from 'lucide-react'
+import { aboutData } from './AboutData'
 
 export default function About() {
   return (
     <div className="pt-20">
       <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-blue-50"></div>
-      
+
       <div className="absolute inset-0 overflow-hidden">
         {[...Array(12)].map((_, i) => (
           <motion.div
@@ -33,10 +34,10 @@ export default function About() {
         <div className="max-w-7xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-              About <span className="text-blue-600">Dara Cold Chain Logistics</span>
+              {aboutData.hero.title.main} <span className="text-blue-600">{aboutData.hero.title.highlight}</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Technology-driven cold chain logistics for Nigeria's pharmaceutical, healthcare, and perishable goods industries
+              {aboutData.hero.description}
             </p>
           </motion.div>
 
@@ -46,13 +47,13 @@ export default function About() {
                 <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
                   <Thermometer className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">Who We Are</h3>
+                <h3 className="text-2xl font-bold text-gray-900">{aboutData.whoWeAre.title}</h3>
               </div>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Dara Cold Chain Logistics is a <span className="font-semibold text-blue-600">technology-driven logistics company</span> focused on delivering reliable, temperature-controlled transportation for Nigeria's pharmaceutical, healthcare, and perishable goods industries.
+                {aboutData.whoWeAre.description1}
               </p>
               <p className="text-lg text-gray-700 leading-relaxed">
-                We ensure that sensitive products — from <span className="font-semibold">vaccines and medical supplies</span> to <span className="font-semibold">frozen foods and fresh produce</span> — are moved safely, efficiently, and in perfect condition from source to destination.
+                {aboutData.whoWeAre.description2}
               </p>
             </motion.div>
 
@@ -63,9 +64,9 @@ export default function About() {
                     <Shield className="w-6 h-6 text-green-600" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-2">Trust & Precision</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-2">{aboutData.trustAndPrecision.title}</h4>
                     <p className="text-gray-700 leading-relaxed">
-                      At Dara, we understand that cold-chain logistics isn't just about transportation; it's about <span className="font-semibold text-green-600">trust, precision, and product integrity</span>.
+                      {aboutData.trustAndPrecision.description}
                     </p>
                   </div>
                 </div>
@@ -77,9 +78,9 @@ export default function About() {
                     <Zap className="w-6 h-6 text-purple-600" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-2">Advanced Technology</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-2">{aboutData.advancedTech.title}</h4>
                     <p className="text-gray-700 leading-relaxed">
-                      Our fleet of well-maintained refrigerated trucks, equipped with <span className="font-semibold text-purple-600">real-time GPS and temperature monitoring systems</span>, ensures every shipment maintains optimal conditions throughout the journey.
+                      {aboutData.advancedTech.description}
                     </p>
                   </div>
                 </div>
@@ -91,9 +92,9 @@ export default function About() {
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h4 className="text-lg font-bold text-gray-900 mb-2">GIT Insurance</h4>
+                    <h4 className="text-lg font-bold text-gray-900 mb-2">{aboutData.gitInsurance.title}</h4>
                     <p className="text-gray-700 leading-relaxed">
-                      We provide <span className="font-semibold text-orange-600">Goods-in-Transit (GIT) insurance</span>, giving our clients peace of mind and full confidence in the security of their products.
+                      {aboutData.gitInsurance.description}
                     </p>
                   </div>
                 </div>
@@ -111,34 +112,26 @@ export default function About() {
             <p className="text-xl text-gray-600">The principles that guide everything we do</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="w-14 h-14 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
-                <Shield className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Reliability</h3>
-              <p className="text-gray-600">Delivering safely and on time, every time.</p>
-            </motion.div>
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="w-14 h-14 bg-green-100 rounded-lg flex items-center justify-center mb-6">
-                <Thermometer className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Integrity</h3>
-              <p className="text-gray-600">Upholding quality and transparency in every operation.</p>
-            </motion.div>
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="w-14 h-14 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
-                <Zap className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Innovation</h3>
-              <p className="text-gray-600">Leveraging technology to improve logistics performance.</p>
-            </motion.div>
-            <motion.div whileHover={{ y: -5 }} className="bg-white rounded-xl p-8 shadow-lg">
-              <div className="w-14 h-14 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
-                <Users className="w-8 h-8 text-orange-600" />
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-3">Customer Focus</h3>
-              <p className="text-gray-600">Tailoring every solution to fit client needs.</p>
-            </motion.div>
+            {aboutData.coreValues.map((value, index) => {
+              const Icon = value.icon === "Shield" ? Shield :
+                value.icon === "Thermometer" ? Thermometer :
+                  value.icon === "Zap" ? Zap : Users;
+              const bgColor = value.color === "blue" ? "bg-blue-100" :
+                value.color === "green" ? "bg-green-100" :
+                  value.color === "purple" ? "bg-purple-100" : "bg-orange-100";
+              const textColor = value.color === "blue" ? "text-blue-600" :
+                value.color === "green" ? "text-green-600" :
+                  value.color === "purple" ? "text-purple-600" : "text-orange-600";
+              return (
+                <motion.div key={index} whileHover={{ y: -5 }} className="bg-white rounded-xl p-8 shadow-lg">
+                  <div className={`w-14 h-14 ${bgColor} rounded-lg flex items-center justify-center mb-6`}>
+                    <Icon className={`w-8 h-8 ${textColor}`} />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{value.title}</h3>
+                  <p className="text-gray-600">{value.description}</p>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

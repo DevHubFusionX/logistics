@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Package, Shield, MapPin, Zap, TrendingUp, ArrowRight, Truck, Globe, Clock, CheckCircle } from 'lucide-react'
 import { SectionHeader, Button } from '../ui'
-import { SERVICES_DATA } from '../../constants/mockData'
+import { servicesData } from './Data'
 
 const handleLearnMore = () => {
   document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
@@ -127,17 +127,6 @@ export default function DaraServices() {
     offset: ["start end", "end start"]
   })
 
-  // Add mock features and images if not present in data
-  const enhancedServices = SERVICES_DATA.map((s, index) => ({
-    ...s,
-    features: s.features || [
-      "Real-time tracking available",
-      "Insurance coverage included",
-      "24/7 Customer support"
-    ],
-    image: s.image || `/serviceImages/${index + 1}.jpg`
-  }))
-
   return (
     <section id="services" className="py-12 md:py-24 bg-gray-50 relative overflow-hidden" ref={containerRef}>
       {/* Subtle Background Pattern */}
@@ -164,7 +153,7 @@ export default function DaraServices() {
 
         {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {enhancedServices.map((service, index) => (
+          {servicesData.map((service, index) => (
             <ServiceCard key={index} service={service} index={index} />
           ))}
 
@@ -175,7 +164,7 @@ export default function DaraServices() {
             viewport={{ once: true }}
             transition={{
               duration: 0.7,
-              delay: enhancedServices.length * 0.15,
+              delay: servicesData.length * 0.15,
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
             whileHover={{
@@ -206,7 +195,7 @@ export default function DaraServices() {
               className="text-xl font-bold text-gray-900 mb-2 relative z-10"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: enhancedServices.length * 0.15 + 0.2 }}
+              transition={{ delay: servicesData.length * 0.15 + 0.2 }}
             >
               Need a Custom Solution?
             </motion.h3>
@@ -215,7 +204,7 @@ export default function DaraServices() {
               className="text-gray-600 mb-6 max-w-xs relative z-10"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: enhancedServices.length * 0.15 + 0.3 }}
+              transition={{ delay: servicesData.length * 0.15 + 0.3 }}
             >
               We specialize in tailored logistics strategies for complex supply chains.
             </motion.p>
@@ -223,7 +212,7 @@ export default function DaraServices() {
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: enhancedServices.length * 0.15 + 0.4 }}
+              transition={{ delay: servicesData.length * 0.15 + 0.4 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="relative z-10"

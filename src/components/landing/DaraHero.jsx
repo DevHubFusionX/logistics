@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Package, Truck, MapPin, Clock } from 'lucide-react'
+import { ArrowRight, Package, Truck, MapPin, Clock, Users } from 'lucide-react'
 import { useState, useEffect } from 'react'
-import { HERO_FEATURES, HERO_BACKGROUND_IMAGES, HERO_STATS } from '../../constants/mockData'
+import { heroData } from './Data'
 import { Button, Badge } from '../ui'
 import { fadeInUp, scaleIn, hoverScale } from '../../utils'
 
@@ -11,14 +11,14 @@ export default function DaraHero() {
 
   useEffect(() => {
     const featureInterval = setInterval(() => {
-      setCurrentFeature((prev) => (prev + 1) % HERO_FEATURES.length)
+      setCurrentFeature((prev) => (prev + 1) % heroData.features.length)
     }, 3000)
     return () => clearInterval(featureInterval)
   }, [])
 
   useEffect(() => {
     const imageInterval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % HERO_BACKGROUND_IMAGES.length)
+      setCurrentImage((prev) => (prev + 1) % heroData.backgroundImages.length)
     }, 5000)
     return () => clearInterval(imageInterval)
   }, [])
@@ -28,7 +28,7 @@ export default function DaraHero() {
       className="min-h-screen flex items-center relative overflow-hidden px-4 sm:px-6 lg:px-8"
     >
       {/* Background Images with Zoom Effect */}
-      {HERO_BACKGROUND_IMAGES.map((image, index) => (
+      {heroData.backgroundImages.map((image, index) => (
         <motion.div
           key={index}
           className="absolute inset-0"
@@ -61,9 +61,9 @@ export default function DaraHero() {
                 transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-white leading-[1.1] tracking-tight"
               >
-                Nigeria's Leading
+                {heroData.title.prefix}
                 <br />
-                <span className="text-blue-400">Cold Chain</span> Logistics
+                <span className="text-blue-400">{heroData.title.highlight}</span> {heroData.title.suffix}
               </motion.h1>
 
               {/* Rotating Features */}
@@ -83,7 +83,7 @@ export default function DaraHero() {
                   className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 font-medium leading-relaxed tracking-wide px-2"
                   aria-live="polite"
                 >
-                  {HERO_FEATURES[currentFeature]}
+                  {heroData.features[currentFeature]}
                 </motion.p>
               </motion.div>
             </div>
@@ -109,14 +109,14 @@ export default function DaraHero() {
               transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
               className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
             >
-              <Button to="/booking/request" size="lg" className="shadow-2xl">
-                Start Shipping Now
+              <Button to={heroData.buttons.primary.link} size="lg" className="shadow-2xl">
+                {heroData.buttons.primary.text}
                 <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
               </Button>
 
-              <Button to="/tracking" variant="secondary" size="lg">
+              <Button to={heroData.buttons.secondary.link} variant="secondary" size="lg">
                 <Package className="w-5 h-5 sm:w-6 sm:h-6 group-hover:rotate-12 transition-transform" />
-                Track Shipment
+                {heroData.buttons.secondary.text}
               </Button>
             </motion.div>
 
@@ -128,10 +128,10 @@ export default function DaraHero() {
               transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
               className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto px-2"
             >
-              {HERO_STATS.map((stat, index) => {
-                const IconComponent = { Truck, Clock, MapPin }[stat.icon]
+              {heroData.stats.map((stat, index) => {
+                const IconComponent = { Truck, Clock, MapPin, Users }[stat.icon]
                 return (
-                  <motion.div 
+                  <motion.div
                     key={index}
                     initial={{ opacity: 0, scale: 0.9 }}
                     whileInView={{ opacity: 1, scale: 1 }}

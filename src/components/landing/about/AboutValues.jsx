@@ -1,29 +1,13 @@
 import { motion } from 'framer-motion'
 import { Target, Heart, Award, Globe } from 'lucide-react'
+import { aboutData } from '../../../pages/AboutData'
 
 export default function AboutValues() {
-  const values = [
-    {
-      icon: Target,
-      title: "Our Mission",
-      description: "To transform Nigerian commerce by providing reliable, affordable, and technology-driven logistics solutions that connect every corner of Nigeria."
-    },
-    {
-      icon: Heart,
-      title: "Our Vision",
-      description: "Building Nigeria's most trusted logistics network where distance is no barrier to business growth and economic prosperity."
-    },
-    {
-      icon: Award,
-      title: "Our Excellence",
-      description: "Industry-leading 99.2% delivery success rate across Nigeria, with a commitment to continuous improvement and customer satisfaction."
-    },
-    {
-      icon: Globe,
-      title: "Our Reach",
-      description: "Comprehensive network covering all 36 Nigerian states with local expertise, strategic partnerships, and deep understanding of Nigerian markets."
-    }
-  ]
+  const iconMap = { Target, Heart, Award, Globe }
+  const values = aboutData.whatDrivesUs.values.map(v => ({
+    ...v,
+    icon: iconMap[v.icon] || Target
+  }))
 
   return (
     <section className="py-20 bg-gray-50">
@@ -36,10 +20,10 @@ export default function AboutValues() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl font-heading text-gray-900 mb-6">
-            What Drives Us
+            {aboutData.whatDrivesUs.title}
           </h2>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-            Our core values and principles that guide every decision and shape our company culture
+            {aboutData.whatDrivesUs.description}
           </p>
         </motion.div>
 
@@ -75,7 +59,7 @@ export default function AboutValues() {
         {/* Desktop: Diagonal Layout */}
         <div className="hidden md:block relative max-w-7xl mx-auto h-[600px] lg:h-[800px]">
           {/* Diagonal Background */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -95,7 +79,7 @@ export default function AboutValues() {
             whileHover={{ scale: 1.03, y: -5, transition: { duration: 0.3 } }}
             className="absolute top-0 left-0 w-[45%] h-[35%] bg-gradient-to-br from-blue-50 to-white rounded-3xl p-6 lg:p-8 shadow-xl hover:shadow-2xl border border-gray-100 transition-shadow"
           >
-            <motion.div 
+            <motion.div
               initial={{ rotate: -180, scale: 0 }}
               whileInView={{ rotate: 0, scale: 1 }}
               viewport={{ once: true }}
