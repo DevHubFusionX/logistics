@@ -1,7 +1,8 @@
 import { Package, MapPin, Clock, Eye, Download, Info, Edit, X, CreditCard, Truck, Phone, User } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { getStatusBadge, getStatusText } from '../../utils/bookingUtils'
 
-export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, getStatusBadge, getStatusText }) {
+export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow }) {
   const navigate = useNavigate()
 
   return (

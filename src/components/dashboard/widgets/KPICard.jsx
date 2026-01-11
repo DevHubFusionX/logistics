@@ -31,7 +31,7 @@ function KPICard({
       
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wide">{title}</h3>
-        {change !== undefined && (
+        {change !== undefined && change !== 0 && (
           <span className={`text-xs font-bold ${change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
             {change >= 0 ? '↑' : '↓'}{Math.abs(change)}%
           </span>

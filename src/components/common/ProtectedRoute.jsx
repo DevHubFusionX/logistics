@@ -3,7 +3,7 @@ import { useAuth } from '../../hooks'
 
 export default function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
-  
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -11,10 +11,10 @@ export default function ProtectedRoute({ children }) {
       </div>
     )
   }
-  
+
   if (!user) {
     return <Navigate to="/auth/login" replace />
   }
-  
+
   return children
 }

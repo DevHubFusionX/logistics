@@ -4,6 +4,7 @@ import { Navbar, Footer, LoadingScreen } from './components/common'
 import AppRoutes from './routes/AppRoutes'
 import { AuthProvider } from './hooks'
 import { Toaster } from 'react-hot-toast'
+import './utils/devTools' // Import dev tools for development
 
 function AppContent() {
   const location = useLocation()

@@ -116,7 +116,7 @@ export default function AppRoutes() {
 
 
         {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<Navigate to="/my-bookings" replace />} />
+        <Route path="/dashboard" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
         <Route path="/dashboard/overview" element={<DashboardRoute><Dashboard /></DashboardRoute>} />
         <Route path="/shipments" element={<DashboardRoute><Shipments /></DashboardRoute>} />
         <Route path="/shipments/*" element={<DashboardRoute><Shipments /></DashboardRoute>} />

@@ -4,16 +4,15 @@ import { KPI_DATA } from '../../../constants/mockData'
 export default function KPIRibbon({ onKPIClick }) {
   return (
     <div className="overflow-hidden">
-      {/* Mobile: Horizontal Scroll */}
+      {/* Mobile: Grid Layout */}
       <div className="sm:hidden">
-        <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="grid grid-cols-2 gap-3">
           {KPI_DATA.map((kpi) => (
-            <div key={kpi.id} className="flex-shrink-0 w-60">
-              <KPICard
-                {...kpi}
-                onClick={() => onKPIClick(kpi.id)}
-              />
-            </div>
+            <KPICard
+              key={kpi.id}
+              {...kpi}
+              onClick={() => onKPIClick(kpi.id)}
+            />
           ))}
         </div>
       </div>

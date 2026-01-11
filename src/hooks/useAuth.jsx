@@ -18,6 +18,15 @@ export const AuthProvider = ({ children }) => {
   })
   const [loading, setLoading] = useState(true)
 
+  // Persist user changes to localStorage
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user))
+    } else {
+      localStorage.removeItem('user')
+    }
+  }, [user])
+
   useEffect(() => {
     const initAuth = async () => {
       const token = localStorage.getItem('token')
@@ -26,7 +35,6 @@ export const AuthProvider = ({ children }) => {
           const response = await authService.getProfile()
           if (response.data?.user) {
             setUser(response.data.user)
-            localStorage.setItem('user', JSON.stringify(response.data.user))
           }
         } catch (err) {
           console.error('Failed to fetch profile:', err)
@@ -75,6 +83,13 @@ export const AuthProvider = ({ children }) => {
     return allowedRoles.includes(userRole)
   }
 
+  const updateUserRole = (newRole) => {
+    if (user) {
+      const updatedUser = { ...user, role: newRole }
+      setUser(updatedUser)
+    }
+  }
+
   const value = {
     user,
     setUser,
@@ -82,7 +97,8 @@ export const AuthProvider = ({ children }) => {
     register,
     logout,
     loading,
-    hasPermission
+    hasPermission,
+    updateUserRole
   }
 
   return (

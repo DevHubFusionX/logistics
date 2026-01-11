@@ -85,8 +85,6 @@ export default function MyBookings() {
               onEdit={setEditBooking}
               onCancel={setCancelBookingModal}
               onPayNow={handlePayNow}
-              getStatusBadge={getStatusBadge}
-              getStatusText={getStatusText}
             />
           ))}
         </div>

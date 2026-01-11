@@ -15,6 +15,15 @@ export const AuthProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null
   })
 
+  // Persist user changes to localStorage
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('user', JSON.stringify(user))
+    } else {
+      localStorage.removeItem('user')
+    }
+  }, [user])
+
   const register = async (userData) => {
     const response = await authService.register(userData)
     if (response.data?.user) {
@@ -43,8 +52,23 @@ export const AuthProvider = ({ children }) => {
     return allowedRoles.includes(user.role)
   }
 
+  const updateUserRole = (newRole) => {
+    if (user) {
+      const updatedUser = { ...user, role: newRole }
+      setUser(updatedUser)
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, setUser, register, login, logout, hasPermission }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      setUser, 
+      register, 
+      login, 
+      logout, 
+      hasPermission, 
+      updateUserRole 
+    }}>
       {children}
     </AuthContext.Provider>
   )

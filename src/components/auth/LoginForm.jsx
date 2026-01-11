@@ -44,14 +44,14 @@ export default function LoginForm() {
 
     try {
       const response = await login(formData)
-      
+
       if (response.data?.token) {
         if (rememberMe) {
           localStorage.setItem('rememberMe', 'true')
         } else {
           localStorage.removeItem('rememberMe')
         }
-        
+
         setError('')
         showToast.success('Login successful', 'Redirecting to dashboard...')
         setTimeout(() => {
@@ -95,7 +95,7 @@ export default function LoginForm() {
       </motion.div>
 
       {error && (
-        <motion.div 
+        <motion.div
           className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-2"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -121,9 +121,8 @@ export default function LoginForm() {
                 setFormData({ ...formData, email: e.target.value })
                 setFieldErrors({ ...fieldErrors, email: '' })
               }}
-              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${
-                fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Enter your email address"
               required
             />
@@ -148,9 +147,8 @@ export default function LoginForm() {
                 setFormData({ ...formData, password: e.target.value })
                 setFieldErrors({ ...fieldErrors, password: '' })
               }}
-              className={`w-full pl-10 pr-12 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${
-                fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-12 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Enter your password"
               required
             />
@@ -171,11 +169,11 @@ export default function LoginForm() {
           transition={{ delay: 0.5 }}
         >
           <label className="flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={rememberMe}
               onChange={(e) => setRememberMe(e.target.checked)}
-              className="rounded border-gray-300 text-sky-500 focus:ring-sky-500" 
+              className="rounded border-gray-300 text-sky-500 focus:ring-sky-500"
             />
             <span className="ml-2 text-sm text-gray-600 font-medium">Keep me signed in</span>
           </label>

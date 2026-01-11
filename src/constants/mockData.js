@@ -1,70 +1,89 @@
 // Home Page Data - Moved to src/components/landing/Data.jsx
 
-// KPI Data
+// KPI Data - Cold-Chain Focused Metrics
 export const KPI_DATA = [
+  // Revenue / Earnings
   {
-    id: 'active_trucks',
-    title: 'Active Trucks',
-    value: '48',
-    change: 8.3,
-    period: '24h',
-    sparklineData: [42, 44, 46, 45, 47, 49, 48],
+    id: 'revenue_last_month',
+    title: 'Net Revenue (Last Month)',
+    value: '₦2,190,000',
+    change: 0,
+    period: 'vs prev month',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    color: 'green'
+  },
+  {
+    id: 'revenue_last_week',
+    title: 'Net Revenue (Last Week)',
+    value: '₦520,000',
+    change: 0,
+    period: 'vs prev week',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    color: 'green'
+  },
+  {
+    id: 'revenue_this_month',
+    title: 'Net Revenue (MTD)',
+    value: '₦1,050,000',
+    change: 0,
+    period: 'month to date',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    color: 'green'
+  },
+  {
+    id: 'revenue_this_year',
+    title: 'Net Revenue (YTD)',
+    value: '₦6,280,000',
+    change: 0,
+    period: 'year to date',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    color: 'green'
+  },
+  {
+    id: 'total_gmv',
+    title: 'Total GMV',
+    value: '₦41,900,000',
+    change: 0,
+    period: 'billed to clients',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    color: 'green'
+  },
+  // Trips & Fulfillment
+  {
+    id: 'completed_trips',
+    title: 'Cold-Chain Trips Completed',
+    value: '42',
+    change: 0,
+    period: 'total to date',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'blue'
   },
   {
-    id: 'ongoing_trips',
-    title: 'Ongoing Trips',
-    value: '127',
-    change: 5.2,
-    period: '24h',
-    sparklineData: [115, 118, 122, 120, 125, 128, 127],
+    id: 'pending_trips',
+    title: 'Trips Pending/In Progress',
+    value: '4',
+    change: 0,
+    period: 'currently active',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    color: 'orange'
+  },
+  {
+    id: 'trip_timeline',
+    title: 'Trip Timeline',
+    value: 'Real-time',
+    change: 0,
+    period: 'live updates',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'blue'
   },
   {
-    id: 'completed',
-    title: 'Completed Deliveries',
-    value: '1,847',
-    change: 12.4,
-    period: '7d',
-    sparklineData: [1600, 1650, 1700, 1750, 1800, 1820, 1847],
-    color: 'green'
-  },
-  {
-    id: 'failed',
-    title: 'Failed Deliveries',
-    value: '23',
-    change: -15.2,
-    period: '7d',
-    sparklineData: [35, 32, 28, 26, 24, 25, 23],
-    color: 'green'
-  },
-  {
-    id: 'temperature',
-    title: 'Avg Truck Temperature',
-    value: '22.5',
-    unit: '°C',
-    change: 2.1,
-    period: '24h',
-    sparklineData: [21, 21.5, 22, 22.5, 23, 22.8, 22.5],
+    id: 'fleet_map',
+    title: 'Live Fleet Map',
+    value: '6 Trucks',
+    change: 0,
+    period: 'active vehicles',
+    sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'blue'
-  },
-  {
-    id: 'revenue',
-    title: 'Daily Revenue',
-    value: '₦2.4M',
-    change: 18.7,
-    period: '24h',
-    sparklineData: [1.8, 2.0, 2.1, 2.3, 2.2, 2.5, 2.4],
-    color: 'green'
-  },
-  {
-    id: 'alerts',
-    title: 'Active Alerts',
-    value: '8',
-    change: -25.0,
-    period: '24h',
-    sparklineData: [15, 13, 11, 10, 9, 10, 8],
-    color: 'green'
   }
 ]
 
