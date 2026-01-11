@@ -6,7 +6,7 @@ export default function RoleSwitcherRestore() {
 
   useEffect(() => {
     const checkVisibility = () => {
-      const isDev = import.meta.env.DEV || localStorage.getItem('showRoleSwitcher') === 'true'
+      const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development' || localStorage.getItem('showRoleSwitcher') === 'true'
       const isVisible = localStorage.getItem('roleSwitcherVisible') !== 'false'
       setShowRestore(isDev && !isVisible)
     }
@@ -31,7 +31,7 @@ export default function RoleSwitcherRestore() {
     <button
       onClick={handleRestore}
       className="fixed bottom-4 right-4 z-[9998] bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition-colors"
-      title="Show Role Switcher (Ctrl+Shift+R)"
+      title="Show Role Switcher (Ctrl+Shift+R or Triple Tap)"
     >
       <Settings className="w-4 h-4" />
     </button>

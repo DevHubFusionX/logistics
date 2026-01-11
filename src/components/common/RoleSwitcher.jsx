@@ -82,7 +82,7 @@ export default function RoleSwitcher() {
 
   // Show/hide based on environment or localStorage
   useEffect(() => {
-    const isDev = import.meta.env.DEV || localStorage.getItem('showRoleSwitcher') === 'true'
+    const isDev = import.meta.env.DEV || import.meta.env.MODE === 'development' || localStorage.getItem('showRoleSwitcher') === 'true'
     const wasVisible = localStorage.getItem('roleSwitcherVisible') !== 'false'
     setIsVisible(isDev && wasVisible)
   }, [])

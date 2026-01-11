@@ -55,7 +55,7 @@ if (typeof window !== 'undefined') {
     setRole: (role) => setMockUser(role)
   }
   
-  // Keyboard shortcut to show role switcher (Ctrl+Shift+R)
+  // Keyboard shortcut to show role switcher (Ctrl+Shift+R or triple tap on mobile)
   document.addEventListener('keydown', (e) => {
     if (e.ctrlKey && e.shiftKey && e.key === 'R') {
       e.preventDefault()
@@ -63,13 +63,30 @@ if (typeof window !== 'undefined') {
     }
   })
   
+  // Mobile triple tap to show role switcher
+  let tapCount = 0
+  let tapTimer = null
+  document.addEventListener('touchend', (e) => {
+    tapCount++
+    if (tapCount === 1) {
+      tapTimer = setTimeout(() => {
+        tapCount = 0
+      }, 500)
+    } else if (tapCount === 3) {
+      clearTimeout(tapTimer)
+      tapCount = 0
+      showRoleSwitcher()
+    }
+  })
+  
   // Auto-enable in development
-  if (import.meta.env.DEV) {
+  if (import.meta.env.DEV || import.meta.env.MODE === 'development') {
     console.log('🛠️ Dev Tools Available:')
     console.log('- devTools.showRoleSwitcher() - Show role switcher')
     console.log('- devTools.setMockUser(role) - Set mock user with role')
     console.log('- devTools.clearAuth() - Clear all auth data')
     console.log('- Ctrl+Shift+R - Show role switcher (keyboard shortcut)')
+    console.log('- Triple tap anywhere - Show role switcher (mobile)')
     
     // Auto-enable role switcher in dev mode
     if (!localStorage.getItem('showRoleSwitcher')) {
