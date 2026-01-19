@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Menu, X, User, LogOut, LayoutDashboard, Package, MapPin, FileText, CreditCard, HelpCircle, Mail, Phone, Clock } from 'lucide-react'
 import { useAuth } from '../../hooks'
 import { AnimatedLogo } from '.'
+import logo from '../../assets/img/logo/logo.png'
 
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -140,7 +141,7 @@ export default function Navbar() {
             </button>
             <div className="flex items-center gap-3 mb-4">
               <img
-                src="/assets/img/dara-logo.png"
+                src={logo}
                 alt="Dara Express Logo"
                 className="h-8 sm:h-10 w-auto object-contain filter brightness-0 invert"
               />
