@@ -108,7 +108,7 @@ Products of Interest: ${formData.productsOfInterest || 'Not specified'}
                         initial={{ opacity: 0, scale: 0.95, y: 20 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                        className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+                        className="relative w-[calc(100%-1rem)] sm:w-full max-w-md sm:max-w-lg md:max-w-2xl max-h-[85vh] bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col"
                     >
                         {/* Close Button */}
                         <button
