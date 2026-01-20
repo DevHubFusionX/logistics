@@ -41,7 +41,7 @@ export const heroData = {
     ],
     buttons: {
         primary: { text: "Start Shipping Now", link: "/booking/request" },
-        secondary: { text: "Track Shipment", link: "/tracking" }
+        secondary: { text: "Schedule a Demo", link: "/tracking" }
     }
 }
 

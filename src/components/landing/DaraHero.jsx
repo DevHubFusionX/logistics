@@ -4,10 +4,12 @@ import { useState, useEffect } from 'react'
 import { heroData } from './Data'
 import { Button, Badge } from '../ui'
 import { fadeInUp, scaleIn, hoverScale } from '../../utils'
+import { ScheduleDemoModal } from './demo'
 
 export default function DaraHero() {
   const [currentFeature, setCurrentFeature] = useState(0)
   const [currentImage, setCurrentImage] = useState(0)
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
 
   useEffect(() => {
     const featureInterval = setInterval(() => {
@@ -114,7 +116,11 @@ export default function DaraHero() {
                 <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
               </Button>
 
-              <Button to={heroData.buttons.secondary.link} variant="secondary" size="lg">
+              <Button
+                onClick={() => setIsDemoModalOpen(true)}
+                variant="secondary"
+                size="lg"
+              >
                 <Package className="w-5 h-5 sm:w-6 sm:h-6 group-hover:rotate-12 transition-transform" />
                 {heroData.buttons.secondary.text}
               </Button>
@@ -181,6 +187,10 @@ export default function DaraHero() {
       </div>
 
 
+      <ScheduleDemoModal
+        isOpen={isDemoModalOpen}
+        onClose={() => setIsDemoModalOpen(false)}
+      />
     </section>
   )
 }

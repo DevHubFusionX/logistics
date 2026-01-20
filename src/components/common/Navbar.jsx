@@ -3,7 +3,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Menu, X, User, LogOut, LayoutDashboard, Package, MapPin, FileText, CreditCard, HelpCircle, Mail, Phone, Clock } from 'lucide-react'
 import { useAuth } from '../../hooks'
 import { AnimatedLogo } from '.'
-import logo from '../../assets/img/logo/logo.png'
 
 export default function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -140,11 +139,7 @@ export default function Navbar() {
               <X className="w-5 h-5 text-white" />
             </button>
             <div className="flex items-center gap-3 mb-4">
-              <img
-                src={logo}
-                alt="Dara Express Logo"
-                className="h-8 sm:h-10 w-auto object-contain filter brightness-0 invert"
-              />
+              <AnimatedLogo className="h-8 sm:h-10 w-auto brightness-0 invert" />
             </div>
             {user && (
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20">
@@ -338,6 +333,7 @@ export default function Navbar() {
           )}
         </div>
       </div>
+
     </>
   )
 }
