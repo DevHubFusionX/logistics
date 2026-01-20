@@ -91,7 +91,7 @@ export default function Navbar() {
                     Sign In
                   </Link>
                   <Link
-                    to="/booking/request"
+                    to="/auth/signup"
                     className="px-6 py-2.5 text-white rounded-lg text-sm font-bold hover:shadow-lg transition-all"
                     style={{ backgroundColor: '#00843D' }}
                     aria-label="Book a shipment"
