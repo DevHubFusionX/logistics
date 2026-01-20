@@ -27,7 +27,7 @@ export default function VerifyOTP() {
       newOtp[index] = value
       setOtp(newOtp)
       setError('')
-      
+
       // Auto-focus next input
       if (value && index < 5) {
         inputRefs.current[index + 1]?.focus()
@@ -44,7 +44,7 @@ export default function VerifyOTP() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     const otpCode = otp.join('')
-    
+
     // Validation
     if (otpCode.length !== 6) {
       setError('Please enter all 6 digits')
@@ -60,7 +60,7 @@ export default function VerifyOTP() {
       setLoading(false)
       showToast.success('Verification successful', 'Redirecting to dashboard...')
       setTimeout(() => {
-        navigate('/dashboard')
+        navigate('/my-bookings')
       }, 1000)
     }, 2000)
   }
@@ -83,13 +83,13 @@ export default function VerifyOTP() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex items-center justify-center py-12 px-4">
-      <motion.div 
+      <motion.div
         className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <motion.div 
+        <motion.div
           className="text-center mb-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -101,7 +101,7 @@ export default function VerifyOTP() {
           <h2 className="text-2xl font-bold text-gray-800">Verify Your Account</h2>
           <p className="text-gray-600 mt-2">Enter the 6-digit code sent to your email</p>
           {error && (
-            <motion.p 
+            <motion.p
               className="mt-3 text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg"
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -112,7 +112,7 @@ export default function VerifyOTP() {
         </motion.div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <motion.div 
+          <motion.div
             className="flex justify-center gap-3"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -126,9 +126,8 @@ export default function VerifyOTP() {
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-lg focus:border-sky-500 focus:ring-2 focus:ring-sky-200 ${
-                  error ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                }`}
+                className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-lg focus:border-sky-500 focus:ring-2 focus:ring-sky-200 ${error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                  }`}
                 maxLength={1}
                 inputMode="numeric"
                 pattern="[0-9]*"
@@ -136,7 +135,7 @@ export default function VerifyOTP() {
             ))}
           </motion.div>
 
-          <motion.div 
+          <motion.div
             className="text-center"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -179,7 +178,7 @@ export default function VerifyOTP() {
           </motion.button>
         </form>
 
-        <motion.div 
+        <motion.div
           className="mt-6 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

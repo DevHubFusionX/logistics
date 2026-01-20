@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import TopHeader from './TopHeader'
 import Sidebar from './Sidebar'
-import { RoleSwitcher, RoleSwitcherRestore } from '../../common'
 
 export default function AppLayout({ children }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
@@ -69,23 +68,18 @@ export default function AppLayout({ children }) {
         {/* Main Content Area */}
         <main
           id="main-content"
-          className={`flex-1 transition-all duration-300 overflow-y-auto ${
-            isMobile
-              ? 'w-full ml-0'
-              : sidebarCollapsed
-                ? 'ml-[4.5rem]'
-                : 'ml-72'
-          }`}
+          className={`flex-1 transition-all duration-300 overflow-y-auto ${isMobile
+            ? 'w-full ml-0'
+            : sidebarCollapsed
+              ? 'ml-[4.5rem]'
+              : 'ml-72'
+            }`}
         >
           <div className="p-3 sm:p-4 lg:p-6 min-h-full">
             {children}
           </div>
         </main>
       </div>
-
-      {/* Role Switcher for Development */}
-      <RoleSwitcher />
-      <RoleSwitcherRestore />
     </div>
   )
 }

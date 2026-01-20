@@ -12,7 +12,7 @@ export default function BookingConfirmation({ bookingId, estimatedCost, formData
         </div>
         <h3 className="text-xl sm:text-2xl font-bold mb-2">Booking Confirmed!</h3>
         <p className="text-sm sm:text-base text-gray-600 mb-6">Your shipment has been successfully booked</p>
-        
+
         <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 sm:p-6 mb-6 max-w-md mx-auto">
           <p className="text-xs sm:text-sm text-gray-600 mb-1">Booking Reference</p>
           <p className="text-2xl sm:text-3xl font-bold text-blue-600 mb-4 break-all">{bookingId}</p>
@@ -40,7 +40,7 @@ export default function BookingConfirmation({ bookingId, estimatedCost, formData
           <button onClick={() => navigate('/my-bookings')} className="px-4 sm:px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm sm:text-base">
             View My Bookings
           </button>
-          <button onClick={() => navigate('/dashboard')} className="px-4 sm:px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base">
+          <button onClick={() => navigate('/my-bookings')} className="px-4 sm:px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base">
             Back to Dashboard
           </button>
         </div>

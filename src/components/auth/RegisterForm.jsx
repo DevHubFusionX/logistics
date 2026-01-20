@@ -73,13 +73,13 @@ export default function RegisterForm() {
 
     try {
       const response = await register(formData)
-      
+
       if (response.data?.token) {
         setSuccess('Account created successfully! Redirecting to dashboard...')
         setError('')
         showToast.success('Account created', 'Welcome to Dara Logistics!')
         setTimeout(() => {
-          navigate('/dashboard', { 
+          navigate('/my-bookings', {
             state: { message: 'Welcome to Dara Logistics!' }
           })
         }, 1500)
@@ -122,7 +122,7 @@ export default function RegisterForm() {
       </motion.div>
 
       {error && (
-        <motion.div 
+        <motion.div
           className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-2"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export default function RegisterForm() {
       )}
 
       {success && (
-        <motion.div 
+        <motion.div
           className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-600 text-sm flex items-center gap-2"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -156,9 +156,8 @@ export default function RegisterForm() {
                   setFormData({ ...formData, firstName: e.target.value })
                   setFieldErrors({ ...fieldErrors, firstName: '' })
                 }}
-                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                  fieldErrors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                }`}
+                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                  }`}
                 placeholder="First name"
                 required
               />
@@ -178,9 +177,8 @@ export default function RegisterForm() {
                   setFormData({ ...formData, lastName: e.target.value })
                   setFieldErrors({ ...fieldErrors, lastName: '' })
                 }}
-                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                  fieldErrors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-300'
-                }`}
+                className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                  }`}
                 placeholder="Last name"
                 required
               />
@@ -202,9 +200,8 @@ export default function RegisterForm() {
                 setFormData({ ...formData, email: e.target.value })
                 setFieldErrors({ ...fieldErrors, email: '' })
               }}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Enter your business email"
               required
             />
@@ -225,9 +222,8 @@ export default function RegisterForm() {
                 setFormData({ ...formData, phoneNumber: e.target.value })
                 setFieldErrors({ ...fieldErrors, phoneNumber: '' })
               }}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                fieldErrors.phoneNumber ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.phoneNumber ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Enter phone number"
               required
             />
@@ -248,9 +244,8 @@ export default function RegisterForm() {
                 setFormData({ ...formData, companyName: e.target.value })
                 setFieldErrors({ ...fieldErrors, companyName: '' })
               }}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                fieldErrors.companyName ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.companyName ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Your company name"
               required
             />
@@ -271,9 +266,8 @@ export default function RegisterForm() {
                 setFormData({ ...formData, address: e.target.value })
                 setFieldErrors({ ...fieldErrors, address: '' })
               }}
-              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                fieldErrors.address ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.address ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Your address"
               required
             />
@@ -294,9 +288,8 @@ export default function RegisterForm() {
                 handlePasswordChange(e.target.value)
                 setFieldErrors({ ...fieldErrors, password: '' })
               }}
-              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${
-                fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-12 py-3 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent ${fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="Create password"
               required
             />
@@ -316,24 +309,22 @@ export default function RegisterForm() {
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs text-gray-600">Password strength:</span>
                 <div className="flex gap-1">
-                  {[1,2,3,4,5].map((level) => (
-                    <div 
+                  {[1, 2, 3, 4, 5].map((level) => (
+                    <div
                       key={level}
-                      className={`w-4 h-1 rounded-full ${
-                        passwordStrength >= level 
-                          ? passwordStrength <= 2 ? 'bg-red-400' 
-                            : passwordStrength <= 3 ? 'bg-yellow-400' 
-                            : 'bg-green-400'
+                      className={`w-4 h-1 rounded-full ${passwordStrength >= level
+                          ? passwordStrength <= 2 ? 'bg-red-400'
+                            : passwordStrength <= 3 ? 'bg-yellow-400'
+                              : 'bg-green-400'
                           : 'bg-gray-200'
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
-                <span className={`text-xs ${
-                  passwordStrength <= 2 ? 'text-red-500' 
-                    : passwordStrength <= 3 ? 'text-yellow-500' 
-                    : 'text-green-500'
-                }`}>
+                <span className={`text-xs ${passwordStrength <= 2 ? 'text-red-500'
+                    : passwordStrength <= 3 ? 'text-yellow-500'
+                      : 'text-green-500'
+                  }`}>
                   {passwordStrength <= 2 ? 'Weak' : passwordStrength <= 3 ? 'Medium' : 'Strong'}
                 </span>
               </div>

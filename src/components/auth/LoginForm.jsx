@@ -55,7 +55,7 @@ export default function LoginForm() {
         setError('')
         showToast.success('Login successful', 'Redirecting to dashboard...')
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate('/my-bookings')
         }, 500)
       } else {
         setError('Invalid credentials. Please check your email and password.')

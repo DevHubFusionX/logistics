@@ -6,7 +6,7 @@ const AuthContext = createContext()
 export const useAuth = () => {
   const context = useContext(AuthContext)
   if (!context) {
-    return { user: null, loading: false, login: () => {}, register: () => {}, logout: () => {}, hasPermission: () => true, setUser: () => {} }
+    return { user: null, loading: false, login: () => { }, register: () => { }, logout: () => { }, hasPermission: () => true, setUser: () => { } }
   }
   return context
 }
@@ -79,7 +79,8 @@ export const AuthProvider = ({ children }) => {
 
   const hasPermission = (allowedRoles) => {
     if (!allowedRoles || allowedRoles.length === 0) return true
-    const userRole = user?.role || 'Customer'
+    // Temporarily disabled admin roles - all users treated as Customer
+    const userRole = 'Customer' // Original: user?.role || 'Customer'
     return allowedRoles.includes(userRole)
   }
 

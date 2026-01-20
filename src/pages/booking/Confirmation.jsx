@@ -15,7 +15,7 @@ export default function Confirmation() {
     if (bookingId && bookingData?.email) {
       notificationService.sendBookingConfirmation(bookingId, bookingData.email)
         .catch(err => console.error('Failed to send confirmation email:', err))
-      
+
       if (bookingData?.contactPhone) {
         notificationService.sendBookingSMS(bookingId, bookingData.contactPhone)
           .catch(err => console.error('Failed to send SMS:', err))
@@ -141,12 +141,12 @@ export default function Confirmation() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <ReceiptDownload 
-            paymentId={paymentId} 
+          <ReceiptDownload
+            paymentId={paymentId}
             email={bookingData.email}
             type="receipt"
           />
-          <InvoiceGenerator 
+          <InvoiceGenerator
             bookingId={bookingId}
             email={bookingData.email}
           />
@@ -159,7 +159,7 @@ export default function Confirmation() {
         </div>
 
         <div className="flex justify-center gap-4">
-          <button onClick={() => navigate('/dashboard')} className="flex items-center gap-2 px-6 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium">
+          <button onClick={() => navigate('/my-bookings')} className="flex items-center gap-2 px-6 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium">
             <Home className="w-5 h-5" />
             Go to Dashboard
           </button>

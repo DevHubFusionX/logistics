@@ -61,7 +61,7 @@ export default function Navbar() {
               {user ? (
                 <>
                   <Link
-                    to="/dashboard"
+                    to="/my-bookings"
                     className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-primary rounded-lg hover:bg-gray-50 transition-all"
                   >
                     <LayoutDashboard className="w-4 h-4" />
@@ -178,7 +178,7 @@ export default function Navbar() {
                 <div className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2 px-2">Main Menu</div>
                 <div className="space-y-1">
                   <Link
-                    to="/dashboard"
+                    to="/my-bookings"
                     className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-white hover:shadow-sm transition-all"
                   >
                     <LayoutDashboard className="w-4 h-4 text-primary" />

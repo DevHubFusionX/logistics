@@ -1,6 +1,6 @@
-import { 
-  Home, Package, Truck, Map, Warehouse, ShoppingCart, Users, 
-  UserCheck, BarChart3, AlertTriangle, Clipboard, Puzzle, 
+import {
+  Home, Package, Truck, Map, Warehouse, ShoppingCart, Users,
+  UserCheck, BarChart3, AlertTriangle, Clipboard, Puzzle,
   Settings, HelpCircle, Thermometer, CreditCard, MapPin, FileText, DollarSign, ClipboardList, Navigation, Info, BookOpen, MessageSquare, TrendingUp
 } from 'lucide-react'
 
@@ -10,12 +10,12 @@ export const NAVIGATION_SECTIONS = [
     items: [
       {
         id: 'overview',
-        label: 'Overview',
+        label: 'Dashboard',
         icon: Home,
-        path: '/dashboard',
-        description: 'Dashboard & insights',
+        path: '/my-bookings',
+        description: 'Your shipping dashboard',
         color: 'blue',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Finance', 'Support']
+        roles: ['Customer']
       },
       {
         id: 'my-bookings',

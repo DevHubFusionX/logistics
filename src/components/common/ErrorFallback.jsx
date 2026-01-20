@@ -6,7 +6,7 @@ export default function ErrorFallback({ error, onRetry, onReset }) {
   const navigate = useNavigate()
   const errorCode = getErrorCode(error)
   const message = getUserFriendlyMessage(error)
-  
+
   const isNetworkError = [
     ERROR_CODES.NETWORK_ERROR,
     ERROR_CODES.CONNECTION_LOST,
@@ -23,13 +23,13 @@ export default function ErrorFallback({ error, onRetry, onReset }) {
             <AlertTriangle className="w-8 h-8 text-red-600" />
           )}
         </div>
-        
+
         <h2 className="text-xl font-bold text-gray-900 mb-2">
           {isNetworkError ? 'Connection Problem' : 'Something Went Wrong'}
         </h2>
-        
+
         <p className="text-gray-600 mb-6">{message}</p>
-        
+
         {import.meta.env.DEV && error.message && (
           <div className="bg-gray-100 rounded-lg p-3 mb-6 text-left">
             <p className="text-xs font-mono text-gray-700 break-all">
@@ -37,7 +37,7 @@ export default function ErrorFallback({ error, onRetry, onReset }) {
             </p>
           </div>
         )}
-        
+
         <div className="flex flex-col sm:flex-row gap-3">
           {onRetry && (
             <button
@@ -48,7 +48,7 @@ export default function ErrorFallback({ error, onRetry, onReset }) {
               Try Again
             </button>
           )}
-          
+
           {onReset && (
             <button
               onClick={onReset}
@@ -57,9 +57,9 @@ export default function ErrorFallback({ error, onRetry, onReset }) {
               Reset
             </button>
           )}
-          
+
           <button
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/my-bookings')}
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
             <Home className="w-4 h-4" />
