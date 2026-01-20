@@ -57,8 +57,8 @@ export default function DaraAbout() {
         <div className="grid lg:grid-cols-2 gap-20 items-center mb-24">
           {/* Story Narrative */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="space-y-8"
@@ -70,10 +70,10 @@ export default function DaraAbout() {
                 return (
                   <motion.div
                     key={index}
-                    initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.7, delay: 0.2 + (index * 0.2) }}
-                    viewport={{ once: true }}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.1 + (index * 0.15) }}
+                    viewport={{ once: true, margin: "-50px" }}
                     className="flex gap-4"
                   >
                     <motion.div
@@ -119,8 +119,8 @@ export default function DaraAbout() {
 
           {/* Visual Story & Stats */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
             viewport={{ once: true }}
             className="space-y-6"
@@ -151,18 +151,18 @@ export default function DaraAbout() {
                 className="absolute bottom-8 left-8 right-8 text-white"
               >
                 <motion.blockquote
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 1.0 }}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.9 }}
                   viewport={{ once: true }}
-                  className="text-lg font-medium italic mb-3"
+                  className="text-base sm:text-lg font-medium italic mb-3"
                 >
                   "{aboutData.quote.text}"
                 </motion.blockquote>
                 <motion.cite
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 1.2 }}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 1.0 }}
                   viewport={{ once: true }}
                   className="text-sm opacity-90 font-semibold"
                 >
@@ -193,8 +193,8 @@ export default function DaraAbout() {
                     {stat.value === 'TrendingUp' ? <TrendingUp className="w-8 h-8" /> : stat.value}
                   </motion.div>
                   <motion.div
-                    initial={{ opacity: 0, x: index === 0 ? -10 : 10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, delay: 1.0 + (index * 0.2) }}
                     viewport={{ once: true }}
                     className="text-sm font-semibold text-gray-700"
