@@ -72,6 +72,7 @@ const Team = lazy(() => import('../pages/public/Team'))
 const Blog = lazy(() => import('../pages/public/Blog'))
 const Contact = lazy(() => import('../pages/public/Contact'))
 const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'))
+const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
 const VerifyOTP = lazy(() => import('../pages/auth/VerifyOTP'))
 
 export default function AppRoutes() {
@@ -96,6 +97,7 @@ export default function AppRoutes() {
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+          <Route path="/auth/reset-password" element={<ResetPassword />} />
           <Route path="/auth/verify-otp" element={<VerifyOTP />} />
         </Route>
 

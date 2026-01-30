@@ -17,46 +17,46 @@ export default function User() {
   const [activeTab, setActiveTab] = useState('profile')
 
   return (
-    <div className="space-y-8 pb-10">
+    <div className="space-y-6 lg:space-y-8 pb-10">
       <PageHeader
         title="Account Configuration"
         subtitle="Manage your global identity, security protocols, and system preferences"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-8 items-start">
         {/* Navigation Sidebar */}
-        <div className="lg:col-span-4 xl:col-span-3 space-y-3 sticky top-24">
-          <div className="bg-white/70 backdrop-blur-md rounded-3xl border border-gray-100 p-3 shadow-sm">
-            <nav className="flex flex-col gap-1">
+        <div className="w-full lg:col-span-4 xl:col-span-3 space-y-4 lg:sticky lg:top-24">
+          <div className="bg-white/70 backdrop-blur-md rounded-[2rem] lg:rounded-3xl border border-gray-100 p-2 lg:p-3 shadow-sm overflow-hidden">
+            <nav className="flex flex-row lg:flex-col gap-1 overflow-x-auto lg:overflow-x-visible no-scrollbar pb-1 lg:pb-0">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-start gap-4 p-4 rounded-2xl transition-all duration-300 group ${activeTab === tab.id
-                      ? 'bg-blue-600 text-white shadow-xl shadow-blue-100'
-                      : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+                  className={`flex flex-col lg:flex-row items-center lg:items-start gap-2 lg:gap-4 p-3 lg:p-4 rounded-2xl transition-all duration-300 group shrink-0 min-w-[100px] lg:min-w-0 ${activeTab === tab.id
+                    ? 'bg-blue-600 text-white shadow-xl shadow-blue-100'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
                     }`}
                 >
                   <div className={`p-2 rounded-xl transition-colors ${activeTab === tab.id ? 'bg-white/20' : 'bg-gray-100 text-gray-400 group-hover:text-blue-600'
                     }`}>
-                    <tab.icon className="w-5 h-5" />
+                    <tab.icon className="w-4 h-4 lg:w-5 lg:h-5" />
                   </div>
-                  <div className="text-left flex-1 min-w-0">
-                    <p className={`text-sm font-bold truncate ${activeTab === tab.id ? 'text-white' : 'text-gray-900'}`}>
+                  <div className="text-center lg:text-left flex-1 min-w-0">
+                    <p className={`text-[10px] lg:text-sm font-bold truncate ${activeTab === tab.id ? 'text-white' : 'text-gray-900'}`}>
                       {tab.label}
                     </p>
-                    <p className={`text-[10px] font-medium leading-tight mt-0.5 line-clamp-1 ${activeTab === tab.id ? 'text-blue-100' : 'text-gray-400'
+                    <p className={`hidden lg:block text-[10px] font-medium leading-tight mt-0.5 line-clamp-1 ${activeTab === tab.id ? 'text-blue-100' : 'text-gray-400'
                       }`}>
                       {tab.description}
                     </p>
                   </div>
-                  {activeTab === tab.id && <ChevronRight className="w-4 h-4 text-blue-100 self-center" />}
+                  {activeTab === tab.id && <ChevronRight className="hidden lg:block w-4 h-4 text-blue-100 self-center" />}
                 </button>
               ))}
             </nav>
           </div>
 
-          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-3xl p-6 border border-indigo-100 relative overflow-hidden group">
+          <div className="hidden lg:block bg-gradient-to-br from-indigo-50 to-blue-50 rounded-3xl p-6 border border-indigo-100 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-12 -mt-12 blur-2xl group-hover:scale-110 transition-transform duration-500" />
             <div className="relative z-10">
               <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-sm mb-4">
@@ -72,8 +72,8 @@ export default function User() {
         </div>
 
         {/* Content Area */}
-        <div className="lg:col-span-8 xl:col-span-9 animate-in fade-in slide-in-from-right-4 duration-500">
-          <div className="bg-white/50 backdrop-blur-sm rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
+        <div className="w-full lg:col-span-8 xl:col-span-9 animate-in fade-in slide-in-from-right-4 lg:slide-in-from-right-4 duration-500">
+          <div className="bg-white/50 backdrop-blur-sm rounded-[2rem] lg:rounded-[2.5rem] border border-gray-100 shadow-sm overflow-hidden">
             {activeTab === 'profile' && <ProfileSection />}
             {activeTab === 'security' && <SecuritySection />}
             {activeTab === 'notifications' && <NotificationSettings />}

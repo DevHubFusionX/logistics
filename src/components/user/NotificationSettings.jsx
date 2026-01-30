@@ -45,30 +45,30 @@ export default function NotificationSettings() {
   return (
     <div className="divide-y divide-gray-100">
       {/* Channels Section */}
-      <div className="p-8 lg:p-10">
-        <div className="flex items-center gap-3 mb-8">
+      <div className="p-6 lg:p-10">
+        <div className="flex items-center gap-3 mb-6 lg:mb-8">
           <Smartphone className="w-5 h-5 text-blue-600" />
           <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Communication Channels</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
           <NotificationToggle
             label="Email Dispatch"
-            description="Authoritative updates via enterprise email."
+            description="Enterprise email updates."
             enabled={settings.emailNotifications}
             onToggle={() => toggleSetting('emailNotifications')}
             icon={Mail}
           />
           <NotificationToggle
             label="Real-time Push"
-            description="Browser-level system notifications."
+            description="System notifications."
             enabled={settings.pushNotifications}
             onToggle={() => toggleSetting('pushNotifications')}
             icon={Bell}
           />
           <NotificationToggle
             label="Secure SMS"
-            description="Critical alerts via mobile network."
+            description="Critical mobile alerts."
             enabled={settings.smsNotifications}
             onToggle={() => toggleSetting('smsNotifications')}
             icon={MessageSquare}
@@ -77,30 +77,30 @@ export default function NotificationSettings() {
       </div>
 
       {/* Intelligence Section */}
-      <div className="p-8 lg:p-10">
-        <div className="flex items-center gap-3 mb-8">
+      <div className="p-6 lg:p-10">
+        <div className="flex items-center gap-3 mb-6 lg:mb-8">
           <Truck className="w-5 h-5 text-indigo-600" />
           <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Operational Intelligence</span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:gap-4">
           <NotificationToggle
             label="Logistics Heartbeat"
-            description="Status changes in the supply chain."
+            description="Supply chain changes."
             enabled={settings.shipmentUpdates}
             onToggle={() => toggleSetting('shipmentUpdates')}
             icon={Truck}
           />
           <NotificationToggle
             label="System Audit"
-            description="Confirmations for all fiscal events."
+            description="Fiscal event confirmations."
             enabled={settings.orderConfirmations}
             onToggle={() => toggleSetting('orderConfirmations')}
             icon={Shield}
           />
           <NotificationToggle
             label="Analytic Digests"
-            description="Weekly performance synchronization."
+            description="Performance synchronization."
             enabled={settings.weeklyReports}
             onToggle={() => toggleSetting('weeklyReports')}
             icon={Zap}

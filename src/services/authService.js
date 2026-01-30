@@ -51,8 +51,8 @@ export default {
     body: JSON.stringify({ email })
   }),
 
-  resetPassword: (token, password) => httpClient.request('/auth/reset-password', {
+  resetPassword: (token_hash, password) => httpClient.request('/auth/reset-password', {
     method: 'POST',
-    body: JSON.stringify({ token, password })
+    body: JSON.stringify({ token_hash, password })
   })
 }

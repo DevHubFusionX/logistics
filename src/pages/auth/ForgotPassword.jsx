@@ -4,6 +4,7 @@ import { Mail, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import AuthLayout from '../../components/auth/AuthLayout'
 import { useToast } from '../../components/ui/advanced'
+import authService from '../../services/authService'
 
 function ForgotPasswordForm() {
   const { showToast, ToastContainer } = useToast()
@@ -29,13 +30,22 @@ function ForgotPasswordForm() {
     }
 
     setLoading(true)
-    
-    // Simulate API call
-    setTimeout(() => {
+
+    try {
+      const response = await authService.forgotPassword(email)
+
+      if (response.status === 200) {
+        setSent(true)
+        showToast.success('Email sent', 'Check your inbox for reset instructions')
+      } else {
+        throw new Error(response.data?.message || 'Failed to send reset link')
+      }
+    } catch (err) {
+      setError(err.message || 'An error occurred. Please try again.')
+      showToast.error('Request failed', err.message)
+    } finally {
       setLoading(false)
-      setSent(true)
-      showToast.success('Email sent', 'Check your inbox for reset instructions')
-    }, 2000)
+    }
   }
 
   if (sent) {
@@ -88,9 +98,8 @@ function ForgotPasswordForm() {
                 setEmail(e.target.value)
                 setError('')
               }}
-              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg ${
-                error ? 'border-red-300 bg-red-50' : 'border-gray-300'
-              }`}
+              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg ${error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                }`}
               placeholder="your.email@company.com"
               required
             />
@@ -127,7 +136,7 @@ function ForgotPasswordForm() {
 
 export default function ForgotPassword() {
   return (
-    <AuthLayout 
+    <AuthLayout
       title="Reset Your Password"
       subtitle="Don't worry, we'll help you get back into your account quickly and securely."
     >
