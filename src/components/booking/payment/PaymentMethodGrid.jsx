@@ -1,14 +1,12 @@
-import { CreditCard, Truck, Wallet, Building2, Banknote } from 'lucide-react'
+import { CreditCard, Building2, Banknote } from 'lucide-react'
 import PaymentMethodButton from './PaymentMethodButton'
 import { PAYMENT_METHODS } from '../../../utils/paymentValidation'
 
 export default function PaymentMethodGrid({ selectedMethod, onMethodChange }) {
   const methods = [
-    { id: PAYMENT_METHODS.CARD, icon: CreditCard, title: 'Card Payment', subtitle: 'Pay with Paystack' },
-    { id: PAYMENT_METHODS.WALLET, icon: Wallet, title: 'Wallet', subtitle: 'Pay from balance' },
-    { id: PAYMENT_METHODS.BANK_TRANSFER, icon: Building2, title: 'Bank Transfer', subtitle: 'Upload proof' },
-    { id: PAYMENT_METHODS.CASH, icon: Banknote, title: 'Cash Payment', subtitle: 'Pay on delivery' },
-    { id: PAYMENT_METHODS.PAY_LATER, icon: Truck, title: 'Pay Later', subtitle: 'Invoice payment' }
+    { id: PAYMENT_METHODS.CARD, icon: CreditCard, title: 'Paystack', subtitle: 'Pay securely online' },
+    { id: PAYMENT_METHODS.BANK_TRANSFER, icon: Building2, title: 'Bank Transfer', subtitle: 'Upload payment proof' },
+    { id: PAYMENT_METHODS.CASH, icon: Banknote, title: 'Cash Payment', subtitle: 'Pay on delivery' }
   ]
 
   return (

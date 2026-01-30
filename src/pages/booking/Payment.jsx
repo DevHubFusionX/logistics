@@ -4,13 +4,17 @@ import { CreditCard, CheckCircle, XCircle, ArrowLeft, Loader, DollarSign, Shield
 import { PageHeader } from '../../components/dashboard'
 import toast from 'react-hot-toast'
 import PaystackPayment from '../../components/payments/PaystackPayment'
-import paymentService from '../../services/paymentService'
+import { useInitializePaymentMutation, useVerifyPaymentMutation } from '../../hooks/queries/usePaymentQueries'
 
 export default function Payment() {
   const location = useLocation()
   const navigate = useNavigate()
   const [processing, setProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState(null)
+
+  // TanStack Query mutations
+  const initializePayment = useInitializePaymentMutation()
+  const verifyPayment = useVerifyPaymentMutation()
 
   // Handle URL params for verification
   const queryParams = new URLSearchParams(location.search)
@@ -30,9 +34,8 @@ export default function Payment() {
   const verifyPaymentOnReturn = async () => {
     setProcessing(true)
     try {
-      await paymentService.verifyPayment(bookingId)
+      await verifyPayment.mutateAsync(bookingId)
       setPaymentStatus('success')
-      toast.success('Payment verified successfully!')
       // Clear storage
       localStorage.removeItem('currentBookingId')
 
@@ -43,7 +46,6 @@ export default function Payment() {
       }, 2000)
     } catch (error) {
       console.error(error)
-      // Even if verification fails initially, we show failed state
       setPaymentStatus('failed')
     } finally {
       setProcessing(false)
@@ -63,9 +65,8 @@ export default function Payment() {
   const handlePaymentSuccess = async (reference) => {
     setProcessing(true)
     try {
-      const response = await paymentService.verifyPayment(bookingId)
+      await verifyPayment.mutateAsync(bookingId)
       setPaymentStatus('success')
-      toast.success('Payment verified successfully!')
       setTimeout(() => {
         if (isExistingBooking) {
           navigate('/my-bookings', { state: { paymentSuccess: true } })
@@ -77,7 +78,6 @@ export default function Payment() {
       }, 2000)
     } catch (error) {
       setPaymentStatus('failed')
-      toast.error('Payment verification failed. Please contact support.')
     } finally {
       setProcessing(false)
     }
@@ -181,7 +181,7 @@ export default function Payment() {
                         // Persist bookingId for return
                         if (bookingId) localStorage.setItem('currentBookingId', bookingId)
 
-                        const response = await paymentService.initializePayment(bookingId)
+                        const response = await initializePayment.mutateAsync(bookingId)
                         if (response.data && response.data.authorization_url) {
                           window.location.href = response.data.authorization_url
                         } else {
@@ -197,8 +197,6 @@ export default function Payment() {
                               navigate('/my-bookings')
                             }
                           }, 1000)
-                        } else {
-                          toast.error(error.message || 'Could not initialize payment')
                         }
                         setProcessing(false)
                       }

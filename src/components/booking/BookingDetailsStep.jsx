@@ -1,5 +1,6 @@
-import { User, MapPin, Truck, ArrowLeft } from 'lucide-react'
+import { User, MapPin, Truck, ArrowLeft, Book } from 'lucide-react'
 import { useState } from 'react'
+import AddressBookSelector from './AddressBookSelector'
 
 export default function BookingDetailsStep({ formData, onChange, onNestedChange, onSubmit, onBack, loading }) {
   const [errors, setErrors] = useState({})
@@ -79,6 +80,14 @@ export default function BookingDetailsStep({ formData, onChange, onNestedChange,
           </div>
           <h3 className="text-xl font-bold text-gray-900">Pickup Details</h3>
         </div>
+        <AddressBookSelector
+          currentCity={formData.pickupLocation.city}
+          onSelect={(addr) => {
+            onNestedChange('pickupPerson', 'name', addr.contact_name);
+            onNestedChange('pickupPerson', 'phone', addr.phone);
+            onNestedChange('pickupLocation', 'address', addr.street);
+          }}
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Pickup Person Name</label>
@@ -142,6 +151,14 @@ export default function BookingDetailsStep({ formData, onChange, onNestedChange,
           </div>
           <h3 className="text-xl font-bold text-gray-900">Delivery Details</h3>
         </div>
+        <AddressBookSelector
+          currentCity={formData.dropoffLocation.city}
+          onSelect={(addr) => {
+            onNestedChange('receiverPerson', 'name', addr.contact_name);
+            onNestedChange('receiverPerson', 'phone', addr.phone);
+            onNestedChange('dropoffLocation', 'address', addr.street);
+          }}
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Receiver Name</label>

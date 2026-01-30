@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useState, memo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { NAVIGATION_SECTIONS } from '../../../constants/navigation'
 import { useAuth } from '../../../hooks/useAuth'
@@ -7,7 +7,7 @@ import SidebarHeader from './sidebar/SidebarHeader'
 import SidebarFooter from './sidebar/SidebarFooter'
 import SidebarSection from './sidebar/SidebarSection'
 
-export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
+function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
   const { hasPermission } = useAuth()
   const [expandedItems, setExpandedItems] = useState({ shipments: true })
   const location = useLocation()
@@ -21,12 +21,11 @@ export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
   }
 
   return (
-    <aside 
-      className={`fixed left-0 top-16 bg-white border-r border-gray-200 transition-all duration-300 ${
-        isMobile 
-          ? `z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} w-64 shadow-2xl`
-          : `z-30 ${collapsed ? 'w-16' : 'w-64'}`
-      }`}
+    <aside
+      className={`fixed left-0 top-16 bg-white border-r border-gray-200 transition-all duration-300 ${isMobile
+        ? `z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} w-64 shadow-2xl`
+        : `z-30 ${collapsed ? 'w-16' : 'w-64'}`
+        }`}
       style={{ height: 'calc(100vh - 4rem)' }}
     >
       <div className="h-full flex flex-col bg-gradient-to-b from-gray-50 to-white">
@@ -36,7 +35,7 @@ export default function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
           {NAVIGATION_SECTIONS.map((section) => {
             const visibleItems = { ...section, items: section.items.filter(item => hasPermission(item.roles)) }
             if (visibleItems.items.length === 0) return null
-            
+
             return (
               <SidebarSection
                 key={section.title}
@@ -62,3 +61,5 @@ Sidebar.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func
 }
+
+export default memo(Sidebar)

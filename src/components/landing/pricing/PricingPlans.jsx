@@ -25,7 +25,7 @@ export default function PricingPlans({ plans, billingCycle }) {
           {plans.map((plan, index) => {
             const Icon = plan.icon
             const price = billingCycle === 'monthly' ? plan.monthlyPrice : plan.annualPrice
-            
+
             return (
               <motion.div
                 key={index}
@@ -33,11 +33,10 @@ export default function PricingPlans({ plans, billingCycle }) {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
-                className={`bg-white rounded-3xl p-8 border-2 transition-all duration-300 hover:shadow-2xl relative ${
-                  plan.popular
+                className={`bg-white rounded-3xl p-8 border-2 transition-all duration-300 hover:shadow-2xl relative ${plan.popular
                     ? 'border-primary shadow-xl scale-105'
                     : 'border-gray-200 hover:border-primary/30'
-                }`}
+                  }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
@@ -88,11 +87,10 @@ export default function PricingPlans({ plans, billingCycle }) {
 
                 <Link
                   to={plan.name === 'Enterprise' ? '/contact' : '/booking/request'}
-                  className={`block w-full py-4 rounded-xl font-bold text-center transition-all duration-300 ${
-                    plan.popular
+                  className={`block w-full py-4 rounded-xl font-bold text-center transition-all duration-300 ${plan.popular
                       ? 'text-white shadow-lg hover:shadow-xl'
                       : 'border-2 border-gray-300 text-gray-700 hover:border-primary hover:text-primary hover:bg-blue-50'
-                  }`}
+                    }`}
                   style={plan.popular ? { backgroundColor: '#00843D' } : {}}
                 >
                   {plan.name === 'Enterprise' ? 'Contact Sales' : 'Start Free Trial'}

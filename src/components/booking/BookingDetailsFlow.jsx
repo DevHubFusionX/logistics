@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { User, MapPin, Truck, ArrowLeft, ArrowRight } from 'lucide-react'
 import FormSection from './FormSection'
 import FormInput from './FormInput'
+import AddressBookSelector from './AddressBookSelector'
 
 export default function BookingDetailsFlow({ formData, onChange, onNestedChange, onSubmit, onBack, loading }) {
   const [subStep, setSubStep] = useState(1)
@@ -91,6 +92,15 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
 
       {subStep === 2 && (
         <FormSection icon={MapPin} title="Pickup Details" colorScheme="green">
+          <AddressBookSelector
+            currentCity={formData.pickupLocation.city}
+            onSelect={(addr) => {
+              onNestedChange('pickupPerson', 'name', addr.contact_name);
+              onNestedChange('pickupPerson', 'phone', addr.phone);
+              onNestedChange('pickupLocation', 'address', addr.street);
+              // You can also sync city if needed, but Step 1 usually locks it
+            }}
+          />
           <FormInput
             label="Pickup Person Name"
             value={formData.pickupPerson.name}
@@ -131,6 +141,14 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
 
       {subStep === 3 && (
         <FormSection icon={Truck} title="Delivery Details" colorScheme="orange">
+          <AddressBookSelector
+            currentCity={formData.dropoffLocation.city}
+            onSelect={(addr) => {
+              onNestedChange('receiverPerson', 'name', addr.contact_name);
+              onNestedChange('receiverPerson', 'phone', addr.phone);
+              onNestedChange('dropoffLocation', 'address', addr.street);
+            }}
+          />
           <FormInput
             label="Receiver Name"
             value={formData.receiverPerson.name}

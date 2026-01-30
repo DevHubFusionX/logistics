@@ -1,29 +1,13 @@
 import { useParams, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 import { Download, Printer, ArrowLeft, CheckCircle } from 'lucide-react'
-import bookingService from '../../services/bookingService'
+import { useBookingQuery } from '../../hooks/queries/useBookingQueries'
 import { calculateBookingPrice } from '../../utils/bookingUtils'
 
 export default function Invoice() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const [booking, setBooking] = useState(null)
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    fetchBooking()
-  }, [id])
-
-  const fetchBooking = async () => {
-    try {
-      const response = await bookingService.getBookingById(id)
-      setBooking(response.data || response)
-    } catch (error) {
-      console.error('Error fetching booking:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data: booking, isLoading: loading } = useBookingQuery(id)
 
   const handlePrint = () => window.print()
 

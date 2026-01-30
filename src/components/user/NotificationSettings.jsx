@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Bell, Mail, MessageSquare, Truck } from 'lucide-react'
+import { Bell, Mail, MessageSquare, Truck, Shield, Zap, Smartphone } from 'lucide-react'
 
 export default function NotificationSettings() {
   const [settings, setSettings] = useState({
@@ -16,87 +16,94 @@ export default function NotificationSettings() {
     setSettings(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
-  const NotificationToggle = ({ label, description, enabled, onToggle }) => (
-    <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-      <div className="flex-1">
-        <p className="font-medium text-gray-900">{label}</p>
-        <p className="text-sm text-gray-600">{description}</p>
+  const NotificationToggle = ({ label, description, enabled, onToggle, icon: Icon }) => (
+    <div className="flex items-center justify-between p-5 bg-gray-50/50 rounded-[1.5rem] border border-gray-100 group hover:border-blue-100 hover:bg-white transition-all duration-300">
+      <div className="flex items-center gap-4">
+        {Icon && (
+          <div className={`p-2 rounded-xl transition-colors ${enabled ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-400'}`}>
+            <Icon className="w-4 h-4" />
+          </div>
+        )}
+        <div className="flex-1">
+          <p className="text-sm font-black text-gray-900 leading-none">{label}</p>
+          <p className="text-[10px] font-bold text-gray-400 mt-1.5 leading-tight">{description}</p>
+        </div>
       </div>
       <button
         onClick={onToggle}
-        className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-          enabled ? 'bg-blue-600' : 'bg-gray-300'
-        }`}
+        className={`relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-blue-100 ${enabled ? 'bg-blue-600' : 'bg-gray-200'
+          }`}
       >
         <span
-          className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-            enabled ? 'translate-x-6' : 'translate-x-1'
-          }`}
+          className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition-transform duration-300 ${enabled ? 'translate-x-6' : 'translate-x-1'
+            }`}
         />
       </button>
     </div>
   )
 
   return (
-    <div className="space-y-6">
-      {/* Notification Channels */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <div className="flex items-center gap-3 mb-4">
-          <Bell className="w-5 h-5 text-gray-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Notification Channels</h3>
+    <div className="divide-y divide-gray-100">
+      {/* Channels Section */}
+      <div className="p-8 lg:p-10">
+        <div className="flex items-center gap-3 mb-8">
+          <Smartphone className="w-5 h-5 text-blue-600" />
+          <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Communication Channels</span>
         </div>
-        <div className="space-y-3">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NotificationToggle
-            label="Email Notifications"
-            description="Receive notifications via email"
+            label="Email Dispatch"
+            description="Authoritative updates via enterprise email."
             enabled={settings.emailNotifications}
             onToggle={() => toggleSetting('emailNotifications')}
+            icon={Mail}
           />
           <NotificationToggle
-            label="Push Notifications"
-            description="Receive push notifications in browser"
+            label="Real-time Push"
+            description="Browser-level system notifications."
             enabled={settings.pushNotifications}
             onToggle={() => toggleSetting('pushNotifications')}
+            icon={Bell}
           />
           <NotificationToggle
-            label="SMS Notifications"
-            description="Receive text messages for important updates"
+            label="Secure SMS"
+            description="Critical alerts via mobile network."
             enabled={settings.smsNotifications}
             onToggle={() => toggleSetting('smsNotifications')}
+            icon={MessageSquare}
           />
         </div>
       </div>
 
-      {/* Notification Types */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <div className="flex items-center gap-3 mb-4">
-          <Truck className="w-5 h-5 text-gray-600" />
-          <h3 className="text-lg font-semibold text-gray-900">Notification Types</h3>
+      {/* Intelligence Section */}
+      <div className="p-8 lg:p-10">
+        <div className="flex items-center gap-3 mb-8">
+          <Truck className="w-5 h-5 text-indigo-600" />
+          <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">Operational Intelligence</span>
         </div>
-        <div className="space-y-3">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <NotificationToggle
-            label="Shipment Updates"
-            description="Get notified about shipment status changes"
+            label="Logistics Heartbeat"
+            description="Status changes in the supply chain."
             enabled={settings.shipmentUpdates}
             onToggle={() => toggleSetting('shipmentUpdates')}
+            icon={Truck}
           />
           <NotificationToggle
-            label="Order Confirmations"
-            description="Receive confirmations for new orders"
+            label="System Audit"
+            description="Confirmations for all fiscal events."
             enabled={settings.orderConfirmations}
             onToggle={() => toggleSetting('orderConfirmations')}
+            icon={Shield}
           />
           <NotificationToggle
-            label="Promotions & Offers"
-            description="Get updates about special offers and promotions"
-            enabled={settings.promotions}
-            onToggle={() => toggleSetting('promotions')}
-          />
-          <NotificationToggle
-            label="Weekly Reports"
-            description="Receive weekly summary of your activities"
+            label="Analytic Digests"
+            description="Weekly performance synchronization."
             enabled={settings.weeklyReports}
             onToggle={() => toggleSetting('weeklyReports')}
+            icon={Zap}
           />
         </div>
       </div>

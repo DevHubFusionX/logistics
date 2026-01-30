@@ -1,6 +1,6 @@
 import httpClient from './httpClient'
 
 export default {
-  getSummary: (params = {}) => httpClient.request('/dashboard/summary', {}, params),
-  getRealtime: () => httpClient.request('/dashboard/realtime')
+  getSummary: (params = {}) => httpClient.request('/analytics/dashboard', {}, params),
+  getRealtime: () => httpClient.request('/analytics/live-tracking')
 }

@@ -1,8 +1,8 @@
 import { memo } from 'react'
 
-function MetricCard({ 
-  title, 
-  value, 
+function MetricCard({
+  title,
+  value,
   icon: Icon,
   sparklineData = [],
   unit = '',
@@ -25,7 +25,7 @@ function MetricCard({
   return (
     <div className="group relative bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-all overflow-hidden">
       <div className={`absolute top-0 left-0 w-1 h-full ${colors.bg}`} />
-      
+
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wide">{title}</h3>
         {Icon && (
@@ -34,7 +34,7 @@ function MetricCard({
           </div>
         )}
       </div>
-      
+
       <div className="flex items-baseline gap-1 mb-3">
         <span className="text-2xl font-bold text-gray-900">{value}</span>
         {unit && <span className="text-sm font-semibold text-gray-400">{unit}</span>}

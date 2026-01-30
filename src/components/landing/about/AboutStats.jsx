@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { TrendingUp } from 'lucide-react'
-import { aboutData } from '../../../pages/AboutData'
+import { aboutData } from '../../../pages/public/AboutData'
 
 export default function AboutStats() {
   const stats = aboutData.stats

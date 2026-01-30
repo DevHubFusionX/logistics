@@ -84,6 +84,33 @@ export const KPI_DATA = [
     period: 'active vehicles',
     sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'blue'
+  },
+  {
+    id: 'active_drivers',
+    title: 'Active Drivers',
+    value: '18',
+    change: 2,
+    period: 'on duty',
+    sparklineData: [15, 16, 18, 17, 18, 18, 18],
+    color: 'green'
+  },
+  {
+    id: 'fleet_health',
+    title: 'Fleet Health',
+    value: '98%',
+    change: 0,
+    period: 'operational',
+    sparklineData: [95, 96, 98, 98, 98, 98, 98],
+    color: 'emerald'
+  },
+  {
+    id: 'ontime_rate',
+    title: 'On-time Rate',
+    value: '99.2%',
+    change: 0.5,
+    period: 'vs last month',
+    sparklineData: [98, 98.5, 99, 99.2, 99.2, 99.2, 99.2],
+    color: 'purple'
   }
 ]
 

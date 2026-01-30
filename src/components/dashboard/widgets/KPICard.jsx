@@ -1,10 +1,10 @@
 import { memo } from 'react'
 
-function KPICard({ 
-  title, 
-  value, 
-  unit = '', 
-  change, 
+function KPICard({
+  title,
+  value,
+  unit = '',
+  change,
   period = '24h',
   sparklineData = [],
   onClick,
@@ -16,19 +16,22 @@ function KPICard({
     orange: 'bg-orange-500',
     red: 'bg-red-500',
     purple: 'bg-purple-500',
-    cyan: 'bg-cyan-500'
+    cyan: 'bg-cyan-500',
+    emerald: 'bg-emerald-500',
+    indigo: 'bg-indigo-500',
+    amber: 'bg-amber-500'
   }
 
   const max = Math.max(...sparklineData)
   const min = Math.min(...sparklineData)
 
   return (
-    <div 
-      onClick={onClick} 
+    <div
+      onClick={onClick}
       className="group relative bg-white rounded-xl border border-gray-100 p-4 shadow-sm hover:shadow-md transition-all cursor-pointer overflow-hidden"
     >
       <div className={`absolute top-0 left-0 w-1 h-full ${colorMap[color]}`} />
-      
+
       <div className="flex items-start justify-between mb-2">
         <h3 className="text-xs font-medium text-gray-600 uppercase tracking-wide">{title}</h3>
         {change !== undefined && change !== 0 && (
@@ -37,7 +40,7 @@ function KPICard({
           </span>
         )}
       </div>
-      
+
       <div className="flex items-baseline gap-1 mb-3">
         <span className="text-2xl font-bold text-gray-900">{value}</span>
         {unit && <span className="text-sm font-semibold text-gray-400">{unit}</span>}

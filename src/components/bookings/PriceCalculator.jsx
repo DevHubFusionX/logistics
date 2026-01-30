@@ -19,7 +19,11 @@ export default function PriceCalculator() {
         setResult(null)
 
         try {
-            const response = await bookingService.getPrices(city, truckSize)
+            const response = await bookingService.getPrices({
+                serviceType: 'standard',
+                weight: truckSize,
+                distance: 50 // Default distance since we only have city
+            })
             if (response && response.error) {
                 setError(response.message || 'Failed to calculate price')
             } else if (response && response.data) {

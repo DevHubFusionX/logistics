@@ -9,13 +9,32 @@ export const NAVIGATION_SECTIONS = [
     title: 'Main',
     items: [
       {
-        id: 'overview',
-        label: 'Dashboard',
-        icon: Home,
-        path: '/my-bookings',
-        description: 'Your shipping dashboard',
+        id: 'admin-dashboard',
+        label: 'Admin Overview',
+        icon: BarChart3,
+        path: '/dashboard',
+        description: 'Dashboard summary',
+        color: 'sky',
+        roles: ['Super Admin', 'Dispatcher']
+      },
+      {
+        id: 'tracking',
+        label: 'Track Shipment',
+        icon: MapPin,
+        path: '/tracking/track',
+        description: 'Real-time tracking',
         color: 'blue',
-        roles: ['Customer']
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Finance', 'Support', 'Customer']
+      },
+      {
+        id: 'driver-app',
+        label: 'Driver App',
+        icon: Navigation,
+        path: '/driver-app',
+        description: 'Manage deliveries',
+        color: 'purple',
+        comingSoon: true,
+        roles: ['Super Admin', 'Dispatcher']
       },
       {
         id: 'my-bookings',
@@ -42,27 +61,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/booking/request',
         description: 'Create new shipment',
         color: 'green',
-        roles: ['Super Admin', 'Support', 'Customer']
-      },
-      {
-        id: 'bookings-management',
-        label: 'Manage Bookings',
-        icon: ClipboardList,
-        path: '/bookings-management',
-        description: 'Assign drivers',
-        color: 'blue',
-        badge: { count: 3, type: 'warning' },
-        isNew: true,
-        roles: ['Super Admin', 'Dispatcher']
-      },
-      {
-        id: 'tracking',
-        label: 'Track Shipment',
-        icon: MapPin,
-        path: '/tracking/track',
-        description: 'Real-time tracking',
-        color: 'blue',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Finance', 'Support', 'Customer']
+        roles: ['Support', 'Customer']
       },
       {
         id: 'status-guide',
@@ -89,6 +88,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/my-temperature',
         description: 'Cold chain tracking',
         color: 'cyan',
+        comingSoon: true,
         roles: ['Customer']
       },
       {
@@ -108,42 +108,7 @@ export const NAVIGATION_SECTIONS = [
         description: 'Get help & create tickets',
         color: 'blue',
         roles: ['Customer']
-      },
-      {
-        id: 'driver-app',
-        label: 'Driver App',
-        icon: Navigation,
-        path: '/driver-app',
-        description: 'Manage deliveries',
-        color: 'purple',
-        isNew: true,
-        roles: ['Super Admin', 'Dispatcher']
-      },
-      // {
-      //   id: 'shipments',
-      //   label: 'Shipments',
-      //   icon: Package,
-      //   path: '/shipments',
-      //   badge: { count: 12, type: 'info' },
-      //   description: 'Track all deliveries',
-      //   color: 'blue',
-      //   subItems: [
-      //     { label: 'All Shipments', path: '/shipments', count: '1,234' },
-      //     { label: 'In Transit', path: '/shipments/in-transit', count: '45', status: 'active' },
-      //     { label: 'Delayed', path: '/shipments/delayed', count: '8', status: 'warning' },
-      //     { label: 'Delivered', path: '/shipments/delivered', count: '1,181', status: 'success' },
-      //     { label: 'Exceptions', path: '/shipments/exceptions', count: '3', status: 'error' }
-      //   ]
-      // },
-      // {
-      //   id: 'orders',
-      //   label: 'Orders',
-      //   icon: ShoppingCart,
-      //   path: '/orders',
-      //   badge: { count: 5, type: 'warning' },
-      //   description: 'Manage order fulfillment',
-      //   color: 'green'
-      // }
+      }
     ]
   },
   {
@@ -156,6 +121,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/fleet',
         description: 'Vehicles & maintenance',
         color: 'indigo',
+        comingSoon: true,
         roles: ['Super Admin', 'Fleet Officer', 'Dispatcher'],
         subItems: [
           { label: 'All Vehicles', path: '/fleet', count: '24' },
@@ -164,36 +130,6 @@ export const NAVIGATION_SECTIONS = [
           { label: 'Offline', path: '/fleet/offline', count: '3', status: 'error' }
         ]
       },
-      // {
-      //   id: 'routes',
-      //   label: 'Routes & Live Map',
-      //   icon: Map,
-      //   path: '/routes',
-      //   description: 'Real-time tracking',
-      //   color: 'emerald',
-      //   isNew: true
-      // },
-      // {
-      //   id: 'warehouses',
-      //   label: 'Warehouses',
-      //   icon: Warehouse,
-      //   path: '/warehouses',
-      //   description: 'Inventory management',
-      //   color: 'purple',
-      //   subItems: [
-      //     { label: 'All Locations', path: '/warehouses', count: '8' },
-      //     { label: 'Inventory', path: '/warehouses/inventory' },
-      //     { label: 'Stock Alerts', path: '/warehouses/alerts', count: '2', status: 'warning' }
-      //   ]
-      // },
-      // {
-      //   id: 'tasks',
-      //   label: 'Dispatch Board',
-      //   icon: Clipboard,
-      //   path: '/tasks',
-      //   description: 'Task management',
-      //   color: 'orange'
-      // },
       {
         id: 'temperature',
         label: 'Temperature',
@@ -201,6 +137,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/temperature',
         description: 'Cold chain monitoring',
         color: 'cyan',
+        comingSoon: true,
         badge: { count: 3, type: 'error' },
         roles: ['Super Admin', 'Fleet Officer']
       }
@@ -225,6 +162,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/drivers',
         description: 'Personnel management',
         color: 'green',
+        comingSoon: true,
         roles: ['Super Admin', 'Fleet Officer']
       },
       {
@@ -268,23 +206,6 @@ export const NAVIGATION_SECTIONS = [
   {
     title: 'System',
     items: [
-      // {
-      //   id: 'alerts',
-      //   label: 'Alerts & Incidents',
-      //   icon: AlertTriangle,
-      //   path: '/alerts',
-      //   badge: { count: 3, type: 'error' },
-      //   description: 'System notifications',
-      //   color: 'red'
-      // },
-      // {
-      //   id: 'integrations',
-      //   label: 'Integrations',
-      //   icon: Puzzle,
-      //   path: '/integrations',
-      //   description: 'Third-party connections',
-      //   color: 'gray'
-      // },
       {
         id: 'settings',
         label: 'Settings',
@@ -299,15 +220,7 @@ export const NAVIGATION_SECTIONS = [
           { label: 'Notifications', path: '/settings/notifications' },
           { label: 'Security', path: '/settings/security' }
         ]
-      },
-      // {
-      //   id: 'help',
-      //   label: 'Help & Support',
-      //   icon: HelpCircle,
-      //   path: '/help',
-      //   description: '24/7 assistance',
-      //   color: 'blue'
-      // }
+      }
     ]
   }
 ]

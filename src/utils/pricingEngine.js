@@ -3,16 +3,16 @@
 
 // Global pricing rules - can be updated by admin
 let globalPricingRules = {
-  baseRatePerKg: 2.50,
+  baseRatePerKg: 500,  // ₦500 per kg
   serviceMultipliers: {
     standard: 1.0,
     express: 1.5,
     overnight: 2.0
   },
   insuranceRate: 0.02,
-  handlingFee: 25,
-  taxRate: 0.08,
-  currency: 'USD',
+  handlingFee: 2500,  // ₦2,500 handling fee
+  taxRate: 0.075,     // 7.5% VAT (Nigeria standard)
+  currency: 'NGN',
   lastUpdatedBy: 'admin@daraexpress.com',
   lastUpdatedAt: '2025-01-15 14:30'
 }
@@ -21,15 +21,15 @@ let globalPricingRules = {
 let clientOverrides = {
   'adebayo-industries': {
     name: 'Adebayo Industries',
-    baseRatePerKg: 2.20,
+    baseRatePerKg: 450,  // ₦450 per kg (discounted)
     discount: 0.10,
-    currency: 'USD'
+    currency: 'NGN'
   },
   'kano-distribution': {
     name: 'Kano Distribution Ltd',
-    baseRatePerKg: 2.30,
+    baseRatePerKg: 475,  // ₦475 per kg
     discount: 0.05,
-    currency: 'USD'
+    currency: 'NGN'
   }
 }
 
@@ -39,27 +39,27 @@ export function calculateQuote(bookingData, clientId = null) {
   // Check for client-specific pricing
   const clientOverride = clientId ? clientOverrides[clientId] : null
   const baseRate = clientOverride?.baseRatePerKg || globalPricingRules.baseRatePerKg
-  
+
   const weight = parseFloat(bookingData.weight)
   const basePrice = weight * baseRate
-  
+
   const serviceMultiplier = globalPricingRules.serviceMultipliers[bookingData.serviceType] || 1.0
   const insurance = basePrice * globalPricingRules.insuranceRate
   const handling = globalPricingRules.handlingFee
-  
+
   let subtotal = (basePrice * serviceMultiplier) + insurance + handling
-  
+
   // Calculate discount amount before applying
   const discountAmount = clientOverride?.discount ? subtotal * clientOverride.discount : 0
-  
+
   // Apply client discount if exists
   if (discountAmount > 0) {
     subtotal = subtotal - discountAmount
   }
-  
+
   const tax = subtotal * globalPricingRules.taxRate
   const total = subtotal + tax
-  
+
   return {
     basePrice: basePrice.toFixed(2),
     serviceMultiplier,
@@ -90,10 +90,10 @@ export function updatePricingRules(newRules, user = 'admin@daraexpress.com') {
     lastUpdatedBy: user,
     lastUpdatedAt: new Date().toLocaleString()
   }
-  
+
   // Log the change for audit
   logPricingChange(user, 'Updated pricing rules', oldRules, globalPricingRules)
-  
+
   return { ...globalPricingRules }
 }
 

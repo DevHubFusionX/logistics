@@ -44,6 +44,7 @@ export default function LoginForm() {
 
     try {
       const response = await login(formData)
+      console.log('[DEBUG] LoginForm response:', response)
 
       if (response.data?.token) {
         if (rememberMe) {
@@ -54,12 +55,18 @@ export default function LoginForm() {
 
         setError('')
         showToast.success('Login successful', 'Redirecting to dashboard...')
+
+        const userRole = response.data.user?.role
+        const isAdmin = userRole === 'admin' || userRole === 'Super Admin' || userRole === 'Dispatcher'
+
         setTimeout(() => {
-          navigate('/my-bookings')
+          navigate(isAdmin ? '/dashboard' : '/my-bookings')
         }, 500)
       } else {
-        setError('Invalid credentials. Please check your email and password.')
-        showToast.error('Login failed', 'Invalid credentials')
+        const missingField = !response.data ? 'Response body' : !response.data.token ? 'Token' : 'User'
+        setError(`Login succeeded but ${missingField} is missing. Please contact support.`)
+        showToast.error('Login failed', `Missing ${missingField}`)
+        console.error('[CRITICAL] Login success without expected data:', response.data)
       }
     } catch (error) {
       if (error.message.includes('401') || error.message.includes('unauthorized')) {

@@ -10,7 +10,7 @@ export const useBookings = () => {
     try {
       setLoading(true)
       const response = await bookingService.getBookings()
-      setBookings(response.data?.records || [])
+      setBookings(response.data?.shipments || [])
     } catch (error) {
       console.error('Error fetching bookings:', error)
     } finally {

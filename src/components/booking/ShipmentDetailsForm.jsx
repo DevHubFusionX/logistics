@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { validateField, getValidationErrors } from '../../utils/formValidation'
 import { securityService } from '../../services'
+import AddressBookSelector from './AddressBookSelector'
 
 export default function ShipmentDetailsForm({ formData, onChange, onNestedChange, onSubmit }) {
   const navigate = useNavigate()
@@ -96,6 +97,16 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
           </div>
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">Pickup Details</h3>
         </div>
+        <AddressBookSelector
+          currentCity={formData.pickupLocation.city}
+          onSelect={(addr) => {
+            onNestedChange('pickupPerson', 'name', addr.contact_name);
+            onNestedChange('pickupPerson', 'phone', addr.phone);
+            onNestedChange('pickupLocation', 'address', addr.street);
+            onNestedChange('pickupLocation', 'city', addr.city);
+            onNestedChange('pickupLocation', 'state', addr.state);
+          }}
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Person Name</label>
@@ -121,8 +132,7 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <select value={formData.pickupLocation.city} onChange={(e) => handleNestedFieldChange('pickupLocation', 'city', e.target.value)} onBlur={() => handleBlur('pickupCity')} className={inputClass('pickupCity')} required>
-              <option value="">Select City...</option>
+            <select value={formData.pickupLocation.city || 'Lagos'} onChange={(e) => handleNestedFieldChange('pickupLocation', 'city', e.target.value)} onBlur={() => handleBlur('pickupCity')} className={inputClass('pickupCity')} required>
               <option value="Lagos">Lagos</option>
               <option value="Abuja">Abuja</option>
               <option value="Warri">Warri</option>
@@ -153,6 +163,16 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
           </div>
           <h3 className="text-base sm:text-lg font-semibold text-gray-900">Delivery Details</h3>
         </div>
+        <AddressBookSelector
+          currentCity={formData.dropoffLocation.city}
+          onSelect={(addr) => {
+            onNestedChange('receiverPerson', 'name', addr.contact_name);
+            onNestedChange('receiverPerson', 'phone', addr.phone);
+            onNestedChange('dropoffLocation', 'address', addr.street);
+            onNestedChange('dropoffLocation', 'city', addr.city);
+            onNestedChange('dropoffLocation', 'state', addr.state);
+          }}
+        />
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Receiver Name</label>
@@ -216,10 +236,8 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <select name="goodsType" value={formData.goodsType} onChange={handleFieldChange} onBlur={() => handleBlur('goodsType')} className={inputClass('goodsType')} required>
               <option value="">Select...</option>
               <option value="Frozen Foods">Frozen Foods</option>
-              <option value="Electronics">Electronics</option>
-              <option value="Food">Food</option>
               <option value="Pharmaceuticals">Pharmaceuticals</option>
-              <option value="General">General Cargo</option>
+              <option value="General Cargo">General Cargo</option>
             </select>
             <ErrorMessage error={touched.goodsType && errors.goodsType} />
           </div>
@@ -237,10 +255,9 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
             <select name="vehicleType" value={formData.vehicleType} onChange={handleFieldChange} onBlur={() => handleBlur('vehicleType')} className={inputClass('vehicleType')} required>
               <option value="">Select...</option>
-              <option value="Frozen Truck">Frozen Truck</option>
-              <option value="Dry Truck">Dry Truck</option>
-              <option value="Van">Van</option>
-              <option value="Truck">Truck (Other)</option>
+              <option value="5 Tons">5 Tons</option>
+              <option value="10 Tons">10 Tons</option>
+              <option value="15 Tons">15 Tons</option>
             </select>
             <ErrorMessage error={touched.vehicleType && errors.vehicleType} />
           </div>

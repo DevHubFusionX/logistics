@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { Target, Heart, Award, Globe } from 'lucide-react'
-import { aboutData } from '../../../pages/AboutData'
+import { aboutData } from '../../../pages/public/AboutData'
 
 export default function AboutValues() {
   const iconMap = { Target, Heart, Award, Globe }

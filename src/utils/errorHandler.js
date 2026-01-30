@@ -13,7 +13,7 @@ export const handleApiError = (error) => {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       // Add other auth-related keys as needed
-      window.location.href = "/login";
+      window.location.href = "/auth/login";
     }
   }
 

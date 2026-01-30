@@ -1,11 +1,16 @@
 import { useState, useEffect } from 'react'
+import useUiStore from '../../../store/uiStore'
 import TopHeader from './TopHeader'
 import Sidebar from './Sidebar'
 
 export default function AppLayout({ children }) {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const {
+    sidebarCollapsed,
+    setSidebarCollapsed,
+    sidebarOpen,
+    setMobileSidebar
+  } = useUiStore()
   const [isMobile, setIsMobile] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   useEffect(() => {
     const checkMobile = () => {
@@ -13,7 +18,7 @@ export default function AppLayout({ children }) {
       setIsMobile(mobile)
       if (mobile) {
         setSidebarCollapsed(false)
-        setSidebarOpen(false)
+        setMobileSidebar(false)
       }
     }
 
@@ -24,7 +29,7 @@ export default function AppLayout({ children }) {
 
   const handleToggleSidebar = () => {
     if (isMobile) {
-      setSidebarOpen(!sidebarOpen)
+      setMobileSidebar(!sidebarOpen)
     } else {
       setSidebarCollapsed(!sidebarCollapsed)
     }

@@ -1,99 +1,125 @@
-import { MapPin, Package } from 'lucide-react'
+import { MapPin, Package, ShieldCheck, Truck, Clock, CheckCircle, ArrowLeft, ArrowRight, MoveRight } from 'lucide-react'
 
 export default function ReviewQuote({ formData, estimatedCost, onBack, onConfirm, loading }) {
+  const features = [
+    { icon: Truck, title: 'Door-to-door', desc: 'Full delivery' },
+    { icon: Clock, title: 'Real-time tracking', desc: 'Secure' },
+    { icon: ShieldCheck, title: 'Insurance', desc: 'Protected' },
+    { icon: CheckCircle, title: 'Expert Handling', desc: 'Pro care' }
+  ]
+
   return (
-    <div className="space-y-4 sm:space-y-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
-        <h3 className="text-base sm:text-lg font-semibold mb-4">Shipment Summary</h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-green-600 mt-1" />
-              <div>
-                <p className="text-sm text-gray-500">Pickup Location</p>
-                <p className="font-semibold">{formData.pickupLocation.address}</p>
-                <p className="text-sm">{formData.pickupLocation.city}, {formData.pickupLocation.state}</p>
-                <p className="text-sm text-gray-600 mt-1">Contact: {formData.pickupPerson.name} ({formData.pickupPerson.phone})</p>
+    <div className="max-w-5xl mx-auto animate-fadeIn px-4">
+      {/* Shipment Ticket Container */}
+      <div className="bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl shadow-blue-900/10 overflow-hidden relative">
+        <div className="bg-gradient-to-r from-primary/10 to-accent/10 px-8 py-4 flex items-center justify-between border-b border-gray-100/50">
+          <div className="flex items-center gap-3">
+            <div className="w-2.5 h-2.5 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(0,132,61,0.5)]" />
+            <span className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{formData.vehicleType || 'Standard'} Shipment Details</span>
+          </div>
+          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-right">Quote Ref: {Math.random().toString(36).substring(7).toUpperCase()}</p>
+        </div>
+
+        <div className="flex flex-col lg:flex-row">
+          <div className="flex-1 p-8 sm:p-10 space-y-10 border-r border-gray-50 bg-white">
+            <div className="flex items-center justify-between relative px-4">
+              <div className="absolute left-12 right-12 top-6 h-px border-t-2 border-dashed border-gray-200 -z-0" />
+              <div className="flex flex-col items-center gap-4 relative z-10 scale-90 sm:scale-100">
+                <div className="w-12 h-12 rounded-2xl bg-white border-2 border-primary flex items-center justify-center shadow-lg shadow-primary/10 transition-transform hover:scale-110 duration-300">
+                  <div className="w-4 h-4 rounded-full bg-primary" />
+                </div>
+                <div className="text-center">
+                  <span className="text-[9px] font-black text-primary uppercase tracking-[0.2em] block mb-1">Origin</span>
+                  <h3 className="text-lg font-bold text-gray-900 leading-none">{formData.pickupLocation.city}</h3>
+                </div>
+              </div>
+
+              <div className="bg-blue-50 p-2.5 rounded-full border border-blue-100 shadow-sm z-10 hidden sm:block">
+                <ArrowRight className="w-5 h-5 text-primary" />
+              </div>
+
+              <div className="flex flex-col items-center gap-4 relative z-10 scale-90 sm:scale-100">
+                <div className="w-12 h-12 rounded-2xl bg-white border-2 border-accent flex items-center justify-center shadow-lg shadow-accent/10 transition-transform hover:scale-110 duration-300">
+                  <MapPin className="w-6 h-6 text-accent" />
+                </div>
+                <div className="text-center">
+                  <span className="text-[9px] font-black text-accent uppercase tracking-[0.2em] block mb-1">Destination</span>
+                  <h3 className="text-lg font-bold text-gray-900 leading-none">{formData.dropoffLocation.city}</h3>
+                </div>
               </div>
             </div>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-start gap-3">
-              <MapPin className="w-5 h-5 text-orange-600 mt-1" />
-              <div>
-                <p className="text-sm text-gray-500">Delivery Location</p>
-                <p className="font-semibold">{formData.dropoffLocation.address}</p>
-                <p className="text-sm">{formData.dropoffLocation.city}, {formData.dropoffLocation.state}</p>
-                <p className="text-sm text-gray-600 mt-1">Contact: {formData.receiverPerson.name} ({formData.receiverPerson.phone})</p>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 pt-6">
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Package Type</label>
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-orange-50">
+                    <Package className="w-4 h-4 text-orange-500" />
+                  </div>
+                  <p className="text-sm font-bold text-gray-800">{formData.goodsType}</p>
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Weight / Qty</label>
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-blue-50">
+                    <Truck className="w-4 h-4 text-blue-500" />
+                  </div>
+                  <p className="text-sm font-bold text-gray-800">{formData.cargoWeightKg}kg • {formData.quantity} units</p>
+                </div>
+              </div>
+              <div className="space-y-1.5 col-span-2 sm:col-span-1">
+                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Service Level</label>
+                <p className="text-sm font-bold text-blue-600 bg-blue-50 inline-block px-3 py-1 rounded-lg border border-blue-100">
+                  {formData.vehicleType}
+                </p>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="border-t pt-4">
-          <h4 className="font-semibold mb-3 text-sm sm:text-base">Cargo Details</h4>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
-            <div>
-              <p className="text-gray-500">Goods Type</p>
-              <p className="font-semibold">{formData.goodsType}</p>
-            </div>
-            <div>
-              <p className="text-gray-500">Weight</p>
-              <p className="font-semibold">{formData.cargoWeightKg} kg</p>
-            </div>
-            <div>
-              <p className="text-gray-500">Quantity</p>
-              <p className="font-semibold">{formData.quantity} units</p>
-            </div>
-            <div>
-              <p className="text-gray-500">Vehicle Type</p>
-              <p className="font-semibold">{formData.vehicleType}</p>
+            <div className="pt-6 grid grid-cols-2 gap-4">
+              {features.map((f, i) => (
+                <div key={i} className="flex items-center gap-3 py-2.5 px-4 rounded-xl bg-gradient-to-r from-gray-50 to-white border border-gray-100 shadow-sm group hover:border-accent/30 transition-all">
+                  <CheckCircle className="w-4 h-4 text-accent shrink-0 group-hover:scale-110 transition-transform" />
+                  <span className="text-[11px] font-bold text-gray-600 tracking-tight">{f.title}</span>
+                </div>
+              ))}
             </div>
           </div>
-          
-          {(formData.isFragile || formData.isPerishable) && (
-            <div className="mt-3 flex gap-2">
-              {formData.isFragile && <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">Fragile</span>}
-              {formData.isPerishable && <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-semibold">Perishable ({formData.tempControlCelsius}°C)</span>}
-            </div>
-          )}
-        </div>
 
-        <div className="border-t mt-4 pt-4">
-          <h4 className="font-semibold mb-3 text-sm sm:text-base">Schedule</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
-            <div>
-              <p className="text-gray-500">Pickup Date</p>
-              <p className="font-semibold">{new Date(formData.estimatedPickupDate).toLocaleString()}</p>
+          <div className="w-full lg:w-[320px] bg-gradient-to-b from-primary/5 to-accent/5 p-8 sm:p-10 flex flex-col items-center justify-center text-center border-l border-dashed border-gray-200 shadow-inner">
+            <div className="space-y-1 mb-8">
+              <p className="text-primary/60 text-[10px] font-black uppercase tracking-widest text-center">Total Estimated Cost</p>
+              <h2 className="text-4xl font-black text-gray-900 leading-tight">
+                ₦{estimatedCost?.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 })}
+                <span className="text-lg text-gray-400 font-semibold">.00</span>
+              </h2>
+              <p className="text-[10px] text-accent font-bold uppercase tracking-wider">All Taxes Included</p>
             </div>
-            <div>
-              <p className="text-gray-500">Delivery Date</p>
-              <p className="font-semibold">{new Date(formData.estimatedDeliveryDate).toLocaleString()}</p>
+
+            <div className="w-full space-y-4">
+              <button
+                onClick={onConfirm}
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-primary via-blue-600 to-accent text-white rounded-2xl py-4 font-black uppercase tracking-[0.2em] text-[10px] hover:shadow-2xl hover:shadow-primary/30 hover:-translate-y-1 transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-3 group border border-white/20 shadow-xl"
+              >
+                {loading ? 'Processing...' : (
+                  <>
+                    Complete Booking
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={onBack}
+                className="w-full py-3 rounded-xl font-bold text-gray-400 hover:text-primary transition-all text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/50"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                Go Back
+              </button>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl border-2 border-blue-200 p-4 sm:p-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <p className="text-xs sm:text-sm text-gray-600">Estimated Shipping Cost</p>
-            <p className="text-2xl sm:text-3xl font-bold text-blue-600">₦{estimatedCost?.toFixed(2)}</p>
-            <p className="text-xs text-gray-500 mt-1">Price calculated based on distance, weight, and service type</p>
-          </div>
-          <Package className="w-10 h-10 sm:w-12 sm:h-12 text-blue-600 flex-shrink-0" />
-        </div>
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-3">
-        <button onClick={onBack} className="px-4 sm:px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base">
-          Back to Edit
-        </button>
-        <button onClick={onConfirm} disabled={loading} className="flex-1 bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors font-semibold disabled:opacity-50 text-sm sm:text-base">
-          {loading ? 'Processing...' : 'Confirm & Book Now'}
-        </button>
       </div>
     </div>
   )

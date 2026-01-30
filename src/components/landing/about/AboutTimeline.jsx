@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { aboutData } from '../../../pages/AboutData'
+import { aboutData } from '../../../pages/public/AboutData'
 
 export default function AboutTimeline() {
   const timeline = aboutData.timeline

@@ -12,8 +12,8 @@ export default function FleetUsageChart({ data }) {
       <div className="flex items-center justify-center h-56">
         <svg width="220" height="220" viewBox="0 0 220 220">
           <circle cx="110" cy="110" r="90" fill="#10b981" />
-          <circle cx="110" cy="110" r="90" fill="#f59e0b" strokeDasharray="565 565" strokeDashoffset="113" stroke="#f59e0b" fill="none" strokeWidth="90" />
-          <circle cx="110" cy="110" r="90" fill="#ef4444" strokeDasharray="565 565" strokeDashoffset="283" stroke="#ef4444" fill="none" strokeWidth="90" />
+          <circle cx="110" cy="110" r="90" strokeDasharray="565 565" strokeDashoffset="113" stroke="#f59e0b" fill="none" strokeWidth="90" />
+          <circle cx="110" cy="110" r="90" strokeDasharray="565 565" strokeDashoffset="283" stroke="#ef4444" fill="none" strokeWidth="90" />
           <text x="110" y="110" textAnchor="middle" dy=".3em" className="text-3xl font-bold" fill="#1f2937">
             {data.active}%
           </text>

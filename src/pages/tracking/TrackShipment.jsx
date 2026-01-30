@@ -1,39 +1,30 @@
 import { useState } from 'react'
-import { Search, MapPin, Package, Truck, CheckCircle, Clock } from 'lucide-react'
-import bookingService from '../../services/bookingService'
+import { Search, MapPin, Package, Truck, CheckCircle, Clock, AlertCircle } from 'lucide-react'
+import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import toast from 'react-hot-toast'
 
 export default function TrackShipment() {
   const [trackingId, setTrackingId] = useState('')
-  const [shipment, setShipment] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [searchId, setSearchId] = useState('')
 
-  const handleTrack = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    try {
-      const response = await bookingService.getBookingById(trackingId)
-      const booking = response.data || response
-      setShipment({
-        id: booking.bookingId || booking._id,
-        status: booking.status,
-        origin: `${booking.pickupLocation?.city || 'N/A'}`,
-        destination: `${booking.dropoffLocation?.city || 'N/A'}`,
-        currentLocation: booking.currentLocation?.city || 'Tracking will be available once driver is assigned',
-        estimatedDelivery: new Date(booking.estimatedDeliveryDate).toLocaleDateString(),
-        timeline: [
-          { status: 'Booked', date: new Date(booking.createdAt).toLocaleString(), completed: true },
-          { status: 'Confirmed', date: 'Pending', completed: ['confirmed', 'in_transit', 'delivered'].includes(booking.status) },
-          { status: 'In Transit', date: 'Pending', completed: ['in_transit', 'delivered'].includes(booking.status) },
-          { status: 'Delivered', date: 'Pending', completed: booking.status === 'delivered' }
-        ]
-      })
-    } catch (error) {
+  const {
+    data: shipment,
+    isLoading: loading,
+    error
+  } = useTrackingQuery(searchId, {
+    onError: (err) => {
       toast.error('Booking not found')
-      setShipment(null)
-    } finally {
-      setLoading(false)
+    },
+    enabled: !!searchId
+  })
+
+  const handleTrack = (e) => {
+    e.preventDefault()
+    if (!trackingId.trim()) {
+      toast.error('Please enter a tracking ID')
+      return
     }
+    setSearchId(trackingId)
   }
 
   return (
@@ -63,6 +54,12 @@ export default function TrackShipment() {
               {loading ? 'Tracking...' : 'Track'}
             </button>
           </div>
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <p className="text-sm text-red-800">{error.message || 'Booking not found'}</p>
+            </div>
+          )}
         </form>
 
         {shipment && (
@@ -139,3 +136,4 @@ export default function TrackShipment() {
     </div>
   )
 }
+

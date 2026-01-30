@@ -1,14 +1,55 @@
-import { useState, useEffect, createContext, useContext } from 'react'
+import React, { useState, useEffect, createContext, useContext, useMemo } from 'react'
 import authService from '../services/authService'
 
-const AuthContext = createContext()
+// Split into two contexts to prevent unnecessary re-renders
+const AuthStateContext = createContext()
+const AuthActionsContext = createContext()
 
-export const useAuth = () => {
-  const context = useContext(AuthContext)
+const roleMap = {
+  'user': 'Customer',
+  'admin': 'Super Admin',
+  'driver': 'Driver'
+}
+
+const normalizeUser = (user) => {
+  if (!user) return null
+  return {
+    ...user,
+    role: roleMap[user.role] || user.role || 'Customer'
+  }
+}
+
+// Hook to access auth state (user, loading)
+export const useAuthState = () => {
+  const context = useContext(AuthStateContext)
   if (!context) {
-    return { user: null, loading: false, login: () => { }, register: () => { }, logout: () => { }, hasPermission: () => true, setUser: () => { } }
+    return { user: null, loading: false }
   }
   return context
+}
+
+// Hook to access auth actions (login, logout, etc)
+export const useAuthActions = () => {
+  const context = useContext(AuthActionsContext)
+  if (!context) {
+    return {
+      login: () => { },
+      register: () => { },
+      logout: () => { },
+      hasPermission: () => true,
+      updateProfile: () => { },
+      updateUserRole: () => { },
+      setUser: () => { }
+    }
+  }
+  return context
+}
+
+// Combined hook for backwards compatibility
+export const useAuth = () => {
+  const state = useAuthState()
+  const actions = useAuthActions()
+  return { ...state, ...actions }
 }
 
 export const AuthProvider = ({ children }) => {
@@ -33,8 +74,8 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const response = await authService.getProfile()
-          if (response.data?.user) {
-            setUser(response.data.user)
+          if (response.data) {
+            setUser(normalizeUser(response.data))
           }
         } catch (err) {
           console.error('Failed to fetch profile:', err)
@@ -49,7 +90,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     const response = await authService.login(credentials)
     if (response.data?.token) {
-      setUser(response.data.user)
+      setUser(normalizeUser(response.data.user))
     }
     return response
   }
@@ -57,16 +98,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     const response = await authService.register(userData)
     if (response.data?.token) {
-      setUser(response.data.user)
-    } else if (import.meta.env.DEV) {
-      const mockUser = {
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        role: 'Customer'
-      }
-      setUser(mockUser)
-      return { data: { token: 'mock-token', user: mockUser } }
+      setUser(normalizeUser(response.data.user))
     }
     return response
   }
@@ -75,13 +107,21 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
     setUser(null)
+    window.location.href = '/auth/login'
   }
 
   const hasPermission = (allowedRoles) => {
     if (!allowedRoles || allowedRoles.length === 0) return true
-    // Temporarily disabled admin roles - all users treated as Customer
-    const userRole = 'Customer' // Original: user?.role || 'Customer'
+    const userRole = user?.role || 'user'
     return allowedRoles.includes(userRole)
+  }
+
+  const updateProfile = async (profileData) => {
+    const response = await authService.updateProfile(profileData)
+    if (response.data?.user) {
+      setUser(prev => normalizeUser({ ...prev, ...response.data.user }))
+    }
+    return response
   }
 
   const updateUserRole = (newRole) => {
@@ -91,20 +131,30 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const value = {
-    user,
-    setUser,
-    login,
-    register,
-    logout,
-    loading,
-    hasPermission,
-    updateUserRole
-  }
+  // Memoize state and actions to prevent unnecessary re-renders
+  const stateValue = useMemo(
+    () => ({ user, loading }),
+    [user, loading]
+  )
+
+  const actionsValue = useMemo(
+    () => ({
+      setUser,
+      login,
+      register,
+      logout,
+      hasPermission,
+      updateUserRole,
+      updateProfile
+    }),
+    [user] // Actions depend on user state
+  )
 
   return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
+    <AuthStateContext.Provider value={stateValue}>
+      <AuthActionsContext.Provider value={actionsValue}>
+        {children}
+      </AuthActionsContext.Provider>
+    </AuthStateContext.Provider>
   )
 }

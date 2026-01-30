@@ -2,6 +2,7 @@ export const getStatusBadge = (status) => {
   const badges = {
     pending: 'bg-yellow-100 text-yellow-700',
     confirmed: 'bg-blue-100 text-blue-700',
+    processing: 'bg-blue-100 text-blue-700',
     in_transit: 'bg-green-100 text-green-700',
     delivered: 'bg-gray-100 text-gray-700',
     cancelled: 'bg-red-100 text-red-700'
@@ -11,8 +12,9 @@ export const getStatusBadge = (status) => {
 
 export const getStatusText = (status) => {
   const texts = {
-    pending: 'Pending Review',
-    confirmed: 'Confirmed',
+    pending: 'Pending Pickup',
+    confirmed: 'Driver Assigned',
+    processing: 'Processing',
     in_transit: 'In Transit',
     delivered: 'Delivered',
     cancelled: 'Cancelled'
@@ -21,22 +23,26 @@ export const getStatusText = (status) => {
 }
 
 export const calculateBookingPrice = (booking) => {
-  if (booking.totalCost || booking.estimatedCost || booking.price) {
-    return booking.totalCost || booking.estimatedCost || booking.price
-  }
+  const price = booking.shipping_fee || booking.calculatedPrice || booking.totalCost || booking.estimatedCost || booking.price
+  if (price) return price;
   const baseRate = 5000
-  const weightRate = parseFloat(booking.cargoWeightKg || 0) * 50
-  const quantityRate = (booking.quantity || 1) * 500
-  const fragileCharge = booking.isFragile ? 2000 : 0
-  const perishableCharge = booking.isPerishable ? 3000 : 0
-  const vehicleRates = { 'Van': 0, 'Truck': 5000, 'Refrigerated Van': 8000 }
-  const vehicleCharge = vehicleRates[booking.vehicleType] || 0
+  const weight = parseFloat(booking.weight || booking.cargoWeightKg || 0)
+  const weightRate = weight * 50
+  const quantity = booking.dimensions?.quantity || booking.quantity || 1
+  const quantityRate = quantity * 500
+  const isFragile = booking.dimensions?.isFragile || booking.isFragile
+  const fragileCharge = isFragile ? 2000 : 0
+  const isPerishable = booking.dimensions?.isPerishable || booking.isPerishable
+  const perishableCharge = isPerishable ? 3000 : 0
+  const vehicleType = booking.service_type || booking.vehicleType
+  const vehicleRates = { 'van': 0, 'truck': 5000, 'van_refrigerated': 8000, 'Standard': 0 }
+  const vehicleCharge = vehicleRates[vehicleType] || 0
   return baseRate + weightRate + quantityRate + fragileCharge + perishableCharge + vehicleCharge
 }
 
 export const getBookingStats = (bookings) => ({
   pendingCount: bookings.filter(b => b.status === 'pending').length,
-  activeCount: bookings.filter(b => b.status === 'in_transit' || b.status === 'confirmed').length,
+  activeCount: bookings.filter(b => b.status === 'in_transit' || b.status === 'confirmed' || b.status === 'processing').length,
   deliveredThisMonth: bookings.filter(b => b.status === 'delivered').length,
-  outstandingInvoices: bookings.filter(b => b.paymentStatus === 'unpaid').length
+  outstandingInvoices: bookings.filter(b => (b.payment_status || b.paymentStatus) === 'unpaid').length
 })

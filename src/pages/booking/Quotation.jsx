@@ -2,13 +2,19 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, CheckCircle, Package, MapPin, DollarSign, Tag } from 'lucide-react'
 import { PageHeader } from '../../components/dashboard'
 import { calculateQuote } from '../../utils/pricingEngine'
+import { useBookingStore } from '../../stores/bookingStore'
 
 export default function Quotation() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { bookingData, bookingId, clientId } = location.state || {}
+  const store = useBookingStore()
 
-  if (!bookingData) {
+  // Use location state or fallback to store
+  const bookingData = location.state?.bookingData || store.formData
+  const bookingId = location.state?.bookingId || store.bookingId
+  const clientId = location.state?.clientId
+
+  if (!bookingData || (!location.state?.bookingData && !store.bookingId)) {
     navigate('/booking/request')
     return null
   }
@@ -16,6 +22,8 @@ export default function Quotation() {
   const quote = calculateQuote(bookingData, clientId)
 
   const handleAccept = () => {
+    // Sync to store just in case
+    store.setEstimatedCost(quote.total)
     navigate('/booking/payment', { state: { bookingData, quote, bookingId } })
   }
 

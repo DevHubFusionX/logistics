@@ -1,66 +1,65 @@
 import httpClient from './httpClient'
 
 const bookingService = {
-  createBooking: (bookingData) => 
-    httpClient.request('/bookings/', {
+  createBooking: (bookingData) =>
+    httpClient.request('/shipments', {
       method: 'POST',
       body: JSON.stringify(bookingData)
     }),
 
-  getBookings: (params = { limit: 100, page: 1 }) => 
-    httpClient.request('/bookings/users', {}, params),
+  getBookings: (params = { limit: 100, page: 1 }) => {
+    const user = JSON.parse(localStorage.getItem('user') || '{}')
+    return httpClient.request(`/users/${user.id}/shipments`, {}, params)
+  },
 
-  getBookingById: (id) => 
-    httpClient.request(`/bookings/${id}/`),
+  getAllBookings: (params = { limit: 100, page: 1 }) =>
+    httpClient.request('/shipments', {}, params),
 
-  getPrices: (city, distance) => 
-    httpClient.request(`/bookings/prices/${city}/${distance}`),
+  getBookingById: (id) =>
+    httpClient.request(`/shipments/${id}`),
+
+  trackShipment: (trackingNumber) =>
+    httpClient.request(`/tracking/${trackingNumber}`),
+
+  getPrices: (data) =>
+    httpClient.request('/pricing/calculate', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
 
   updateBooking: (id, bookingData) => {
-    console.log('bookingService.updateBooking called with id:', id)
-    console.log('bookingData:', bookingData)
-    return httpClient.request(`/bookings/${id}`, {
-      method: 'PATCH',
+    return httpClient.request(`/shipments/${id}`, {
+      method: 'PUT',
       body: JSON.stringify(bookingData)
     })
   },
 
-  cancelBooking: (id, reason) => 
-    httpClient.request(`/bookings/cancel/${id}`, {
-      method: 'PATCH',
+  cancelBooking: (id, reason) =>
+    httpClient.request(`/shipments/${id}/cancel`, {
+      method: 'POST',
       body: JSON.stringify({ reason })
     }),
 
-  deleteBooking: (id) => 
-    httpClient.request(`/bookings/${id}/`, {
+  deleteBooking: (id) =>
+    httpClient.request(`/shipments/${id}`, {
       method: 'DELETE'
     }),
 
-  createMultiStopBooking: (bookingData, stops) => 
-    httpClient.request('/bookings/multi-stop', {
-      method: 'POST',
-      body: JSON.stringify({ ...bookingData, stops })
-    }),
+  // Multi-stop and recurring not yet implemented in backend V1
+  createMultiStopBooking: (bookingData, stops) =>
+    Promise.reject(new Error('Feature not available locally')),
 
-  createRecurringBooking: (bookingData, schedule) => 
-    httpClient.request('/bookings/recurring', {
-      method: 'POST',
-      body: JSON.stringify({ ...bookingData, schedule })
-    }),
+  createRecurringBooking: (bookingData, schedule) =>
+    Promise.reject(new Error('Feature not available locally')),
 
-  getRecurringBookings: (params = { limit: 50, page: 1 }) => 
-    httpClient.request('/bookings/recurring', {}, params),
+  getRecurringBookings: (params = { limit: 50, page: 1 }) =>
+    Promise.resolve({ data: [] }),
 
-  updateRecurringBooking: (id, schedule) => 
-    httpClient.request(`/bookings/recurring/${id}`, {
-      method: 'PATCH',
-      body: JSON.stringify({ schedule })
-    }),
+  updateRecurringBooking: (id, schedule) =>
+    Promise.reject(new Error('Feature not available locally')),
 
-  cancelRecurringBooking: (id) => 
-    httpClient.request(`/bookings/recurring/${id}/cancel`, {
-      method: 'PATCH'
-    })
+  cancelRecurringBooking: (id) =>
+    Promise.reject(new Error('Feature not available locally'))
 }
 
 export default bookingService

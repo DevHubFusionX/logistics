@@ -4,10 +4,13 @@ import { sanitizeObject } from '../utils/sanitize'
 export default {
   register: async (userData) => {
     localStorage.clear()
-    const response = await httpClient.request('/auth/sign-up', {
+    const response = await httpClient.request('/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData)
     })
+
+    console.log('[DEBUG] Register Response:', JSON.stringify(response.data, null, 2))
+
     if (response.data?.token) {
       const sanitizedToken = String(response.data.token).replace(/[<>"'&]/g, '')
       localStorage.setItem('token', sanitizedToken)
@@ -23,6 +26,10 @@ export default {
       method: 'POST',
       body: JSON.stringify(credentials)
     })
+
+    console.log('[DEBUG] Login Response Body Keys:', Object.keys(response.data || {}))
+    console.log('[DEBUG] Token Present:', !!response.data?.token)
+
     if (response.data?.token) {
       const sanitizedToken = String(response.data.token).replace(/[<>"'&]/g, '')
       localStorage.setItem('token', sanitizedToken)
@@ -32,7 +39,12 @@ export default {
     return response
   },
 
-  getProfile: () => httpClient.request('/user/'),
+  getProfile: () => httpClient.request('/users/profile'),
+
+  updateProfile: (profileData) => httpClient.request('/users/profile', {
+    method: 'PUT',
+    body: JSON.stringify(profileData)
+  }),
 
   forgotPassword: (email) => httpClient.request('/auth/forgot-password', {
     method: 'POST',

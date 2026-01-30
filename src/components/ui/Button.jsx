@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
-export default function Button({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  to, 
-  onClick, 
+export default function Button({
+  children,
+  variant = 'primary',
+  size = 'md',
+  to,
+  onClick,
   className = '',
   animate = true,
-  ...props 
+  ...props
 }) {
   const variants = {
     primary: 'bg-green-500 text-white hover:bg-green-600',

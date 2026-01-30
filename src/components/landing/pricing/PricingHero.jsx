@@ -17,7 +17,7 @@ export default function PricingHero({ billingCycle, setBillingCycle }) {
           <Users className="w-4 h-4" />
           Trusted by 1,000+ Nigerian businesses
         </motion.div>
-        
+
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -29,7 +29,7 @@ export default function PricingHero({ billingCycle, setBillingCycle }) {
           <br />
           <span className="text-primary">Makes Sense</span>
         </motion.h1>
-        
+
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -40,7 +40,7 @@ export default function PricingHero({ billingCycle, setBillingCycle }) {
           Transparent pricing designed for Nigerian businesses. No hidden fees, no surprises.
           Pay in Naira and scale as your business grows.
         </motion.p>
-        
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -50,21 +50,19 @@ export default function PricingHero({ billingCycle, setBillingCycle }) {
         >
           <button
             onClick={() => setBillingCycle('monthly')}
-            className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-              billingCycle === 'monthly'
+            className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all ${billingCycle === 'monthly'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-600 hover:text-gray-900'
-            }`}
+              }`}
           >
             Monthly
           </button>
           <button
             onClick={() => setBillingCycle('annual')}
-            className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all ${
-              billingCycle === 'annual'
+            className={`px-6 py-2.5 rounded-lg font-semibold text-sm transition-all ${billingCycle === 'annual'
                 ? 'bg-white text-gray-900 shadow-md'
                 : 'text-gray-600 hover:text-gray-900'
-            }`}
+              }`}
           >
             Annual
           </button>

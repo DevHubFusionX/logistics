@@ -29,9 +29,8 @@ export default function PricingFAQ({ faqs, openFaq, setOpenFaq }) {
                 >
                   <span className="font-semibold text-gray-900 pr-4">{faq.question}</span>
                   <ChevronDown
-                    className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform ${
-                      openFaq === index ? 'rotate-180' : ''
-                    }`}
+                    className={`w-5 h-5 text-gray-500 flex-shrink-0 transition-transform ${openFaq === index ? 'rotate-180' : ''
+                      }`}
                   />
                 </button>
                 {openFaq === index && (

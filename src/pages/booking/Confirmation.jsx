@@ -159,11 +159,11 @@ export default function Confirmation() {
         </div>
 
         <div className="flex justify-center gap-4">
-          <button onClick={() => navigate('/my-bookings')} className="flex items-center gap-2 px-6 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium">
+          <button onClick={handleFinish} className="flex items-center gap-2 px-6 py-3 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors font-medium">
             <Home className="w-5 h-5" />
             Go to Dashboard
           </button>
-          <button onClick={() => navigate('/booking/request')} className="flex items-center gap-2 px-6 py-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors font-medium">
+          <button onClick={() => { store.resetBooking(); navigate('/booking/request'); }} className="flex items-center gap-2 px-6 py-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors font-medium">
             <Package className="w-5 h-5" />
             Book Another Shipment
           </button>

@@ -1,55 +1,58 @@
 import httpClient from './httpClient'
 
 export default {
-  getClients: (params = {}) => httpClient.request('/clients', {}, params),
+  getClients: (params = {}) => {
+    console.log('Fetching clients with params:', params)
+    return httpClient.request('/users', { method: 'GET' }, { ...params, role: 'user' })
+  },
   getClient: (clientId) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}`)
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}`)
   },
-  createClient: (clientData) => httpClient.request('/clients', {
+  createClient: (clientData) => httpClient.request('/users', {
     method: 'POST',
     body: JSON.stringify(clientData)
   }),
   updateClient: (clientId, clientData) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}`, {
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}`, {
       method: 'PUT',
       body: JSON.stringify(clientData)
     })
   },
-  getClientBookings: (clientId, params = {}) => {
+  getClientShipments: (clientId, params = {}) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/bookings`, {}, params)
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/shipments`, {}, params)
   },
   getClientPayments: (clientId, params = {}) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/payments`, {}, params)
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/payments`, {}, params)
   },
   getClientAnalytics: (clientId, params = {}) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/analytics`, {}, params)
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/analytics`, {}, params)
   },
   updateClientCreditLimit: (clientId, creditData) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/credit-limit`, {
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/credit-limit`, {
       method: 'PATCH',
       body: JSON.stringify(creditData)
     })
   },
   suspendClient: (clientId, suspendData) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/suspend`, {
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/suspend`, {
       method: 'POST',
       body: JSON.stringify(suspendData)
     })
   },
   getClientDocuments: (clientId) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/documents`)
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/documents`)
   },
   uploadClientDocument: (clientId, formData) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/clients/${encodeURIComponent(clientId)}/documents`, {
+    return httpClient.request(`/users/${encodeURIComponent(clientId)}/documents`, {
       method: 'POST',
       body: formData,
       headers: {}

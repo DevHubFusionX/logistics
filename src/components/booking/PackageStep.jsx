@@ -85,6 +85,7 @@ export default function PackageStep({ formData, onChange, onNext, onBack, loadin
                     type="button"
                     onClick={() => {
                       onChange('truckSize', truck.value)
+                      onChange('vehicleType', truck.label) // Sync with pricing service expectation
                       onChange('cargoWeightKg', truck.value * 1000)
                     }}
                     className={`p-4 border-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 ${isSelected

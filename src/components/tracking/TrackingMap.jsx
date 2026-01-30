@@ -38,7 +38,7 @@ export default function TrackingMap({ shipment }) {
           <div className="flex items-center justify-between text-sm">
             <div>
               <p className="text-gray-600">From</p>
-              <p className="font-semibold">Lagos</p>
+              <p className="font-semibold">{shipment.pickupCity}</p>
             </div>
             <div className="flex-1 mx-4">
               <div className="h-1 bg-gradient-to-r from-green-500 via-blue-500 to-gray-300 rounded-full"></div>
@@ -46,7 +46,7 @@ export default function TrackingMap({ shipment }) {
             </div>
             <div className="text-right">
               <p className="text-gray-600">To</p>
-              <p className="font-semibold">Abuja</p>
+              <p className="font-semibold">{shipment.deliveryCity}</p>
             </div>
           </div>
         </div>
