@@ -10,7 +10,7 @@ export default defineConfig({
     react(),
     visualizer({
       open: false,
-      filename: 'bundle-stats.html',
+      filename: 'dist/bundle-stats.html',
       gzipSize: true,
       brotliSize: true
     })

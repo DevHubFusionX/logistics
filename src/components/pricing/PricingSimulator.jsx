@@ -1,29 +1,26 @@
 import { useState } from 'react'
 import { Calculator, TrendingUp, RefreshCw, AlertCircle, MapPin, Package, Truck } from 'lucide-react'
 import pricingService from '../../services/pricingService'
+import { useAuth } from '../../hooks/useAuth'
 import toast from 'react-hot-toast'
 
+const NIGERIAN_CITIES = [
+  'Lagos', 'Abuja', 'Port Harcourt', 'Enugu', 'Kano', 'Ibadan',
+  'Benin City', 'Warri', 'Kaduna', 'Jos', 'Calabar', 'Owerri',
+  'Uyo', 'Abeokuta', 'Onitsha', 'Asaba'
+]
+
 export default function PricingSimulator() {
+  const { user } = useAuth()
   const [weight, setWeight] = useState(10)
-  const [distance, setDistance] = useState(100)
-  const [serviceType, setServiceType] = useState('standard')
+  const [destination, setDestination] = useState('Enugu')
   const [isLoading, setIsLoading] = useState(false)
   const [quote, setQuote] = useState(null)
   const [error, setError] = useState(null)
 
-  const serviceOptions = [
-    { value: 'economy', label: 'Economy', desc: 'Budget-friendly option' },
-    { value: 'standard', label: 'Standard', desc: '2-5 days delivery' },
-    { value: 'priority', label: 'Priority', desc: 'Faster delivery' },
-    { value: 'express', label: 'Express', desc: 'Same-day delivery' },
-    { value: '5 tons', label: '5 Tons Truck', desc: 'Small freight' },
-    { value: '10 tons', label: '10 Tons Truck', desc: 'Medium freight' },
-    { value: '15 tons', label: '15 Tons Truck', desc: 'Large freight' }
-  ]
-
   const handleCalculate = async () => {
-    if (weight <= 0 || distance <= 0) {
-      toast.error('Please enter valid weight and distance')
+    if (weight <= 0 || !destination) {
+      toast.error('Please enter valid weight and destination')
       return
     }
 
@@ -31,21 +28,25 @@ export default function PricingSimulator() {
     setError(null)
 
     try {
-      const response = await pricingService.calculatePrice(serviceType, weight, distance)
-      const data = response.data || response
+      // Determine if the current user has an admin role
+      const isAdmin = ['Super Admin', 'Dispatcher', 'admin', 'Admin', 'SUPER_ADMIN'].includes(user?.role)
 
-      // Calculate breakdown from estimated price
-      const estimatedPrice = data.estimatedPrice || 0
-      const tax = estimatedPrice * 0.075 // 7.5% VAT
-      const subtotal = estimatedPrice - tax
+      // Access different pricing tiers or logic for admin users.
+      const response = await pricingService.calculatePrice(destination, weight, isAdmin)
+      // httpClient returns { data: { error, message, data: { price } } }
+      const apiBody = response.data
+      if (apiBody?.error) throw new Error(apiBody.message || 'Failed to calculate price')
+
+      const price = apiBody.data?.price || 0
+      const tax = price * 0.075 // 7.5% VAT
+      const subtotal = price - tax
 
       setQuote({
-        serviceType: data.serviceType,
-        weight: data.weight,
-        distance: data.distance,
+        destination,
+        weight,
         subtotal: subtotal,
         tax: tax,
-        total: estimatedPrice
+        total: price
       })
     } catch (err) {
       setError(err.message || 'Failed to calculate price')
@@ -73,63 +74,41 @@ export default function PricingSimulator() {
         <div className="space-y-5 bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
           <div>
             <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-              <Truck className="w-4 h-4 text-gray-400" />
-              Service Type
+              <MapPin className="w-4 h-4 text-gray-400" />
+              Destination City
             </label>
             <select
-              value={serviceType}
-              onChange={(e) => setServiceType(e.target.value)}
+              value={destination}
+              onChange={(e) => setDestination(e.target.value)}
               className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium bg-white"
             >
-              {serviceOptions.map(opt => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label} - {opt.desc}
-                </option>
+              {NIGERIAN_CITIES.map(city => (
+                <option key={city} value={city}>{city}</option>
               ))}
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                <Package className="w-4 h-4 text-gray-400" />
-                Weight
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={weight}
-                  onChange={(e) => setWeight(parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium"
-                  placeholder="0"
-                  min="0"
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs uppercase">kg</span>
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                Distance
-              </label>
-              <div className="relative">
-                <input
-                  type="number"
-                  value={distance}
-                  onChange={(e) => setDistance(parseFloat(e.target.value) || 0)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium"
-                  placeholder="0"
-                  min="0"
-                />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs uppercase">km</span>
-              </div>
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+              <Package className="w-4 h-4 text-gray-400" />
+              Weight (Tons)
+            </label>
+            <div className="relative">
+              <input
+                type="number"
+                value={weight}
+                onChange={(e) => setWeight(parseFloat(e.target.value) || 0)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent font-medium"
+                placeholder="0"
+                min="0"
+              />
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-xs uppercase">tons</span>
             </div>
           </div>
 
           <button
             onClick={handleCalculate}
-            disabled={isLoading || weight <= 0 || distance <= 0}
+            disabled={isLoading || weight <= 0 || !destination}
             className="w-full flex items-center justify-center gap-2 px-4 py-4 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all font-bold shadow-lg shadow-emerald-100 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Calculator className="w-5 h-5" />}
@@ -156,16 +135,12 @@ export default function PricingSimulator() {
 
               <div className="space-y-3 text-sm flex-1">
                 <div className="flex justify-between items-center opacity-80">
-                  <span>Service Type</span>
-                  <span className="font-bold capitalize">{quote.serviceType}</span>
+                  <span>Destination</span>
+                  <span className="font-bold capitalize">{quote.destination}</span>
                 </div>
                 <div className="flex justify-between items-center opacity-80">
                   <span>Weight</span>
-                  <span className="font-mono font-bold">{quote.weight} kg</span>
-                </div>
-                <div className="flex justify-between items-center opacity-80">
-                  <span>Distance</span>
-                  <span className="font-mono font-bold">{quote.distance} km</span>
+                  <span className="font-mono font-bold">{quote.weight} tons</span>
                 </div>
 
                 <div className="pt-4 mt-4 border-t border-white/10">
@@ -185,7 +160,7 @@ export default function PricingSimulator() {
               </div>
 
               <p className="mt-6 text-[10px] text-emerald-200 italic text-center">
-                * Price calculated from database pricing configurations
+                * Price calculated from live API pricing
               </p>
             </div>
           ) : (
@@ -195,7 +170,7 @@ export default function PricingSimulator() {
               </div>
               <h4 className="text-gray-900 font-bold">Ready to Calculate</h4>
               <p className="text-xs text-gray-500 mt-2 max-w-[220px]">
-                Select service type, enter weight and distance, then click calculate to get an instant price quote
+                Select a destination city and enter the weight, then click calculate to get an instant price quote
               </p>
             </div>
           )}

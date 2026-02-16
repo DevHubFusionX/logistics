@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import authService from '../../services/authService'
-import { useAuthActions } from '../useAuth'
+import { useAuthState, useAuthActions } from '../useAuth'
 import toast from 'react-hot-toast'
 
 export const authKeys = {
@@ -8,13 +8,21 @@ export const authKeys = {
 }
 
 export function useProfileQuery() {
+    const { user } = useAuthState()
+    const isAdmin = user?.role === 'Super Admin' || user?.role === 'admin' || user?.role === 'SUPER_ADMIN'
+
     return useQuery({
-        queryKey: authKeys.profile,
+        queryKey: [...authKeys.profile, user?.id],
         queryFn: async () => {
-            const response = await authService.getProfile()
-            return response.data || response
+            const response = isAdmin
+                ? await authService.getAdminProfile()
+                : await authService.getProfile()
+
+            // API returns { data: { error, message, data: { user fields... } } }
+            return response.data?.data || response.data || response
         },
         staleTime: 10 * 60 * 1000, // 10 minutes
+        enabled: !!user // Only run if we have a user context
     })
 }
 

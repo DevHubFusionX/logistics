@@ -74,7 +74,9 @@ export default function RegisterForm() {
     try {
       const response = await register(formData)
 
-      if (response.data?.token) {
+      // API returns { data: { error, message, data: { user, token } } }
+      const payload = response.data?.data
+      if (payload?.token) {
         setSuccess('Account created successfully! Redirecting to dashboard...')
         setError('')
         showToast.success('Account created', 'Welcome to Dara Logistics!')
@@ -313,17 +315,17 @@ export default function RegisterForm() {
                     <div
                       key={level}
                       className={`w-4 h-1 rounded-full ${passwordStrength >= level
-                          ? passwordStrength <= 2 ? 'bg-red-400'
-                            : passwordStrength <= 3 ? 'bg-yellow-400'
-                              : 'bg-green-400'
-                          : 'bg-gray-200'
+                        ? passwordStrength <= 2 ? 'bg-red-400'
+                          : passwordStrength <= 3 ? 'bg-yellow-400'
+                            : 'bg-green-400'
+                        : 'bg-gray-200'
                         }`}
                     />
                   ))}
                 </div>
                 <span className={`text-xs ${passwordStrength <= 2 ? 'text-red-500'
-                    : passwordStrength <= 3 ? 'text-yellow-500'
-                      : 'text-green-500'
+                  : passwordStrength <= 3 ? 'text-yellow-500'
+                    : 'text-green-500'
                   }`}>
                   {passwordStrength <= 2 ? 'Weak' : passwordStrength <= 3 ? 'Medium' : 'Strong'}
                 </span>

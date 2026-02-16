@@ -13,7 +13,18 @@ export default function ProtectedRoute({ children }) {
   }
 
   if (!user) {
-    return <Navigate to="/auth/login" replace />
+    const path = window.location.pathname;
+    const isAdminPath = path === '/dashboard' ||
+      path.startsWith('/shipments') ||
+      path.startsWith('/fleet') ||
+      path.startsWith('/customers') ||
+      path.startsWith('/drivers') ||
+      path.startsWith('/reports') ||
+      path.startsWith('/payments') ||
+      path.startsWith('/pricing-management') ||
+      path.startsWith('/bookings-management');
+
+    return <Navigate to={isAdminPath ? "/auth/admin/login" : "/auth/login"} replace />
   }
 
   return children

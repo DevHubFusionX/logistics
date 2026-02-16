@@ -6,10 +6,16 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
   const navigate = useNavigate()
 
   // Data Normalization
-  const id = booking.tracking_number || booking.trackingNumber || booking.id || 'N/A'
-  const packageInfo = `${(booking.package_type || booking.cargoType || 'Package').toUpperCase()} • ${booking.weight || 0}kg`
-  const origin = booking.origin || booking.pickupCity || booking.pickupLocation?.city || 'N/A'
-  const destination = booking.destination || booking.deliveryCity || booking.dropoffLocation?.city || 'N/A'
+  const id = booking._id || booking.tracking_number || booking.trackingNumber || booking.id || 'N/A'
+  const packageInfo = `${(booking.goodsType || booking.package_type || booking.cargoType || 'Package').toUpperCase()} • ${booking.cargoWeightKg || booking.weight || 0}kg`
+
+  const origin = typeof booking.pickupLocation === 'string'
+    ? booking.pickupLocation
+    : (booking.pickupLocation?.city || booking.origin || booking.pickupCity || 'N/A')
+
+  const destination = typeof booking.dropoffLocation === 'string'
+    ? booking.dropoffLocation
+    : (booking.dropoffLocation?.city || booking.destination || booking.deliveryCity || 'N/A')
 
   const formatDate = (dateStr) => {
     if (!dateStr) return 'N/A'
@@ -17,11 +23,11 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
     return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })
   }
 
-  const createdAt = formatDate(booking.created_at || booking.createdAt)
-  const eta = formatDate(booking.estimated_delivery || booking.estimatedDeliveryDate || booking.pickupDate)
+  const createdAt = formatDate(booking.createdAt || booking.created_at)
+  const eta = formatDate(booking.estimatedDeliveryDate || booking.estimated_delivery || booking.pickupDate)
 
-  const amount = booking.shipping_fee || booking.amount || booking.calculatedPrice || 0
-  const paymentStatus = booking.payment_status || booking.paymentStatus || 'unpaid'
+  const amount = booking.price || booking.shipping_fee || booking.amount || booking.calculatedPrice || 0
+  const paymentStatus = booking.paymentStatus || booking.payment_status || 'unpaid'
 
   const driver = booking.driver || booking.assignedDriver
   const driverName = driver?.profile ? `${driver.profile.first_name} ${driver.profile.last_name}` : (driver?.name || null)

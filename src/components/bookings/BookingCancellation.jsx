@@ -24,7 +24,7 @@ export default function BookingCancellation({ booking, onSuccess, onClose }) {
 
     setLoading(true)
     try {
-      await bookingService.cancelBooking(booking._id || booking.id, reason)
+      await bookingService.cancelBooking(booking._id || booking.id)
       toast.success('Booking cancelled successfully')
       onSuccess?.()
     } catch (error) {

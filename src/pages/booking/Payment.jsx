@@ -182,11 +182,14 @@ export default function Payment() {
                         if (bookingId) localStorage.setItem('currentBookingId', bookingId)
 
                         const response = await initializePayment.mutateAsync(bookingId)
-                        if (response.data && response.data.authorization_url) {
-                          window.location.href = response.data.authorization_url
+                        // response is { data: { error, message, data: { ... } }, status }
+                        const apiBody = response.data
+                        const paymentData = apiBody?.data
+
+                        if (!apiBody.error && paymentData?.authorization_url) {
+                          window.location.href = paymentData.authorization_url
                         } else {
-                          toast.error('Failed to initialize payment')
-                          setProcessing(false)
+                          throw new Error(apiBody.message || 'Failed to initialize payment')
                         }
                       } catch (error) {
                         console.error('Payment init error:', error)

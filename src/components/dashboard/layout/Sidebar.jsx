@@ -16,8 +16,20 @@ function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
     setExpandedItems(prev => ({ ...prev, [itemId]: !prev[itemId] }))
   }
 
-  const isActive = (path) => {
-    return location.pathname === path || location.pathname.startsWith(path + '/')
+  const isActive = (path, item) => {
+    const currentPath = location.pathname
+
+    // Exact match
+    if (currentPath === path) return true
+
+    // Contextual highlighting for User Bookings deep links
+    if (item?.id === 'user-bookings' && currentPath.includes('/admin/customers/')) return true
+
+    // Prevent "Clients & Orders" or "Bookings" from being active when deep in user bookings
+    if ((item?.id === 'customers' || item?.id === 'admin-bookings') && currentPath.includes('/admin/customers/')) return false
+
+    // Normal parent/prefix matching
+    return currentPath.startsWith(path + '/')
   }
 
   return (

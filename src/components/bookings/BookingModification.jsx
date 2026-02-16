@@ -81,23 +81,27 @@ export default function BookingModification({ booking, onSuccess, onClose }) {
     setLoading(true)
     try {
       const payload = {
-        origin: `${formData.pickupLocation.address}, ${formData.pickupLocation.city}`,
-        destination: `${formData.dropoffLocation.address}, ${formData.dropoffLocation.city}`,
-        weight: Number(formData.cargoWeightKg),
-        packageType: formData.goodsType,
-        serviceType: formData.vehicleType,
-        receiverName: formData.receiverPerson.name,
-        receiverPhone: formData.receiverPerson.phone,
-        receiverEmail: formData.receiverPerson.email,
-        dimensions: {
-          quantity: Number(formData.quantity),
-          isFragile: formData.isFragile,
-          isPerishable: formData.isPerishable,
-          tempControl: Number(formData.tempControlCelsius)
+        pickupLocation: {
+          address: formData.pickupLocation.address,
+          city: formData.pickupLocation.city,
+          state: formData.pickupLocation.state || 'Lagos'
         },
-        specialInstructions: formData.notes,
-        estimatedPickupDate: formData.estimatedPickupDate,
-        estimatedDeliveryDate: formData.estimatedDeliveryDate
+        dropoffLocation: {
+          address: formData.dropoffLocation.address,
+          city: formData.dropoffLocation.city,
+          state: formData.dropoffLocation.state || 'Lagos'
+        },
+        goodsType: formData.goodsType,
+        cargoWeightKg: Number(formData.cargoWeightKg),
+        quantity: parseInt(formData.quantity, 10) || 1,
+        isFragile: Boolean(formData.isFragile),
+        isPerishable: Boolean(formData.isPerishable),
+        tempControlCelsius: parseInt(formData.tempControlCelsius, 10) || 20,
+        vehicleType: formData.vehicleType,
+        estimatedPickupDate: formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : null,
+        estimatedDeliveryDate: formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : null,
+        status: booking.status || 'pending',
+        notes: formData.notes
       }
 
       await bookingService.updateBooking(booking._id || booking.id, payload)

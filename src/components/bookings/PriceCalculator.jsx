@@ -19,19 +19,15 @@ export default function PriceCalculator() {
         setResult(null)
 
         try {
-            const response = await bookingService.getPrices({
-                serviceType: 'standard',
-                weight: truckSize,
-                distance: 50 // Default distance since we only have city
-            })
-            if (response && response.error) {
-                setError(response.message || 'Failed to calculate price')
-            } else if (response && response.data) {
-                setResult(response.data)
+            const response = await bookingService.getPrices(city, truckSize, false)
+            // httpClient returns { data: { error, message, data: { price } } }
+            const apiBody = response.data
+            if (apiBody && apiBody.error) {
+                setError(apiBody.message || 'Failed to calculate price')
+            } else if (apiBody?.data) {
+                setResult(apiBody.data)
             } else {
-                // Fallback if response structure is different than expected 200 OK wrapper
-                // The documentation showed 200 OK with data object
-                setResult(response)
+                setResult(apiBody)
             }
         } catch (err) {
             setError(err.message || 'An error occurred while calculating price')

@@ -2,13 +2,11 @@ import { useEffect } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useBookingStore } from '../stores/bookingStore'
 import {
-  useCreateBookingMutation,
-  usePayBookingMutation
+  useCreateBookingMutation
 } from './queries/useBookingQueries'
 import { useVerifyPaymentMutation } from './queries/usePaymentQueries'
 import bookingService from '../services/bookingService'
-import { extractBookingId, isValidBookingResponse } from '../utils/bookingValidation'
-import { getUserFriendlyMessage, isRetryableError } from '../utils/errorCodes'
+import { getUserFriendlyMessage } from '../utils/errorCodes'
 import toast from 'react-hot-toast'
 
 export const useBookingFlow = () => {
@@ -42,34 +40,20 @@ export const useBookingFlow = () => {
   }
 
   const handlePackageNext = async () => {
-    // We use service directly here for the procedural transition, 
-    // or we could use useBookingPriceQuery reactively in the components.
-    // For now, keeping the logic similar to original.
     setStep(2) // Stay while loading
     const loadingToast = toast.loading('Calculating price...')
     try {
-      // Estimated distances from Lagos to other cities (Approx KM)
-      const cityDistances = {
-        'Abuja': 750,
-        'Warri': 430,
-        'Benin City': 320,
-        'Enugu': 540,
-        'Port Harcourt': 610,
-        'Lagos': 25 // Within Lagos default
-      }
-
       const destinationCity = formData.dropoffLocation.city
-      const distance = cityDistances[destinationCity] || 50 // Fallback
+      const truckSize = formData.truckSize || 5
+      const isAdmin = ['Super Admin', 'Dispatcher', 'admin', 'Admin', 'SUPER_ADMIN'].includes(user?.role)
 
-      const response = await bookingService.getPrices({
-        serviceType: formData.vehicleType || 'standard',
-        weight: formData.cargoWeightKg || 1,
-        distance
-      })
+      const response = await bookingService.getPrices(destinationCity, truckSize, isAdmin)
 
-      if (response.error) throw new Error(response.message || 'Failed to calculate price')
+      // httpClient returns { data: { error, message, data: { price } } }
+      const apiBody = response.data
+      if (apiBody?.error) throw new Error(apiBody.message || 'Failed to calculate price')
 
-      setEstimatedCost(response.data.estimatedPrice)
+      setEstimatedCost(apiBody.data?.price || 0)
       setStep(3)
       toast.success('Price calculated!', { id: loadingToast })
     } catch (err) {
@@ -96,39 +80,63 @@ export const useBookingFlow = () => {
         return '+234' + p
       }
 
-      const shipmentPayload = {
-        origin: typeof formData.pickupLocation === 'string' ? formData.pickupLocation : `${formData.pickupLocation.address}, ${formData.pickupLocation.city}`,
-        destination: typeof formData.dropoffLocation === 'string' ? formData.dropoffLocation : `${formData.dropoffLocation.address}, ${formData.dropoffLocation.city}`,
-        receiverName: formData.receiverPerson?.name || formData.receiverName,
-        receiverEmail: formData.receiverPerson?.email || formData.receiverEmail,
-        receiverPhone: normalizePhone(formData.receiverPerson?.phone),
-        weight: Number(formData.cargoWeightKg),
-        dimensions: {
-          quantity: Math.round(Number(formData.quantity)),
-          isFragile: formData.isFragile,
-          isPerishable: formData.isPerishable,
-          tempControl: formData.tempControlCelsius
+      // Build payload matching POST /bookings/ API schema
+      const bookingPayload = {
+        fullNameOrBusiness: formData.fullNameOrBusiness,
+        contactPhone: normalizePhone(formData.contactPhone),
+        email: formData.email,
+        customerType: formData.customerType || 'Business',
+        pickupPerson: {
+          name: formData.pickupPerson?.name,
+          phone: normalizePhone(formData.pickupPerson?.phone),
+          email: formData.pickupPerson?.email
         },
-        serviceType: formData.vehicleType?.toLowerCase() || 'standard',
-        packageType: formData.goodsType?.toLowerCase() || 'parcel',
-        description: `Goods: ${formData.goodsType}. Quantity: ${formData.quantity}. ${formData.notes || ''}`,
-        declaredValue: formData.declaredValue ? Number(formData.declaredValue) : 0,
-        specialInstructions: formData.notes || ''
+        receiverPerson: {
+          name: formData.receiverPerson?.name,
+          phone: normalizePhone(formData.receiverPerson?.phone),
+          email: formData.receiverPerson?.email
+        },
+        // API accepts pickupLocation as a string
+        pickupLocation: formData.pickupLocation?.address
+          ? `${formData.pickupLocation.address}, ${formData.pickupLocation.city || 'Lagos'}`
+          : formData.pickupLocation?.city || 'Lagos',
+        // API accepts dropoffLocation as object with address + city (no state)
+        dropoffLocation: {
+          address: formData.dropoffLocation?.address || '',
+          city: formData.dropoffLocation?.city || ''
+        },
+        goodsType: formData.goodsType,
+        cargoWeightKg: Number(formData.cargoWeightKg),
+        quantity: parseInt(formData.quantity, 10) || 1,
+        isFragile: Boolean(formData.isFragile),
+        isPerishable: Boolean(formData.isPerishable),
+        tempControlCelsius: parseInt(formData.tempControlCelsius, 10) || 20,
+        vehicleType: formData.vehicleType || 'Van',
+        estimatedPickupDate: formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : new Date().toISOString(),
+        estimatedDeliveryDate: formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+        notes: formData.notes || '',
+        truckSize: formData.truckSize || 5
       }
 
-      const response = await createBookingMutation.mutateAsync(shipmentPayload)
-      if (!isValidBookingResponse(response)) throw new Error('Invalid booking response from server')
+      console.log('[DEBUG] Booking Payload:', JSON.stringify(bookingPayload, null, 2))
 
-      const id = extractBookingId(response)
+      const response = await createBookingMutation.mutateAsync(bookingPayload)
+
+      // API returns { data: { error, message, data: { booking fields... } } }
+      const apiBody = response.data
+      const bookingData = apiBody?.data || apiBody
+
+      if (apiBody?.error) throw new Error(apiBody.message || 'Booking creation failed')
+
+      const id = bookingData?._id || bookingData?.id || null
+      if (!id) throw new Error('No booking ID returned from server')
+
       setBookingId(id)
-
       toast.success('Booking created successfully!', { id: 'booking-submit' })
       setStep(5)
     } catch (err) {
       const friendlyMessage = getUserFriendlyMessage(err)
       toast.error(friendlyMessage, { id: 'booking-submit' })
-      // If it's a retryable error, we might store it, but TanStack Query handles basic retries.
-      // Here we keep local error state simple.
     }
   }
 

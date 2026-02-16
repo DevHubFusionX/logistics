@@ -21,7 +21,7 @@ export default function SidebarSection({ section, collapsed, expandedItems, togg
             collapsed={collapsed}
             isExpanded={expandedItems[item.id]}
             toggleExpanded={toggleExpanded}
-            isActive={isActive}
+            isActive={(path) => isActive(path, item)}
           />
         ))}
       </div>

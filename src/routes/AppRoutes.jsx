@@ -42,6 +42,7 @@ const Settings = lazy(() => import('../pages/dashboard/Settings'))
 const UserRoles = lazy(() => import('../pages/admin/UserRoles'))
 const PricingManagement = lazy(() => import('../pages/admin/PricingManagement'))
 const BookingsManagement = lazy(() => import('../pages/admin/BookingsManagement'))
+const AdminUserBookings = lazy(() => import('../pages/admin/AdminUserBookings'))
 const Reconciliation = lazy(() => import('../pages/admin/Reconciliation'))
 const User = lazy(() => import('../pages/user/User'))
 
@@ -75,6 +76,8 @@ const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'))
 const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
 const VerifyOTP = lazy(() => import('../pages/auth/VerifyOTP'))
 
+const AdminLogin = lazy(() => import('../pages/auth/AdminLogin'))
+
 export default function AppRoutes() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
@@ -96,6 +99,7 @@ export default function AppRoutes() {
         <Route element={<AuthLayout />}>
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/admin/login" element={<AdminLogin />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
           <Route path="/auth/reset-password" element={<ResetPassword />} />
           <Route path="/auth/verify-otp" element={<VerifyOTP />} />
@@ -138,6 +142,7 @@ export default function AppRoutes() {
           <Route path="/payments/reconciliation" element={<Reconciliation />} />
           <Route path="/pricing-management" element={<PricingManagement />} />
           <Route path="/bookings-management" element={<BookingsManagement />} />
+          <Route path="/admin/customers/:id/bookings" element={<AdminUserBookings />} />
           <Route path="/integrations" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings/*" element={<Settings />} />

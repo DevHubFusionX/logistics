@@ -1,5 +1,6 @@
 import React from 'react'
-import { Eye, Mail, Phone, MapPin, Building2, TrendingUp, ArrowUpRight, MoreHorizontal } from 'lucide-react'
+import { Eye, Mail, Phone, MapPin, Building2, TrendingUp, ArrowUpRight, MoreHorizontal, Package } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const ClientCard = ({ client, onViewClient }) => {
     const getRoleColor = (role) => {
@@ -67,14 +68,22 @@ const ClientCard = ({ client, onViewClient }) => {
                     </div>
                 </div>
 
-                <button
-                    onClick={() => onViewClient(client)}
-                    className="w-full mt-5 flex items-center justify-center gap-2 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-blue-600 transition-all duration-300 font-medium group/btn shadow-md hover:shadow-blue-200"
-                >
-                    <Eye className="w-4 h-4" />
-                    View Profile
-                    <ArrowUpRight className="w-4 h-4 opacity-0 group-hover/btn:opacity-100 group-hover/btn:translate-x-0.5 -translate-x-2 transition-all" />
-                </button>
+                <div className="grid grid-cols-2 gap-3 mt-5">
+                    <button
+                        onClick={() => onViewClient(client)}
+                        className="flex items-center justify-center gap-2 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-blue-600 transition-all duration-300 font-medium group/btn shadow-md hover:shadow-blue-200"
+                    >
+                        <Eye className="w-4 h-4" />
+                        Profile
+                    </button>
+                    <Link
+                        to={`/admin/customers/${client.id}/bookings`}
+                        className="flex items-center justify-center gap-2 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 hover:border-indigo-100 transition-all duration-300 font-medium group/btn shadow-sm"
+                    >
+                        <Package className="w-4 h-4" />
+                        Bookings
+                    </Link>
+                </div>
             </div>
         </div>
     )

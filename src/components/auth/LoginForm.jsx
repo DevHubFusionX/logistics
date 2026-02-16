@@ -46,7 +46,9 @@ export default function LoginForm() {
       const response = await login(formData)
       console.log('[DEBUG] LoginForm response:', response)
 
-      if (response.data?.token) {
+      // API returns { data: { error, message, data: { user, token } } }
+      const payload = response.data?.data
+      if (payload?.token) {
         if (rememberMe) {
           localStorage.setItem('rememberMe', 'true')
         } else {
@@ -56,14 +58,14 @@ export default function LoginForm() {
         setError('')
         showToast.success('Login successful', 'Redirecting to dashboard...')
 
-        const userRole = response.data.user?.role
-        const isAdmin = userRole === 'admin' || userRole === 'Super Admin' || userRole === 'Dispatcher'
+        const userRole = payload.user?.role
+        const isAdminUser = userRole === 'admin' || userRole === 'Super Admin' || userRole === 'Dispatcher'
 
         setTimeout(() => {
-          navigate(isAdmin ? '/dashboard' : '/my-bookings')
+          navigate(isAdminUser ? '/dashboard' : '/my-bookings')
         }, 500)
       } else {
-        const missingField = !response.data ? 'Response body' : !response.data.token ? 'Token' : 'User'
+        const missingField = !response.data ? 'Response body' : !payload?.token ? 'Token' : 'User'
         setError(`Login succeeded but ${missingField} is missing. Please contact support.`)
         showToast.error('Login failed', `Missing ${missingField}`)
         console.error('[CRITICAL] Login success without expected data:', response.data)
@@ -167,6 +169,9 @@ export default function LoginForm() {
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
+          {fieldErrors.password && (
+            <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>
+          )}
         </motion.div>
 
         <motion.div

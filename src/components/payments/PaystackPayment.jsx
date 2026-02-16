@@ -15,17 +15,15 @@ export default function PaystackPayment({ amount, email, bookingId, onSuccess, o
     try {
       console.log('Initializing payment for booking:', bookingId)
       const response = await paymentService.initializePayment(bookingId)
-      console.log('Payment initialization response:', response)
+      // response is { data: { error, message, data: { authorization_url, access_code, reference } }, status }
+      const apiBody = response.data
+      const paymentData = apiBody?.data
 
-      if (response.error) {
-        throw new Error(response.message || 'Failed to initialize payment')
+      if (apiBody.error || !paymentData?.authorization_url) {
+        throw new Error(apiBody.message || 'Failed to initialize payment')
       }
 
-      if (!response.data || !response.data.authorization_url) {
-        throw new Error('Invalid payment response from server')
-      }
-
-      const { authorization_url, reference } = response.data
+      const { authorization_url, reference } = paymentData
       console.log('Payment reference:', reference)
       console.log('Redirecting to:', authorization_url)
 

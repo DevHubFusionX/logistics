@@ -115,6 +115,24 @@ export const NAVIGATION_SECTIONS = [
     title: 'Operations',
     items: [
       {
+        id: 'admin-bookings',
+        label: 'Bookings',
+        icon: Package,
+        path: '/bookings-management',
+        description: 'Manage all shipments',
+        color: 'blue',
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
+      },
+      {
+        id: 'user-bookings',
+        label: 'User Bookings',
+        icon: Users,
+        path: '/customers', // Fallback to customers list to select a user
+        description: 'View bookings by user',
+        color: 'indigo',
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
+      },
+      {
         id: 'fleet',
         label: 'Fleet Management',
         icon: Truck,
@@ -146,15 +164,7 @@ export const NAVIGATION_SECTIONS = [
   {
     title: 'People & Analytics',
     items: [
-      {
-        id: 'customers',
-        label: 'Clients & Orders',
-        icon: Users,
-        path: '/customers',
-        description: 'Client & order management',
-        color: 'blue',
-        roles: ['Super Admin', 'Support']
-      },
+    
       {
         id: 'drivers',
         label: 'Drivers & Staff',

@@ -8,12 +8,17 @@ import toast from 'react-hot-toast'
  * 
  * Replaces: useBookings hook
  */
-export function useBookingsQuery(filters = {}) {
+export function useBookingsQuery(filters = { limit: 10, page: 1 }) {
     return useQuery({
         queryKey: queryKeys.bookings.list(filters),
         queryFn: async () => {
             const response = await bookingService.getBookings(filters)
-            return response.data?.shipments || []
+            // API returns { data: { error, message, data: { records, pagination } } }
+            const apiBody = response.data
+            if (apiBody?.error) {
+                throw new Error(apiBody.message || 'Failed to fetch bookings')
+            }
+            return apiBody.data?.records || []
         },
         staleTime: 2 * 60 * 1000,
         retry: 2,
@@ -23,14 +28,34 @@ export function useBookingsQuery(filters = {}) {
 /**
  * Fetch all shipments (Admin View)
  */
-export function useAllBookingsQuery(filters = {}) {
+export function useAllBookingsQuery(filters = { limit: 10, page: 1 }) {
     return useQuery({
         queryKey: ['bookings', 'all', filters],
         queryFn: async () => {
-            const response = await bookingService.getAllBookings(filters)
-            return response.data?.shipments || response.data || []
+            const response = await bookingService.getAdminBookings(filters)
+            // API returns { data: { error, message, data: { records, pagination } } }
+            const apiBody = response.data
+            if (apiBody?.error) throw new Error(apiBody.message || 'Failed to fetch all bookings')
+
+            // Return full data object to allow access to pagination in UI
+            return apiBody.data || { records: [], pagination: {} }
         },
-        staleTime: 1 * 60 * 1000, // 1 minute
+        staleTime: 5 * 60 * 1000,
+    })
+}
+
+export function useAdminUserBookingsQuery(userId, filters = { limit: 10, page: 1 }) {
+    return useQuery({
+        queryKey: ['bookings', 'user', userId, filters],
+        queryFn: async () => {
+            if (!userId) return { records: [], pagination: {} }
+            const response = await bookingService.getUserBookingsForAdmin(userId, filters)
+            const apiBody = response.data
+            if (apiBody?.error) throw new Error(apiBody.message || 'Failed to fetch user bookings')
+            return apiBody.data || { records: [], pagination: {} }
+        },
+        enabled: !!userId,
+        staleTime: 1 * 60 * 1000,
     })
 }
 
@@ -71,11 +96,13 @@ export function useBookingPriceQuery(params, options = {}) {
     return useQuery({
         queryKey: ['bookings', 'price', params],
         queryFn: async () => {
-            const response = await bookingService.getPrices(params)
-            if (response.error) throw new Error(response.message || 'Failed to calculate price')
-            return response.data || response
+            const response = await bookingService.getPrices(params?.destination, params?.weight)
+            // httpClient returns { data: { error, message, data: { price } } }
+            const apiBody = response.data
+            if (apiBody?.error) throw new Error(apiBody.message || 'Failed to calculate price')
+            return apiBody.data || apiBody
         },
-        enabled: !!params?.weight && !!params?.serviceType,
+        enabled: !!params?.weight && !!params?.destination,
         staleTime: 1 * 60 * 1000, // 1 minute
         ...options,
     })
@@ -90,18 +117,25 @@ export function useUpdateBookingMutation() {
     const queryClient = useQueryClient()
 
     return useMutation({
-        mutationFn: async ({ bookingId, data }) => {
+        mutationFn: async ({ bookingId, data, isAdmin = false }) => {
+            if (isAdmin) {
+                return await bookingService.updateAdminBooking(bookingId, data)
+            }
             return await bookingService.updateBooking(bookingId, data)
         },
 
-        onSuccess: (updatedBooking, variables) => {
+        onSuccess: (response, variables) => {
             toast.success('Booking updated successfully!')
 
+            // API returns { data: { error, message, data: { ...updatedBooking } } }
+            const apiBody = response.data
+            const updatedBooking = apiBody?.data || apiBody
+
             // Update the specific booking in cache
-            if (updatedBooking?.data) {
+            if (updatedBooking) {
                 queryClient.setQueryData(
                     queryKeys.bookings.detail(variables.bookingId),
-                    updatedBooking.data
+                    updatedBooking
                 )
             }
 
@@ -110,7 +144,7 @@ export function useUpdateBookingMutation() {
         },
 
         onError: (error) => {
-            const message = error.response?.data?.message || 'Failed to update booking'
+            const message = error.response?.data?.message || error.message || 'Failed to update booking'
             toast.error(message)
         },
     })
@@ -127,15 +161,26 @@ export function useCancelBookingMutation() {
             return await bookingService.cancelBooking(bookingId)
         },
 
-        onSuccess: () => {
-            toast.success('Booking cancelled successfully!')
+        onSuccess: (response, bookingId) => {
+            toast.success('Booking cancelled successfully')
 
-            // Invalidate all booking queries to refresh
+            // API returns { data: { error, message, data: { ...booking } } }
+            const apiBody = response.data
+            const updatedBooking = apiBody?.data || apiBody
+
+            // Update cache
+            if (updatedBooking) {
+                queryClient.setQueryData(
+                    queryKeys.bookings.detail(bookingId),
+                    updatedBooking
+                )
+            }
+
             queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all })
         },
 
         onError: (error) => {
-            const message = error.response?.data?.message || 'Failed to cancel booking'
+            const message = error.response?.data?.message || error.message || 'Failed to cancel booking'
             toast.error(message)
         },
     })
@@ -152,44 +197,17 @@ export function useCreateBookingMutation() {
             return await bookingService.createBooking(bookingData)
         },
 
-        onSuccess: (newBooking) => {
-            toast.success('Booking created successfully!')
-
-            // Invalidate bookings list
+        onSuccess: (response) => {
+            // API returns { data: { error, message, data: { booking fields } } }
+            // Toast is handled by the booking flow
             queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all })
-
-            return newBooking
+            return response
         },
 
         onError: (error) => {
-            const message = error.response?.data?.message || 'Failed to create booking'
+            const message = error.response?.data?.message || error.message || 'Failed to create booking'
             toast.error(message)
         },
     })
 }
 
-/**
- * Pay for booking mutation
- */
-export function usePayBookingMutation() {
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationFn: async ({ bookingId, paymentData }) => {
-            return await bookingService.payForBooking(bookingId, paymentData)
-        },
-
-        onSuccess: (response, variables) => {
-            // Update booking status in cache
-            queryClient.invalidateQueries({
-                queryKey: queryKeys.bookings.detail(variables.bookingId)
-            })
-            queryClient.invalidateQueries({ queryKey: queryKeys.bookings.all })
-        },
-
-        onError: (error) => {
-            const message = error.response?.data?.message || 'Payment failed'
-            toast.error(message)
-        },
-    })
-}

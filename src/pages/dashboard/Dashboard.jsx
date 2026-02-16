@@ -5,7 +5,9 @@ import MyBookings from '../user/MyBookings'
 export default function Dashboard() {
   const { user } = useAuth()
 
-  if (user?.role === 'Super Admin' || user?.role === 'Dispatcher') {
+  const isAdmin = ['Super Admin', 'Dispatcher', 'admin', 'Admin', 'SUPER_ADMIN'].includes(user?.role)
+
+  if (isAdmin) {
     return <AdminOverview />
   }
 

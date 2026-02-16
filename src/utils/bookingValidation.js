@@ -12,8 +12,10 @@ export const validateBookingId = (bookingId) => {
 }
 
 export const extractBookingId = (response) => {
-  // Try multiple possible locations for booking ID
+  // Try nested DARA API structure first: { data: { error, message, data: { _id, ... } } }
   return (
+    response?.data?.data?._id ||
+    response?.data?.data?.id ||
     response?.data?.shipment?.id ||
     response?.data?.bookingId ||
     response?.data?._id ||

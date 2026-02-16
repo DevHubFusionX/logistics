@@ -32,26 +32,28 @@ export default function BookingsManagement() {
     ...(debouncedSearch && { search: debouncedSearch })
   }), [statusFilter, debouncedSearch])
 
-  const { data: rawBookings = [], isLoading, isError, refetch } = useAllBookingsQuery(queryParams)
+  const { data: rawData, isLoading, isError, refetch } = useAllBookingsQuery(queryParams)
+  const rawBookings = rawData?.records || []
+  const pagination = rawData?.pagination || {}
 
   const mappedBookings = useMemo(() => {
-    const segments = Array.isArray(rawBookings) ? rawBookings : []
-    return segments.map(b => ({
+    const records = Array.isArray(rawBookings) ? rawBookings : []
+    return records.map(b => ({
       ...b,
-      id: b.id,
-      trackingNumber: b.tracking_number,
-      customerName: b.sender ? `${b.sender.first_name} ${b.sender.last_name}` : (b.receiver_name || 'Guest'),
-      customerEmail: b.sender?.email || b.receiver_email,
-      customerPhone: b.sender?.phone || b.receiver_phone,
-      pickupCity: b.origin?.split(',').pop()?.trim() || 'N/A',
-      deliveryCity: b.destination?.split(',').pop()?.trim() || 'N/A',
-      weight: b.weight,
-      cargoType: b.package_type,
-      serviceType: b.service_type,
+      id: b._id || b.id,
+      trackingNumber: b.tracking_number || b._id,
+      customerName: b.fullNameOrBusiness || (b.sender ? `${b.sender.first_name} ${b.sender.last_name}` : (b.receiver_name || 'Guest')),
+      customerEmail: b.email || b.sender?.email || b.receiver_email,
+      customerPhone: b.contactPhone || b.sender?.phone || b.receiver_phone,
+      pickupCity: b.pickupLocation?.city || b.origin?.split(',').pop()?.trim() || 'N/A',
+      deliveryCity: b.dropoffLocation?.city || b.destination?.split(',').pop()?.trim() || 'N/A',
+      weight: b.cargoWeightKg || b.weight,
+      cargoType: b.goodsType || b.package_type,
+      serviceType: b.vehicleType || b.service_type,
       status: b.status,
-      amount: b.shipping_fee,
-      createdAt: b.created_at,
-      pickupDate: b.estimated_delivery,
+      amount: b.price || b.shipping_fee,
+      createdAt: b.createdAt || b.created_at,
+      pickupDate: b.estimatedPickupDate || b.pickupDate || b.estimated_delivery,
       driverId: b.driver?.id,
       driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : null
     }))
@@ -191,7 +193,7 @@ export default function BookingsManagement() {
           <div className="grid grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 gap-6">
             {mappedBookings.map(booking => (
               <BookingCard
-                key={booking.id}
+                key={booking.id || booking._id}
                 booking={booking}
                 onViewDetails={() => handleViewDetails(booking)}
                 onAssignDriver={() => handleAssignDriver(booking)}

@@ -10,10 +10,17 @@ export class ApiError extends Error {
 export const handleApiError = (error) => {
   if (error?.response?.status === 401 || error?.status === 401) {
     if (typeof window !== "undefined") {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      // Add other auth-related keys as needed
-      window.location.href = "/auth/login";
+      const path = window.location.pathname;
+      const isAuthPath = path.includes('/auth/login') ||
+        path.includes('/auth/admin/login') ||
+        path.includes('/auth/signup');
+
+      // Don't redirect if we're already on an auth page or if the error is from a login attempt
+      if (!isAuthPath) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/auth/login";
+      }
     }
   }
 

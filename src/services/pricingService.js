@@ -52,11 +52,9 @@ const pricingService = {
     },
 
     // Calculate price using backend
-    calculatePrice: async (serviceType, weight, distance) => {
-        return httpClient.request('/pricing/calculate', {
-            method: 'POST',
-            body: JSON.stringify({ serviceType, weight, distance })
-        })
+    calculatePrice: async (destination, weight, isAdmin = false) => {
+        const path = isAdmin ? '/admin/bookings/prices' : '/bookings/prices'
+        return httpClient.request(`${path}/${encodeURIComponent(destination)}/${encodeURIComponent(weight)}`)
     },
 
     // Client overrides (stored locally for now, can be extended to backend)

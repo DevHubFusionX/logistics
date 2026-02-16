@@ -159,8 +159,8 @@ export default function ProfileSection() {
                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider ml-1">Secure Mobile Connection</label>
                 <input
                   type="tel"
-                  value={displayData.phone}
-                  onChange={(e) => handleChange('phone', e.target.value)}
+                  value={displayData.phoneNumber}
+                  onChange={(e) => handleChange('phoneNumber', e.target.value)}
                   disabled={!isEditing}
                   placeholder="+234 000 000 0000"
                   className={`w-full px-5 py-3 rounded-xl transition-all font-bold text-sm ${isEditing

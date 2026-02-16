@@ -1,7 +1,9 @@
 import React from 'react'
-import { Eye, Mail, Phone, ExternalLink, ShieldCheck, MoreVertical } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Eye, Mail, Phone, ExternalLink, ShieldCheck, MoreVertical, Package } from 'lucide-react'
 
 export default function ClientsTable({ data, onViewClient }) {
+  const navigate = useNavigate()
   const getPaymentBadge = (status) => {
     const styles = {
       current: 'bg-emerald-50 text-emerald-700 border-emerald-100 ring-emerald-500/10',
@@ -79,6 +81,13 @@ export default function ClientsTable({ data, onViewClient }) {
                     title="View details"
                   >
                     <Eye className="w-4.5 h-4.5" />
+                  </button>
+                  <button
+                    onClick={() => navigate(`/admin/customers/${client.id}/bookings`)}
+                    className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                    title="View user bookings"
+                  >
+                    <Package className="w-4.5 h-4.5" />
                   </button>
                   <button className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-all">
                     <MoreVertical className="w-4.5 h-4.5" />

@@ -8,6 +8,7 @@ const AuthActionsContext = createContext()
 const roleMap = {
   'user': 'Customer',
   'admin': 'Super Admin',
+  'SUPER_ADMIN': 'Super Admin',
   'driver': 'Driver'
 }
 
@@ -18,6 +19,7 @@ const normalizeUser = (user) => {
     role: roleMap[user.role] || user.role || 'Customer'
   }
 }
+
 
 // Hook to access auth state (user, loading)
 export const useAuthState = () => {
@@ -34,6 +36,7 @@ export const useAuthActions = () => {
   if (!context) {
     return {
       login: () => { },
+      adminLogin: () => { },
       register: () => { },
       logout: () => { },
       hasPermission: () => true,
@@ -54,8 +57,16 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('user')
-    return savedUser ? JSON.parse(savedUser) : null
+    try {
+      const savedUser = localStorage.getItem('user')
+      if (savedUser && savedUser !== 'undefined') {
+        return JSON.parse(savedUser)
+      }
+    } catch (error) {
+      console.error('Failed to parse user from localStorage:', error)
+      localStorage.removeItem('user')
+    }
+    return null
   })
   const [loading, setLoading] = useState(true)
 
@@ -73,13 +84,31 @@ export const AuthProvider = ({ children }) => {
       const token = localStorage.getItem('token')
       if (token) {
         try {
-          const response = await authService.getProfile()
-          if (response.data) {
-            setUser(normalizeUser(response.data))
+          // Determine which profile endpoint to call based on existing local state if available
+          const savedUser = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null
+          const isAdmin = savedUser?.role === 'Super Admin' || savedUser?.role === 'admin' || savedUser?.role === 'SUPER_ADMIN'
+
+          const response = isAdmin
+            ? await authService.getAdminProfile()
+            : await authService.getProfile()
+
+          // API might return { data: { admin } } or { data: { user } } or { data: { data: { user/admin } } }
+          const apiBody = response.data
+          const userData = apiBody?.data?.user || apiBody?.data?.admin || apiBody?.data || apiBody
+
+          if (userData) {
+            setUser(normalizeUser(userData))
           }
         } catch (err) {
           console.error('Failed to fetch profile:', err)
-          localStorage.clear()
+          // If profile fetch fails (e.g. 401 for admin on /user/), 
+          // we keep the local state if it exists, or clear it if it's a real auth failure
+          if (err.status === 401 && user) {
+            console.log('Restoring user session from local state')
+          } else {
+            localStorage.clear()
+            setUser(null)
+          }
         }
       }
       setLoading(false)
@@ -89,16 +118,30 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (credentials) => {
     const response = await authService.login(credentials)
-    if (response.data?.token) {
-      setUser(normalizeUser(response.data.user))
+    // API returns { data: { error, message, data: { user/admin, token } } }
+    const payload = response.data?.data
+    if (payload?.token) {
+      setUser(normalizeUser(payload.user || payload.admin))
+    }
+    return response
+  }
+
+  const adminLogin = async (credentials) => {
+    const response = await authService.adminLogin(credentials)
+    // API returns { data: { error, message, data: { user/admin, token } } }
+    const payload = response.data?.data
+    if (payload?.token) {
+      setUser(normalizeUser(payload.user || payload.admin))
     }
     return response
   }
 
   const register = async (userData) => {
     const response = await authService.register(userData)
-    if (response.data?.token) {
-      setUser(normalizeUser(response.data.user))
+    // API returns { data: { error, message, data: { user, token } } }
+    const payload = response.data?.data
+    if (payload?.token) {
+      setUser(normalizeUser(payload.user))
     }
     return response
   }
@@ -141,6 +184,7 @@ export const AuthProvider = ({ children }) => {
     () => ({
       setUser,
       login,
+      adminLogin,
       register,
       logout,
       hasPermission,

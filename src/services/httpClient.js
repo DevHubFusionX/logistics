@@ -3,7 +3,7 @@ import { ApiError, handleApiError } from '../utils/errorHandler'
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 // Note: In production, relative paths work best with proxying or direct domain mapping
 
-const ALLOWED_ENDPOINTS = ['/auth', '/user', '/users', '/addresses', '/shipments', '/drivers', '/fleet', '/trips', '/bookings', '/analytics', '/payments', '/payment', '/pricing', '/tracking']
+const ALLOWED_ENDPOINTS = ['/auth', '/user', '/users', '/addresses', '/shipments', '/drivers', '/fleet', '/trips', '/bookings', '/analytics', '/payments', '/payment', '/pricing', '/tracking', '/admin']
 
 class HttpClient {
   validateEndpoint(endpoint) {
