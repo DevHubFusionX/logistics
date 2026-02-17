@@ -62,6 +62,7 @@ const BookingStatusGuide = lazy(() => import('../pages/user/BookingStatusGuide')
 const AddressBook = lazy(() => import('../pages/user/AddressBook'))
 const MyTemperature = lazy(() => import('../pages/user/MyTemperature'))
 const Support = lazy(() => import('../pages/user/Support'))
+const TicketDetail = lazy(() => import('../pages/user/TicketDetail'))
 const MyAnalytics = lazy(() => import('../pages/user/MyAnalytics'))
 const DriverApp = lazy(() => import('../pages/user/DriverApp'))
 const PaymentHistory = lazy(() => import('../pages/user/PaymentHistory'))
@@ -105,7 +106,7 @@ export default function AppRoutes() {
           <Route path="/auth/verify-otp" element={<VerifyOTP />} />
         </Route>
 
-        {/* Dashboard & Protected Routes - Uses AppLayout with Sidebar */}
+        {/* Dashboard & Protected Routes - User/Customer Zone */}
         <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
           {/* Booking Routes */}
           <Route path="/booking/request" element={<BookingRequest />} />
@@ -120,7 +121,24 @@ export default function AppRoutes() {
           <Route path="/tracking/invoice" element={<Invoice />} />
           <Route path="/tracking/invoice/:id" element={<Invoice />} />
 
-          {/* Core Dashboard Routes */}
+          {/* User Specific Routes */}
+          <Route path="/profile" element={<ManageProfile />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          <Route path="/payment-history" element={<PaymentHistory />} />
+          <Route path="/my-temperature" element={<MyTemperature />} />
+          <Route path="/my-analytics" element={<MyAnalytics />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/support/:ticketId" element={<TicketDetail />} />
+          <Route path="/booking-status-guide" element={<BookingStatusGuide />} />
+          <Route path="/address-book" element={<AddressBook />} />
+        </Route>
+
+        {/* Admin Dashboard Protected Routes */}
+        <Route element={
+          <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']}>
+            <DashboardLayout />
+          </ProtectedRoute>
+        }>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/overview" element={<Dashboard />} />
           <Route path="/shipments" element={<Shipments />} />
@@ -133,7 +151,6 @@ export default function AppRoutes() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/drivers" element={<Drivers />} />
           <Route path="/trips" element={<Trips />} />
-          <Route path="/analytics" element={<Dashboard />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/tasks" element={<Tasks />} />
@@ -143,22 +160,10 @@ export default function AppRoutes() {
           <Route path="/pricing-management" element={<PricingManagement />} />
           <Route path="/bookings-management" element={<BookingsManagement />} />
           <Route path="/admin/customers/:id/bookings" element={<AdminUserBookings />} />
-          <Route path="/integrations" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings/*" element={<Settings />} />
           <Route path="/settings/roles" element={<UserRoles />} />
-          <Route path="/help" element={<Dashboard />} />
           <Route path="/user" element={<User />} />
-
-          {/* User Specific Routes */}
-          <Route path="/profile" element={<ManageProfile />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-          <Route path="/payment-history" element={<PaymentHistory />} />
-          <Route path="/my-temperature" element={<MyTemperature />} />
-          <Route path="/my-analytics" element={<MyAnalytics />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/booking-status-guide" element={<BookingStatusGuide />} />
-          <Route path="/address-book" element={<AddressBook />} />
         </Route>
 
         {/* 404 Not Found - Catch all */}

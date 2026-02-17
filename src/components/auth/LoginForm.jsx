@@ -1,89 +1,90 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff } from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth.jsx'
+import { useLoginMutation } from '../../hooks/queries/useAuthQueries'
+import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
 
-const MIN_PASSWORD_LENGTH = 8
+const MAX_ATTEMPTS = 5
+const LOCKOUT_TIME = 60000 // 1 minute
 
 export default function LoginForm() {
   const navigate = useNavigate()
-  const { login } = useAuth()
   const { showToast, ToastContainer } = useToast()
+  const { mutate: login, isLoading: isLoggingIn, error: loginError, reset: resetMutation } = useLoginMutation()
+
+  const {
+    fieldErrors,
+    clearFieldError,
+    validateEmail,
+    validatePassword,
+    setFieldError
+  } = useFormValidation()
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   })
   const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
-  const [fieldErrors, setFieldErrors] = useState({})
+
+  // Rate limiting state
+  const [attempts, setAttempts] = useState(0)
+  const [lockoutTime, setLockoutTime] = useState(0)
+
+  useEffect(() => {
+    if (lockoutTime > 0) {
+      const timer = setInterval(() => {
+        setLockoutTime((prev) => Math.max(0, prev - 1000))
+      }, 1000)
+      return () => clearInterval(timer)
+    }
+  }, [lockoutTime])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setLoading(true)
-    setError('')
-    setFieldErrors({})
 
-    // Validation
-    const errors = {}
-    if (!formData.email) errors.email = 'Email is required'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email format'
-    if (!formData.password) errors.password = 'Password is required'
-    else if (formData.password.length < MIN_PASSWORD_LENGTH) errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
-
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors)
-      setError('Please fix the errors below')
-      showToast.error('Validation failed', 'Please check your input')
-      setLoading(false)
+    if (lockoutTime > 0) {
+      showToast.error('Too many attempts', `Please try again in ${Math.ceil(lockoutTime / 1000)}s`)
       return
     }
 
-    try {
-      const response = await login(formData)
-      console.log('[DEBUG] LoginForm response:', response)
+    resetMutation()
 
-      // API returns { data: { error, message, data: { user, token } } }
-      const payload = response.data?.data
-      if (payload?.token) {
-        if (rememberMe) {
-          localStorage.setItem('rememberMe', 'true')
-        } else {
-          localStorage.removeItem('rememberMe')
-        }
+    // Validation
+    const emailError = validateEmail(formData.email)
+    const passwordError = validatePassword(formData.password)
 
-        setError('')
-        showToast.success('Login successful', 'Redirecting to dashboard...')
-
-        const userRole = payload.user?.role
-        const isAdminUser = userRole === 'admin' || userRole === 'Super Admin' || userRole === 'Dispatcher'
-
-        setTimeout(() => {
-          navigate(isAdminUser ? '/dashboard' : '/my-bookings')
-        }, 500)
-      } else {
-        const missingField = !response.data ? 'Response body' : !payload?.token ? 'Token' : 'User'
-        setError(`Login succeeded but ${missingField} is missing. Please contact support.`)
-        showToast.error('Login failed', `Missing ${missingField}`)
-        console.error('[CRITICAL] Login success without expected data:', response.data)
-      }
-    } catch (error) {
-      if (error.message.includes('401') || error.message.includes('unauthorized')) {
-        setError('Invalid email or password. Please try again.')
-        showToast.error('Login failed', 'Invalid credentials')
-      } else if (error.message.includes('network') || error.message.includes('fetch')) {
-        setError('Connection error. Please check your internet and try again.')
-        showToast.error('Connection error', 'Please check your internet')
-      } else {
-        setError(error.message || 'Login failed. Please try again.')
-        showToast.error('Login failed', error.message || 'Please try again')
-      }
-    } finally {
-      setLoading(false)
+    if (emailError || passwordError) {
+      if (emailError) setFieldError('email', emailError)
+      if (passwordError) setFieldError('password', passwordError)
+      return
     }
+
+    login(formData, {
+      onSuccess: (response) => {
+        const userRole = response.data?.data?.user?.role || response.data?.data?.admin?.role
+        const isAdmin = ['admin', 'Super Admin', 'Dispatcher'].includes(userRole)
+
+        showToast.success('Welcome back!', 'Redirecting to your dashboard...')
+        setTimeout(() => {
+          navigate(isAdmin ? '/dashboard' : '/my-bookings')
+        }, 800)
+      },
+      onError: (err) => {
+        const newAttempts = attempts + 1
+        setAttempts(newAttempts)
+
+        if (newAttempts >= MAX_ATTEMPTS) {
+          setLockoutTime(LOCKOUT_TIME)
+          setAttempts(0)
+          showToast.error('Security Alert', 'Too many failed attempts. Account locked for 60 seconds.')
+        } else {
+          showToast.error('Login Failed', err.message || 'Invalid credentials')
+        }
+      }
+    })
   }
 
   return (
@@ -91,35 +92,25 @@ export default function LoginForm() {
       className="max-w-md w-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
     >
-      <motion.div
-        className="text-center mb-8"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      >
+      <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
         <p className="text-gray-600">Access your logistics command center</p>
-      </motion.div>
+      </div>
 
-      {error && (
+      {lockoutTime > 0 && (
         <motion.div
-          className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-2"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
+          className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-lg text-amber-700 text-sm flex items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <div className="w-4 h-4 bg-red-500 rounded-full flex-shrink-0"></div>
-          {error}
+          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <span>Security Lock: Try again in {Math.ceil(lockoutTime / 1000)} seconds</span>
         </motion.div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-        >
+        <div>
           <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -128,25 +119,25 @@ export default function LoginForm() {
               value={formData.email}
               onChange={(e) => {
                 setFormData({ ...formData, email: e.target.value })
-                setFieldErrors({ ...fieldErrors, email: '' })
+                clearFieldError('email')
               }}
-              className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              className={`w-full pl-10 pr-4 py-4 border rounded-xl focus:ring-4 focus:ring-sky-50 focus:border-sky-500 font-medium text-lg transition-all ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
                 }`}
-              placeholder="Enter your email address"
+              placeholder="Enter your email"
               required
+              disabled={isLoggingIn || lockoutTime > 0}
             />
           </div>
-          {fieldErrors.email && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>
-          )}
-        </motion.div>
+          {fieldErrors.email && <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>}
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+        <div>
+          <div className="flex justify-between mb-2">
+            <label className="block text-sm font-semibold text-gray-700">Password</label>
+            <Link to="/auth/forgot-password" size="sm" className="text-sky-600 hover:text-sky-700 text-sm font-semibold">
+              Forgot password?
+            </Link>
+          </div>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
@@ -154,12 +145,13 @@ export default function LoginForm() {
               value={formData.password}
               onChange={(e) => {
                 setFormData({ ...formData, password: e.target.value })
-                setFieldErrors({ ...fieldErrors, password: '' })
+                clearFieldError('password')
               }}
-              className={`w-full pl-10 pr-12 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium text-lg transition-all duration-200 hover:border-gray-400 ${fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300'
+              className={`w-full pl-10 pr-12 py-4 border rounded-xl focus:ring-4 focus:ring-sky-50 focus:border-sky-500 font-medium text-lg transition-all ${fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
                 }`}
               placeholder="Enter your password"
               required
+              disabled={isLoggingIn || lockoutTime > 0}
             />
             <button
               type="button"
@@ -169,69 +161,46 @@ export default function LoginForm() {
               {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
             </button>
           </div>
-          {fieldErrors.password && (
-            <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>
-          )}
-        </motion.div>
+          {fieldErrors.password && <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>}
+        </div>
 
-        <motion.div
-          className="flex items-center justify-between"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <label className="flex items-center cursor-pointer">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className="rounded border-gray-300 text-sky-500 focus:ring-sky-500"
-            />
-            <span className="ml-2 text-sm text-gray-600 font-medium">Keep me signed in</span>
+        <div className="flex items-center">
+          <input
+            id="remember-me"
+            type="checkbox"
+            checked={rememberMe}
+            onChange={(e) => setRememberMe(e.target.checked)}
+            className="w-4 h-4 rounded border-gray-300 text-sky-600 focus:ring-sky-500"
+          />
+          <label htmlFor="remember-me" className="ml-2 text-sm text-gray-600 font-medium cursor-pointer">
+            Keep me signed in
           </label>
-          <Link to="/auth/forgot-password" className="text-sm text-sky-600 hover:text-sky-700 font-semibold transition-colors">
-            Forgot password?
-          </Link>
-        </motion.div>
+        </div>
 
         <motion.button
           type="submit"
-          disabled={loading}
-          className="w-full bg-gradient-to-r from-sky-600 to-blue-700 text-white py-4 rounded-lg font-semibold text-lg hover:from-sky-500 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
-          whileHover={{ scale: loading ? 1 : 1.02 }}
-          whileTap={{ scale: loading ? 1 : 0.98 }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          disabled={isLoggingIn || lockoutTime > 0}
+          className="w-full bg-gradient-to-r from-sky-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-100 disabled:opacity-50"
+          whileHover={{ scale: isLoggingIn || lockoutTime > 0 ? 1 : 1.01 }}
+          whileTap={{ scale: isLoggingIn || lockoutTime > 0 ? 1 : 0.99 }}
         >
-          {loading ? (
+          {isLoggingIn ? (
             <div className="flex items-center justify-center gap-3">
-              <div className="flex gap-1">
-                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-              </div>
-              <span className="opacity-90">Signing In</span>
+              <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              <span>Verifying Credentials...</span>
             </div>
-          ) : (
-            'Sign In to Dashboard'
-          )}
+          ) : 'Sign In'}
         </motion.button>
       </form>
 
-      <motion.div
-        className="mt-8 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
-      >
+      <div className="mt-8 text-center">
         <p className="text-gray-600">
-          New to Dara Logistics?{' '}
-          <Link to="/auth/signup" className="text-sky-600 hover:text-sky-700 font-semibold transition-colors">
-            Create your account
+          Not a member?{' '}
+          <Link to="/auth/signup" className="text-sky-600 hover:text-sky-700 font-bold">
+            Create an account
           </Link>
         </p>
-      </motion.div>
+      </div>
       <ToastContainer />
     </motion.div>
   )

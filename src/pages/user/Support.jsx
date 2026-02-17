@@ -1,53 +1,63 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageHeader } from '../../components/dashboard'
-import { MessageSquare, Plus, Clock, CheckCircle, AlertCircle, Send, RefreshCw } from 'lucide-react'
+import {
+  Plus, MessageSquare, Clock, CheckCircle, AlertCircle, Search,
+  RefreshCw, Send, Filter, ChevronRight
+} from 'lucide-react'
 import { useTicketsQuery, useCreateTicketMutation } from '../../hooks/queries/useSupportQueries'
+import { TicketSkeleton, StatCardSkeleton } from '../../components/common/SkeletonLoaders'
+
+const statusConfig = {
+  open: { icon: AlertCircle, color: 'yellow', label: 'Open' },
+  in_progress: { icon: Clock, color: 'blue', label: 'In Progress' },
+  resolved: { icon: CheckCircle, color: 'green', label: 'Resolved' },
+}
 
 export default function Support() {
+  const navigate = useNavigate()
   const [showNewTicket, setShowNewTicket] = useState(false)
   const [filter, setFilter] = useState('all')
+  const [search, setSearch] = useState('')
   const [formData, setFormData] = useState({
-    subject: '',
-    category: '',
-    priority: 'medium',
-    description: ''
+    subject: '', category: '', priority: 'medium', description: ''
   })
 
-  const queryFilters = useMemo(() => ({
-    ...(filter !== 'all' && { status: filter })
-  }), [filter])
+  const queryFilters = useMemo(() => {
+    const f = {}
+    if (filter !== 'all') f.status = filter
+    return f
+  }, [filter])
 
   const { data: tickets = [], isLoading, isError, refetch } = useTicketsQuery(queryFilters)
   const createTicketMutation = useCreateTicketMutation()
 
-  const stats = useMemo(() => {
-    return {
-      open: tickets.filter(t => t.status === 'open').length,
-      inProgress: tickets.filter(t => t.status === 'in_progress' || t.status === 'processing').length,
-      resolved: tickets.filter(t => t.status === 'resolved' || t.status === 'closed').length
-    }
-  }, [tickets])
+  // Search
+  const filteredTickets = useMemo(() => {
+    if (!search.trim()) return tickets
+    const q = search.toLowerCase()
+    return tickets.filter(t =>
+      (t.subject || '').toLowerCase().includes(q) ||
+      (t.id || '').toLowerCase().includes(q) ||
+      (t.category || '').toLowerCase().includes(q)
+    )
+  }, [tickets, search])
 
-  const getStatusBadge = (status) => {
-    const badges = {
-      open: 'bg-blue-100 text-blue-700',
-      in_progress: 'bg-yellow-100 text-yellow-700',
-      processing: 'bg-yellow-100 text-yellow-700',
-      resolved: 'bg-green-100 text-green-700',
-      closed: 'bg-green-100 text-green-700'
-    }
-    return badges[status] || 'bg-gray-100 text-gray-700'
-  }
+  // Stats
+  const stats = useMemo(() => ({
+    open: tickets.filter(t => t.status === 'open').length,
+    inProgress: tickets.filter(t => t.status === 'in_progress').length,
+    resolved: tickets.filter(t => t.status === 'resolved').length,
+  }), [tickets])
 
-  const getPriorityBadge = (priority) => {
-    const badges = {
-      low: 'bg-gray-100 text-gray-700',
-      medium: 'bg-blue-100 text-blue-700',
-      high: 'bg-orange-100 text-orange-700',
-      critical: 'bg-red-100 text-red-700'
+  // Close modal on Escape
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === 'Escape' && showNewTicket) setShowNewTicket(false)
     }
-    return badges[priority] || 'bg-gray-100 text-gray-700'
-  }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [showNewTicket])
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -61,9 +71,14 @@ export default function Support() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        <p className="text-gray-500 animate-pulse font-medium">Loading support center...</p>
+      <div className="space-y-6 pb-6">
+        <PageHeader title="Support Center" subtitle="Get help and track your support tickets" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {Array.from({ length: 3 }).map((_, i) => <StatCardSkeleton key={i} />)}
+        </div>
+        <div className="space-y-4">
+          {Array.from({ length: 3 }).map((_, i) => <TicketSkeleton key={i} />)}
+        </div>
       </div>
     )
   }
@@ -71,238 +86,236 @@ export default function Support() {
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4 text-center">
-        <AlertCircle className="w-12 h-12 text-red-500" />
-        <h3 className="text-xl font-bold text-gray-900">Support Center Offline</h3>
-        <p className="text-gray-500 max-w-sm">We're having trouble connecting to the support system. Please try again in a moment.</p>
-        <button
-          onClick={() => refetch()}
-          className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-md transition-all font-bold"
-        >
-          <RefreshCw className="w-4 h-4" /> Reconnect
-        </button>
+        <div className="p-4 bg-red-50 rounded-full"><AlertCircle className="w-8 h-8 text-red-500" /></div>
+        <h3 className="text-lg font-bold text-gray-900">Could not load tickets</h3>
+        <button onClick={() => refetch()} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium text-sm">Retry</button>
       </div>
     )
   }
 
   return (
     <div className="space-y-6 pb-6">
-      <div className="flex items-center justify-between">
-        <PageHeader
-          title="Support Center"
-          subtitle="Get help with your shipments and account"
-        />
-        <button
-          onClick={() => refetch()}
-          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-          title="Refresh tickets"
-        >
-          <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl p-5 border border-blue-100 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <div className="p-2 bg-blue-600 rounded-xl">
-              <AlertCircle className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-blue-600">Open Tickets</span>
-          </div>
-          <p className="text-4xl font-black text-gray-900">{stats.open}</p>
-          <p className="text-xs font-bold text-blue-700/60 mt-1">Awaiting specialist response</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-yellow-50 to-amber-50 rounded-2xl p-5 border border-yellow-100 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <div className="p-2 bg-yellow-500 rounded-xl">
-              <Clock className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-yellow-600">Active</span>
-          </div>
-          <p className="text-4xl font-black text-gray-900">{stats.inProgress}</p>
-          <p className="text-xs font-bold text-yellow-700/60 mt-1">Currently being handled</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-100 shadow-sm">
-          <div className="flex items-center justify-between mb-2">
-            <div className="p-2 bg-green-600 rounded-xl">
-              <CheckCircle className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-[10px] font-black uppercase tracking-widest text-green-600">Resolved</span>
-          </div>
-          <p className="text-4xl font-black text-gray-900">{stats.resolved}</p>
-          <p className="text-xs font-bold text-green-700/60 mt-1">Completed this period</p>
-        </div>
-      </div>
-
-      <div className="flex flex-wrap items-center justify-between gap-4 bg-white/50 p-2 rounded-2xl border border-gray-100">
-        <div className="flex gap-2">
-          {['all', 'open', 'in_progress', 'resolved'].map(status => (
-            <button
-              key={status}
-              onClick={() => setFilter(status)}
-              className={`px-6 py-2.5 rounded-xl transition-all font-bold text-sm capitalize ${filter === status
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-100 border border-blue-600'
-                  : 'bg-white text-gray-500 border border-gray-200 hover:border-blue-300 hover:text-blue-600'
-                }`}
-            >
-              {status.replace('_', ' ')}
-            </button>
-          ))}
-        </div>
+      <div className="flex items-end justify-between">
+        <PageHeader title="Support Center" subtitle="Get help and track your support tickets" />
         <button
           onClick={() => setShowNewTicket(true)}
-          className="flex items-center gap-2 px-6 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-200"
+          className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all font-bold shadow-lg shadow-blue-200"
         >
           <Plus className="w-5 h-5" />
           New Ticket
         </button>
       </div>
 
-      <div className="grid gap-6">
-        {tickets.map(ticket => (
-          <div key={ticket.id} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-xl hover:scale-[1.01] transition-all group cursor-pointer">
-            <div className="flex items-start justify-between mb-6">
-              <div className="flex items-center gap-4">
-                <div className="p-4 bg-blue-50 rounded-2xl group-hover:bg-blue-100 transition-colors">
-                  <MessageSquare className="w-8 h-8 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="text-xl font-black text-gray-900 group-hover:text-blue-700 transition-colors">{ticket.subject}</h3>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs font-bold text-gray-400 uppercase tracking-tighter">{ticket.id}</span>
-                    <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                    <span className="text-xs font-bold text-blue-600/60 uppercase tracking-tighter">{ticket.category}</span>
-                  </div>
-                </div>
+      {/* Stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {[
+          { label: 'Open', count: stats.open, color: 'yellow', icon: AlertCircle },
+          { label: 'In Progress', count: stats.inProgress, color: 'blue', icon: Clock },
+          { label: 'Resolved', count: stats.resolved, color: 'green', icon: CheckCircle },
+        ].map(stat => (
+          <div key={stat.label} className={`bg-${stat.color}-50 rounded-xl border border-${stat.color}-200 p-5`}>
+            <div className="flex items-center gap-3 mb-2">
+              <div className={`p-2 bg-${stat.color}-100 rounded-lg`}>
+                <stat.icon className={`w-4 h-4 text-${stat.color}-600`} />
               </div>
-              <div className="flex gap-2">
-                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${getStatusBadge(ticket.status)}`}>
-                  {(ticket.status || 'unknown').replace('_', ' ')}
-                </span>
-                <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${getPriorityBadge(ticket.priority)}`}>
-                  {ticket.priority || 'MEDIUM'}
-                </span>
-              </div>
+              <span className="text-xs font-bold uppercase tracking-wide text-gray-600">{stat.label}</span>
             </div>
-
-            <div className="flex items-center justify-between pt-6 border-t border-gray-50">
-              <div className="flex items-center gap-6 text-xs font-bold text-gray-400">
-                <div className="flex items-center gap-1.5">
-                  <Clock className="w-3.5 h-3.5" />
-                  <span>Created: {ticket.createdAt || ticket.created_at}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <RefreshCw className="w-3.5 h-3.5" />
-                  <span>Updated: {ticket.lastUpdate || 'Just now'}</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <MessageSquare className="w-3.5 h-3.5" />
-                  <span>{ticket.messages?.length || 0} messages</span>
-                </div>
-              </div>
-              <button className="px-6 py-2.5 bg-gray-900 text-white rounded-xl hover:bg-blue-600 transition-all font-bold text-sm shadow-lg shadow-gray-100">
-                View Conversations
-              </button>
-            </div>
+            <p className="text-3xl font-black text-gray-900">{stat.count}</p>
           </div>
         ))}
       </div>
 
-      {tickets.length === 0 && (
-        <div className="bg-white rounded-3xl border border-dashed border-gray-200 p-20 text-center flex flex-col items-center">
-          <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mb-6">
-            <MessageSquare className="w-10 h-10 text-gray-300" />
-          </div>
-          <h3 className="text-2xl font-black text-gray-900 mb-2">Clear History</h3>
-          <p className="text-gray-500 max-w-xs font-medium">You don't have any support tickets in this category. Need help with anything?</p>
-          <button onClick={() => setShowNewTicket(true)} className="mt-6 text-blue-600 font-bold hover:underline underline-offset-4">Create your first ticket</button>
+      {/* Search + Filter */}
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search tickets by subject or ID…"
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all bg-white"
+          />
+        </div>
+        <div className="flex items-center gap-1 bg-white border border-gray-200 p-1 rounded-xl">
+          <Filter className="w-4 h-4 text-gray-400 ml-2 mr-1" />
+          {['all', 'open', 'in_progress', 'resolved'].map(f => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${filter === f
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
+                }`}
+            >
+              {f === 'all' ? 'All' : f === 'in_progress' ? 'In Progress' : f.charAt(0).toUpperCase() + f.slice(1)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Ticket List */}
+      {filteredTickets.length === 0 ? (
+        <div className="bg-white rounded-2xl border border-gray-100 p-12 text-center">
+          <MessageSquare className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-gray-900 mb-1">
+            {search.trim() ? 'No matching tickets' : 'No tickets yet'}
+          </h3>
+          <p className="text-gray-500 text-sm">
+            {search.trim()
+              ? 'Try a different search or clear filters.'
+              : 'Open a support ticket and our team will respond shortly.'
+            }
+          </p>
+          {search.trim() ? (
+            <button onClick={() => { setSearch(''); setFilter('all') }} className="mt-3 text-sm text-blue-600 font-semibold hover:underline">Clear search</button>
+          ) : (
+            <button onClick={() => setShowNewTicket(true)} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Create Ticket</button>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {filteredTickets.map(ticket => {
+            const cfg = statusConfig[ticket.status] || statusConfig.open
+            const StatusIcon = cfg.icon
+            return (
+              <div key={ticket.id || ticket._id} className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm hover:shadow-md transition-all group">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-4">
+                    <div className={`p-3 bg-${cfg.color}-50 rounded-2xl`}>
+                      <StatusIcon className={`w-6 h-6 text-${cfg.color}-500`} />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-gray-900 mb-1">{ticket.subject || 'Untitled'}</h3>
+                      <span className="text-xs text-gray-500">
+                        {ticket.id?.slice(0, 8).toUpperCase()} · {new Date(ticket.createdAt || ticket.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className={`px-2.5 py-0.5 bg-${cfg.color}-100 text-${cfg.color}-700 rounded-full text-[10px] font-bold uppercase`}>
+                      {cfg.label}
+                    </span>
+                    {ticket.priority && (
+                      <span className="px-2.5 py-0.5 bg-gray-100 text-gray-600 rounded-full text-[10px] font-bold uppercase">
+                        {ticket.priority}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {ticket.description && (
+                  <p className="text-sm text-gray-600 line-clamp-2 mb-4">{ticket.description}</p>
+                )}
+
+                <div className="flex items-center justify-between pt-4 border-t border-gray-50">
+                  <span className="text-xs text-gray-400">
+                    {ticket.category && <span className="font-medium">{ticket.category}</span>}
+                  </span>
+                  <button
+                    onClick={() => navigate(`/support/${ticket.id || ticket._id}`)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors"
+                  >
+                    View Conversation
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+
+      {/* Result count */}
+      {filteredTickets.length > 0 && (
+        <div className="text-center text-xs font-medium text-gray-400">
+          Showing {filteredTickets.length} of {tickets.length} tickets
         </div>
       )}
 
       {/* New Ticket Modal */}
       {showNewTicket && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="fixed inset-0 bg-black/40 backdrop-blur-md transition-opacity" onClick={() => setShowNewTicket(false)}></div>
-          <div className="relative bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col scale-100 transition-transform">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 px-8 py-6 text-white shrink-0">
-              <h3 className="text-2xl font-black tracking-tight">Open Support Request</h3>
-              <p className="text-blue-100 text-sm mt-1">Our team typically responds within 2 hours</p>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setShowNewTicket(false)} />
+          <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center bg-gray-50">
+              <h3 className="font-bold text-lg text-gray-900">New Support Ticket</h3>
+              <button onClick={() => setShowNewTicket(false)} className="text-gray-400 hover:text-gray-600">
+                <Plus className="w-5 h-5 rotate-45" />
+              </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-8 space-y-6 overflow-y-auto">
-              <div className="space-y-1">
-                <label className="text-sm font-bold text-gray-700">Detailed Subject</label>
+            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Subject</label>
                 <input
                   type="text"
+                  required
                   value={formData.subject}
                   onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                  className="w-full px-4 py-4 border-2 border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-medium"
-                  placeholder="e.g. Shipment BK-1029 delay in Lagos"
-                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Brief summary of your issue"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-sm font-bold text-gray-700">Problem Category</label>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Category</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-bold"
-                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="">Select category</option>
-                    <option value="delivery">Delivery Issues</option>
-                    <option value="temperature">Temperature & Handling</option>
-                    <option value="billing">Invoicing & Payments</option>
-                    <option value="technical">App Technical Issue</option>
-                    <option value="other">General Inquiry</option>
+                    <option value="">Select...</option>
+                    <option value="booking">Booking Issue</option>
+                    <option value="payment">Payment Issue</option>
+                    <option value="delivery">Delivery Issue</option>
+                    <option value="account">Account Issue</option>
+                    <option value="other">Other</option>
                   </select>
                 </div>
-
-                <div className="space-y-1">
-                  <label className="text-sm font-bold text-gray-700">Severity Level</label>
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Priority</label>
                   <select
                     value={formData.priority}
                     onChange={(e) => setFormData({ ...formData, priority: e.target.value })}
-                    className="w-full px-4 py-4 border-2 border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all font-bold"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
-                    <option value="low">Standard Priority</option>
-                    <option value="medium">Medium Priority</option>
-                    <option value="high">High Urgency</option>
-                    <option value="critical">Critical (Immediate Care)</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="urgent">Urgent</option>
                   </select>
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-sm font-bold text-gray-700">Description</label>
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Description</label>
                 <textarea
+                  required
+                  rows={4}
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-4 py-4 border-2 border-gray-100 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-600 transition-all resize-none font-medium"
-                  rows="5"
-                  placeholder="Tell us more about the situation..."
-                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Describe your issue in detail"
                 />
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="pt-2 flex gap-3">
                 <button
                   type="button"
                   onClick={() => setShowNewTicket(false)}
-                  className="flex-1 px-4 py-4 border-2 border-gray-100 rounded-2xl hover:bg-gray-50 transition-all font-bold text-gray-500"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50"
                 >
-                  Discard
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createTicketMutation.isPending}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-4 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 transition-all font-bold shadow-xl shadow-blue-100 disabled:opacity-50"
+                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50 flex justify-center items-center gap-2"
                 >
-                  {createTicketMutation.isPending ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
-                  {createTicketMutation.isPending ? 'Sending...' : 'Transmit Ticket'}
+                  {createTicketMutation.isPending && <RefreshCw className="w-4 h-4 animate-spin" />}
+                  Submit Ticket
                 </button>
               </div>
             </form>

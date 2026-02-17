@@ -118,8 +118,6 @@ export const useBookingFlow = () => {
         truckSize: formData.truckSize || 5
       }
 
-      console.log('[DEBUG] Booking Payload:', JSON.stringify(bookingPayload, null, 2))
-
       const response = await createBookingMutation.mutateAsync(bookingPayload)
 
       // API returns { data: { error, message, data: { booking fields... } } }

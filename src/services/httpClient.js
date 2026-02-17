@@ -1,7 +1,7 @@
 import { ApiError, handleApiError } from '../utils/errorHandler'
+import { useAuthStore } from '../stores/authStore'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
-// Note: In production, relative paths work best with proxying or direct domain mapping
 
 const ALLOWED_ENDPOINTS = ['/auth', '/user', '/users', '/addresses', '/shipments', '/drivers', '/fleet', '/trips', '/bookings', '/analytics', '/payments', '/payment', '/pricing', '/tracking', '/admin']
 
@@ -9,10 +9,10 @@ class HttpClient {
   validateEndpoint(endpoint) {
     if (!endpoint.startsWith('/')) return false
     return ALLOWED_ENDPOINTS.some(allowed => {
-      // Must match exactly or be followed by a slash (e.g., /shipments or /shipments/123)
       return endpoint === allowed || endpoint.startsWith(allowed + '/')
     })
   }
+
   buildUrl(endpoint, params = {}) {
     if (!params || Object.keys(params).length === 0) return endpoint
     const query = new URLSearchParams(params).toString()
@@ -25,14 +25,14 @@ class HttpClient {
     }
     const url = `${BASE_URL}${this.buildUrl(endpoint, params)}`
 
-    // Prevent SSRF by validating the final URL
+    // URL Validation
     const baseUrlObj = new URL(BASE_URL, window.location.origin)
     const finalUrlObj = new URL(url, window.location.origin)
     if (finalUrlObj.origin !== baseUrlObj.origin || !finalUrlObj.pathname.startsWith(baseUrlObj.pathname)) {
       throw new ApiError('Invalid URL', 400, null)
     }
 
-    const token = localStorage.getItem('token')
+    const { token, logout } = useAuthStore.getState()
 
     const config = {
       headers: {
@@ -44,23 +44,22 @@ class HttpClient {
     }
 
     try {
-      console.log('HTTP Request:', config.method || 'GET', url)
-      console.log('Request body:', config.body)
       const response = await fetch(url, config)
 
-      // Validate response URL to prevent SSRF via redirects
+      // Validate redirect origin
       const responseUrlObj = new URL(response.url)
       if (responseUrlObj.origin !== baseUrlObj.origin || !responseUrlObj.pathname.startsWith(baseUrlObj.pathname)) {
         throw new ApiError('Invalid redirect detected', 400, null)
       }
 
       const data = await response.json()
-      console.log('Response status:', response.status)
-      console.log('Response data:', JSON.stringify(data, null, 2))
 
       if (!response.ok) {
-        console.error('API Error Response:', JSON.stringify(data, null, 2))
-        const error = new ApiError(data.msg || data.message || 'Request failed', response.status, data)
+        if (response.status === 401) {
+          logout()
+        }
+        const errorMsg = data.msg || data.message || 'Request failed'
+        const error = new ApiError(errorMsg, response.status, data)
         handleApiError(error)
         throw error
       }

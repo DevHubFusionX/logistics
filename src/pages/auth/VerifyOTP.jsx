@@ -1,22 +1,27 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Shield, RefreshCw } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Shield, RefreshCw, Mail } from 'lucide-react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
+import authService from '../../services/authService'
 import { useToast } from '../../components/ui/advanced'
 
 export default function VerifyOTP() {
   const navigate = useNavigate()
+  const location = useLocation()
   const { showToast, ToastContainer } = useToast()
+
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
-  const [timeLeft, setTimeLeft] = useState(300) // 5 minutes
+  const [timeLeft, setTimeLeft] = useState(300)
   const [isResending, setIsResending] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const inputRefs = useRef([])
 
+  const email = location.state?.email || ''
+
   useEffect(() => {
     const timer = setInterval(() => {
-      setTimeLeft((prev) => prev > 0 ? prev - 1 : 0)
+      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0))
     }, 1000)
     return () => clearInterval(timer)
   }, [])
@@ -28,7 +33,6 @@ export default function VerifyOTP() {
       setOtp(newOtp)
       setError('')
 
-      // Auto-focus next input
       if (value && index < 5) {
         inputRefs.current[index + 1]?.focus()
       }
@@ -41,38 +45,57 @@ export default function VerifyOTP() {
     }
   }
 
+  const handlePaste = (e) => {
+    const data = e.clipboardData.getData('text').slice(0, 6)
+    if (/^[0-9]+$/.test(data)) {
+      const newOtp = data.split('').concat(Array(6 - data.length).fill(''))
+      setOtp(newOtp.slice(0, 6))
+      inputRefs.current[Math.min(data.length, 5)].focus()
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     const otpCode = otp.join('')
 
-    // Validation
     if (otpCode.length !== 6) {
       setError('Please enter all 6 digits')
-      showToast.error('Incomplete OTP', 'Please enter all 6 digits')
       return
     }
 
     setLoading(true)
     setError('')
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      await authService.verifyOTP(otpCode)
+      showToast.success('Verification successful', 'Welcome to your dashboard!')
+      setTimeout(() => navigate('/my-bookings'), 1000)
+    } catch (err) {
+      setError(err.message || 'Invalid verification code')
+      showToast.error('Verification failed', err.message || 'The code you entered is invalid')
+    } finally {
       setLoading(false)
-      showToast.success('Verification successful', 'Redirecting to dashboard...')
-      setTimeout(() => {
-        navigate('/my-bookings')
-      }, 1000)
-    }, 2000)
+    }
   }
 
   const handleResend = async () => {
+    if (!email) {
+      showToast.error('Reference missing', 'No email address found to resend code to.')
+      return
+    }
+
     setIsResending(true)
     setError('')
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    setIsResending(false)
-    setTimeLeft(300)
-    showToast.success('Code resent', 'Check your email for the new code')
+
+    try {
+      await authService.resendOTP(email)
+      setTimeLeft(300)
+      showToast.success('Code resent', 'Check your email for the new code')
+    } catch (err) {
+      showToast.error('Resend failed', err.message || 'Could not send a new code')
+    } finally {
+      setIsResending(false)
+    }
   }
 
   const formatTime = (seconds) => {
@@ -82,112 +105,95 @@ export default function VerifyOTP() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-50 to-blue-100 flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4">
       <motion.div
-        className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        className="max-w-md w-full bg-white rounded-3xl shadow-xl p-10 border border-gray-100"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
       >
-        <motion.div
-          className="text-center mb-8"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="w-16 h-16 bg-gradient-to-r from-sky-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-            <Shield className="w-8 h-8 text-white" />
+        <div className="text-center mb-10">
+          <div className="w-20 h-20 bg-sky-50 rounded-full flex items-center justify-center mx-auto mb-6">
+            <Shield className="w-10 h-10 text-sky-600" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-800">Verify Your Account</h2>
-          <p className="text-gray-600 mt-2">Enter the 6-digit code sent to your email</p>
-          {error && (
-            <motion.p
-              className="mt-3 text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              {error}
-            </motion.p>
+          <h2 className="text-3xl font-bold text-gray-900">Account Security</h2>
+          <p className="text-gray-500 mt-3 font-medium">
+            We've sent a 6-digit security code to your email address.
+          </p>
+          {email && (
+            <div className="mt-4 flex items-center justify-center gap-2 text-sky-600 bg-sky-50 py-2 px-4 rounded-full inline-flex font-semibold text-sm mx-auto">
+              <Mail className="w-4 h-4" />
+              {email}
+            </div>
           )}
-        </motion.div>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <motion.div
-            className="flex justify-center gap-3"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-          >
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="flex justify-center gap-3" onPaste={handlePaste}>
             {otp.map((digit, index) => (
               <input
                 key={index}
-                ref={(el) => inputRefs.current[index] = el}
+                ref={(el) => (inputRefs.current[index] = el)}
                 type="text"
                 value={digit}
                 onChange={(e) => handleOtpChange(index, e.target.value)}
                 onKeyDown={(e) => handleKeyDown(index, e)}
-                className={`w-12 h-12 text-center text-xl font-bold border-2 rounded-lg focus:border-sky-500 focus:ring-2 focus:ring-sky-200 ${error ? 'border-red-300 bg-red-50' : 'border-gray-300'
+                className={`w-12 h-16 text-center text-2xl font-bold border-2 rounded-2xl focus:border-sky-500 focus:ring-4 focus:ring-sky-50 transition-all ${error ? 'border-red-300 bg-red-50' : 'border-gray-200 bg-gray-50/30'
                   }`}
                 maxLength={1}
                 inputMode="numeric"
                 pattern="[0-9]*"
               />
             ))}
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            <p className="text-gray-600 mb-2">Time remaining: {formatTime(timeLeft)}</p>
+          {error && (
+            <motion.p
+              className="text-center text-sm font-bold text-red-600 bg-red-50 py-3 rounded-xl border border-red-100"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {error}
+            </motion.p>
+          )}
+
+          <div className="text-center">
+            <div className="text-sm text-gray-400 font-semibold mb-4 tracking-wider uppercase">
+              Time Remaining: <span className={timeLeft < 60 ? 'text-red-500 animate-pulse' : 'text-gray-700'}>{formatTime(timeLeft)}</span>
+            </div>
             <button
               type="button"
               onClick={handleResend}
-              disabled={timeLeft > 0 || isResending}
-              className="text-sky-500 hover:text-sky-600 font-medium disabled:text-gray-400 disabled:cursor-not-allowed flex items-center gap-2 mx-auto"
+              disabled={timeLeft > 120 || isResending}
+              className="group text-sky-600 hover:text-sky-700 font-bold text-sm disabled:text-gray-300 disabled:cursor-not-allowed flex items-center gap-2 mx-auto transition-all"
             >
-              <RefreshCw className={`w-4 h-4 ${isResending ? 'animate-spin' : ''}`} />
-              {isResending ? 'Resending...' : 'Resend Code'}
+              <RefreshCw className={`w-4 h-4 ${isResending ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
+              {isResending ? 'Resending Code...' : 'Resend Security Code'}
             </button>
-          </motion.div>
+          </div>
 
           <motion.button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-sky-500 to-blue-600 text-white py-3 rounded-lg font-semibold hover:from-sky-400 hover:to-blue-500 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-            whileHover={{ scale: loading ? 1 : 1.02 }}
-            whileTap={{ scale: loading ? 1 : 0.98 }}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            className="w-full bg-sky-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-sky-700 transition-all shadow-xl shadow-sky-100 disabled:opacity-50"
+            whileHover={{ scale: loading ? 1 : 1.01 }}
+            whileTap={{ scale: loading ? 1 : 0.99 }}
           >
             {loading ? (
-              <div className="flex items-center justify-center gap-2">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                </div>
+              <div className="flex items-center justify-center gap-3">
+                <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                 <span>Verifying...</span>
               </div>
             ) : (
-              'Verify Account'
+              'Unlock Access'
             )}
           </motion.button>
         </form>
 
-        <motion.div
-          className="mt-6 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-        >
-          <Link to="/auth/login" className="text-sky-500 hover:text-sky-600 font-medium">
-            Back to Login
+        <div className="mt-8 text-center text-xs font-bold text-gray-400 uppercase tracking-widest">
+          <Link to="/auth/login" className="hover:text-sky-600 transition-colors">
+            Back to Sign In
           </Link>
-        </motion.div>
+        </div>
       </motion.div>
       <ToastContainer />
     </div>

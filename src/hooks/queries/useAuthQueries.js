@@ -1,48 +1,116 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import authService from '../../services/authService'
-import { useAuthState, useAuthActions } from '../useAuth'
+import { useAuthStore } from '../../stores/authStore'
 import toast from 'react-hot-toast'
 
 export const authKeys = {
     profile: ['auth', 'profile'],
 }
 
+/**
+ * Hook to fetch current user profile
+ */
 export function useProfileQuery() {
-    const { user } = useAuthState()
+    const { user, logout } = useAuthStore()
     const isAdmin = user?.role === 'Super Admin' || user?.role === 'admin' || user?.role === 'SUPER_ADMIN'
 
     return useQuery({
         queryKey: [...authKeys.profile, user?.id],
         queryFn: async () => {
-            const response = isAdmin
-                ? await authService.getAdminProfile()
-                : await authService.getProfile()
+            try {
+                const response = isAdmin
+                    ? await authService.getAdminProfile()
+                    : await authService.getProfile()
 
-            // API returns { data: { error, message, data: { user fields... } } }
-            return response.data?.data || response.data || response
+                // API returns { data: { error, message, data: { user fields... } } }
+                return response.data?.data || response.data || response
+            } catch (error) {
+                if (error.status === 401) {
+                    logout()
+                }
+                throw error
+            }
         },
         staleTime: 10 * 60 * 1000, // 10 minutes
-        enabled: !!user // Only run if we have a user context
+        enabled: !!user
     })
 }
 
+/**
+ * Hook for user login mutation
+ */
+export function useLoginMutation() {
+    const { setAuth } = useAuthStore()
+
+    return useMutation({
+        mutationFn: (credentials) => authService.login(credentials),
+        onSuccess: (response) => {
+            const payload = response.data?.data
+            if (payload?.token) {
+                const user = payload.user || payload.admin
+                setAuth(user, payload.token)
+                toast.success('Login successful!')
+            }
+        }
+    })
+}
+
+/**
+ * Hook for admin login mutation
+ */
+export function useAdminLoginMutation() {
+    const { setAuth } = useAuthStore()
+
+    return useMutation({
+        mutationFn: (credentials) => authService.adminLogin(credentials),
+        onSuccess: (response) => {
+            const payload = response.data?.data
+            if (payload?.token) {
+                const user = payload.user || payload.admin
+                setAuth(user, payload.token)
+                toast.success('Admin access granted!')
+            }
+        }
+    })
+}
+
+/**
+ * Hook for registration mutation
+ */
+export function useRegisterMutation() {
+    const { setAuth } = useAuthStore()
+
+    return useMutation({
+        mutationFn: (userData) => authService.register(userData),
+        onSuccess: (response) => {
+            const payload = response.data?.data
+            if (payload?.token) {
+                setAuth(payload.user, payload.token)
+                toast.success('Account created successfully!')
+            }
+        }
+    })
+}
+
+/**
+ * Hook to update user profile
+ */
 export function useUpdateProfileMutation() {
     const queryClient = useQueryClient()
-    const { setUser } = useAuthActions()
+    const { updateUser } = useAuthStore()
 
     return useMutation({
         mutationFn: (data) => authService.updateProfile(data),
         onSuccess: (response) => {
-            const updatedUser = response.data?.user || response.data || response
+            const updatedUser = response.data?.user || response.data?.data || response.data
             if (updatedUser) {
-                // Sync context state if needed, though Query will handle cache
-                setUser(prev => ({ ...prev, ...updatedUser }))
+                updateUser(updatedUser)
             }
-            toast.success('Profile updated successfully!')
+            toast.success('Profile updated!')
             queryClient.invalidateQueries({ queryKey: authKeys.profile })
         },
         onError: (error) => {
-            toast.error(error.message || 'Failed to update profile')
+            toast.error(error.message || 'Update failed')
         }
     })
 }

@@ -1,100 +1,109 @@
+import { useState, memo } from 'react'
+import { Link } from 'react-router-dom'
 import { PageHeader } from '../../components/dashboard'
-import { CheckCircle, Clock, Truck, AlertTriangle, XCircle, ThermometerSnowflake, Package } from 'lucide-react'
+import { CheckCircle, Clock, Truck, AlertTriangle, XCircle, ThermometerSnowflake, Package, ChevronDown, ArrowRight } from 'lucide-react'
 
-export default function BookingStatusGuide() {
-  const statuses = [
-    {
-      status: 'Pending',
-      icon: Clock,
-      color: 'yellow',
-      meaning: 'Waiting for approval',
-      description: 'Your booking request has been received and is being reviewed by our team. We will confirm availability and assign a driver shortly.',
-      customerAction: 'No action needed. You will be notified once confirmed.',
-      bgColor: 'from-yellow-50 to-amber-50',
-      borderColor: 'border-yellow-200',
-      iconBg: 'bg-yellow-100',
-      iconColor: 'text-yellow-600'
-    },
-    {
-      status: 'Confirmed',
-      icon: CheckCircle,
-      color: 'blue',
-      meaning: 'Truck + driver assigned',
-      description: 'Your booking has been confirmed! A truck and driver have been assigned to your shipment. You will receive driver details and estimated pickup time.',
-      customerAction: 'Prepare your cargo for pickup at the scheduled time.',
-      bgColor: 'from-blue-50 to-cyan-50',
-      borderColor: 'border-blue-200',
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-600'
-    },
-    {
-      status: 'In Transit',
-      icon: Truck,
-      color: 'green',
-      meaning: 'Delivery underway',
-      description: 'Your shipment is on the move! The driver has picked up your cargo and is en route to the delivery location. Track real-time location and ETA.',
-      customerAction: 'Track your shipment in real-time. Prepare to receive delivery.',
-      bgColor: 'from-green-50 to-emerald-50',
-      borderColor: 'border-green-200',
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-600'
-    },
-    {
-      status: 'Temperature Alert',
-      icon: ThermometerSnowflake,
-      color: 'orange',
-      meaning: 'Monitoring warning',
-      description: 'Temperature deviation detected for cold chain shipments. Our team is monitoring and taking corrective action to maintain required temperature.',
-      customerAction: 'We are handling this. You will be updated on resolution.',
-      bgColor: 'from-orange-50 to-amber-50',
-      borderColor: 'border-orange-200',
-      iconBg: 'bg-orange-100',
-      iconColor: 'text-orange-600'
-    },
-    {
-      status: 'Delivered',
-      icon: Package,
-      color: 'gray',
-      meaning: 'Successfully completed',
-      description: 'Your shipment has been successfully delivered! Proof of delivery (POD) has been captured. Invoice will be generated and sent to you.',
-      customerAction: 'Download your invoice and provide feedback.',
-      bgColor: 'from-gray-50 to-slate-50',
-      borderColor: 'border-gray-200',
-      iconBg: 'bg-gray-100',
-      iconColor: 'text-gray-600'
-    },
-    {
-      status: 'Cancelled',
-      icon: XCircle,
-      color: 'red',
-      meaning: 'Customer or Support cancelled',
-      description: 'This booking has been cancelled. If you cancelled, no charges apply. If cancelled by us, you will be notified of the reason.',
-      customerAction: 'Contact support if you have questions about cancellation.',
-      bgColor: 'from-red-50 to-rose-50',
-      borderColor: 'border-red-200',
-      iconBg: 'bg-red-100',
-      iconColor: 'text-red-600'
-    },
-    {
-      status: 'Failed',
-      icon: AlertTriangle,
-      color: 'red',
-      meaning: 'Delivery could not complete',
-      description: 'Delivery attempt was unsuccessful. This could be due to address issues, recipient unavailable, or other delivery obstacles.',
-      customerAction: 'Contact support to reschedule or resolve delivery issues.',
-      bgColor: 'from-red-50 to-orange-50',
-      borderColor: 'border-red-200',
-      iconBg: 'bg-red-100',
-      iconColor: 'text-red-600'
-    }
-  ]
+const statuses = [
+  {
+    status: 'Pending',
+    icon: Clock,
+    meaning: 'Waiting for approval',
+    description: 'Your booking request has been received and is being reviewed by our team. We will confirm availability and assign a driver shortly.',
+    customerAction: 'No action needed. You will be notified once confirmed.',
+    bgColor: 'from-yellow-50 to-amber-50',
+    borderColor: 'border-yellow-200',
+    iconBg: 'bg-yellow-100',
+    iconColor: 'text-yellow-600'
+  },
+  {
+    status: 'Confirmed',
+    icon: CheckCircle,
+    meaning: 'Truck + driver assigned',
+    description: 'Your booking has been confirmed! A truck and driver have been assigned to your shipment. You will receive driver details and estimated pickup time.',
+    customerAction: 'Prepare your cargo for pickup at the scheduled time.',
+    bgColor: 'from-blue-50 to-cyan-50',
+    borderColor: 'border-blue-200',
+    iconBg: 'bg-blue-100',
+    iconColor: 'text-blue-600'
+  },
+  {
+    status: 'In Transit',
+    icon: Truck,
+    meaning: 'Delivery underway',
+    description: 'Your shipment is on the move! The driver has picked up your cargo and is en route to the delivery location. Track real-time location and ETA.',
+    customerAction: 'Track your shipment in real-time. Prepare to receive delivery.',
+    bgColor: 'from-green-50 to-emerald-50',
+    borderColor: 'border-green-200',
+    iconBg: 'bg-green-100',
+    iconColor: 'text-green-600'
+  },
+  {
+    status: 'Temperature Alert',
+    icon: ThermometerSnowflake,
+    meaning: 'Monitoring warning',
+    description: 'Temperature deviation detected for cold chain shipments. Our team is monitoring and taking corrective action to maintain required temperature.',
+    customerAction: 'We are handling this. You will be updated on resolution.',
+    bgColor: 'from-orange-50 to-amber-50',
+    borderColor: 'border-orange-200',
+    iconBg: 'bg-orange-100',
+    iconColor: 'text-orange-600'
+  },
+  {
+    status: 'Delivered',
+    icon: Package,
+    meaning: 'Successfully completed',
+    description: 'Your shipment has been successfully delivered! Proof of delivery (POD) has been captured. Invoice will be generated and sent to you.',
+    customerAction: 'Download your invoice and provide feedback.',
+    bgColor: 'from-gray-50 to-slate-50',
+    borderColor: 'border-gray-200',
+    iconBg: 'bg-gray-100',
+    iconColor: 'text-gray-600'
+  },
+  {
+    status: 'Cancelled',
+    icon: XCircle,
+    meaning: 'Customer or Support cancelled',
+    description: 'This booking has been cancelled. If you cancelled, no charges apply. If cancelled by us, you will be notified of the reason.',
+    customerAction: 'Contact support if you have questions about cancellation.',
+    bgColor: 'from-red-50 to-rose-50',
+    borderColor: 'border-red-200',
+    iconBg: 'bg-red-100',
+    iconColor: 'text-red-600'
+  },
+  {
+    status: 'Failed',
+    icon: AlertTriangle,
+    meaning: 'Delivery could not complete',
+    description: 'Delivery attempt was unsuccessful. This could be due to address issues, recipient unavailable, or other delivery obstacles.',
+    customerAction: 'Contact support to reschedule or resolve delivery issues.',
+    bgColor: 'from-red-50 to-orange-50',
+    borderColor: 'border-red-200',
+    iconBg: 'bg-red-100',
+    iconColor: 'text-red-600'
+  }
+]
+
+function BookingStatusGuide() {
+  const [expanded, setExpanded] = useState(null)
+
+  const toggle = (status) => {
+    setExpanded(prev => prev === status ? null : status)
+  }
 
   return (
     <div className="space-y-6 pb-6">
-      <PageHeader
-        title="Booking Status Guide"
-        subtitle="Understand what each booking status means and what actions you need to take"
-      />
+      <div className="flex items-end justify-between">
+        <PageHeader
+          title="Booking Status Guide"
+          subtitle="Understand what each booking status means and what actions you need to take"
+        />
+        <Link
+          to="/my-bookings"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm shadow-sm"
+        >
+          View My Bookings <ArrowRight className="w-4 h-4" />
+        </Link>
+      </div>
 
       <div className="bg-gradient-to-r from-blue-50 via-cyan-50 to-indigo-50 rounded-xl border border-blue-200 p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-2">How to Track Your Booking</h3>
@@ -107,78 +116,82 @@ export default function BookingStatusGuide() {
         </div>
       </div>
 
-      <div className="grid gap-4">
-        {statuses.map((item, index) => {
+      {/* Status Color Legend */}
+      <div className="flex flex-wrap gap-3 bg-white rounded-xl border border-gray-200 p-4">
+        {statuses.map(item => {
           const Icon = item.icon
           return (
-            <div
-              key={item.status}
-              className={`bg-gradient-to-r ${item.bgColor} rounded-xl border ${item.borderColor} p-6 shadow-sm`}
-            >
-              <div className="flex items-start gap-4">
-                <div className={`p-3 ${item.iconBg} rounded-lg flex-shrink-0`}>
-                  <Icon className={`w-6 h-6 ${item.iconColor}`} />
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className="text-xl font-bold text-gray-900">{item.status}</h3>
-                    <span className="text-sm text-gray-600">•</span>
-                    <span className="text-sm font-medium text-gray-700">{item.meaning}</span>
-                  </div>
-                  <p className="text-gray-700 mb-3">{item.description}</p>
-                  <div className="bg-white/50 rounded-lg p-3 border border-gray-200">
-                    <p className="text-sm font-semibold text-gray-900 mb-1">What you should do:</p>
-                    <p className="text-sm text-gray-700">{item.customerAction}</p>
-                  </div>
-                </div>
-              </div>
+            <div key={item.status} className="flex items-center gap-2 text-xs font-semibold text-gray-600">
+              <div className={`w-3 h-3 rounded-full ${item.iconBg}`} />
+              {item.status}
             </div>
           )
         })}
       </div>
 
+      {/* Accordion Status Cards */}
+      <div className="grid gap-3">
+        {statuses.map((item) => {
+          const Icon = item.icon
+          const isOpen = expanded === item.status
+          return (
+            <div
+              key={item.status}
+              className={`bg-gradient-to-r ${item.bgColor} rounded-xl border ${item.borderColor} overflow-hidden shadow-sm transition-all`}
+            >
+              <button
+                onClick={() => toggle(item.status)}
+                className="w-full flex items-center justify-between p-5 text-left"
+              >
+                <div className="flex items-center gap-4">
+                  <div className={`p-3 ${item.iconBg} rounded-lg flex-shrink-0`}>
+                    <Icon className={`w-5 h-5 ${item.iconColor}`} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">{item.status}</h3>
+                    <span className="text-sm font-medium text-gray-600">{item.meaning}</span>
+                  </div>
+                </div>
+                <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isOpen && (
+                <div className="px-5 pb-5 space-y-3 animate-in fade-in duration-200">
+                  <p className="text-gray-700">{item.description}</p>
+                  <div className="bg-white/50 rounded-lg p-3 border border-gray-200">
+                    <p className="text-sm font-semibold text-gray-900 mb-1">What you should do:</p>
+                    <p className="text-sm text-gray-700">{item.customerAction}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Timeline */}
       <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Typical Booking Timeline</h3>
         <div className="space-y-3">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-bold text-yellow-600">1</span>
+          {[
+            { num: 1, label: 'Pending Review', desc: 'Usually takes 15-30 minutes', color: 'yellow' },
+            { num: 2, label: 'Confirmed', desc: 'Driver assigned, ready for pickup', color: 'blue' },
+            { num: 3, label: 'In Transit', desc: 'Delivery in progress (track in real-time)', color: 'green' },
+            { num: 4, label: 'Delivered', desc: 'Shipment completed, invoice generated', color: 'gray' },
+          ].map((step, i, arr) => (
+            <div key={step.num}>
+              <div className="flex items-center gap-3">
+                <div className={`w-8 h-8 bg-${step.color}-100 rounded-full flex items-center justify-center flex-shrink-0`}>
+                  <span className={`text-sm font-bold text-${step.color}-600`}>{step.num}</span>
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900">{step.label}</p>
+                  <p className="text-sm text-gray-600">{step.desc}</p>
+                </div>
+              </div>
+              {i < arr.length - 1 && <div className="ml-4 border-l-2 border-gray-200 h-6" />}
             </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900">Pending Review</p>
-              <p className="text-sm text-gray-600">Usually takes 15-30 minutes</p>
-            </div>
-          </div>
-          <div className="ml-4 border-l-2 border-gray-200 h-6"></div>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-bold text-blue-600">2</span>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900">Confirmed</p>
-              <p className="text-sm text-gray-600">Driver assigned, ready for pickup</p>
-            </div>
-          </div>
-          <div className="ml-4 border-l-2 border-gray-200 h-6"></div>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-bold text-green-600">3</span>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900">In Transit</p>
-              <p className="text-sm text-gray-600">Delivery in progress (track in real-time)</p>
-            </div>
-          </div>
-          <div className="ml-4 border-l-2 border-gray-200 h-6"></div>
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-bold text-gray-600">4</span>
-            </div>
-            <div className="flex-1">
-              <p className="font-semibold text-gray-900">Delivered</p>
-              <p className="text-sm text-gray-600">Shipment completed, invoice generated</p>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -188,9 +201,9 @@ export default function BookingStatusGuide() {
           If you have questions about your booking status or need assistance, our support team is here to help.
         </p>
         <div className="flex flex-wrap gap-3">
-          <a href="tel:+2348001234567" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
-            Call Support
-          </a>
+          <Link to="/support" className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors font-medium">
+            Open Support Ticket
+          </Link>
           <a href="mailto:support@daralogistics.com" className="px-4 py-2 border border-purple-300 rounded-lg hover:bg-purple-50 transition-colors font-medium">
             Email Us
           </a>
@@ -199,3 +212,5 @@ export default function BookingStatusGuide() {
     </div>
   )
 }
+
+export default memo(BookingStatusGuide)

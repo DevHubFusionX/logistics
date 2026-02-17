@@ -1,73 +1,82 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { Mail, Lock, Eye, EyeOff, ShieldCheck } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth.jsx'
+import { Mail, Lock, Eye, EyeOff, ShieldCheck, AlertTriangle } from 'lucide-react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useAdminLoginMutation } from '../../hooks/queries/useAuthQueries'
+import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
 
-const MIN_PASSWORD_LENGTH = 8
+const MAX_ATTEMPTS = 5
+const LOCKOUT_TIME = 120000 // 2 minutes for admins
 
 export default function AdminLoginForm() {
     const navigate = useNavigate()
-    const { adminLogin } = useAuth()
     const { showToast, ToastContainer } = useToast()
+    const { mutate: login, isLoading, reset } = useAdminLoginMutation()
+
+    const {
+        fieldErrors,
+        clearFieldError,
+        validateEmail,
+        validatePassword,
+        setFieldError
+    } = useFormValidation()
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     })
     const [showPassword, setShowPassword] = useState(false)
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
-    const [fieldErrors, setFieldErrors] = useState({})
+    const [attempts, setAttempts] = useState(0)
+    const [lockoutTime, setLockoutTime] = useState(0)
 
-    const handleSubmit = async (e) => {
+    useEffect(() => {
+        if (lockoutTime > 0) {
+            const timer = setInterval(() => {
+                setLockoutTime((prev) => Math.max(0, prev - 1000))
+            }, 1000)
+            return () => clearInterval(timer)
+        }
+    }, [lockoutTime])
+
+    const handleSubmit = (e) => {
         e.preventDefault()
-        setLoading(true)
-        setError('')
-        setFieldErrors({})
 
-        // Validation
-        const errors = {}
-        if (!formData.email) errors.email = 'Email is required'
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) errors.email = 'Invalid email format'
-        if (!formData.password) errors.password = 'Password is required'
-        else if (formData.password.length < MIN_PASSWORD_LENGTH) errors.password = `Password must be at least ${MIN_PASSWORD_LENGTH} characters`
-
-        if (Object.keys(errors).length > 0) {
-            setFieldErrors(errors)
-            setError('Please fix the errors below')
-            showToast.error('Validation failed', 'Please check your input')
-            setLoading(false)
+        if (lockoutTime > 0) {
+            showToast.error('Access Temporarily Blocked', `Too many attempts. Retry in ${Math.ceil(lockoutTime / 1000)}s`)
             return
         }
 
-        try {
-            const response = await adminLogin(formData)
-            const payload = response.data?.data
+        reset()
 
-            if (payload?.token) {
-                setError('')
-                showToast.success('Admin access granted', 'Loading dashboard...')
+        // Validation
+        const emailError = validateEmail(formData.email)
+        const passwordError = validatePassword(formData.password)
 
-                setTimeout(() => {
-                    navigate('/dashboard')
-                }, 800)
-            } else {
-                const missingField = !response.data ? 'Response body' : !payload?.token ? 'Token' : 'User'
-                setError(`Login succeeded but ${missingField} is missing. Please contact support.`)
-                showToast.error('Login failed', `Missing ${missingField}`)
-            }
-        } catch (error) {
-            if (error.message.includes('401') || error.message.includes('unauthorized')) {
-                setError('Invalid administrative credentials.')
-                showToast.error('Access Denied', 'Invalid credentials')
-            } else {
-                setError(error.message || 'Administrative login failed.')
-                showToast.error('Login Error', error.message || 'Technical issue')
-            }
-        } finally {
-            setLoading(false)
+        if (emailError || passwordError) {
+            if (emailError) setFieldError('email', emailError)
+            if (passwordError) setFieldError('password', passwordError)
+            return
         }
+
+        login(formData, {
+            onSuccess: () => {
+                showToast.success('Admin access granted', 'Loading dashboard...')
+                setTimeout(() => navigate('/dashboard'), 800)
+            },
+            onError: (err) => {
+                const newAttempts = attempts + 1
+                setAttempts(newAttempts)
+
+                if (newAttempts >= MAX_ATTEMPTS) {
+                    setLockoutTime(LOCKOUT_TIME)
+                    setAttempts(0)
+                    showToast.error('Critical Security Alert', 'Administrative access blocked due to multiple failures.')
+                } else {
+                    showToast.error('Access Denied', err.message || 'Invalid administrative credentials')
+                }
+            }
+        })
     }
 
     return (
@@ -75,35 +84,29 @@ export default function AdminLoginForm() {
             className="max-w-md w-full"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
         >
-            <motion.div
-                className="text-center mb-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2 }}
-            >
+            <div className="text-center mb-8">
                 <div className="w-16 h-16 bg-sky-100 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-sky-200">
                     <ShieldCheck className="w-8 h-8 text-sky-600" />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">Admin Portal</h2>
                 <p className="text-gray-600 font-medium">Authentication for administrative staff</p>
-            </motion.div>
+            </div>
 
-            {error && (
+            {lockoutTime > 0 && (
                 <motion.div
-                    className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-3"
+                    className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm flex items-center gap-3 font-semibold"
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
                 >
-                    <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                    {error}
+                    <AlertTriangle className="w-5 h-5 animate-pulse" />
+                    <span>Security Lock: {Math.ceil(lockoutTime / 1000)}s remaining</span>
                 </motion.div>
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Admin Email</label>
                     <div className="relative">
                         <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <input
@@ -111,18 +114,20 @@ export default function AdminLoginForm() {
                             value={formData.email}
                             onChange={(e) => {
                                 setFormData({ ...formData, email: e.target.value })
-                                setFieldErrors({ ...fieldErrors, email: '' })
+                                clearFieldError('email')
                             }}
-                            className={`w-full pl-10 pr-4 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium transition-all ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-sky-400'}`}
+                            className={`w-full pl-10 pr-4 py-4 border rounded-xl focus:ring-4 focus:ring-sky-50 focus:border-sky-500 font-medium transition-all ${fieldErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-sky-300'
+                                }`}
                             placeholder="admin@dera.com"
                             required
+                            disabled={isLoading || lockoutTime > 0}
                         />
                     </div>
                     {fieldErrors.email && <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Secure Password</label>
                     <div className="relative">
                         <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                         <input
@@ -130,11 +135,13 @@ export default function AdminLoginForm() {
                             value={formData.password}
                             onChange={(e) => {
                                 setFormData({ ...formData, password: e.target.value })
-                                setFieldErrors({ ...fieldErrors, password: '' })
+                                clearFieldError('password')
                             }}
-                            className={`w-full pl-10 pr-12 py-4 border rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-transparent font-medium transition-all ${fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-sky-400'}`}
+                            className={`w-full pl-10 pr-12 py-4 border rounded-xl focus:ring-4 focus:ring-sky-50 focus:border-sky-500 font-medium transition-all ${fieldErrors.password ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-sky-300'
+                                }`}
                             placeholder="••••••••"
                             required
+                            disabled={isLoading || lockoutTime > 0}
                         />
                         <button
                             type="button"
@@ -149,19 +156,24 @@ export default function AdminLoginForm() {
 
                 <motion.button
                     type="submit"
-                    disabled={loading}
-                    className="w-full bg-sky-600 text-white py-4 rounded-lg font-bold text-lg hover:bg-sky-700 transition-all shadow-lg shadow-sky-100 disabled:opacity-50 disabled:cursor-not-allowed"
-                    whileHover={{ scale: 1.01 }}
-                    whileTap={{ scale: 0.99 }}
+                    disabled={isLoading || lockoutTime > 0}
+                    className="w-full bg-sky-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-sky-950 transition-all shadow-xl shadow-sky-100 disabled:opacity-50"
+                    whileHover={{ scale: isLoading || lockoutTime > 0 ? 1 : 1.01 }}
+                    whileTap={{ scale: isLoading || lockoutTime > 0 ? 1 : 0.99 }}
                 >
-                    {loading ? (
+                    {isLoading ? (
                         <div className="flex items-center justify-center gap-2">
-                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            Authenticating...
+                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Authenticating...</span>
                         </div>
                     ) : 'Authorized Login'}
                 </motion.button>
             </form>
+            <div className="mt-6 text-center">
+                <Link to="/auth/login" className="text-sm text-gray-500 hover:text-sky-600 transition-colors font-medium">
+                    Standard User Login
+                </Link>
+            </div>
             <ToastContainer />
         </motion.div>
     )

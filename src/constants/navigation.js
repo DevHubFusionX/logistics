@@ -9,6 +9,24 @@ export const NAVIGATION_SECTIONS = [
     title: 'Main',
     items: [
       {
+        id: 'my-bookings',
+        label: 'My Bookings',
+        icon: Package,
+        path: '/my-bookings',
+        description: 'View your bookings',
+        color: 'blue',
+        roles: ['Customer']
+      },
+      {
+        id: 'payment-history',
+        label: 'Payment History',
+        icon: CreditCard,
+        path: '/payment-history',
+        description: 'View payment transactions',
+        color: 'green',
+        roles: ['Customer']
+      },
+      {
         id: 'admin-dashboard',
         label: 'Admin Overview',
         icon: BarChart3,
@@ -35,24 +53,6 @@ export const NAVIGATION_SECTIONS = [
         color: 'purple',
         comingSoon: true,
         roles: ['Super Admin', 'Dispatcher']
-      },
-      {
-        id: 'my-bookings',
-        label: 'My Bookings',
-        icon: Package,
-        path: '/my-bookings',
-        description: 'View your bookings',
-        color: 'blue',
-        roles: ['Customer']
-      },
-      {
-        id: 'payment-history',
-        label: 'Payment History',
-        icon: CreditCard,
-        path: '/payment-history',
-        description: 'View payment transactions',
-        color: 'green',
-        roles: ['Customer']
       },
       {
         id: 'bookings',
@@ -164,7 +164,7 @@ export const NAVIGATION_SECTIONS = [
   {
     title: 'People & Analytics',
     items: [
-    
+
       {
         id: 'drivers',
         label: 'Drivers & Staff',

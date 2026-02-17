@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { PageHeader } from '../../components/dashboard'
-import { MapPin, Plus, Edit, Trash2, Star, RefreshCw, AlertCircle, Phone, Navigation } from 'lucide-react'
-import { useToast } from '../../components/ui/advanced'
+import { MapPin, Plus, Edit, Trash2, Star, RefreshCw, AlertCircle, Phone, Navigation, Search, Package } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import {
   useAddressesQuery,
   useCreateAddressMutation,
@@ -9,15 +9,21 @@ import {
   useSetDefaultAddressMutation,
   useUpdateAddressMutation
 } from '../../hooks/queries/useAddressQueries'
+import { AddressCardSkeleton } from '../../components/common/SkeletonLoaders'
+import ConfirmDialog from '../../components/common/ConfirmDialog'
+import toast from 'react-hot-toast'
 
 export default function AddressBook() {
-  const { showToast, ToastContainer } = useToast()
+  const navigate = useNavigate()
   const [showModal, setShowModal] = useState(false)
   const [editingAddress, setEditingAddress] = useState(null)
+  const [deleteTarget, setDeleteTarget] = useState(null)
+  const [search, setSearch] = useState('')
+  const [formErrors, setFormErrors] = useState({})
   const [formData, setFormData] = useState({
     label: '',
     name: '',
-    address: '', // Maps to street
+    address: '',
     city: '',
     state: '',
     phone: '',
@@ -31,18 +37,35 @@ export default function AddressBook() {
   const setDefaultMutation = useSetDefaultAddressMutation()
   const updateMutation = useUpdateAddressMutation()
 
+  // Search filter
+  const filteredAddresses = useMemo(() => {
+    if (!search.trim()) return addresses
+    const q = search.toLowerCase()
+    return addresses.filter(a =>
+      (a.label || '').toLowerCase().includes(q) ||
+      (a.contact_name || a.name || '').toLowerCase().includes(q) ||
+      (a.street || a.address || '').toLowerCase().includes(q) ||
+      (a.city || '').toLowerCase().includes(q)
+    )
+  }, [addresses, search])
+
   const handleSetDefault = (id) => {
     setDefaultMutation.mutate(id)
   }
 
-  const handleDelete = (id) => {
-    if (window.confirm('Delete this address?')) {
-      deleteMutation.mutate(id)
-    }
+  const handleDeleteConfirm = () => {
+    if (!deleteTarget) return
+    deleteMutation.mutate(deleteTarget, {
+      onSuccess: () => {
+        setDeleteTarget(null)
+        toast.success('Address deleted')
+      }
+    })
   }
 
   const handleEdit = (address) => {
     setEditingAddress(address)
+    setFormErrors({})
     setFormData({
       label: address.label,
       name: address.contact_name || address.name,
@@ -56,10 +79,26 @@ export default function AddressBook() {
     setShowModal(true)
   }
 
+  const validateForm = () => {
+    const errors = {}
+    if (!formData.label.trim()) errors.label = 'Label is required'
+    if (!formData.name.trim()) errors.name = 'Contact name is required'
+    if (!formData.address.trim()) errors.address = 'Street address is required'
+    if (!formData.city.trim()) errors.city = 'City is required'
+    if (!formData.state.trim()) errors.state = 'State is required'
+    if (!formData.phone.trim()) {
+      errors.phone = 'Phone is required'
+    } else if (!/^[\d+\s()-]{7,}$/.test(formData.phone)) {
+      errors.phone = 'Invalid phone format'
+    }
+    setFormErrors(errors)
+    return Object.keys(errors).length === 0
+  }
+
   const handleSubmit = (e) => {
     e.preventDefault()
-    // Backend expects 'name' (controller maps to contact_name) and 'address' (controller maps to street)
-    // or we can send exact fields. Controller handles 'name' -> 'contact_name' and 'street' || 'address' -> 'street'
+    if (!validateForm()) return
+
     const payload = {
       ...formData,
       street: formData.address,
@@ -73,6 +112,7 @@ export default function AddressBook() {
           setShowModal(false)
           setEditingAddress(null)
           resetForm()
+          toast.success('Address updated')
         }
       })
     } else {
@@ -80,6 +120,7 @@ export default function AddressBook() {
         onSuccess: () => {
           setShowModal(false)
           resetForm()
+          toast.success('Address saved')
         }
       })
     }
@@ -87,13 +128,16 @@ export default function AddressBook() {
 
   const resetForm = () => {
     setFormData({ label: '', name: '', address: '', city: '', state: '', phone: '', postalCode: '', country: 'Nigeria' })
+    setFormErrors({})
   }
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600"></div>
-        <p className="text-gray-500 font-medium text-sm">Loading addresses...</p>
+      <div className="space-y-6 pb-6">
+        <PageHeader title="Address Book" subtitle="Manage saved pickup and delivery locations" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => <AddressCardSkeleton key={i} />)}
+        </div>
       </div>
     )
   }
@@ -136,19 +180,35 @@ export default function AddressBook() {
         </button>
       </div>
 
+      {/* Search bar */}
+      {addresses.length > 0 && (
+        <div className="relative max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search addresses…"
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-blue-100 focus:border-blue-500 transition-all bg-white"
+          />
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {addresses.map(address => (
+        {filteredAddresses.map(address => (
           <div key={address.id} className="group bg-white rounded-xl border border-gray-200 p-5 shadow-sm hover:shadow-md transition-all relative">
             <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
               <button
                 onClick={() => handleEdit(address)}
                 className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-colors"
+                title="Edit"
               >
                 <Edit className="w-4 h-4" />
               </button>
               <button
-                onClick={() => handleDelete(address.id)}
+                onClick={() => setDeleteTarget(address.id)}
                 className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-md transition-colors"
+                title="Delete"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -197,6 +257,13 @@ export default function AddressBook() {
                   Set as Default
                 </button>
               )}
+              <button
+                onClick={() => navigate('/booking/request')}
+                className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1.5 transition-colors ml-auto"
+              >
+                <Package className="w-3.5 h-3.5" />
+                Use in Booking
+              </button>
             </div>
           </div>
         ))}
@@ -217,13 +284,35 @@ export default function AddressBook() {
         </button>
       </div>
 
-      {addresses.length === 0 && (
+      {filteredAddresses.length === 0 && addresses.length > 0 && (
         <div className="py-12 text-center">
-          <p className="text-gray-500">Your address book is empty.</p>
+          <Search className="w-8 h-8 text-gray-300 mx-auto mb-3" />
+          <p className="text-gray-500 font-medium">No addresses match your search.</p>
+          <button onClick={() => setSearch('')} className="mt-2 text-sm text-blue-600 font-semibold hover:underline">Clear search</button>
         </div>
       )}
 
-      {/* Modal */}
+      {addresses.length === 0 && (
+        <div className="py-12 text-center">
+          <MapPin className="w-10 h-10 text-gray-300 mx-auto mb-3" />
+          <h3 className="text-lg font-bold text-gray-900 mb-1">No saved addresses</h3>
+          <p className="text-gray-500 text-sm">Add your first pickup or delivery location to speed up bookings.</p>
+        </div>
+      )}
+
+      {/* Delete Confirmation */}
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete Address"
+        message="Are you sure you want to delete this address? This action cannot be undone."
+        confirmLabel="Delete"
+        variant="danger"
+        loading={deleteMutation.isPending}
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
+
+      {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity" onClick={() => setShowModal(false)}></div>
@@ -242,10 +331,10 @@ export default function AddressBook() {
                   type="text"
                   value={formData.label}
                   onChange={(e) => setFormData({ ...formData, label: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${formErrors.label ? 'border-red-300' : 'border-gray-300'}`}
                   placeholder="e.g. Home, Office"
-                  required
                 />
+                {formErrors.label && <p className="text-xs text-red-500 mt-1">{formErrors.label}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -255,9 +344,9 @@ export default function AddressBook() {
                     type="text"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    required
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${formErrors.name ? 'border-red-300' : 'border-gray-300'}`}
                   />
+                  {formErrors.name && <p className="text-xs text-red-500 mt-1">{formErrors.name}</p>}
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">Phone</label>
@@ -265,9 +354,9 @@ export default function AddressBook() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    required
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${formErrors.phone ? 'border-red-300' : 'border-gray-300'}`}
                   />
+                  {formErrors.phone && <p className="text-xs text-red-500 mt-1">{formErrors.phone}</p>}
                 </div>
               </div>
 
@@ -277,9 +366,9 @@ export default function AddressBook() {
                   type="text"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                  required
+                  className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${formErrors.address ? 'border-red-300' : 'border-gray-300'}`}
                 />
+                {formErrors.address && <p className="text-xs text-red-500 mt-1">{formErrors.address}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
@@ -289,9 +378,9 @@ export default function AddressBook() {
                     type="text"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    required
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${formErrors.city ? 'border-red-300' : 'border-gray-300'}`}
                   />
+                  {formErrors.city && <p className="text-xs text-red-500 mt-1">{formErrors.city}</p>}
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wide mb-1.5">State</label>
@@ -299,9 +388,9 @@ export default function AddressBook() {
                     type="text"
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
-                    required
+                    className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white ${formErrors.state ? 'border-red-300' : 'border-gray-300'}`}
                   />
+                  {formErrors.state && <p className="text-xs text-red-500 mt-1">{formErrors.state}</p>}
                 </div>
               </div>
 
@@ -326,8 +415,6 @@ export default function AddressBook() {
           </div>
         </div>
       )}
-
-      <ToastContainer />
     </div>
   )
 }
