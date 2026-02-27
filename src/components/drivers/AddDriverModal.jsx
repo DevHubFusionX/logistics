@@ -42,7 +42,6 @@ export default function AddDriverModal({ isOpen, onClose, onRefresh, driver = nu
     medicalFitnessCertificate: null,
     drugTestReport: null,
     bankName: '',
-    bvn: '',
     accountName: '',
     accountNumber: ''
   })
@@ -72,7 +71,6 @@ export default function AddDriverModal({ isOpen, onClose, onRefresh, driver = nu
         medicalFitnessCertificate: null,
         drugTestReport: null,
         bankName: driver.bankName || '',
-        bvn: driver.bvn || '',
         accountName: driver.accountName || '',
         accountNumber: driver.accountNumber || ''
       })
@@ -100,7 +98,6 @@ export default function AddDriverModal({ isOpen, onClose, onRefresh, driver = nu
         medicalFitnessCertificate: null,
         drugTestReport: null,
         bankName: '',
-        bvn: '',
         accountName: '',
         accountNumber: ''
       })
