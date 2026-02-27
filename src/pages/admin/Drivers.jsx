@@ -11,7 +11,7 @@ import {
   DriverModal,
   AddDriverModal
 } from '../../components/drivers'
-import { useDriversQuery } from '../../hooks/queries/useAdminQueries'
+import { useDriversQuery, useFleetQuery } from '../../hooks/queries/useAdminQueries'
 
 export default function Drivers() {
   const [searchTerm, setSearchTerm] = useState('')
@@ -20,8 +20,28 @@ export default function Drivers() {
   const [activeTab, setActiveTab] = useState('info')
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const { showToast, ToastContainer } = useToast()
+  const [driverToEdit, setDriverToEdit] = useState(null)
 
-  const { data: drivers = [], isLoading, isError, refetch } = useDriversQuery()
+  const { data: drivers = [], isLoading: isLoadingDrivers, isError: isErrorDrivers, refetch: refetchDrivers } = useDriversQuery()
+  const { data: fleet = [], isLoading: isLoadingFleet, refetch: refetchFleet } = useFleetQuery()
+
+  const isLoading = isLoadingDrivers || isLoadingFleet
+  const isError = isErrorDrivers
+  const refetch = () => {
+    refetchDrivers()
+    refetchFleet()
+  }
+
+  // Create a map of driverId -> assigned truck info
+  const truckMap = useMemo(() => {
+    const map = {}
+    fleet.forEach(truck => {
+      if (truck.driverId) {
+        map[truck.driverId] = truck
+      }
+    })
+    return map
+  }, [fleet])
 
   useLogisticsShortcuts({
     onNewShipment: () => setIsAddModalOpen(true),
@@ -30,20 +50,16 @@ export default function Drivers() {
   })
 
   const filteredDrivers = useMemo(() => {
+    console.log('[Drivers Page] Input drivers:', drivers)
     const sanitizedSearch = sanitizeInput(searchTerm)
-    return drivers.filter(driver => {
+    const filtered = drivers.filter(driver => {
       const matchesSearch = (driver.name || '').toLowerCase().includes(sanitizedSearch.toLowerCase()) ||
         (driver.licenseNumber || '').toLowerCase().includes(sanitizedSearch.toLowerCase())
       const matchesStatus = filterStatus === 'all' || driver.status === filterStatus
-      return true // Temporary override or proper fix when we have real data structure
-      // return matchesSearch && matchesStatus
-    }).filter(driver => {
-      // Fallback filter if backend returns different structure
-      const name = driver.name || `${driver.profile?.first_name || ''} ${driver.profile?.last_name || ''}`.trim()
-      const matchesSearch = name.toLowerCase().includes(sanitizedSearch.toLowerCase())
-      const matchesStatus = filterStatus === 'all' || driver.status === filterStatus
       return matchesSearch && matchesStatus
     })
+    console.log('[Drivers Page] Filtered output:', filtered)
+    return filtered
   }, [drivers, searchTerm, filterStatus])
 
   const handleViewDriver = (driverId) => {
@@ -98,14 +114,18 @@ export default function Drivers() {
         subtitle="Manage driver profiles, performance tracking, and vehicle assignments"
       />
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Overview</h3>
+          <button
+            onClick={() => refetch()}
+            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+            title="Refresh Data"
+          >
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
         <DriverStats drivers={drivers} />
-        <button
-          onClick={() => refetch()}
-          className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
-        >
-          <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
-        </button>
       </div>
 
       <DriverFilters
@@ -114,13 +134,22 @@ export default function Drivers() {
         filterStatus={filterStatus}
         onStatusChange={setFilterStatus}
         onClear={() => setSearchTerm('')}
-        onAddDriver={() => setIsAddModalOpen(true)}
+        onAddDriver={() => {
+          setDriverToEdit(null)
+          setIsAddModalOpen(true)
+        }}
       />
 
       <DriverTable
         drivers={filteredDrivers}
         onView={handleViewDriver}
-        onEdit={() => showToast.info('Edit driver functionality incoming')}
+        onEdit={(id) => {
+          const driver = drivers.find(d => (d.id || d._id) === id)
+          if (driver) {
+            setDriverToEdit(driver)
+            setIsAddModalOpen(true)
+          }
+        }}
         onDelete={() => showToast.warning('Delete driver functionality incoming')}
         onExport={() => showToast.success('Driver data exported successfully')}
         onSaveView={() => showToast.info('View saved')}
@@ -128,13 +157,23 @@ export default function Drivers() {
 
       <DriverModal
         driver={selectedDriver}
+        assignedTruck={selectedDriver ? truckMap[selectedDriver.id] : null}
         activeTab={activeTab}
         onTabChange={setActiveTab}
         onClose={() => setSelectedDriver(null)}
       />
 
-      <AddDriverModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+      <AddDriverModal
+        isOpen={isAddModalOpen}
+        onClose={() => {
+          setIsAddModalOpen(false)
+          setDriverToEdit(null)
+        }}
+        onRefresh={refetch}
+        driver={driverToEdit}
+      />
       <ToastContainer />
     </div>
   )
 }
+

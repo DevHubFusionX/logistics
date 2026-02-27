@@ -54,8 +54,8 @@ export default function BookingsManagement() {
       amount: b.price || b.shipping_fee,
       createdAt: b.createdAt || b.created_at,
       pickupDate: b.estimatedPickupDate || b.pickupDate || b.estimated_delivery,
-      driverId: b.driver?.id,
-      driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : null
+      driverId: b.driver?.id || b.driverId,
+      driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : (b.driverName || null)
     }))
   }, [rawBookings])
 

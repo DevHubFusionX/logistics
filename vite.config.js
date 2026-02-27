@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 import { visualizer } from 'rollup-plugin-visualizer'
+import compression from 'vite-plugin-compression'
 
 export default defineConfig({
   plugins: [
@@ -13,6 +14,14 @@ export default defineConfig({
       filename: 'dist/bundle-stats.html',
       gzipSize: true,
       brotliSize: true
+    }),
+    compression({
+      algorithm: 'gzip',
+      ext: '.gz',
+    }),
+    compression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
     })
   ],
   resolve: {

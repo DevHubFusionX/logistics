@@ -1,35 +1,35 @@
+import { Truck, CheckCircle, Clock, Wifi } from 'lucide-react'
 import { MetricCard } from '../ui/advanced'
-import { Truck, Wrench } from 'lucide-react'
 
 export default function FleetMetrics({ data, statusCounts }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
       <MetricCard
-        title="Total Fleet"
-        value={data.length}
+        title="Total Trucks"
+        value={statusCounts.total}
         icon={Truck}
-        sparklineData={[60, 62, 65, 63, 68, 70, 72]}
+        sparklineData={[3, 4, 4, 5, 5, 6, 6]}
       />
       <MetricCard
-        title="Available"
-        value={statusCounts.available}
-        icon={Truck}
+        title="Approved"
+        value={statusCounts.approved}
+        icon={CheckCircle}
         color="green"
-        sparklineData={[25, 28, 26, 30, 32, 35, 38]}
+        sparklineData={[2, 2, 3, 3, 4, 4, 5]}
       />
       <MetricCard
-        title="On Trip"
-        value={statusCounts.on_trip}
-        icon={Truck}
-        color="blue"
-        sparklineData={[30, 28, 32, 30, 28, 25, 27]}
-      />
-      <MetricCard
-        title="Maintenance"
-        value={statusCounts.maintenance}
-        icon={Wrench}
+        title="Pending Approval"
+        value={statusCounts.pending}
+        icon={Clock}
         color="orange"
-        sparklineData={[5, 4, 6, 5, 8, 10, 7]}
+        sparklineData={[1, 2, 1, 2, 1, 2, 1]}
+      />
+      <MetricCard
+        title="GPS Enabled"
+        value={statusCounts.gpsEnabled}
+        icon={Wifi}
+        color="blue"
+        sparklineData={[2, 3, 3, 4, 4, 5, 5]}
       />
     </div>
   )

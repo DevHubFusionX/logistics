@@ -19,6 +19,9 @@ const bookingService = {
   getBookingById: (id) =>
     httpClient.request(`/bookings/${id}`),
 
+  getAdminBookingById: (id) =>
+    httpClient.request(`/admin/bookings/${id}`),
+
   trackShipment: (trackingNumber) =>
     httpClient.request(`/tracking/${trackingNumber}`),
 

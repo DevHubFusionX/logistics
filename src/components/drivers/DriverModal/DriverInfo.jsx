@@ -1,15 +1,16 @@
-import { User, Award, Truck, Star } from 'lucide-react'
+import { User, Shield, Briefcase, Landmark, Calendar, MapPin, Phone, Mail, Globe, Heart, Truck } from 'lucide-react'
 
-const getPerformanceColor = (score) => {
-  if (score >= 95) return 'text-green-600'
-  if (score >= 90) return 'text-blue-600'
-  if (score >= 85) return 'text-yellow-600'
-  return 'text-orange-600'
-}
+export default function DriverInfo({ driver, assignedTruck }) {
+  const formatDate = (dateStr) => {
+    if (!dateStr || dateStr === 'N/A') return 'N/A'
+    try {
+      return new Date(dateStr).toLocaleDateString('en-NG', { year: 'numeric', month: 'long', day: 'numeric' })
+    } catch { return dateStr }
+  }
 
-export default function DriverInfo({ driver }) {
   return (
     <div className="space-y-6">
+      {/* Personal Information */}
       <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl p-5 border border-gray-200">
         <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <div className="p-2 bg-gray-200 rounded-lg">
@@ -19,91 +20,178 @@ export default function DriverInfo({ driver }) {
         </h3>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">Email:</span>
-            <p className="font-medium">{driver.email}</p>
+            <span className="text-gray-500 flex items-center gap-1"><Mail className="w-3 h-3" /> Email:</span>
+            <p className="font-medium mt-0.5">{driver.email || 'N/A'}</p>
           </div>
           <div>
-            <span className="text-gray-500">Phone:</span>
-            <p className="font-medium">{driver.phone}</p>
+            <span className="text-gray-500 flex items-center gap-1"><Phone className="w-3 h-3" /> Phone:</span>
+            <p className="font-medium mt-0.5">{driver.phone || driver.phoneNumber || 'N/A'}</p>
           </div>
           <div>
-            <span className="text-gray-500">License Number:</span>
-            <p className="font-medium">{driver.licenseNumber}</p>
+            <span className="text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> Date of Birth:</span>
+            <p className="font-medium mt-0.5">{formatDate(driver.dateOfBirth)}</p>
           </div>
           <div>
-            <span className="text-gray-500">License Expiry:</span>
-            <p className="font-medium">{driver.licenseExpiry}</p>
+            <span className="text-gray-500 flex items-center gap-1"><Globe className="w-3 h-3" /> Nationality:</span>
+            <p className="font-medium mt-0.5 capitalize">{driver.nationality || 'N/A'}</p>
           </div>
           <div className="col-span-2">
-            <span className="text-gray-500">Address:</span>
-            <p className="font-medium">{driver.address}</p>
+            <span className="text-gray-500 flex items-center gap-1"><MapPin className="w-3 h-3" /> Address:</span>
+            <p className="font-medium mt-0.5">{driver.address || driver.residentialAddress || 'N/A'}</p>
           </div>
           <div>
-            <span className="text-gray-500">Emergency Contact:</span>
-            <p className="font-medium">{driver.emergencyContact}</p>
+            <span className="text-gray-500 flex items-center gap-1"><Heart className="w-3 h-3" /> Next of Kin:</span>
+            <p className="font-medium mt-0.5">{driver.emergencyContact || driver.nextOfKin || 'N/A'}</p>
           </div>
           <div>
-            <span className="text-gray-500">Join Date:</span>
-            <p className="font-medium">{driver.joinDate}</p>
+            <span className="text-gray-500 flex items-center gap-1"><Calendar className="w-3 h-3" /> Joined:</span>
+            <p className="font-medium mt-0.5">{driver.joinDate || 'N/A'}</p>
           </div>
         </div>
       </div>
 
+      {/* Guarantor Information */}
       <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
         <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <div className="p-2 bg-blue-100 rounded-lg">
-            <Award className="w-5 h-5 text-blue-600" />
+            <Shield className="w-5 h-5 text-blue-600" />
           </div>
-          Performance Metrics
+          Guarantor Information
         </h3>
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">Performance Score:</span>
-            <p className={`text-2xl font-bold ${getPerformanceColor(driver.performanceScore)}`}>
-              {driver.performanceScore}%
-            </p>
+            <span className="text-gray-500">Name:</span>
+            <p className="font-medium mt-0.5">{driver.guarantorName || 'N/A'}</p>
           </div>
           <div>
-            <span className="text-gray-500">Rating:</span>
-            <div className="flex items-center gap-1">
-              <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-              <span className="text-2xl font-bold">{driver.rating}</span>
-            </div>
+            <span className="text-gray-500">Phone:</span>
+            <p className="font-medium mt-0.5">{driver.guarantorPhoneNumber || 'N/A'}</p>
           </div>
-          <div>
-            <span className="text-gray-500">Total Deliveries:</span>
-            <p className="text-xl font-bold">{driver.totalDeliveries}</p>
-          </div>
-          <div>
-            <span className="text-gray-500">On-Time Rate:</span>
-            <p className="text-xl font-bold text-green-600">{driver.onTimeRate}%</p>
+          <div className="col-span-2">
+            <span className="text-gray-500">Address:</span>
+            <p className="font-medium mt-0.5">{driver.guarantorAddress || 'N/A'}</p>
           </div>
         </div>
       </div>
 
+      {/* Employment Information */}
       <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-5 border border-green-200">
         <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
           <div className="p-2 bg-green-100 rounded-lg">
-            <Truck className="w-5 h-5 text-green-600" />
+            <Briefcase className="w-5 h-5 text-green-600" />
           </div>
-          Assignment
+          Employment Details
         </h3>
-        <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-sm text-gray-500">Assigned Truck:</span>
-            <p className="font-medium text-lg">{driver.assignedTruck || 'Unassigned'}</p>
+            <span className="text-gray-500">Years of Experience:</span>
+            <p className="font-medium text-lg mt-0.5">{driver.yearsOfDrivingExperience || 'N/A'}</p>
           </div>
-          <div className="flex gap-2">
-            <button className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
-              Assign Truck
-            </button>
-            {driver.assignedTruck && (
-              <button className="flex-1 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 text-sm">
-                Unassign Truck
-              </button>
-            )}
+          <div>
+            <span className="text-gray-500">Previous Company:</span>
+            <p className="font-medium mt-0.5 capitalize">{driver.previousCompany || 'N/A'}</p>
+          </div>
+          <div>
+            <span className="text-gray-500">Status:</span>
+            <p className="mt-0.5">
+              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${driver.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                {driver.status === 'active' ? 'Active' : 'Inactive'}
+              </span>
+            </p>
+          </div>
+          <div>
+            <span className="text-gray-500">Verified:</span>
+            <p className="mt-0.5">
+              <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${driver.isVerified ? 'bg-blue-100 text-blue-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                {driver.isVerified ? 'Verified' : 'Pending'}
+              </span>
+            </p>
           </div>
         </div>
+      </div>
+
+      {/* Bank Details */}
+      <div className="bg-gradient-to-br from-purple-50 to-violet-50 rounded-xl p-5 border border-purple-200">
+        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="p-2 bg-purple-100 rounded-lg">
+            <Landmark className="w-5 h-5 text-purple-600" />
+          </div>
+          Bank Details
+        </h3>
+        <div className="grid grid-cols-2 gap-4 text-sm">
+          <div>
+            <span className="text-gray-500">Bank Name:</span>
+            <p className="font-medium mt-0.5">{driver.bankName || 'N/A'}</p>
+          </div>
+          <div>
+            <span className="text-gray-500">Account Number:</span>
+            <p className="font-medium mt-0.5">{driver.accountNumber || 'N/A'}</p>
+          </div>
+          <div className="col-span-2">
+            <span className="text-gray-500">Account Name:</span>
+            <p className="font-medium mt-0.5">{driver.accountName || 'N/A'}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Assigned Vehicle */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
+        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <Truck className="w-5 h-5 text-blue-600" />
+          </div>
+          Assigned Vehicle
+        </h3>
+        {assignedTruck ? (
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-500">Plate Number:</span>
+              <p className="font-medium mt-0.5">{assignedTruck.plateNumber}</p>
+            </div>
+            <div>
+              <span className="text-gray-500">Vehicle Type:</span>
+              <p className="font-medium mt-0.5">{assignedTruck.vehicleType}</p>
+            </div>
+            <div className="col-span-2">
+              <span className="text-gray-500">Make & Model:</span>
+              <p className="font-medium mt-0.5">{assignedTruck.make} {assignedTruck.model}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-4 bg-white/50 rounded-lg border border-dashed border-blue-200">
+            <p className="text-sm text-gray-500 italic">No vehicle assigned yet</p>
+          </div>
+        )}
+      </div>
+
+      {/* Assigned Vehicle */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-5 border border-blue-200">
+        <h3 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="p-2 bg-blue-100 rounded-lg">
+            <Truck className="w-5 h-5 text-blue-600" />
+          </div>
+          Assigned Vehicle
+        </h3>
+        {assignedTruck ? (
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <span className="text-gray-500">Plate Number:</span>
+              <p className="font-medium mt-0.5">{assignedTruck.plateNumber}</p>
+            </div>
+            <div>
+              <span className="text-gray-500">Vehicle Type:</span>
+              <p className="font-medium mt-0.5">{assignedTruck.vehicleType}</p>
+            </div>
+            <div className="col-span-2">
+              <span className="text-gray-500">Make & Model:</span>
+              <p className="font-medium mt-0.5">{assignedTruck.make} {assignedTruck.model}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-4 bg-white/50 rounded-lg border border-dashed border-blue-200">
+            <p className="text-sm text-gray-500 italic">No vehicle assigned yet</p>
+          </div>
+        )}
       </div>
     </div>
   )

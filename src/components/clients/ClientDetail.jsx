@@ -73,8 +73,8 @@ export default function ClientDetail({ client, onClose }) {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`flex items-center gap-2 px-6 py-4 text-sm font-bold transition-all relative ${activeTab === tab.id
-                  ? 'text-blue-600'
-                  : 'text-gray-400 hover:text-gray-600'
+                ? 'text-blue-600'
+                : 'text-gray-400 hover:text-gray-600'
                 }`}
             >
               <tab.icon className="w-4 h-4" />

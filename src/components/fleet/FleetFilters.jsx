@@ -17,9 +17,8 @@ export default function FleetFilters({ filters, onFilterChange, onClear, onAddTr
           className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
         >
           <option value="">All Status</option>
-          <option value="available">Available</option>
-          <option value="on_trip">On Trip</option>
-          <option value="maintenance">Maintenance</option>
+          <option value="approved">Approved</option>
+          <option value="pending">Pending</option>
         </select>
         <button
           onClick={onClear}

@@ -3,7 +3,7 @@ import { useAuthStore } from '../stores/authStore'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
-const ALLOWED_ENDPOINTS = ['/auth', '/user', '/users', '/addresses', '/shipments', '/drivers', '/fleet', '/trips', '/bookings', '/analytics', '/payments', '/payment', '/pricing', '/tracking', '/admin']
+const ALLOWED_ENDPOINTS = ['/auth', '/user', '/users', '/addresses', '/shipments', '/drivers', '/driver', '/truck', '/fleet', '/trips', '/bookings', '/analytics', '/payments', '/payment', '/pricing', '/tracking', '/admin']
 
 class HttpClient {
   validateEndpoint(endpoint) {
@@ -34,13 +34,21 @@ class HttpClient {
 
     const { token, logout } = useAuthStore.getState()
 
+    const isFormData = options.body instanceof FormData
+    const isGetOrDelete = !options.method || options.method === 'GET' || options.method === 'DELETE'
+
     const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
       ...options,
+      headers: {
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...(!isFormData && !isGetOrDelete && { 'Content-Type': 'application/json' }),
+        ...options.headers,
+      }
+    }
+
+    // Clean up Content-Type if it was explicitly set to undefined or if it's FormData
+    if (isFormData || config.headers['Content-Type'] === undefined) {
+      delete config.headers['Content-Type']
     }
 
     try {
@@ -53,6 +61,7 @@ class HttpClient {
       }
 
       const data = await response.json()
+      console.log(`[HTTP Client] REQ: ${url}`, data)
 
       if (!response.ok) {
         if (response.status === 401) {

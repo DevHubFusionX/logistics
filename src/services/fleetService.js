@@ -1,39 +1,36 @@
 import httpClient from './httpClient'
 
 export default {
-  getVehicles: (params = {}) => httpClient.request('/fleet/vehicles', {}, params),
-  getVehicle: (vehicleId) => {
-    if (!vehicleId) throw new Error('vehicleId is required')
-    return httpClient.request(`/fleet/vehicles/${encodeURIComponent(vehicleId)}`)
+  getTrucks: (params = {}) => httpClient.request('/truck/', {}, params),
+
+  getTruck: (truckId) => {
+    if (!truckId) throw new Error('truckId is required')
+    return httpClient.request(`/truck/${encodeURIComponent(truckId)}`)
   },
-  addVehicle: (vehicleData) => httpClient.request('/fleet/vehicles', {
-    method: 'POST',
-    body: JSON.stringify(vehicleData)
-  }),
-  updateVehicle: (vehicleId, vehicleData) => {
-    if (!vehicleId) throw new Error('vehicleId is required')
-    return httpClient.request(`/fleet/vehicles/${encodeURIComponent(vehicleId)}`, {
-      method: 'PUT',
-      body: JSON.stringify(vehicleData)
+
+  createTruck: (formData) => {
+    const isFormData = formData instanceof FormData
+    return httpClient.request('/truck/', {
+      method: 'POST',
+      body: isFormData ? formData : JSON.stringify(formData),
+      ...(isFormData ? { headers: {} } : {})
     })
   },
-  deleteVehicle: (vehicleId) => {
-    if (!vehicleId) throw new Error('vehicleId is required')
-    return httpClient.request(`/fleet/vehicles/${encodeURIComponent(vehicleId)}`, {
+
+  updateTruck: (truckId, data) => {
+    if (!truckId) throw new Error('truckId is required')
+    const isFormData = data instanceof FormData
+    return httpClient.request(`/truck/${encodeURIComponent(truckId)}`, {
+      method: 'PATCH',
+      body: isFormData ? data : JSON.stringify(data),
+      ...(isFormData ? { headers: {} } : {})
+    })
+  },
+
+  deleteTruck: (truckId) => {
+    if (!truckId) throw new Error('truckId is required')
+    return httpClient.request(`/truck/${encodeURIComponent(truckId)}`, {
       method: 'DELETE'
     })
-  },
-  getVehicleTelemetry: (vehicleId, params = {}) => {
-    if (!vehicleId) throw new Error('vehicleId is required')
-    return httpClient.request(`/fleet/vehicles/${encodeURIComponent(vehicleId)}/telemetry`, {}, params)
-  },
-  getMaintenanceAlerts: (params = {}) => httpClient.request('/fleet/maintenance/alerts', {}, params),
-  scheduleMaintenance: (maintenanceData) => httpClient.request('/fleet/maintenance', {
-    method: 'POST',
-    body: JSON.stringify(maintenanceData)
-  }),
-  getVehicleTrips: (vehicleId, params = {}) => {
-    if (!vehicleId) throw new Error('vehicleId is required')
-    return httpClient.request(`/fleet/vehicles/${encodeURIComponent(vehicleId)}/trips`, {}, params)
   }
 }

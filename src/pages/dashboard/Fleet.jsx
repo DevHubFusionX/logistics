@@ -2,14 +2,12 @@ import { useState, useMemo, memo } from 'react'
 import { PageHeader } from '../../components/dashboard'
 import { VirtualizedTable, useToast } from '../../components/ui/advanced'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
-import { Thermometer, MapPin, Calendar, RefreshCw, AlertCircle } from 'lucide-react'
+import { Thermometer, RefreshCw, AlertCircle, Truck, Shield, CheckCircle, XCircle } from 'lucide-react'
 import AddTruckModal from '../../components/fleet/AddTruckModal'
 import FleetFilters from '../../components/fleet/FleetFilters'
 import FleetMetrics from '../../components/fleet/FleetMetrics'
-import MaintenanceAlerts from '../../components/fleet/MaintenanceAlerts'
 import TruckDetailModal from '../../components/fleet/TruckDetailModal'
-import { useFleetQuery } from '../../hooks/queries/useAdminQueries'
-import { MAINTENANCE_ALERTS } from '../../components/fleet/fleetData'
+import { useFleetQuery, useDriversQuery } from '../../hooks/queries/useAdminQueries'
 
 function Fleet() {
   const [filters, setFilters] = useState({})
@@ -18,6 +16,19 @@ function Fleet() {
   const { showToast, ToastContainer } = useToast()
 
   const { data: fleetData = [], isLoading, isError, refetch } = useFleetQuery(filters)
+  const { data: drivers = [] } = useDriversQuery()
+
+  // Create a lookup map: driverId -> driver name
+  const driverMap = useMemo(() => {
+    const map = {}
+    drivers.forEach(d => { map[d.id] = d.name })
+    return map
+  }, [drivers])
+
+  // Driver IDs that are already assigned to trucks
+  const assignedDriverIds = useMemo(() => {
+    return new Set(fleetData.map(t => t.driverId).filter(Boolean))
+  }, [fleetData])
 
   useLogisticsShortcuts({
     onNewShipment: () => setIsAddModalOpen(true),
@@ -31,17 +42,20 @@ function Fleet() {
   }
 
   const handleViewTruck = (truckId) => {
-    const truck = fleetData.find(t => t.id === truckId)
+    const truck = fleetData.find(t => (t.id || t._id) === truckId)
     setSelectedTruck(truck)
   }
 
   const filteredFleet = useMemo(() => {
     return fleetData.filter(truck => {
-      const plate = truck.plateNumber || truck.plate_number || ''
+      const plate = truck.plateNumber || ''
       const id = truck.id || truck._id || ''
+      const make = truck.make || ''
 
-      if (filters.search && !id.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !plate.toLowerCase().includes(filters.search.toLowerCase())) {
+      if (filters.search &&
+        !id.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !plate.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !make.toLowerCase().includes(filters.search.toLowerCase())) {
         return false
       }
       if (filters.status && truck.status !== filters.status) return false
@@ -51,41 +65,26 @@ function Fleet() {
 
   const statusCounts = useMemo(() => {
     return {
-      available: fleetData.filter(t => t.status === 'available').length,
-      on_trip: fleetData.filter(t => t.status === 'on_trip').length,
-      maintenance: fleetData.filter(t => t.status === 'maintenance').length
+      total: fleetData.length,
+      approved: fleetData.filter(t => t.status === 'approved').length,
+      pending: fleetData.filter(t => t.status === 'pending').length,
+      gpsEnabled: fleetData.filter(t => t.gpsTrackingInstalled).length
     }
   }, [fleetData])
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'available': return 'bg-green-100 text-green-700'
-      case 'on_trip': return 'bg-blue-100 text-blue-700'
-      case 'maintenance': return 'bg-orange-100 text-orange-700'
+      case 'approved': return 'bg-green-100 text-green-700'
+      case 'pending': return 'bg-yellow-100 text-yellow-700'
       default: return 'bg-gray-100 text-gray-700'
     }
-  }
-
-  const getTempColor = (temp) => {
-    if (!temp && temp !== 0) return 'text-gray-400'
-    if (temp < 20) return 'text-blue-600'
-    if (temp > 24) return 'text-orange-600'
-    return 'text-green-600'
-  }
-
-  const getInsuranceStatus = (expiry) => {
-    if (!expiry) return { text: 'N/A', color: 'text-gray-400' }
-    const daysUntil = Math.ceil((new Date(expiry) - new Date()) / (1000 * 60 * 60 * 24))
-    if (daysUntil < 0) return { text: 'Expired', color: 'text-red-600' }
-    if (daysUntil < 30) return { text: `${daysUntil} days`, color: 'text-orange-600' }
-    return { text: `${daysUntil} days`, color: 'text-green-600' }
   }
 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-        <p className="text-gray-500 animate-pulse">Synchronizing fleet telemetry...</p>
+        <p className="text-gray-500 animate-pulse">Loading fleet data...</p>
       </div>
     )
   }
@@ -94,10 +93,10 @@ function Fleet() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4 text-center">
         <AlertCircle className="w-12 h-12 text-red-500" />
-        <h3 className="text-lg font-bold text-gray-900">Telemetry Sync Failed</h3>
-        <p className="text-gray-500 max-w-sm">Failed to connect to the vehicle tracking service. Please check your connection.</p>
+        <h3 className="text-lg font-bold text-gray-900">Failed to load fleet data</h3>
+        <p className="text-gray-500 max-w-sm">Unable to connect to the fleet management service. Please check your connection.</p>
         <button onClick={() => refetch()} className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-sm">
-          <RefreshCw className="w-4 h-4" /> Retry Connection
+          <RefreshCw className="w-4 h-4" /> Retry
         </button>
       </div>
     )
@@ -108,9 +107,9 @@ function Fleet() {
       <div className="flex items-center justify-between">
         <PageHeader
           title="Fleet Management"
-          subtitle="Real-time monitoring and management of refrigerated truck fleet"
+          subtitle="Manage your truck fleet, vehicle specifications, and compliance"
         />
-        <button onClick={() => refetch()} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Sync fleet data">
+        <button onClick={() => refetch()} className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="Refresh fleet data">
           <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
         </button>
       </div>
@@ -124,65 +123,80 @@ function Fleet() {
 
       <FleetMetrics data={fleetData} statusCounts={statusCounts} />
 
-      <MaintenanceAlerts alerts={MAINTENANCE_ALERTS} />
-
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
         <VirtualizedTable
           data={filteredFleet}
           columns={[
-            { key: 'id', label: 'Truck ID', width: '100px' },
-            { key: 'plateNumber', label: 'Plate Number', width: '120px' },
             {
-              key: 'tonnage',
-              label: 'Tonnage & Capacity',
-              width: '150px',
-              render: (value, row) => `${value}T / ${row.capacity || 'N/A'}`
+              key: 'plateNumber',
+              label: 'Plate Number',
+              width: '120px',
+              render: (value) => (
+                <span className="font-semibold text-gray-900">{value || 'N/A'}</span>
+              )
             },
             {
-              key: 'location',
-              label: 'Location',
-              width: '180px',
+              key: 'driverId',
+              label: 'Driver',
+              width: '140px',
               render: (value) => (
-                <div className="flex items-center gap-1 font-medium text-gray-700">
-                  <MapPin className="w-3 h-3 text-gray-400" />
-                  <span className="truncate">{value || 'Unknown'}</span>
+                <span className="text-sm">{value ? (driverMap[value] || 'Unknown') : <span className="text-gray-400 italic">Unassigned</span>}</span>
+              )
+            },
+            {
+              key: 'vehicleType',
+              label: 'Type',
+              width: '100px',
+              render: (value) => (
+                <div className="flex items-center gap-1">
+                  <Truck className="w-3 h-3 text-gray-400" />
+                  <span className="text-sm">{value || 'N/A'}</span>
                 </div>
               )
             },
             {
-              key: 'temperature',
-              label: 'Real-time Temp',
-              width: '120px',
+              key: 'make',
+              label: 'Make & Model',
+              width: '150px',
+              render: (value, row) => (
+                <span className="text-sm">{value} {row.model} {row.yearOfManufacture !== 'N/A' ? `(${row.yearOfManufacture})` : ''}</span>
+              )
+            },
+            {
+              key: 'truckCapacity',
+              label: 'Capacity',
+              width: '100px'
+            },
+            {
+              key: 'temperatureRange',
+              label: 'Temp Range',
+              width: '130px',
               render: (value) => (
                 <div className="flex items-center gap-1">
-                  <Thermometer className={`w-4 h-4 ${getTempColor(value)}`} />
-                  <span className={`font-bold ${getTempColor(value)}`}>{value !== undefined ? `${value}°C` : 'N/A'}</span>
+                  <Thermometer className="w-3 h-3 text-blue-500" />
+                  <span className="text-sm">{value || 'N/A'}</span>
                 </div>
+              )
+            },
+            {
+              key: 'gpsTrackingInstalled',
+              label: 'GPS',
+              width: '70px',
+              render: (value) => value ? (
+                <CheckCircle className="w-4 h-4 text-green-500" />
+              ) : (
+                <XCircle className="w-4 h-4 text-gray-300" />
               )
             },
             {
               key: 'status',
               label: 'Status',
-              width: '120px',
+              width: '110px',
               render: (value) => (
                 <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusColor(value)}`}>
-                  {(value || 'unknown').replace('_', ' ')}
+                  {value || 'unknown'}
                 </span>
               )
-            },
-            {
-              key: 'insuranceExpiry',
-              label: 'Insurance Expiry',
-              width: '140px',
-              render: (value) => {
-                const status = getInsuranceStatus(value)
-                return (
-                  <div className="flex items-center gap-1">
-                    <Calendar className={`w-3 h-3 ${status.color}`} />
-                    <span className={`font-medium ${status.color}`}>{status.text}</span>
-                  </div>
-                )
-              }
             },
             {
               key: 'actions',
@@ -207,12 +221,15 @@ function Fleet() {
       <TruckDetailModal
         truck={selectedTruck}
         onClose={() => setSelectedTruck(null)}
-        getTempColor={getTempColor}
-        getStatusColor={getStatusColor}
-        getInsuranceStatus={getInsuranceStatus}
+        driverMap={driverMap}
       />
 
-      <AddTruckModal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} />
+      <AddTruckModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onRefresh={refetch}
+        assignedDriverIds={assignedDriverIds}
+      />
       <ToastContainer />
     </div>
   )

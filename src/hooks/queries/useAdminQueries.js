@@ -16,11 +16,14 @@ export function useCustomersQuery(params = {}) {
         queryKey: queryKeys.admin.customers(params),
         queryFn: async () => {
             const response = await clientService.getClients(params)
-            const rawUsers = response.data?.users || []
+            // Handle new API structure { error, message, data: { records, pagination } }
+            const apiBody = response.data?.data || response.data
+            const rawUsers = apiBody?.records || apiBody?.users || []
 
             return rawUsers.map(user => ({
                 ...user,
-                name: user.companyName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unnamed Client',
+                id: user._id || user.id,
+                name: user.fullNameOrBusiness || user.companyName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unnamed Client',
                 contactName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'No Name',
                 industry: user.clientCategory || 'Individual',
                 accountOfficer: 'Standard Account',
@@ -57,6 +60,37 @@ export function useClientShipmentsQuery(clientId, params = {}) {
 }
 
 /**
+ * Normalizes driver data from the API to match the frontend expectations
+ */
+const normalizeDriver = (driver) => ({
+    ...driver,
+    id: driver._id,
+    name: `${driver.firstName || ''} ${driver.lastName || ''}`.trim() || 'Unnamed Driver',
+    email: driver.email || '',
+    phone: driver.phoneNumber || '',
+    address: driver.residentialAddress || 'Not specified',
+    emergencyContact: driver.nextOfKin || 'Not specified',
+    joinDate: driver.createdAt ? new Date(driver.createdAt).toLocaleDateString() : 'N/A',
+
+    // Document URLs
+    ninSlipUrl: driver.ninSlip?.url,
+    driversLicenseUrl: driver.driversLicense?.url,
+    passportPhotoUrl: driver.passportPhoto?.url,
+    medicalCertUrl: driver.medicalFitnessCertificate?.url,
+
+    // UI Fallbacks for missing fields in API
+    performanceScore: driver.performanceScore || 90, // Default to 90
+    rating: driver.rating || 4.5,
+    totalDeliveries: driver.totalDeliveries || 0,
+    onTimeRate: driver.onTimeRate || 95,
+    assignedTruck: driver.assignedTruck || 'None',
+    licenseNumber: driver.licenseNumber || 'N/A',
+    licenseExpiry: driver.licenseExpiry || 'N/A',
+
+    status: driver.isActive ? 'active' : 'inactive'
+})
+
+/**
  * Hook for fetching all drivers/staff
  */
 export function useDriversQuery(params = {}) {
@@ -64,35 +98,98 @@ export function useDriversQuery(params = {}) {
         queryKey: queryKeys.admin.drivers(params),
         queryFn: async () => {
             const response = await driverService.getDrivers(params)
-
-            // Backend returns { drivers: [], total: ... }
-            const rawDrivers = response.data?.drivers || []
-
-            // Normalize data for the frontend components
-            return rawDrivers.map(driver => ({
-                ...driver,
-                name: driver.name || `${driver.profile?.firstName || ''} ${driver.profile?.lastName || ''}`.trim() || 'Unnamed Driver',
-                email: driver.profile?.email || '',
-                phone: driver.profile?.phone || '',
-                vehicleInfo: driver.vehicle ? `${driver.vehicle.make} ${driver.vehicle.model}` : 'Not Assigned',
-                status: driver.status || 'active'
-            }))
+            console.log('[useDriversQuery] Raw response:', response)
+            // httpClient returns { data: { error, message, data: { records } }, status }
+            const apiBody = response.data
+            const rawDrivers = apiBody?.data?.records || []
+            console.log('[useDriversQuery] Records found:', rawDrivers.length, rawDrivers)
+            return rawDrivers.map(normalizeDriver)
         },
         staleTime: 5 * 60 * 1000,
     })
 }
 
 /**
- * Hook for fetching fleet/vehicles
+ * Hook for fetching a single driver's details
+ */
+export function useDriverQuery(driverId) {
+    return useQuery({
+        queryKey: ['admin', 'driver', driverId],
+        queryFn: async () => {
+            const response = await driverService.getDriver(driverId)
+            // httpClient returns { data: { error, message, data: { records } }, status }
+            const apiBody = response.data
+            const driver = apiBody?.data?.records?.[0] || apiBody?.data
+            return driver ? normalizeDriver(driver) : null
+        },
+        enabled: !!driverId,
+        staleTime: 5 * 60 * 1000,
+    })
+}
+
+/**
+ * Normalizes truck data from the API to match the frontend expectations
+ */
+const normalizeTruck = (truck) => ({
+    ...truck,
+    id: truck._id,
+    plateNumber: (truck.plateNumber || '').trim(),
+    make: (truck.make || '').trim(),
+    model: (truck.model || '').trim(),
+    vehicleType: (truck.vehicleType || '').trim(),
+    chassisNumber: (truck.chassisNumber || '').trim(),
+    engineNumber: (truck.engineNumber || '').trim(),
+    truckCapacity: (truck.truckCapacity || '').trim(),
+    yearOfManufacture: truck.yearOfManufacture || 'N/A',
+    insuranceType: truck.insuranceType || 'N/A',
+    temperatureRange: (truck.temperatureRange || '').trim(),
+    reeferUnitBrand: (truck.reeferUnitBrand || '').trim(),
+    reeferUnitModel: (truck.reeferUnitModel || '').trim(),
+    lastMaintenanceDate: truck.lastMaintenanceDate ? new Date(truck.lastMaintenanceDate).toLocaleDateString() : 'N/A',
+    telematicsProvider: (truck.telematicsProvider || '').trim(),
+    trackerSimNumber: truck.trackerSimNumber || '',
+    status: truck.isApproved ? 'approved' : 'pending',
+    createdAt: truck.createdAt,
+    driverId: truck.driver || null,
+
+    // Document URLs
+    vehicleRegistrationUrl: truck.vehicleRegistration?.url,
+    proofOfOwnershipUrl: truck.proofOfOwnership?.url,
+    insuranceDocumentUrl: truck.insuranceDocument?.url,
+    temperatureCalibrationCertificateUrl: truck.temperatureCalibrationCertificate?.url,
+
+    // Photo URLs
+    frontPhotoUrl: truck.front?.url,
+    backPhotoUrl: truck.back?.url,
+    interiorPhotoUrl: truck.interior?.url,
+    tiresPhotoUrl: truck.tires?.url,
+
+    // Safety
+    fireExtinguisherAvailable: truck.fireExtinguisherAvailable || false,
+    reflectiveSafetyGear: truck.reflectiveSafetyGear || false,
+    emergencyKit: truck.emergencyKit || false,
+    spareTire: truck.spareTire || false,
+
+    // Tracking
+    gpsTrackingInstalled: truck.gpsTrackingInstalled || false,
+    realTimeTrackingEnabled: truck.realTimeTrackingEnabled || false,
+    coldChainComplianceStatus: truck.coldChainComplianceStatus || false,
+})
+
+/**
+ * Hook for fetching fleet/trucks
  */
 export function useFleetQuery(params = {}) {
     return useQuery({
         queryKey: queryKeys.admin.fleet(params),
         queryFn: async () => {
-            const response = await fleetService.getVehicles(params)
-            return response.data || response
+            const response = await fleetService.getTrucks(params)
+            // httpClient returns { data: { error, message, data: { records } }, status }
+            const apiBody = response.data
+            const rawTrucks = apiBody?.data?.records || []
+            return rawTrucks.map(normalizeTruck)
         },
-        staleTime: 3 * 60 * 1000, // 3 minutes
+        staleTime: 3 * 60 * 1000,
     })
 }
 

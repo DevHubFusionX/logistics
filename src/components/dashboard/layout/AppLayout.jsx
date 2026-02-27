@@ -49,7 +49,7 @@ export default function AppLayout({ children }) {
       {isMobile && sidebarOpen && (
         <div
           className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden transition-opacity"
-          onClick={() => setSidebarOpen(false)}
+          onClick={() => setMobileSidebar(false)}
           aria-hidden="true"
         />
       )}
@@ -67,7 +67,7 @@ export default function AppLayout({ children }) {
           collapsed={sidebarCollapsed}
           isMobile={isMobile}
           isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+          onClose={() => setMobileSidebar(false)}
         />
 
         {/* Main Content Area */}

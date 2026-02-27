@@ -69,9 +69,28 @@ export function useBookingQuery(bookingId, options = {}) {
             const response = await bookingService.getBookingById(bookingId)
             return response.data || response
         },
-        enabled: !!bookingId, // Only run if bookingId exists
-        staleTime: 5 * 60 * 1000, // 5 minutes
+        enabled: !!bookingId,
+        staleTime: 5 * 60 * 1000,
         ...options,
+    })
+}
+
+/**
+ * Fetch a specific booking's details (Admin View)
+ */
+export function useAdminBookingQuery(bookingId, options = {}) {
+    return useQuery({
+        queryKey: ['admin', 'bookings', bookingId],
+        queryFn: async () => {
+            const response = await bookingService.getAdminBookingById(bookingId)
+            // api returns { error, message, data: { ...booking } }
+            const apiBody = response.data
+            if (apiBody?.error) throw new Error(apiBody.message || 'Failed to fetch booking details')
+            return apiBody.data || apiBody
+        },
+        enabled: !!bookingId,
+        staleTime: 5 * 60 * 1000,
+        ...options
     })
 }
 

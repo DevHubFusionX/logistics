@@ -7,13 +7,14 @@ import BookingCard from '../../components/bookings/BookingCard'
 import BookingDetailsModal from '../../components/bookings/BookingDetailsModal'
 import { getStatusBadge, getStatusText } from '../../utils/bookingUtils'
 import { useAdminUserBookingsQuery } from '../../hooks/queries/useBookingQueries'
+import AssignDriverModal from '../../components/bookings/AssignDriverModal'
+
 
 export default function AdminUserBookings() {
     const { id: userId } = useParams()
     const navigate = useNavigate()
     const [searchTerm, setSearchTerm] = useState('')
-    const [statusFilter, setStatusFilter] = useState('all')
-    const [showDetailsModal, setShowDetailsModal] = useState(false)
+    const [showAssignModal, setShowAssignModal] = useState(false)
     const [selectedBooking, setSelectedBooking] = useState(null)
     const [page, setPage] = useState(1)
     const { showToast, ToastContainer } = useToast()
@@ -47,14 +48,25 @@ export default function AdminUserBookings() {
             amount: b.price || b.shipping_fee,
             createdAt: b.createdAt || b.created_at,
             pickupDate: b.estimatedPickupDate || b.pickupDate || b.estimated_delivery,
-            driverId: b.driver?.id,
-            driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : null
+            driverId: b.driver?.id || b.driverId,
+            driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : (b.driverName || null)
         }))
     }, [rawBookings])
 
     const handleViewDetails = (booking) => {
         setSelectedBooking(booking)
         setShowDetailsModal(true)
+    }
+
+    const handleAssignDriver = (booking) => {
+        setSelectedBooking(booking)
+        setShowAssignModal(true)
+    }
+
+    const handleDriverAssigned = () => {
+        setShowAssignModal(false)
+        refetch()
+        showToast.success('Success', 'Driver has been assigned to the shipment')
     }
 
     return (
@@ -127,6 +139,7 @@ export default function AdminUserBookings() {
                                 key={booking.id || booking._id}
                                 booking={booking}
                                 onViewDetails={() => handleViewDetails(booking)}
+                                onAssignDriver={() => handleAssignDriver(booking)}
                                 isAdminView={true}
                             />
                         ))}
@@ -169,6 +182,14 @@ export default function AdminUserBookings() {
                     onClose={() => setShowDetailsModal(false)}
                     getStatusBadge={getStatusBadge}
                     getStatusText={getStatusText}
+                />
+            )}
+
+            {showAssignModal && (
+                <AssignDriverModal
+                    booking={selectedBooking}
+                    onClose={() => setShowAssignModal(false)}
+                    onAssign={handleDriverAssigned}
                 />
             )}
 

@@ -1,48 +1,54 @@
-import { useState, useEffect } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import bookingService from '../services/bookingService'
 import toast from 'react-hot-toast'
 
-export const useBookings = () => {
-  const [bookings, setBookings] = useState([])
-  const [loading, setLoading] = useState(true)
+export const useBookings = (filters = { limit: 10, page: 1 }) => {
+  const queryClient = useQueryClient()
 
-  const fetchBookings = async () => {
-    try {
-      setLoading(true)
-      const response = await bookingService.getBookings()
-      setBookings(response.data?.shipments || [])
-    } catch (error) {
-      console.error('Error fetching bookings:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ['bookings', filters],
+    queryFn: () => bookingService.getBookings(filters),
+    select: (response) => response.data?.shipments || [],
+    staleTime: 2 * 60 * 1000, // 2 minutes
+  })
+
+  const updateBookingMutation = useMutation({
+    mutationFn: ({ bookingId, data }) => bookingService.updateBooking(bookingId, data),
+    onSuccess: () => {
+      toast.success('Booking updated successfully!')
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    },
+    onError: () => {
+      toast.error('Failed to update booking')
+    },
+  })
+
+  const cancelBookingMutation = useMutation({
+    mutationFn: (bookingId) => bookingService.cancelBooking(bookingId),
+    onSuccess: () => {
+      toast.success('Booking cancelled successfully!')
+      queryClient.invalidateQueries({ queryKey: ['bookings'] })
+    },
+    onError: () => {
+      toast.error('Failed to cancel booking')
+    },
+  })
 
   const updateBooking = async (bookingId, data) => {
-    try {
-      await bookingService.updateBooking(bookingId, data)
-      toast.success('Booking updated successfully!')
-      await fetchBookings()
-    } catch (error) {
-      toast.error('Failed to update booking')
-      throw error
-    }
+    return updateBookingMutation.mutateAsync({ bookingId, data })
   }
 
   const cancelBooking = async (bookingId, confirmed = false) => {
     if (!confirmed && !window.confirm('Are you sure you want to cancel this booking?')) return
-    try {
-      await bookingService.cancelBooking(bookingId)
-      toast.success('Booking cancelled successfully!')
-      await fetchBookings()
-    } catch (error) {
-      toast.error('Failed to cancel booking')
-    }
+    return cancelBookingMutation.mutateAsync(bookingId)
   }
 
-  useEffect(() => {
-    fetchBookings()
-  }, [])
-
-  return { bookings, loading, updateBooking, cancelBooking, refetch: fetchBookings }
+  return {
+    bookings: data || [],
+    loading: isLoading,
+    error,
+    updateBooking,
+    cancelBooking,
+    refetch
+  }
 }

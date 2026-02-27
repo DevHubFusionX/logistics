@@ -20,64 +20,63 @@ const getPerformanceColor = (score) => {
 export default function DriverTable({ drivers, onView, onEdit, onDelete, onExport, onSaveView }) {
   const columns = [
     { key: 'name', label: 'Driver Name', width: '180px' },
-    { key: 'licenseNumber', label: 'License Number', width: '160px' },
-    { 
-      key: 'phone', 
-      label: 'Contact Info', 
+    {
+      key: 'phone',
+      label: 'Contact Info',
       width: '200px',
       render: (value, row) => (
         <div className="space-y-1">
           <div className="flex items-center gap-1 text-xs">
             <Phone className="w-3 h-3 text-gray-400" />
-            <span>{value}</span>
+            <span>{value || 'N/A'}</span>
           </div>
           <div className="flex items-center gap-1 text-xs text-gray-500">
             <Mail className="w-3 h-3 text-gray-400" />
-            <span className="truncate">{row.email}</span>
+            <span className="truncate">{row.email || 'N/A'}</span>
           </div>
         </div>
       )
     },
-    { 
-      key: 'assignedTruck', 
-      label: 'Assigned Truck', 
+    {
+      key: 'nationality',
+      label: 'Nationality',
+      width: '130px',
+      render: (value) => (
+        <span className="text-sm capitalize">{value || 'N/A'}</span>
+      )
+    },
+    {
+      key: 'assignedTruck',
+      label: 'Assigned Truck',
       width: '140px',
       render: (value) => (
         <div className="flex items-center gap-1">
           <Truck className="w-4 h-4 text-gray-400" />
-          <span>{value ? String(value).replace(/[<>"'&]/g, '') : 'Unassigned'}</span>
+          <span>{value && value !== 'None' ? String(value).replace(/[<>"'&]/g, '') : 'Unassigned'}</span>
         </div>
       )
     },
-    { 
-      key: 'performanceScore', 
-      label: 'Performance Score', 
-      width: '150px',
+    {
+      key: 'joinDate',
+      label: 'Joined',
+      width: '120px',
       render: (value) => (
-        <div className="flex items-center gap-2">
-          <div className="flex-1 bg-gray-200 rounded-full h-2">
-            <div 
-              className={`h-2 rounded-full ${value >= 95 ? 'bg-green-500' : value >= 90 ? 'bg-blue-500' : 'bg-yellow-500'}`}
-              style={{ width: `${value}%` }}
-            />
-          </div>
-          <span className={`text-sm font-medium ${getPerformanceColor(value)}`}>{value}%</span>
-        </div>
+        <span className="text-sm text-gray-600">{value || 'N/A'}</span>
       )
     },
-    { 
-      key: 'status', 
-      label: 'Status', 
+    {
+      key: 'status',
+      label: 'Status',
       width: '120px',
       render: (value) => (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(value)}`}>
-          {String(value).replace(/[<>"'&]/g, '').replace('_', ' ')}
+          {value === 'active' ? 'Active' : 'Inactive'}
         </span>
       )
     },
-    { 
-      key: 'actions', 
-      label: 'Actions', 
+    {
+      key: 'actions',
+      label: 'Actions',
       width: '200px',
       render: (_, row) => (
         <div className="flex items-center gap-2">

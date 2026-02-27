@@ -22,7 +22,7 @@ export default {
   },
   getClientShipments: (clientId, params = {}) => {
     if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/shipments`, {}, params)
+    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}`, {}, params)
   },
   getClientPayments: (clientId, params = {}) => {
     if (!clientId) throw new Error('clientId is required')

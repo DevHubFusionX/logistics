@@ -139,13 +139,9 @@ export const NAVIGATION_SECTIONS = [
         path: '/fleet',
         description: 'Vehicles & maintenance',
         color: 'indigo',
-        comingSoon: true,
         roles: ['Super Admin', 'Fleet Officer', 'Dispatcher'],
         subItems: [
-          { label: 'All Vehicles', path: '/fleet', count: '24' },
-          { label: 'Active', path: '/fleet/active', count: '18', status: 'success' },
-          { label: 'Maintenance', path: '/fleet/maintenance', count: '3', status: 'warning' },
-          { label: 'Offline', path: '/fleet/offline', count: '3', status: 'error' }
+          { label: 'All Vehicles', path: '/fleet' },
         ]
       },
       {
@@ -172,8 +168,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/drivers',
         description: 'Personnel management',
         color: 'green',
-        comingSoon: true,
-        roles: ['Super Admin', 'Fleet Officer']
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
       },
       {
         id: 'analytics',
