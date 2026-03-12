@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRegisterMutation } from '../../hooks/queries/useAuthQueries'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
+import AuthTour from './AuthTour'
 
 export default function RegisterForm() {
   const navigate = useNavigate()
@@ -35,6 +36,34 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(0)
+
+  const tourSteps = [
+    {
+      target: '.name-fields',
+      content: 'Enter your first and last name to personalize your account.',
+      disableBeacon: true,
+    },
+    {
+      target: '.email-field',
+      content: 'Provide your email address for account verification and notifications.',
+    },
+    {
+      target: '.phone-field',
+      content: 'Add your phone number for important delivery updates.',
+    },
+    {
+      target: '.company-fields',
+      content: 'Tell us about your business and location.',
+    },
+    {
+      target: '.password-field',
+      content: 'Create a strong password with at least 8 characters.',
+    },
+    {
+      target: '.terms-checkbox',
+      content: 'Review and accept our terms to complete registration.',
+    },
+  ]
 
   const handlePasswordChange = (password) => {
     setFormData({ ...formData, password })
@@ -109,13 +138,14 @@ export default function RegisterForm() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
+      <AuthTour steps={tourSteps} />
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
         <p className="text-gray-600">Start shipping smarter today</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 name-fields">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
             <div className="relative">
@@ -154,7 +184,7 @@ export default function RegisterForm() {
           </div>
         </div>
 
-        <div>
+        <div className="email-field">
           <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -174,7 +204,7 @@ export default function RegisterForm() {
           {fieldErrors.email && <p className="mt-1 text-xs text-red-600">{fieldErrors.email}</p>}
         </div>
 
-        <div>
+        <div className="phone-field">
           <label className="block text-sm font-semibold text-gray-700 mb-2">Phone Number</label>
           <div className="relative">
             <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -193,7 +223,7 @@ export default function RegisterForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 company-fields">
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Company Name</label>
             <div className="relative">
@@ -232,7 +262,7 @@ export default function RegisterForm() {
           </div>
         </div>
 
-        <div>
+        <div className="password-field">
           <label className="block text-sm font-semibold text-gray-700 mb-2">Create Password</label>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -294,7 +324,7 @@ export default function RegisterForm() {
           )}
         </div>
 
-        <div className="flex items-start py-2">
+        <div className="flex items-start py-2 terms-checkbox">
           <input
             id="terms"
             type="checkbox"

@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../../hooks/queries/useAuthQueries'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
+import AuthTour from './AuthTour'
 
 const MAX_ATTEMPTS = 5
 const LOCKOUT_TIME = 60000 // 1 minute
@@ -32,6 +33,22 @@ export default function LoginForm() {
   // Rate limiting state
   const [attempts, setAttempts] = useState(0)
   const [lockoutTime, setLockoutTime] = useState(0)
+
+  const tourSteps = [
+    {
+      target: '.email-field',
+      content: 'Enter your registered email address.',
+      disableBeacon: true,
+    },
+    {
+      target: '.password-field',
+      content: 'Enter your password. Click the eye icon to show/hide it.',
+    },
+    {
+      target: '.remember-me',
+      content: 'Check this to stay signed in on this device.',
+    },
+  ]
 
   useEffect(() => {
     if (lockoutTime > 0) {
@@ -93,6 +110,7 @@ export default function LoginForm() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
+      <AuthTour steps={tourSteps} />
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
         <p className="text-gray-600">Access your logistics command center</p>
@@ -110,7 +128,7 @@ export default function LoginForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
+        <div className="email-field">
           <label className="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -131,7 +149,7 @@ export default function LoginForm() {
           {fieldErrors.email && <p className="mt-1 text-sm text-red-600">{fieldErrors.email}</p>}
         </div>
 
-        <div>
+        <div className="password-field">
           <div className="flex justify-between mb-2">
             <label className="block text-sm font-semibold text-gray-700">Password</label>
             <Link to="/auth/forgot-password" size="sm" className="text-sky-600 hover:text-sky-700 text-sm font-semibold">
@@ -164,7 +182,7 @@ export default function LoginForm() {
           {fieldErrors.password && <p className="mt-1 text-sm text-red-600">{fieldErrors.password}</p>}
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center remember-me">
           <input
             id="remember-me"
             type="checkbox"
