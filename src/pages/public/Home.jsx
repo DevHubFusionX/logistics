@@ -16,9 +16,9 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Global Logistics & Cold Chain Freight Solutions"
-        description="Dara Express provides reliable freight forwarding, cold chain logistics, and last-mile delivery across Nigeria. Trusted by businesses for fast, secure, temperature-controlled cargo shipping."
-        keywords="logistics company Nigeria, freight forwarding Lagos, cold chain logistics, last-mile delivery Nigeria, cargo shipping, pharmaceutical logistics, temperature-controlled delivery, Dara Express"
+        title="Nigeria's Leading Cold Chain & Temp-Controlled Logistics"
+        description="Dara Express - Best cold chain logistics Nigeria. Specialized reefer trucks in Nigeria, pharma logistics, and refrigerated transport Lagos. Expert haulage services Nigeria and reefer trucking."
+        keywords="cold chain logistics Nigeria, refrigerated transport Lagos, reefer trucks in Nigeria, logistics companies in Nigeria, trucking services in Lagos, transport company in Abuja, haulage services Nigeria, pharma logistics, frozen food transport, temperature controlled logistics"
         canonical="/"
       />
       {homeComponents.map((Component, index) => (

@@ -9,9 +9,9 @@ export default function About() {
   return (
     <div className="pt-20">
       <SEO
-        title="About Us - Trusted Nigerian Logistics Company"
-        description="Learn about Dara Express – a leading logistics company in Nigeria specializing in cold chain, freight forwarding, and reliable cargo delivery. Built on trust, precision, and technology."
-        keywords="about Dara Express, Nigerian logistics company, cold chain experts Nigeria, freight company Lagos, reliable cargo delivery, logistics technology Nigeria"
+        title="About Us - Leading Cold Chain Logistics Company in Nigeria"
+        description="Learn about Dara Express, the premier logistics company in Nigeria and transport company in Abuja. Specialized in cold storage Lagos, refrigerated warehouse Abuja, and haulage services Nigeria."
+        keywords="logistics company Nigeria, transport company in Abuja, cold storage Lagos Nigeria, refrigerated warehouse Abuja, haulage services Nigeria, cold chain experts"
         canonical="/about"
       />
       <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-blue-50"></div>

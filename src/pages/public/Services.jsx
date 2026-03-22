@@ -10,9 +10,9 @@ export default function Services() {
   return (
     <div className="pt-20">
       <SEO
-        title="Logistics & Freight Services"
-        description="Explore Dara Express's full range of logistics services: freight forwarding, cold chain shipping, warehousing, air cargo, sea freight, and last-mile delivery across Nigeria and globally."
-        keywords="freight forwarding Nigeria, cold chain shipping, warehousing Lagos, air cargo Nigeria, sea freight, last-mile delivery, logistics services, temperature-controlled logistics"
+        title="Precision Cold Chain & Freight Services Nigeria"
+        description="Explore Dara Express reefer trucks in Nigeria. Specialized pharma logistics Nigeria, frozen food transport Lagos, and refrigerated transport Lagos to Abuja. Expert haulage services."
+        keywords="pharma logistics Nigeria, frozen food transport Lagos, refrigerated transport Lagos, reefer trucks in Nigeria, cold room services Lagos, refrigerated warehouse Abuja, haulage services Nigeria, logistics services"
         canonical="/services"
       />
       {/* Hero Section */}

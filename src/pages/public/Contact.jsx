@@ -5,9 +5,9 @@ export default function Contact() {
   return (
     <div className="pt-20">
       <SEO
-        title="Contact Us - Get a Freight Quote"
-        description="Contact Dara Express to get a free freight quote or speak to a logistics expert. Reach us by phone, WhatsApp, or email. Offices in Lagos, Nigeria."
-        keywords="contact Dara Express, freight quote Nigeria, logistics inquiry Lagos, shipping quote Nigeria, contact logistics company"
+        title="Contact Us - Get a Cold Chain Freight Quote Nigeria"
+        description="Get a precision freight quote Nigeria. Contact Dara Express for truck hire Lagos, logistics inquiry Lagos, and cargo transport Lagos to Abuja. Expert cold chain support."
+        keywords="freight quote Nigeria, cold chain quote Nigeria, logistics inquiry Lagos, truck hire Lagos Nigeria, cargo transport Lagos to Abuja, contact logistics company"
         canonical="/contact"
       />
       {/* Hero Section */}

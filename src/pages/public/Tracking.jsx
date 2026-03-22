@@ -41,9 +41,9 @@ export default function Tracking() {
   return (
     <div className="bg-gray-50 py-12">
       <SEO
-        title="Track Your Shipment - Real-Time Cargo Tracking"
-        description="Track your Dara Express shipment in real-time. Enter your tracking ID to get live updates on your freight, cargo, or delivery status across Nigeria."
-        keywords="track shipment Nigeria, cargo tracking, freight tracking, real-time delivery tracking, Dara Express tracking, logistics tracking Nigeria"
+        title="Track Your Shipment - Real-Time Cold Chain Tracking Nigeria"
+        description="Track your Dara Express shipment in real-time. Live updates for reefer trucks in Nigeria, cargo transport Lagos to Abuja, and temperature controlled logistics status."
+        keywords="track shipment Nigeria, cargo tracking, cold chain tracking, real-time logistics tracking, Dara Express tracking, reefer monitor Nigeria, temperature controlled tracking"
         canonical="/tracking"
       />
       <div className="max-w-4xl mx-auto px-6">

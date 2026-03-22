@@ -21,12 +21,12 @@ export const heroData = {
         highlight: "Cold Chain",
         suffix: "Logistics"
     },
-    description: "Expert temperature-controlled logistics and cold chain solutions in Nigeria. Specialized transportation for pharmaceuticals, vaccines, and perishable goods with real-time tracking.",
+    description: "Expert cold chain logistics Nigeria and temperature controlled logistics. Specialized reefer trucks in Nigeria for pharma logistics and frozen food transport Lagos to Abuja.",
     features: [
-        'Advanced Cold Chain Nigeria: 24/7 temperature monitoring',
-        'Nationwide Temperature Controlled Logistics: Multi-modal coverage',
-        'Express Cold Chain Delivery: Same-day shipping for perishables',
-        'Precision Freight Forwarding in Nigeria: Automated supply chain'
+        'Premium Cold Chain Logistics Nigeria: Real-time reefer monitoring',
+        'Nationwide Haulage Services Nigeria: Dedicated refrigerated fleet',
+        'Reefer Trucks in Nigeria: Express transport for vaccines & perishables',
+        'Top Logistics Companies in Nigeria: 24/7 temperature tracking'
     ],
     backgroundImages: [
         'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1280&q=75',
@@ -35,10 +35,10 @@ export const heroData = {
         'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1280&q=55'
     ],
     imageAlts: [
-        "Cold chain logistics truck in Nigeria",
-        "Temperature controlled pharmaceutical storage",
-        "Refrigerated perishables transportation",
-        "Global freight forwarding warehouse"
+        "Reefer trucks in Nigeria for cold chain logistics",
+        "Pharmaceutical cold storage Lagos Nigeria",
+        "Refrigerated transport services Lagos to Abuja",
+        "Frozen food transport Nigeria logistics"
     ],
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
@@ -66,10 +66,10 @@ export const clientsData = [
 export const aboutData = {
     badge: "Our Journey",
     title: {
-        prefix: "Transforming Nigeria's",
-        highlight: "Cold Chain Industry"
+        prefix: "The Leading",
+        highlight: "Logistics Company in Nigeria"
     },
-    description: "Dara Express is a leader in cold chain logistics in Nigeria, offering specialized temperature controlled solutions for healthcare and perishables. We leverage technology to bridge the gap between production and market.",
+    description: "Dara Express is the go-to transport company in Abuja and Lagos for specialized reefer trucks in Nigeria. We provide end-to-end haulage services Nigeria with a focus on cold room services Lagos and pharma logistics.",
     timeline: [
         {
             year: "Founded (2025)",
@@ -110,66 +110,66 @@ export const servicesData = [
     {
         icon: 'Package',
         image: "/assets/img/pharmaceutical.jpg",
-        title: "Pharmaceutical Cold Chain",
-        subtitle: "Temperature-controlled precision in Nigeria",
-        description: "Specialized cold chain Nigeria transportation for vaccines, medicines, and medical supplies. Real-time temperature monitoring ensures product integrity from pickup to delivery.",
+        title: "Pharma Logistics Nigeria",
+        subtitle: "Cold chain solutions in Lagos & Abuja",
+        description: "Specialized cold room services Lagos and reefer trucks in Nigeria for vaccines and medicine. Hospital-grade cold chain logistics Nigeria with 24/7 monitoring.",
         features: [
             "Temperature-controlled logistics Nigeria: 2°C to 8°C",
-            "Real-time GPS and temperature tracking",
-            "Goods-in-Transit (GIT) insurance included",
-            "Full compliance with pharmaceutical standards"
+            "Refrigerated warehouse Abuja & Lagos storage",
+            "Goods-in-Transit (GIT) insurance for pharma",
+            "Reefer trucks in Nigeria with precision cooling"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Same-day available",
-        coverage: "Nationwide"
+        coverage: "Lagos, Abuja, Port Harcourt"
     },
     {
         icon: 'Clock',
         image: "/assets/img/frozen-foods.jpg",
-        title: "Frozen Foods Logistics",
-        subtitle: "Sub-zero cold chain solutions",
-        description: "Reliable frozen food logistics in Nigeria with specialized temperature-controlled vehicles. Perfect for ice cream, frozen meats, and seafood requiring -18°C or below.",
+        title: "Frozen Food Transport Lagos",
+        subtitle: "Sub-zero reefer trucking services",
+        description: "Reliable frozen food transport Lagos and haulage services Nigeria. Specialized reefer trucks in Nigeria for seafood, meat, and poultry at -18°C.",
         features: [
-            "Sub-zero temperature logistics Nigeria",
-            "Insulated refrigerated trucks",
-            "Quick loading and unloading protocols",
-            "24/7 temperature monitoring alerts"
+            "Frozen storage facilities Nigeria coverage",
+            "Dry truck services Lagos for stable cargo",
+            "Cargo transport Lagos to Abuja express",
+            "Trucking services in Lagos: 24/7 support"
         ],
         pricing: "Custom Quote",
         deliveryTime: "1-3 days",
-        coverage: "Major cities"
+        coverage: "Nationwide Haulage"
     },
     {
         icon: 'Truck',
         image: "/assets/img/fresh-produce.jpg",
-        title: "Fresh Produce Supply Chain",
-        subtitle: "Farm to market, fresh guaranteed",
-        description: "Efficient temperature-controlled transport for fresh fruits, vegetables, and dairy in Nigeria. Maintaining optimal freshness throughout the supply chain.",
+        title: "Refrigerated Transport Lagos",
+        subtitle: "Farm to market cold chain Nigeria",
+        description: "Efficient refrigerated transport Lagos and food storage warehouse Nigeria solutions. Maintaining freshness with advanced reefer trucks in Nigeria.",
         features: [
-            "Climate-controlled transportation (0°C to 15°C)",
-            "Rapid transit for maximum freshness",
-            "Specialized handling for delicate produce",
-            "Direct farm-to-market Cold Chain Nigeria"
+            "Cold room services Lagos: Fresh produce storage",
+            "Truck hire Lagos Nigeria for perishables",
+            "Direct cargo transport Lagos to Abuja",
+            "Best transport company in Abuja for fresh cargo"
         ],
         pricing: "Custom Quote",
         deliveryTime: "12-48 hours",
-        coverage: "All regions"
+        coverage: "All 36 States"
     },
     {
         icon: 'Users',
         image: "/assets/img/enterprise.jpg",
-        title: "Enterprise Logistics Nigeria",
-        subtitle: "Global freight forwarding solutions",
-        description: "Comprehensive freight forwarding in Nigeria for pharmaceutical manufacturers, food distributors, and exporters. Custom cold chain partnerships with dedicated support.",
+        title: "Haulage Services Nigeria",
+        subtitle: "Enterprise logistics companies in Nigeria",
+        description: "Complete freight services Lagos Nigeria and long haul trucking Nigeria. Scalable solutions for dry truck services Lagos and temperature controlled logistics.",
         features: [
-            "Dedicated account management",
-            "Custom temperature logistics Nigeria",
-            "Volume discounts and flexible contracts",
-            "Advanced analytics and compliance reporting"
+            "Goods transportation companies Nigeria leader",
+            "Custom trucking services in Lagos solutions",
+            "Long haul trucking Nigeria: Port to Warehouse",
+            "Freight services Lagos Nigeria expert support"
         ],
         pricing: "Custom Quote",
-        deliveryTime: "Flexible",
-        coverage: "Nationwide+"
+        deliveryTime: "Daily Departures",
+        coverage: "Regional Hubs"
     }
 ]
 
@@ -226,8 +226,8 @@ export const whyUsData = {
         }
     ],
     cta: {
-        title: "Ready to Transform Your Business?",
-        description: "Join thousands of businesses already experiencing the Dara difference. Let's build Nigeria's future together, one delivery at a time.",
+        title: "Best Logistics Company in Nigeria?",
+        description: "Join thousands of businesses using the best transport company in Abuja and Lagos. Competitive truck hire Lagos Nigeria and dry truck services Lagos.",
         primaryBtn: { text: "Get a quote", link: "/booking/request" },
         secondaryBtn: { text: "Learn more", link: "/services" }
     }
@@ -330,9 +330,9 @@ export const testimonialsData = {
 export const contactData = {
     hero: {
         badge: "Get In Touch",
-        title: "Let's Start Your",
-        highlight: "Logistics Journey",
-        description: "Get in touch with our team for personalized logistics solutions."
+        title: "Best Transport",
+        highlight: "Company in Abuja & Lagos",
+        description: "Get a precision freight quote Nigeria. Expert truck hire Lagos Nigeria and cargo transport Lagos to Abuja specialists."
     },
     form: {
         title: "Get Your Custom Quote",
