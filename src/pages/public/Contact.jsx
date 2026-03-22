@@ -1,8 +1,15 @@
 import { ContactHero, ContactInfo, OfficeLocations, ContactForm, SupportInfo } from '../../components/landing'
+import SEO from '../../components/common/SEO'
 
 export default function Contact() {
   return (
     <div className="pt-20">
+      <SEO
+        title="Contact Us - Get a Freight Quote"
+        description="Contact Dara Express to get a free freight quote or speak to a logistics expert. Reach us by phone, WhatsApp, or email. Offices in Lagos, Nigeria."
+        keywords="contact Dara Express, freight quote Nigeria, logistics inquiry Lagos, shipping quote Nigeria, contact logistics company"
+        canonical="/contact"
+      />
       {/* Hero Section */}
       <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-6">

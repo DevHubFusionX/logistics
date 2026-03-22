@@ -29,10 +29,10 @@ export const heroData = {
         'Enterprise-grade API integration & automated workflows'
     ],
     backgroundImages: [
-        'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-        'https://images.unsplash.com/photo-1553413077-190dd305871c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-        'https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80',
-        'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'
+        'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1280&q=75',
+        'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1280&q=55',
+        'https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?auto=format&fit=crop&w=1280&q=55',
+        'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1280&q=55'
     ],
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },

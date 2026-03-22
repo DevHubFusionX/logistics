@@ -1,12 +1,20 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion'
 import { Truck, Warehouse, Globe, Users, CheckCircle, Thermometer, Shield, MapPin, Clock, Package, TrendingUp } from 'lucide-react'
 import { servicesData } from './ServicesData'
+import SEO from '../../components/common/SEO'
 
 export default function Services() {
   const services = servicesData.services;
 
   return (
     <div className="pt-20">
+      <SEO
+        title="Logistics & Freight Services"
+        description="Explore Dara Express's full range of logistics services: freight forwarding, cold chain shipping, warehousing, air cargo, sea freight, and last-mile delivery across Nigeria and globally."
+        keywords="freight forwarding Nigeria, cold chain shipping, warehousing Lagos, air cargo Nigeria, sea freight, last-mile delivery, logistics services, temperature-controlled logistics"
+        canonical="/services"
+      />
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
         <div className="max-w-7xl mx-auto">
@@ -170,17 +178,9 @@ export default function Services() {
 
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          {[...Array(20)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 bg-white rounded-full"
-              style={{ left: `${Math.random() * 100}%`, top: `${Math.random() * 100}%` }}
-              animate={{ y: [-20, 20, -20], opacity: [0.3, 0.8, 0.3] }}
-              transition={{ duration: 3 + Math.random() * 2, repeat: Infinity, delay: Math.random() * 2 }}
-            />
-          ))}
-        </div>
+        <div className="absolute inset-0 opacity-10"
+          style={{ background: 'radial-gradient(ellipse at top left, rgba(255,255,255,0.3) 0%, transparent 60%)' }}
+        />
         <div className="max-w-5xl mx-auto text-center relative z-10">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="inline-block px-4 py-2 bg-white/20 rounded-full text-white text-sm font-semibold mb-6 backdrop-blur-sm">

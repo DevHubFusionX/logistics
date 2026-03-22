@@ -1,34 +1,24 @@
 import { AboutStats, AboutValues, AboutTimeline, AboutAchievements, AboutCTA } from '../../components/landing/about'
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion"
 import { Thermometer, Shield, Zap, Users } from 'lucide-react'
 import { aboutData } from './AboutData'
+import SEO from '../../components/common/SEO'
 
 export default function About() {
   return (
     <div className="pt-20">
+      <SEO
+        title="About Us - Trusted Nigerian Logistics Company"
+        description="Learn about Dara Express – a leading logistics company in Nigeria specializing in cold chain, freight forwarding, and reliable cargo delivery. Built on trust, precision, and technology."
+        keywords="about Dara Express, Nigerian logistics company, cold chain experts Nigeria, freight company Lagos, reliable cargo delivery, logistics technology Nigeria"
+        canonical="/about"
+      />
       <div className="absolute inset-0 bg-gradient-to-br from-sky-50 via-white to-blue-50"></div>
 
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-2 h-2 bg-sky-200 rounded-full opacity-20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
-            }}
-            animate={{
-              y: [-15, 15, -15],
-              opacity: [0.2, 0.5, 0.2]
-            }}
-            transition={{
-              duration: 4 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-          />
-        ))}
-      </div>
+      <div className="absolute inset-0 overflow-hidden opacity-30"
+        style={{ background: 'radial-gradient(ellipse at 30% 20%, rgba(56,189,248,0.2) 0%, transparent 60%)' }}
+      />
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">

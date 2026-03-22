@@ -1,9 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import { motion } from 'framer-motion'
 import { ArrowRight, Package, Truck, MapPin, Clock, Users, TrendingUp } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { heroData } from './Data'
-import { Button, Badge } from '../ui'
-import { fadeInUp, scaleIn, hoverScale } from '../../utils'
+import { Button } from '../ui'
 import { ScheduleDemoModal } from './demo'
 
 export default function DaraHero() {
@@ -29,25 +29,29 @@ export default function DaraHero() {
       id="home"
       className="min-h-screen flex items-center relative overflow-hidden px-4 sm:px-6 lg:px-8"
     >
-      {/* Background Images with Zoom Effect */}
-      {heroData.backgroundImages.map((image, index) => (
-        <motion.div
-          key={index}
-          className="absolute inset-0"
-          initial={{ opacity: 0, scale: 1 }}
-          animate={{
-            opacity: currentImage === index ? 1 : 0,
-            scale: currentImage === index ? 1.1 : 1
-          }}
-          transition={{ duration: 1.5, ease: "easeInOut" }}
-          style={{
-            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${image})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-      ))}
+      {/* Background Images - only render current + next to reduce bandwidth */}
+      {heroData.backgroundImages.map((image, index) => {
+        const nextIndex = (currentImage + 1) % heroData.backgroundImages.length
+        if (index !== currentImage && index !== nextIndex) return null
+        return (
+          <motion.div
+            key={index}
+            className="absolute inset-0"
+            initial={{ opacity: 0, scale: 1 }}
+            animate={{
+              opacity: currentImage === index ? 1 : 0,
+              scale: currentImage === index ? 1.05 : 1
+            }}
+            transition={{ duration: 1.5, ease: "easeInOut" }}
+            style={{
+              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          />
+        )
+      })}
       <div className="container mx-auto pt-16 sm:pt-20 lg:pt-24 pb-12 sm:pb-16 relative z-10">
         <div className="flex justify-center">
           {/* Main Content */}
@@ -162,29 +166,10 @@ export default function DaraHero() {
         </div>
       </div>
 
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-1 h-1 rounded-full"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`
-            }}
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0]
-            }}
-            transition={{
-              duration: 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
-            }}
-          />
-        ))}
-      </div>
+      {/* Subtle gradient overlay - CSS only, zero JS cost */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20"
+        style={{ background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.1) 0%, transparent 70%)' }}
+      />
 
 
       <ScheduleDemoModal

@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Search, MapPin, Package, Truck, CheckCircle, Clock, AlertCircle, RefreshCw } from 'lucide-react'
 import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import toast from 'react-hot-toast'
+import SEO from '../../components/common/SEO'
 
 export default function Tracking() {
   const [trackingId, setTrackingId] = useState('')
@@ -39,6 +40,12 @@ export default function Tracking() {
 
   return (
     <div className="bg-gray-50 py-12">
+      <SEO
+        title="Track Your Shipment - Real-Time Cargo Tracking"
+        description="Track your Dara Express shipment in real-time. Enter your tracking ID to get live updates on your freight, cargo, or delivery status across Nigeria."
+        keywords="track shipment Nigeria, cargo tracking, freight tracking, real-time delivery tracking, Dara Express tracking, logistics tracking Nigeria"
+        canonical="/tracking"
+      />
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Track Your Shipment</h1>
