@@ -21,18 +21,24 @@ export const heroData = {
         highlight: "Cold Chain",
         suffix: "Logistics"
     },
-    description: "Temperature-controlled logistics for pharmaceuticals, vaccines, and perishable goods. Reliable cold chain solutions across Nigeria.",
+    description: "Expert temperature-controlled logistics and cold chain solutions in Nigeria. Specialized transportation for pharmaceuticals, vaccines, and perishable goods with real-time tracking.",
     features: [
-        'Real-time tracking & visibility across your entire supply chain',
-        'Multi-modal transportation solutions with nationwide coverage',
-        'Express delivery & same-day shipping for urgent shipments',
-        'Enterprise-grade API integration & automated workflows'
+        'Advanced Cold Chain Nigeria: 24/7 temperature monitoring',
+        'Nationwide Temperature Controlled Logistics: Multi-modal coverage',
+        'Express Cold Chain Delivery: Same-day shipping for perishables',
+        'Precision Freight Forwarding in Nigeria: Automated supply chain'
     ],
     backgroundImages: [
         'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1280&q=75',
         'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1280&q=55',
         'https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?auto=format&fit=crop&w=1280&q=55',
         'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1280&q=55'
+    ],
+    imageAlts: [
+        "Cold chain logistics truck in Nigeria",
+        "Temperature controlled pharmaceutical storage",
+        "Refrigerated perishables transportation",
+        "Global freight forwarding warehouse"
     ],
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
@@ -61,9 +67,9 @@ export const aboutData = {
     badge: "Our Journey",
     title: {
         prefix: "Transforming Nigeria's",
-        highlight: "Logistics Landscape"
+        highlight: "Cold Chain Industry"
     },
-    description: "A technology-driven cold chain logistics company delivering reliable, temperature-controlled transportation for Nigeria's pharmaceutical, healthcare, and perishable goods industries.",
+    description: "Dara Express is a leader in cold chain logistics in Nigeria, offering specialized temperature controlled solutions for healthcare and perishables. We leverage technology to bridge the gap between production and market.",
     timeline: [
         {
             year: "Founded (2025)",
@@ -104,14 +110,14 @@ export const servicesData = [
     {
         icon: 'Package',
         image: "/assets/img/pharmaceutical.jpg",
-        title: "Pharmaceutical Logistics",
-        subtitle: "Temperature-controlled precision",
-        description: "Specialized cold chain transportation for vaccines, medicines, and medical supplies. Real-time temperature monitoring ensures product integrity from pickup to delivery.",
+        title: "Pharmaceutical Cold Chain",
+        subtitle: "Temperature-controlled precision in Nigeria",
+        description: "Specialized cold chain Nigeria transportation for vaccines, medicines, and medical supplies. Real-time temperature monitoring ensures product integrity from pickup to delivery.",
         features: [
-            "Temperature range: 2°C to 8°C monitoring",
+            "Temperature-controlled logistics Nigeria: 2°C to 8°C",
             "Real-time GPS and temperature tracking",
             "Goods-in-Transit (GIT) insurance included",
-            "Compliance with pharmaceutical standards"
+            "Full compliance with pharmaceutical standards"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Same-day available",
@@ -120,11 +126,11 @@ export const servicesData = [
     {
         icon: 'Clock',
         image: "/assets/img/frozen-foods.jpg",
-        title: "Frozen Foods Transport",
-        subtitle: "Keeping freshness locked in",
-        description: "Reliable frozen food logistics with temperature-controlled vehicles. Perfect for ice cream, frozen meats, seafood, and other frozen products requiring -18°C or below.",
+        title: "Frozen Foods Logistics",
+        subtitle: "Sub-zero cold chain solutions",
+        description: "Reliable frozen food logistics in Nigeria with specialized temperature-controlled vehicles. Perfect for ice cream, frozen meats, and seafood requiring -18°C or below.",
         features: [
-            "Sub-zero temperature maintenance",
+            "Sub-zero temperature logistics Nigeria",
             "Insulated refrigerated trucks",
             "Quick loading and unloading protocols",
             "24/7 temperature monitoring alerts"
@@ -136,14 +142,14 @@ export const servicesData = [
     {
         icon: 'Truck',
         image: "/assets/img/fresh-produce.jpg",
-        title: "Fresh Produce Delivery",
+        title: "Fresh Produce Supply Chain",
         subtitle: "Farm to market, fresh guaranteed",
-        description: "Temperature-controlled transport for fresh fruits, vegetables, dairy, and perishable goods. Maintaining optimal freshness throughout the supply chain.",
+        description: "Efficient temperature-controlled transport for fresh fruits, vegetables, and dairy in Nigeria. Maintaining optimal freshness throughout the supply chain.",
         features: [
-            "Climate-controlled environment (0°C to 15°C)",
+            "Climate-controlled transportation (0°C to 15°C)",
             "Rapid transit for maximum freshness",
             "Specialized handling for delicate produce",
-            "Direct farm-to-market distribution"
+            "Direct farm-to-market Cold Chain Nigeria"
         ],
         pricing: "Custom Quote",
         deliveryTime: "12-48 hours",
@@ -152,12 +158,12 @@ export const servicesData = [
     {
         icon: 'Users',
         image: "/assets/img/enterprise.jpg",
-        title: "Enterprise Cold Chain",
-        subtitle: "End-to-end solutions for scale",
-        description: "Comprehensive cold chain partnerships for pharmaceutical manufacturers, food distributors, and agricultural exporters. Custom solutions with dedicated fleet and support.",
+        title: "Enterprise Logistics Nigeria",
+        subtitle: "Global freight forwarding solutions",
+        description: "Comprehensive freight forwarding in Nigeria for pharmaceutical manufacturers, food distributors, and exporters. Custom cold chain partnerships with dedicated support.",
         features: [
             "Dedicated account management",
-            "Custom temperature requirements",
+            "Custom temperature logistics Nigeria",
             "Volume discounts and flexible contracts",
             "Advanced analytics and compliance reporting"
         ],

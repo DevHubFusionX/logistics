@@ -36,6 +36,8 @@ export default function DaraHero() {
         return (
           <motion.div
             key={index}
+            role="img"
+            aria-label={heroData.imageAlts[index]}
             className="absolute inset-0"
             initial={{ opacity: 0, scale: 1 }}
             animate={{
