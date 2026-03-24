@@ -34,7 +34,9 @@ export default {
    * Update an existing dispatch record
    */
   updateOrder: (orderId, orderData) => {
-    if (!orderId) throw new Error('orderId is required')
+    if (!orderId) {
+      throw new Error('orderId is required')
+    }
     return httpClient.request(`/admin/order/${encodeURIComponent(orderId)}`, {
       method: 'PUT',
       body: JSON.stringify(orderData)

@@ -88,25 +88,28 @@ export default function OrdersTable() {
 
   const handleFormSubmit = async (formData) => {
     try {
-      if (selectedOrder) await updateOrder.mutateAsync({ ...formData, id: selectedOrder.id })
-      else await addOrder.mutateAsync(formData)
+      if (selectedOrder) {
+        await updateOrder.mutateAsync({ ...formData, id: selectedOrder.id })
+      } else {
+        await addOrder.mutateAsync(formData)
+      }
       setIsFormOpen(false)
-    } catch { showToast.error('Action Failed', 'Could not save record.'); }
+    } catch { 
+      showToast.error('Action Failed', 'Could not save record.') 
+    }
   }
 
   // --- Data Logic (Spec aligned & Robust) ---
   const rawResponse = ordersData?.data 
-  console.log('[OrdersTable] Raw Response Data:', rawResponse)
   const rawRecords = Array.isArray(rawResponse) ? rawResponse 
                    : (rawResponse?.records ? rawResponse.records 
                    : (rawResponse ? [rawResponse] : []))
-  console.log('[OrdersTable] Final Records for mapping:', rawRecords)
 
   const filteredOrders = rawRecords.map(b => {
     // Handling route split e.g. "Lagos → Abuja"
     const routeParts = b.route?.split('→') || []
     return {
-      id: b.orderId || b.id,
+      id: b._id || b.orderId || b.id,
       company: b.customer?.name || b.company || 'Unknown',
       truckSize: b.truckType || b.truckSize || 'Standard',
       goodsType: b.goodsType || 'General Cargo',

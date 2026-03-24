@@ -105,16 +105,16 @@ export default function Shipments() {
     setSidebarOpen(true)
   }
 
-  const handleReassignDriver = (shipmentId) => {
-    console.log('Reassign driver for:', shipmentId)
+  const handleReassignDriver = (_shipmentId) => {
+    // Reassign driver logic
   }
 
-  const handlePrintLabel = (shipmentId) => {
-    console.log('Print label for:', shipmentId)
+  const handlePrintLabel = (_shipmentId) => {
+    // Print label logic
   }
 
-  const handleAssignDriver = (shipmentId, driverId, status) => {
-    console.log('Assign driver:', { shipmentId, driverId, status })
+  const handleAssignDriver = (_shipmentId, _driverId, _status) => {
+    // Assign driver logic
   }
 
   const filteredShipments = shipments.filter(shipment => {

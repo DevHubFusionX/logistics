@@ -68,13 +68,11 @@ class HttpClient {
       }
 
       const data = await response.json()
-      console.log(`[HTTP Client] ${config.method || 'GET'} ${response.status} ${url}`, data)
 
       if (!response.ok) {
         if (response.status === 401) {
           logout()
         }
-        console.error(`[HTTP Client Error] ${response.status} ${url}`, data)
         const errorMsg = data.msg || data.message || 'Request failed'
         const error = new ApiError(errorMsg, response.status, data)
         handleApiError(error)

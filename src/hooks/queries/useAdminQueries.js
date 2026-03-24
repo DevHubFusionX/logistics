@@ -98,11 +98,9 @@ export function useDriversQuery(params = {}) {
         queryKey: queryKeys.admin.drivers(params),
         queryFn: async () => {
             const response = await driverService.getDrivers(params)
-            console.log('[useDriversQuery] Raw response:', response)
             // httpClient returns { data: { error, message, data: { records } }, status }
             const apiBody = response.data
             const rawDrivers = apiBody?.data?.records || []
-            console.log('[useDriversQuery] Records found:', rawDrivers.length, rawDrivers)
             return rawDrivers.map(normalizeDriver)
         },
         staleTime: 5 * 60 * 1000,

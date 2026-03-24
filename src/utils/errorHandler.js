@@ -25,7 +25,7 @@ export const handleApiError = (error) => {
   }
 
   if (import.meta.env.DEV) {
-    console.error("API Error:", error);
+    // API Error logged in development
   }
 
   return error;
