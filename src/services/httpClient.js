@@ -15,7 +15,14 @@ class HttpClient {
 
   buildUrl(endpoint, params = {}) {
     if (!params || Object.keys(params).length === 0) return endpoint
-    const query = new URLSearchParams(params).toString()
+    const cleanParams = Object.entries(params).reduce((acc, [key, value]) => {
+      if (value !== undefined && value !== null && value !== '') {
+        acc[key] = value
+      }
+      return acc
+    }, {})
+    if (Object.keys(cleanParams).length === 0) return endpoint
+    const query = new URLSearchParams(cleanParams).toString()
     return `${endpoint}?${query}`
   }
 
@@ -61,12 +68,13 @@ class HttpClient {
       }
 
       const data = await response.json()
-      console.log(`[HTTP Client] REQ: ${url}`, data)
+      console.log(`[HTTP Client] ${config.method || 'GET'} ${response.status} ${url}`, data)
 
       if (!response.ok) {
         if (response.status === 401) {
           logout()
         }
+        console.error(`[HTTP Client Error] ${response.status} ${url}`, data)
         const errorMsg = data.msg || data.message || 'Request failed'
         const error = new ApiError(errorMsg, response.status, data)
         handleApiError(error)

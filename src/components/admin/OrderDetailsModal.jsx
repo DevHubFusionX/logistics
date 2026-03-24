@@ -9,10 +9,11 @@ export default function OrderDetailsModal({ order, isOpen, onClose }) {
   if (!isOpen || !order) return null
 
   const formatCurrency = (val) => {
+    if (typeof val === 'string' && val.includes('₦')) return val
     return new Intl.NumberFormat('en-NG', {
       style: 'currency',
       currency: 'NGN',
-    }).format(val)
+    }).format(typeof val === 'string' ? parseFloat(val.replace(/[^0-9.]/g, '')) : val)
   }
 
   const formatDate = (dateStr) => {

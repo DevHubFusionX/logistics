@@ -1,5 +1,5 @@
 import { Search, Filter } from 'lucide-react'
-import { FILTER_OPTIONS } from '../../../constants/mockData'
+import { FILTER_OPTIONS } from '../../../constants/logistics'
 
 export default function ShipmentFilters({ filters, onFilterChange, onClearFilters }) {
 

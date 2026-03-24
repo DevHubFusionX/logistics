@@ -1,17 +1,20 @@
-import { useState, useMemo, useEffect } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import React, { useState } from 'react'
 import { 
-  Search, Download, MoreHorizontal, 
-  CheckCircle2, AlertCircle, Truck,
-  ArrowUpDown, ExternalLink, RefreshCw,
-  MapPin, Calendar, Building2, Package,
-  ChevronLeft, ChevronRight, Copy, Edit
+  ChevronLeft, ChevronRight, RefreshCw, 
+  ArrowUpDown, Download, Edit, MoreHorizontal,
+  ExternalLink, Copy, AlertCircle, Truck
 } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
 import { useOrdersTableQuery, useOrderMutations } from '../../hooks/queries/useOrderQueries'
 import OrderDetailsModal from '../../components/admin/OrderDetailsModal'
 import OrderFormModal from '../../components/admin/OrderFormModal'
+import OrdersTableControls from '../../components/admin/orders/OrdersTableControls'
+import OrdersTableRow from '../../components/admin/orders/OrdersTableRow'
 
+/**
+ * Admin Orders Management Table
+ * Professional, enterprise-grade interface for managing dispatch records.
+ */
 export default function OrdersTable() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
@@ -24,250 +27,159 @@ export default function OrdersTable() {
   const { showToast } = useToast()
   const { addOrder, updateOrder, deleteOrder } = useOrderMutations()
 
-  const { data: ordersData, isLoading, isError, refetch } = useOrdersTableQuery()
+  const { data: ordersData, isLoading, refetch } = useOrdersTableQuery({
+    page: currentPage,
+    limit: itemsPerPage,
+    search: searchTerm,
+    status: statusFilter === 'all' ? '' : statusFilter
+  })
 
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1)
-  }, [searchTerm, statusFilter])
-
-  const filteredOrders = useMemo(() => {
-    const records = ordersData?.records || []
-    return records.filter(order => {
-      // Robust null checks to prevent "toLowerCase of undefined"
-      const companyStr = order.company || ''
-      const fleetStr = order.fleet || ''
-      const pickupStr = order.pickup || ''
-      const deliveryStr = order.delivery || ''
-      const goodsStr = order.goodsType || ''
-      const statusStr = order.status || ''
-
-      const matchesSearch = 
-        companyStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        fleetStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        pickupStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        deliveryStr.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        goodsStr.toLowerCase().includes(searchTerm.toLowerCase())
-      
-      const matchesStatus = statusFilter === 'all' || statusStr.toLowerCase() === statusFilter.toLowerCase()
-      
-      return matchesSearch && matchesStatus
-    })
-  }, [ordersData, searchTerm, statusFilter])
-
-  const { paginatedOrders, totalPages } = useMemo(() => {
-    const total = Math.ceil(filteredOrders.length / itemsPerPage)
-    const start = (currentPage - 1) * itemsPerPage
-    return {
-      paginatedOrders: filteredOrders.slice(start, start + itemsPerPage),
-      totalPages: total
-    }
-  }, [filteredOrders, currentPage])
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return 'N/A'
-    return new Date(dateStr).toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
-    })
-  }
-
-  const handleViewOrder = (order) => {
-    setSelectedOrder(order)
-    setIsDetailsOpen(true)
-  }
-
-  const handleEditOrder = (order) => {
-    setSelectedOrder(order)
-    setIsFormOpen(true)
-  }
-
-  const handleDeleteOrder = async (id) => {
-    if (window.confirm('Are you sure you want to delete this dispatch record from the enterprise log?')) {
-      try {
-        await deleteOrder.mutateAsync(id)
-        showToast.success('Record Deleted', 'The dispatch log has been updated.')
-      } catch {
-        showToast.error('Delete Failed', 'Could not remove the record.')
-      }
-    }
-  }
-
-  const handleFormSubmit = async (formData) => {
-    try {
-      if (selectedOrder) {
-        await updateOrder.mutateAsync({ ...formData, id: selectedOrder.id })
-        showToast.success('Dispatch Updated', 'Shipment specification has been saved.')
-      } else {
-        await addOrder.mutateAsync(formData)
-        showToast.success('Dispatch Added', 'New shipment has been logged.')
-      }
-      setIsFormOpen(false)
-    } catch {
-      showToast.error('Action Failed', 'Could not save the dispatch record.')
-    }
-  }
-
-  const handleCopyId = (id) => {
-    navigator.clipboard.writeText(id)
-    showToast.success('ID Copied', `Order ID ${id} has been copied to your clipboard.`)
-  }
-
-  const handleExportRow = (order) => {
-    handleExportCSV([order], `dispatch_${order.id}_report.csv`)
-  }
-
-  const handleExportCSV = (data = filteredOrders, filename = `logistics_dispatch_${new Date().toISOString().split('T')[0]}.csv`) => {
-    if (data.length === 0) {
-      showToast.error("Export Failed", "There is no data to export based on your current filters.")
+  // --- Helpers ---
+  const handleExportCSV = (data, filename = `logistics_dispatch_${new Date().toISOString().split('T')[0]}.csv`) => {
+    if (!data || data.length === 0) {
+      showToast.error("Export Failed", "There is no data to export.")
       return
     }
 
-    const headers = [
-      "Order ID", "Date", "Company", "Truck Size", "Goods Type", 
-      "Pickup Location", "Delivery Destination", "Fleet Company", "Status", "Revenue (NGN)"
-    ]
-
+    const headers = ["Order ID", "Date", "Company", "Truck Size", "Goods Type", "Pickup", "Delivery", "Fleet", "Status", "Revenue"]
     const csvRows = [
       headers.join(','),
-      ...data.map(order => [
-        `"${order.id}"`,
-        `"${formatDate(order.date)}"`,
-        `"${order.company}"`,
-        `"${order.truckSize}"`,
-        `"${order.goodsType}"`,
-        `"${order.pickup}"`,
-        `"${order.delivery}"`,
-        `"${order.fleet}"`,
-        `"${order.status}"`,
-        order.revenue
-      ].join(','))
+      ...data.map(o => [`"${o.id}"`, `"${formatDate(o.date)}"`, `"${o.company}"`, `"${o.truckSize}"`, `"${o.goodsType}"`, `"${o.pickup}"`, `"${o.delivery}"`, `"${o.fleet}"`, `"${o.status}"`, o.revenue].join(','))
     ]
 
     try {
       const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' })
       const link = document.createElement("a")
-      const url = URL.createObjectURL(blob)
-      link.setAttribute("href", url)
+      link.href = URL.createObjectURL(blob)
       link.setAttribute("download", filename)
-      link.style.visibility = 'hidden'
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
-      showToast.success("Export Successful", `${data.length} records have been downloaded.`)
+      showToast.success("Export Successful", `${data.length} records downloaded.`)
     } catch {
-      showToast.error("Export Error", "System failed to generate the CSV file.")
+      showToast.error("Export Error", "System failed to generate CSV.")
     }
   }
 
   const getStatusStyle = (status = '') => {
     switch (status.toLowerCase()) {
-      case 'fulfilled':
-        return 'bg-emerald-50 text-emerald-700 border-emerald-100 ring-emerald-500/10'
-      case 'unfulfilled':
-        return 'bg-rose-50 text-rose-700 border-rose-100 ring-rose-500/10'
-      default:
-        return 'bg-gray-50 text-gray-700 border-gray-100'
+      case 'fulfilled': return 'bg-emerald-50 text-emerald-700 border-emerald-100 shadow-emerald-50'
+      case 'unfulfilled': return 'bg-rose-50 text-rose-700 border-rose-100 shadow-rose-50'
+      default: return 'bg-gray-50 text-gray-600 border-gray-100 shadow-gray-50'
     }
   }
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A'
+    return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+  }
+
+  // --- Handlers ---
+  const handleViewOrder = (order) => { setSelectedOrder(order); setIsDetailsOpen(true); }
+  const handleEditOrder = (order) => { setSelectedOrder(order); setIsFormOpen(true); }
+  const handleCopyId = (id) => { navigator.clipboard.writeText(id); showToast.success('Copied', `ID ${id} copied to clipboard.`); }
+  
+  const handleDeleteOrder = async (id) => {
+    if (window.confirm('Are you sure you want to delete this dispatch record?')) {
+      try { await deleteOrder.mutateAsync(id); showToast.success('Deleted', 'Record removed.'); }
+      catch { showToast.error('Error', 'Could not delete record.'); }
+    }
+  }
+
+  const handleFormSubmit = async (formData) => {
+    try {
+      if (selectedOrder) await updateOrder.mutateAsync({ ...formData, id: selectedOrder.id })
+      else await addOrder.mutateAsync(formData)
+      setIsFormOpen(false)
+    } catch { showToast.error('Action Failed', 'Could not save record.'); }
+  }
+
+  // --- Data Logic (Spec aligned & Robust) ---
+  const rawResponse = ordersData?.data 
+  console.log('[OrdersTable] Raw Response Data:', rawResponse)
+  const rawRecords = Array.isArray(rawResponse) ? rawResponse 
+                   : (rawResponse?.records ? rawResponse.records 
+                   : (rawResponse ? [rawResponse] : []))
+  console.log('[OrdersTable] Final Records for mapping:', rawRecords)
+
+  const filteredOrders = rawRecords.map(b => {
+    // Handling route split e.g. "Lagos → Abuja"
+    const routeParts = b.route?.split('→') || []
+    return {
+      id: b.orderId || b.id,
+      company: b.customer?.name || b.company || 'Unknown',
+      truckSize: b.truckType || b.truckSize || 'Standard',
+      goodsType: b.goodsType || 'General Cargo',
+      pickup: routeParts[0]?.trim() || b.pickup || 'N/A',
+      delivery: routeParts[1]?.trim() || b.delivery || 'N/A',
+      fleet: b.fleet || 'Direct Fleet',
+      status: b.status || 'Pending',
+      revenue: b.revenue, // Backend returns pre-formatted string like "₦1,128,000"
+      date: b.date || b.createdAt,
+      reason: b.reasonIfUnfulfilled || b.reason || '-'
+    }
+  })
+
+  const totalPages = ordersData?.pagination?.totalPages || rawResponse?.pagination?.totalPages || 1
+  const paginatedOrders = filteredOrders 
+
   return (
-    <div className="space-y-6 pb-20 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <PageHeader 
-          title="Company Dispatch Log" 
-          subtitle="Enterprise-wide logistical overview for the last 4 months" 
-        />
-        <div className="flex items-center gap-3">
+    <div className="pt-2 sm:pt-4 px-4 sm:px-6 lg:px-8 bg-gray-50/50 min-h-screen">
+      
+      {/* Page Header */}
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between mb-8 gap-6">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">
+            Company Dispatch Log
+          </h1>
+          <p className="text-gray-500 font-medium text-xs mt-1.5">
+            Enterprise-wide logistical overview for the last 4 months
+          </p>
+        </div>
+
+        {/* Action Buttons moved here */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex items-center gap-3 w-full xl:w-auto">
           <button 
-            onClick={() => {
-              setSelectedOrder(null)
-              setIsFormOpen(true)
-            }}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-800 rounded-xl text-sm font-bold text-white hover:bg-gray-800 transition-all shadow-md"
+            onClick={() => { setSelectedOrder(null); setIsFormOpen(true); }}
+            className="flex items-center justify-center gap-2 px-5 py-2 bg-gray-900 rounded-lg text-xs font-bold text-white hover:bg-gray-800 transition-all shadow-md shadow-gray-200/50 w-full sm:w-auto"
           >
-            <Truck className="w-4 h-4" /> Add Dispatch
+            <Truck className="w-3.5 h-3.5" /> Add Dispatch
           </button>
+          
           <button 
             onClick={() => refetch()}
-            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-50 transition-all shadow-sm w-full sm:w-auto"
           >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-            Refresh
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} /> Refresh
           </button>
+
           <button 
-            onClick={() => handleExportCSV()}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 border border-blue-700 rounded-xl text-sm font-bold text-white hover:bg-blue-700 transition-all shadow-md"
+            onClick={() => handleExportCSV(filteredOrders)}
+            className="sm:col-span-2 lg:col-span-1 flex items-center justify-center gap-2 px-5 py-2 bg-blue-600 rounded-lg text-xs font-bold text-white hover:bg-blue-700 transition-all shadow-md shadow-blue-100/50 w-full lg:w-auto"
           >
-            <Download className="w-4 h-4" /> Export CSV
+            <Download className="w-3.5 h-3.5" /> Export CSV
           </button>
         </div>
       </div>
 
-      {/* Modern Control Bar */}
-      <div className="bg-white/70 backdrop-blur-md rounded-2xl border border-gray-100 p-4 shadow-sm sticky top-20 z-20 flex flex-col md:flex-row items-center gap-4">
-        <div className="relative flex-1 w-full">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
-          <input
-            type="search"
-            placeholder="Search company, fleet, goods, or location..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500/20 font-medium placeholder:text-gray-400"
-          />
-        </div>
-        
-        <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto overflow-x-auto no-scrollbar pb-1 md:pb-0">
-          <div className="flex bg-gray-50 p-1 rounded-2xl border border-gray-100 min-w-max">
-            {['all', 'fulfilled', 'unfulfilled'].map((status) => (
-              <button
-                key={status}
-                onClick={() => setStatusFilter(status)}
-                className={`px-3 md:px-4 py-2 rounded-[14px] text-[10px] md:text-xs font-bold capitalize transition-all ${
-                  statusFilter === status 
-                    ? 'bg-white text-blue-600 shadow-sm' 
-                    : 'text-gray-400 hover:text-gray-600'
-                }`}
-              >
-                {status}
-              </button>
-            ))}
-          </div>
-        </div>
+      {/* Search & Filter Card */}
+      <div className="mb-8">
+        <OrdersTableControls 
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          isLoading={isLoading}
+        />
       </div>
 
-      {/* Table Section */}
-      <div className="bg-white rounded-[32px] border border-gray-100 overflow-hidden shadow-sm relative min-h-[500px]">
-        {isLoading && (
-          <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
-            <div className="flex flex-col items-center gap-3">
-              <div className="w-10 h-10 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
-              <p className="text-sm font-bold text-gray-500">Syncing Enterprise Log...</p>
-            </div>
-          </div>
-        )}
+      {/* Main Table Card */}
+      <div className="bg-white rounded-[32px] shadow-2xl shadow-gray-200/40 border border-gray-100 overflow-hidden flex flex-col">
+        
 
-        {isError && (
-          <div className="absolute inset-0 bg-white z-10 flex items-center justify-center p-6 text-center">
-            <div className="max-w-xs">
-              <div className="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-rose-100">
-                <AlertCircle className="w-8 h-8 text-rose-600" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">Connection Interrupted</h3>
-              <p className="text-sm text-gray-500 mt-2 mb-6">We couldn't reach the logistics server. Please check your connection and try again.</p>
-              <button 
-                onClick={() => refetch()}
-                className="w-full py-3 bg-gray-900 text-white rounded-xl font-bold shadow-lg hover:bg-blue-600 transition-all"
-              >
-                Retry Connection
-              </button>
-            </div>
-          </div>
-        )}
 
         <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-200">
-          <table className="w-full border-separate border-spacing-0 min-w-[1000px]">
+          <table className="w-full border-separate border-spacing-0 min-w-[1300px]">
             <thead>
               <tr className="bg-gray-50/50">
                 <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Company Name</th>
@@ -276,122 +188,54 @@ export default function OrdersTable() {
                 <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Pickup Location</th>
                 <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Delivery Destination</th>
                 <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Fleet Company</th>
-                <th className="px-6 py-5 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Status</th>
-                <th className="px-6 py-5 text-right text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 font-mono">Date</th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 flex items-center gap-2 cursor-pointer hover:text-gray-600 transition-colors">
+                  Financials <ArrowUpDown className="w-3 h-3" />
+                </th>
                 <th className="px-6 py-5 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50">
-              {paginatedOrders.map((order) => (
-                <tr key={order.id} className="group hover:bg-blue-50/30 transition-all duration-150">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
-                        <Building2 className="w-4 h-4" />
+            
+            <tbody className="divide-y divide-gray-50 relative">
+              {isLoading ? (
+                <tr>
+                  <td colSpan="8" className="px-6 py-20 text-center">
+                    <div className="flex flex-col items-center gap-4">
+                      <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center animate-pulse">
+                        <RefreshCw className="w-6 h-6 text-blue-600 animate-spin" />
                       </div>
-                      <span className="text-sm font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{order.company}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-gray-100 text-[12px] font-bold text-gray-600 border border-gray-200">
-                      <Truck className="w-3.5 h-3.5" />
-                      {order.truckSize}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-2 text-[13px] font-medium text-gray-600">
-                      <Package className="w-3.5 h-3.5 text-gray-400" />
-                      {order.goodsType}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-1 text-[13px] font-semibold text-gray-700">
-                      <MapPin className="w-3 h-3 text-emerald-500" />
-                      {order.pickup}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-1 text-[13px] font-semibold text-gray-700">
-                      <MapPin className="w-3 h-3 text-rose-500" />
-                      {order.delivery}
-                    </div>
-                  </td>
-                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="text-[13px] font-medium text-gray-500 italic">{order.fleet}</span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold border ring-1 uppercase tracking-tight ${getStatusStyle(order.status)}`}>
-                      {order.status === 'Fulfilled' ? <CheckCircle2 className="w-3 h-3" /> : <AlertCircle className="w-3 h-3" />}
-                      {order.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold text-gray-900">{formatDate(order.date)}</span>
-                      <span className="text-[10px] text-gray-400 font-medium">Recorded</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-center">
-                    <div className="flex items-center justify-center gap-2">
-                       <button 
-                        onClick={() => handleViewOrder(order)}
-                        className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all" 
-                        title="View Trip Specification"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </button>
-                      <button 
-                        onClick={() => handleEditOrder(order)}
-                        className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all" 
-                        title="Edit Dispatch"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <div className="relative group/more">
-                        <button className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all">
-                          <MoreHorizontal className="w-4 h-4" />
-                        </button>
-                        <div className="absolute right-0 bottom-full mb-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 opacity-0 invisible group-hover/more:opacity-100 group-hover/more:visible transition-all z-30">
-                          <button 
-                            onClick={() => handleCopyId(order.id)}
-                            className="w-full text-left px-3 py-2 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl flex items-center gap-2"
-                          >
-                            <Copy className="w-3.5 h-3.5" /> Copy Order ID
-                          </button>
-                          <button 
-                            onClick={() => handleExportRow(order)}
-                            className="w-full text-left px-3 py-2 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl flex items-center gap-2"
-                          >
-                            <Download className="w-3.5 h-3.5" /> Export Data
-                          </button>
-                          <div className="my-1 border-t border-gray-100" />
-                          <button 
-                            onClick={() => handleDeleteOrder(order.id)}
-                            className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl flex items-center gap-2"
-                          >
-                            <AlertCircle className="w-3.5 h-3.5" /> Delete Dispatch
-                          </button>
-                        </div>
-                      </div>
+                      <p className="text-gray-400 text-xs font-bold uppercase tracking-widest">Loading Logistics Data...</p>
                     </div>
                   </td>
                 </tr>
-              ))}
+              ) : paginatedOrders.length > 0 ? (
+                paginatedOrders.map((order) => (
+                  <OrdersTableRow 
+                    key={order.id}
+                    order={order}
+                    onView={handleViewOrder}
+                    onEdit={handleEditOrder}
+                    onDelete={handleDeleteOrder}
+                    onCopyId={handleCopyId}
+                    onExport={() => handleExportCSV([order], `dispatch_${order.id}_report.csv`)}
+                    getStatusStyle={getStatusStyle}
+                    formatDate={formatDate}
+                  />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="px-6 py-20 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <AlertCircle className="w-10 h-10 text-gray-200" />
+                      <p className="text-gray-400 text-xs font-bold uppercase tracking-widest leading-none">No dispatch records found</p>
+                    </div>
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>
-        
-        {paginatedOrders.length === 0 && (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-              <Search className="w-8 h-8 text-gray-300" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">No matching logistical records</h3>
-            <p className="text-gray-500 mt-1 max-w-xs mx-auto">Try adjusting your search criteria or broadening your filters.</p>
-          </div>
-        )}
 
-        {/* Improved Pagination Footer */}
+        {/* Pagination Footer */}
         <div className="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[11px] md:text-[12px] text-gray-400 font-bold uppercase tracking-wider text-center md:text-left">
             Showing <span className="text-gray-900">{paginatedOrders.length}</span> of <span className="text-gray-900">{filteredOrders.length}</span> records
@@ -408,29 +252,19 @@ export default function OrdersTable() {
               </button>
               
               <div className="flex items-center gap-1 px-1 sm:px-2">
-                {[...Array(totalPages)].map((_, i) => {
-                  const page = i + 1;
-                  // Show limited pages if many
-                  if (totalPages > 5) {
-                    if (page !== 1 && page !== totalPages && Math.abs(page - currentPage) > 1) {
-                      if (page === 2 || page === totalPages - 1) return <span key={page} className="text-gray-300">...</span>;
-                      return null;
-                    }
-                  }
-                  return (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold transition-all ${
-                        currentPage === page 
-                          ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
-                          : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-100'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  );
-                })}
+                {[...Array(totalPages)].map((_, i) => (
+                  <button
+                    key={i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                    className={`w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold transition-all ${
+                      currentPage === i + 1 
+                        ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
+                        : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-100'
+                    }`}
+                  >
+                    {i + 1}
+                  </button>
+                ))}
               </div>
 
               <button 

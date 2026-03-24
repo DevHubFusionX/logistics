@@ -5,10 +5,10 @@ import {
   Save, Loader2
 } from 'lucide-react'
 
-const goodsTypes = ['Pharmaceuticals', 'Frozen Foods', 'Construction Materials', 'Electronic Components', 'Consumer Goods', 'Chemicals']
-const truckSizes = ['Small (2 Ton)', 'Medium (5 Ton)', 'Reefer (10 Ton)', 'Large (20 Ton)', 'Trailer (30 Ton)']
+const goodsTypes = ['Cement', 'Pharmaceuticals', 'Frozen Foods', 'Construction Materials', 'Electronic Components', 'Consumer Goods', 'Chemicals']
+const truckSizes = ['15', '20', '30', 'Small (2 Ton)', 'Medium (5 Ton)', 'Reefer (10 Ton)', 'Large (20 Ton)', 'Trailer (30 Ton)']
 const locations = ['Lagos', 'Abuja', 'Kano', 'Ibadan', 'Port Harcourt', 'Benin City', 'Jos', 'Kaduna', 'Enugu']
-const fleetCompanies = ['Dara Logistics', 'GIG Logistics', 'DHL Nigeria', 'Kobo360', 'Ace Logistics']
+const fleetCompanies = ['Fleet-A1', 'Dara Logistics', 'GIG Logistics', 'DHL Nigeria', 'Kobo360', 'Ace Logistics']
 
 export default function OrderFormModal({ isOpen, onClose, onSubmit, initialData = null, isLoading = false }) {
   const [formData, setFormData] = useState({
@@ -50,7 +50,12 @@ export default function OrderFormModal({ isOpen, onClose, onSubmit, initialData 
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(formData)
+    // Convert date string back to ISO for backend consistency if needed
+    const submissionData = {
+      ...formData,
+      date: new Date(formData.date).toISOString()
+    }
+    onSubmit(submissionData)
   }
 
   const handleChange = (e) => {

@@ -1,5 +1,5 @@
 import { Calendar, Wrench, Clock } from 'lucide-react'
-import { MAINTENANCE_SCHEDULE, AUTO_SCHEDULE_THRESHOLDS } from '../../constants/mockData'
+import { MAINTENANCE_SCHEDULE, AUTO_SCHEDULE_THRESHOLDS } from '../../constants/logistics'
 import { getPriorityBadgeColor, formatNumber } from '../../utils/helpers'
 
 export default function MaintenanceCalendar({ vehicles }) {

@@ -8,51 +8,33 @@ import FuelTrends from '../../components/fleet/FuelTrends'
 import BulkOperations from '../../components/fleet/BulkOperations'
 import StatsCard from '../../components/dashboard/widgets/StatsCard'
 
-const mockVehicles = [
-  {
-    id: 'VH001',
-    plate: 'ABC-123',
-    type: 'Truck',
-    capacity: '10 tons',
-    driver: 'John Smith',
-    location: 'Downtown Depot',
-    lastUpdate: '2 min ago',
-    odometer: 45230,
-    fuelLevel: 75,
-    maintenanceDue: '2024-02-15',
-    status: 'available',
-    lat: 40.7128,
-    lng: -74.0060
-  },
-  {
-    id: 'VH002', 
-    plate: 'XYZ-456',
-    type: 'Van',
-    capacity: '3 tons',
-    driver: 'Sarah Johnson',
-    location: 'Route 95',
-    lastUpdate: '5 min ago',
-    odometer: 32100,
-    fuelLevel: 45,
-    maintenanceDue: '2024-01-28',
-    status: 'en route',
-    lat: 40.7589,
-    lng: -73.9851
-  }
-]
+import { useTrucksQuery } from '../../hooks/queries/useFleetQueries'
+import { Loader2 } from 'lucide-react'
 
 export default function Fleet() {
+  const { data: trucksData, isLoading } = useTrucksQuery()
   const [selectedVehicle, setSelectedVehicle] = useState(null)
   const [showTelemetry, setShowTelemetry] = useState(false)
   const [selectedVehicles, setSelectedVehicles] = useState([])
   const [activeWidget, setActiveWidget] = useState('map')
 
+  const vehicles = trucksData || []
+
   const stats = [
-    { title: 'Total Vehicles', value: '24', icon: Truck, color: 'blue' },
-    { title: 'Active Routes', value: '18', icon: MapPin, color: 'green' },
-    { title: 'Fuel Alerts', value: '3', icon: Fuel, color: 'yellow' },
-    { title: 'Maintenance Due', value: '5', icon: Wrench, color: 'red' }
+    { title: 'Total Vehicles', value: vehicles.length.toString(), icon: Truck, color: 'blue' },
+    { title: 'Active Routes', value: vehicles.filter(v => v.status === 'en route').length.toString(), icon: MapPin, color: 'green' },
+    { title: 'Fuel Alerts', value: vehicles.filter(v => v.fuelLevel < 20).length.toString(), icon: Fuel, color: 'yellow' },
+    { title: 'Maintenance Due', value: vehicles.filter(v => new Date(v.maintenanceDue) < new Date()).length.toString(), icon: Wrench, color: 'red' }
   ]
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
+        <Loader2 className="w-12 h-12 text-blue-600 animate-spin" />
+        <p className="text-gray-500 font-medium">Loading fleet data...</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-4 sm:space-y-6">
@@ -94,7 +76,7 @@ export default function Fleet() {
             />
           </div>
           <div className="space-y-3 max-h-[400px] sm:max-h-96 overflow-y-auto">
-            {mockVehicles.map(vehicle => (
+            {vehicles.map(vehicle => (
               <VehicleCard
                 key={vehicle.id}
                 vehicle={vehicle}
@@ -116,9 +98,9 @@ export default function Fleet() {
         </div>
 
         <div className="lg:col-span-2">
-          {activeWidget === 'map' && <FleetMap vehicles={mockVehicles} />}
-          {activeWidget === 'calendar' && <MaintenanceCalendar vehicles={mockVehicles} />}
-          {activeWidget === 'fuel' && <FuelTrends vehicles={mockVehicles} />}
+          {activeWidget === 'map' && <FleetMap vehicles={vehicles} />}
+          {activeWidget === 'calendar' && <MaintenanceCalendar vehicles={vehicles} />}
+          {activeWidget === 'fuel' && <FuelTrends vehicles={vehicles} />}
         </div>
       </div>
 
