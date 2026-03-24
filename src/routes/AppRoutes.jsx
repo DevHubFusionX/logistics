@@ -30,6 +30,7 @@ const Fleet = lazy(() => import('../pages/dashboard/Fleet'))
 const RoutesPage = lazy(() => import('../pages/dashboard/Routes'))
 const Warehouses = lazy(() => import('../pages/dashboard/Warehouses'))
 const Orders = lazy(() => import('../pages/dashboard/Orders'))
+const OrdersTable = lazy(() => import('../pages/admin/OrdersTable'))
 const Customers = lazy(() => import('../pages/admin/Customers'))
 const Drivers = lazy(() => import('../pages/admin/Drivers'))
 const Trips = lazy(() => import('../pages/dashboard/Trips'))
@@ -148,6 +149,7 @@ export default function AppRoutes() {
           <Route path="/warehouses" element={<Warehouses />} />
           <Route path="/warehouses/*" element={<Warehouses />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/admin/orders-list" element={<OrdersTable />} />
           <Route path="/customers" element={<Customers />} />
           <Route path="/drivers" element={<Drivers />} />
           <Route path="/trips" element={<Trips />} />

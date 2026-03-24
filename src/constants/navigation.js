@@ -133,6 +133,15 @@ export const NAVIGATION_SECTIONS = [
         roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
       },
       {
+        id: 'orders-list',
+        label: 'Orders List',
+        icon: ClipboardList,
+        path: '/admin/orders-list',
+        description: 'View logical dispatch orders',
+        color: 'blue',
+        roles: ['Super Admin', 'Dispatcher']
+      },
+      {
         id: 'fleet',
         label: 'Fleet Management',
         icon: Truck,
