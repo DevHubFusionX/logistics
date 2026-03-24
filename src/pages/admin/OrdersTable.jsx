@@ -132,13 +132,13 @@ export default function OrdersTable() {
           />
         </div>
         
-        <div className="flex items-center gap-3 w-full md:w-auto">
-          <div className="flex bg-gray-50 p-1 rounded-2xl border border-gray-100 w-full md:w-auto">
+        <div className="flex items-center gap-2 md:gap-3 w-full md:w-auto overflow-x-auto no-scrollbar pb-1 md:pb-0">
+          <div className="flex bg-gray-50 p-1 rounded-2xl border border-gray-100 min-w-max">
             {['all', 'fulfilled', 'unfulfilled'].map((status) => (
               <button
                 key={status}
                 onClick={() => setStatusFilter(status)}
-                className={`px-4 py-2 rounded-[14px] text-xs font-bold capitalize transition-all ${
+                className={`px-3 md:px-4 py-2 rounded-[14px] text-[10px] md:text-xs font-bold capitalize transition-all ${
                   statusFilter === status 
                     ? 'bg-white text-blue-600 shadow-sm' 
                     : 'text-gray-400 hover:text-gray-600'
@@ -181,7 +181,7 @@ export default function OrdersTable() {
         )}
 
         <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-200">
-          <table className="w-full border-separate border-spacing-0">
+          <table className="w-full border-separate border-spacing-0 min-w-[1000px]">
             <thead>
               <tr className="bg-gray-50/50">
                 <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Company Name</th>
@@ -292,13 +292,13 @@ export default function OrdersTable() {
         )}
 
         {/* Improved Pagination Footer */}
-        <div className="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-[12px] text-gray-400 font-bold uppercase tracking-wider">
-            Showing <span className="text-gray-900">{paginatedOrders.length}</span> of <span className="text-gray-900">{filteredOrders.length}</span> enterprise records
+        <div className="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[11px] md:text-[12px] text-gray-400 font-bold uppercase tracking-wider text-center md:text-left">
+            Showing <span className="text-gray-900">{paginatedOrders.length}</span> of <span className="text-gray-900">{filteredOrders.length}</span> records
           </p>
           
           {totalPages > 1 && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-center">
               <button 
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
@@ -307,7 +307,7 @@ export default function OrdersTable() {
                 <ChevronLeft className="w-4 h-4" />
               </button>
               
-              <div className="flex items-center gap-1 px-2">
+              <div className="flex items-center gap-1 px-1 sm:px-2">
                 {[...Array(totalPages)].map((_, i) => {
                   const page = i + 1;
                   // Show limited pages if many
@@ -321,7 +321,7 @@ export default function OrdersTable() {
                     <button
                       key={page}
                       onClick={() => setCurrentPage(page)}
-                      className={`w-9 h-9 flex items-center justify-center rounded-xl text-xs font-bold transition-all ${
+                      className={`w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold transition-all ${
                         currentPage === page 
                           ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
                           : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-100'
