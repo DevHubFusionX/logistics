@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 const goodsTypes = ['Pharmaceuticals', 'Frozen Foods', 'Construction Materials', 'Electronic Components', 'Consumer Goods', 'Chemicals']
 const companies = ['Newrest', 'Integrated Dairies', 'Olpharm', 'Food Bridge', 'Wihu Industries', 'FMCG Client', 'Dangote Group', 'Nestle Nigeria', 'Jumia']
@@ -52,20 +52,18 @@ const generateData = () => {
   return data.sort((a, b) => new Date(b.date) - new Date(a.date))
 }
 
-const mockOrders = generateData()
+// Persist across sessions if possible, or just let it stay in memory for the session
+let mockOrders = generateData()
 
 /**
  * Hook for fetching dispatch orders for the table view
- * Ready for API integration - just replace the mock response with a service call
  */
 export function useOrdersTableQuery(params = {}) {
     return useQuery({
         queryKey: ['admin', 'orders-list', params],
         queryFn: async () => {
-            // SIMULATED API CALL
-            // To integrate with a real API:
-            // const response = await orderService.getDispatchOrders(params)
-            // return response.data
+            // Simulated delay
+            await new Promise(r => setTimeout(r, 600))
             
             return {
                 records: mockOrders,
@@ -78,4 +76,52 @@ export function useOrdersTableQuery(params = {}) {
         },
         staleTime: 5 * 60 * 1000,
     })
+}
+
+/**
+ * Hook for CRUD operations on the dispatch orders
+ * Ready for API integration - just replace the mock logic with axios/fetch calls
+ */
+export function useOrderMutations() {
+    const queryClient = useQueryClient()
+
+    const addOrder = useMutation({
+        mutationFn: async (newOrder) => {
+            await new Promise(r => setTimeout(r, 800))
+            const order = { 
+                ...newOrder, 
+                id: `ORD-${Date.now().toString().slice(-6)}`,
+                date: newOrder.date || new Date().toISOString()
+            }
+            mockOrders = [order, ...mockOrders]
+            return order
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'orders-list'] })
+        }
+    })
+
+    const updateOrder = useMutation({
+        mutationFn: async (updatedOrder) => {
+            await new Promise(r => setTimeout(r, 800))
+            mockOrders = mockOrders.map(o => o.id === updatedOrder.id ? { ...o, ...updatedOrder } : o)
+            return updatedOrder
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'orders-list'] })
+        }
+    })
+
+    const deleteOrder = useMutation({
+        mutationFn: async (id) => {
+            await new Promise(r => setTimeout(r, 800))
+            mockOrders = mockOrders.filter(o => o.id !== id)
+            return id
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'orders-list'] })
+        }
+    })
+
+    return { addOrder, updateOrder, deleteOrder }
 }

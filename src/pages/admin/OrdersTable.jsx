@@ -5,21 +5,24 @@ import {
   CheckCircle2, AlertCircle, Truck,
   ArrowUpDown, ExternalLink, RefreshCw,
   MapPin, Calendar, Building2, Package,
-  ChevronLeft, ChevronRight, Copy
+  ChevronLeft, ChevronRight, Copy, Edit
 } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
-import { useOrdersTableQuery } from '../../hooks/queries/useOrderQueries'
+import { useOrdersTableQuery, useOrderMutations } from '../../hooks/queries/useOrderQueries'
 import OrderDetailsModal from '../../components/admin/OrderDetailsModal'
+import OrderFormModal from '../../components/admin/OrderFormModal'
 
 export default function OrdersTable() {
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [currentPage, setCurrentPage] = useState(1)
   const [selectedOrder, setSelectedOrder] = useState(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+  const [isFormOpen, setIsFormOpen] = useState(false)
   
   const itemsPerPage = 10
   const { showToast } = useToast()
+  const { addOrder, updateOrder, deleteOrder } = useOrderMutations()
 
   const { data: ordersData, isLoading, isError, refetch } = useOrdersTableQuery()
 
@@ -72,7 +75,38 @@ export default function OrdersTable() {
 
   const handleViewOrder = (order) => {
     setSelectedOrder(order)
-    setIsModalOpen(true)
+    setIsDetailsOpen(true)
+  }
+
+  const handleEditOrder = (order) => {
+    setSelectedOrder(order)
+    setIsFormOpen(true)
+  }
+
+  const handleDeleteOrder = async (id) => {
+    if (window.confirm('Are you sure you want to delete this dispatch record from the enterprise log?')) {
+      try {
+        await deleteOrder.mutateAsync(id)
+        showToast.success('Record Deleted', 'The dispatch log has been updated.')
+      } catch {
+        showToast.error('Delete Failed', 'Could not remove the record.')
+      }
+    }
+  }
+
+  const handleFormSubmit = async (formData) => {
+    try {
+      if (selectedOrder) {
+        await updateOrder.mutateAsync({ ...formData, id: selectedOrder.id })
+        showToast.success('Dispatch Updated', 'Shipment specification has been saved.')
+      } else {
+        await addOrder.mutateAsync(formData)
+        showToast.success('Dispatch Added', 'New shipment has been logged.')
+      }
+      setIsFormOpen(false)
+    } catch {
+      showToast.error('Action Failed', 'Could not save the dispatch record.')
+    }
   }
 
   const handleCopyId = (id) => {
@@ -81,7 +115,50 @@ export default function OrdersTable() {
   }
 
   const handleExportRow = (order) => {
-    showToast.success('Exporting...', `Generating dispatch report for ${order.company}`)
+    handleExportCSV([order], `dispatch_${order.id}_report.csv`)
+  }
+
+  const handleExportCSV = (data = filteredOrders, filename = `logistics_dispatch_${new Date().toISOString().split('T')[0]}.csv`) => {
+    if (data.length === 0) {
+      showToast.error("Export Failed", "There is no data to export based on your current filters.")
+      return
+    }
+
+    const headers = [
+      "Order ID", "Date", "Company", "Truck Size", "Goods Type", 
+      "Pickup Location", "Delivery Destination", "Fleet Company", "Status", "Revenue (NGN)"
+    ]
+
+    const csvRows = [
+      headers.join(','),
+      ...data.map(order => [
+        `"${order.id}"`,
+        `"${formatDate(order.date)}"`,
+        `"${order.company}"`,
+        `"${order.truckSize}"`,
+        `"${order.goodsType}"`,
+        `"${order.pickup}"`,
+        `"${order.delivery}"`,
+        `"${order.fleet}"`,
+        `"${order.status}"`,
+        order.revenue
+      ].join(','))
+    ]
+
+    try {
+      const blob = new Blob([csvRows.join('\n')], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement("a")
+      const url = URL.createObjectURL(blob)
+      link.setAttribute("href", url)
+      link.setAttribute("download", filename)
+      link.style.visibility = 'hidden'
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      showToast.success("Export Successful", `${data.length} records have been downloaded.`)
+    } catch {
+      showToast.error("Export Error", "System failed to generate the CSV file.")
+    }
   }
 
   const getStatusStyle = (status = '') => {
@@ -104,6 +181,15 @@ export default function OrdersTable() {
         />
         <div className="flex items-center gap-3">
           <button 
+            onClick={() => {
+              setSelectedOrder(null)
+              setIsFormOpen(true)
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-gray-900 border border-gray-800 rounded-xl text-sm font-bold text-white hover:bg-gray-800 transition-all shadow-md"
+          >
+            <Truck className="w-4 h-4" /> Add Dispatch
+          </button>
+          <button 
             onClick={() => refetch()}
             className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm"
           >
@@ -111,7 +197,7 @@ export default function OrdersTable() {
             Refresh
           </button>
           <button 
-            onClick={() => showToast.success('Export started', 'The dispatch log is being prepared for download.')}
+            onClick={() => handleExportCSV()}
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 border border-blue-700 rounded-xl text-sm font-bold text-white hover:bg-blue-700 transition-all shadow-md"
           >
             <Download className="w-4 h-4" /> Export CSV
@@ -254,6 +340,13 @@ export default function OrdersTable() {
                       >
                         <ExternalLink className="w-4 h-4" />
                       </button>
+                      <button 
+                        onClick={() => handleEditOrder(order)}
+                        className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-all" 
+                        title="Edit Dispatch"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
                       <div className="relative group/more">
                         <button className="p-2 text-gray-400 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all">
                           <MoreHorizontal className="w-4 h-4" />
@@ -270,6 +363,13 @@ export default function OrdersTable() {
                             className="w-full text-left px-3 py-2 text-xs font-bold text-gray-600 hover:bg-gray-50 rounded-xl flex items-center gap-2"
                           >
                             <Download className="w-3.5 h-3.5" /> Export Data
+                          </button>
+                          <div className="my-1 border-t border-gray-100" />
+                          <button 
+                            onClick={() => handleDeleteOrder(order.id)}
+                            className="w-full text-left px-3 py-2 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl flex items-center gap-2"
+                          >
+                            <AlertCircle className="w-3.5 h-3.5" /> Delete Dispatch
                           </button>
                         </div>
                       </div>
@@ -347,8 +447,16 @@ export default function OrdersTable() {
 
       <OrderDetailsModal 
         order={selectedOrder}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        isOpen={isDetailsOpen}
+        onClose={() => setIsDetailsOpen(false)}
+      />
+
+      <OrderFormModal 
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        onSubmit={handleFormSubmit}
+        initialData={selectedOrder}
+        isLoading={addOrder.isPending || updateOrder.isPending}
       />
     </div>
   )
