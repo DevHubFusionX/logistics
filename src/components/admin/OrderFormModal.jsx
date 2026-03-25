@@ -1,16 +1,26 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { 
   X, Calendar, Building2, Truck, Package, 
   MapPin, CheckCircle2, AlertCircle, TrendingUp,
-  Save, Loader2
+  Save, Loader2, ChevronDown, Check
 } from 'lucide-react'
 
 const goodsTypes = ['Cement', 'Pharmaceuticals', 'Frozen Foods', 'Construction Materials', 'Electronic Components', 'Consumer Goods', 'Chemicals']
 const truckSizes = ['15', '20', '30', 'Small (2 Ton)', 'Medium (5 Ton)', 'Reefer (10 Ton)', 'Large (20 Ton)', 'Trailer (30 Ton)']
 const locations = ['Lagos', 'Abuja', 'Kano', 'Ibadan', 'Port Harcourt', 'Benin City', 'Jos', 'Kaduna', 'Enugu']
-const fleetCompanies = ['Fleet-A1', 'Dara Logistics', 'GIG Logistics', 'DHL Nigeria', 'Kobo360', 'Ace Logistics']
+const fleetCompanies = ['Fleet-A1', 'Dara Logistics', 'GIG Logistics', 'DHL Nigeria', 'Kobo360', 'Ace Logistics', 'Cold Hubs', 'EDV Ventures', 'Ide Richy Logistics', 'Sure Trucks Ltd', 'Azeez Jamal Transports', 'Retail Box']
 
 export default function OrderFormModal({ isOpen, onClose, onSubmit, initialData = null, isLoading = false }) {
+  const [fleetOpen, setFleetOpen] = useState(false)
+  const fleetRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (fleetRef.current && !fleetRef.current.contains(e.target)) setFleetOpen(false)
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
   const [formData, setFormData] = useState({
     company: '',
     truckSize: truckSizes[0],
@@ -163,18 +173,39 @@ export default function OrderFormModal({ isOpen, onClose, onSubmit, initialData 
             </div>
 
             {/* Fleet & Status */}
-            <div>
+            <div className="relative" ref={fleetRef}>
               <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 flex items-center gap-2">
                 <Truck className="w-3.5 h-3.5" /> Fleet Partner
               </label>
-              <select 
-                name="fleet"
-                value={formData.fleet}
-                onChange={handleChange}
-                className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500/20 font-bold transition-all text-sm appearance-none cursor-pointer"
+              <button
+                type="button"
+                onClick={() => setFleetOpen(prev => !prev)}
+                className="w-full px-4 py-3 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-blue-500/20 font-bold transition-all text-sm cursor-pointer flex items-center justify-between gap-2 text-left hover:bg-gray-100"
               >
-                {fleetCompanies.map(f => <option key={f} value={f}>{f}</option>)}
-              </select>
+                <span className="truncate">{formData.fleet || 'Select fleet partner'}</span>
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform duration-200 flex-shrink-0 ${fleetOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {fleetOpen && (
+                <div className="absolute z-50 left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                  <div className="max-h-48 overflow-y-auto py-1.5 scrollbar-thin scrollbar-thumb-gray-200">
+                    {fleetCompanies.map(f => (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => { setFormData(prev => ({ ...prev, fleet: f })); setFleetOpen(false) }}
+                        className={`w-full px-4 py-2.5 text-sm text-left flex items-center justify-between gap-2 transition-colors duration-150 ${
+                          formData.fleet === f
+                            ? 'bg-blue-50 text-blue-700 font-bold'
+                            : 'text-gray-700 hover:bg-gray-50 font-medium'
+                        }`}
+                      >
+                        <span className="truncate">{f}</span>
+                        {formData.fleet === f && <Check className="w-4 h-4 text-blue-600 flex-shrink-0" />}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             <div>
