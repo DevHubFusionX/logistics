@@ -6,6 +6,7 @@ import {
 } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
 import { useOrdersTableQuery, useOrderMutations } from '../../hooks/queries/useOrderQueries'
+import adminOrderService from '../../services/adminOrderService'
 import OrderDetailsModal from '../../components/admin/OrderDetailsModal'
 import OrderFormModal from '../../components/admin/OrderFormModal'
 import OrdersTableControls from '../../components/admin/orders/OrdersTableControls'
@@ -22,6 +23,7 @@ export default function OrdersTable() {
   const [selectedOrder, setSelectedOrder] = useState(null)
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [isFormOpen, setIsFormOpen] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
   
   const itemsPerPage = 10
   const { showToast } = useToast()
@@ -31,7 +33,9 @@ export default function OrdersTable() {
     page: currentPage,
     limit: itemsPerPage,
     search: searchTerm,
-    status: statusFilter === 'all' ? '' : statusFilter
+    status: statusFilter === 'all' ? '' : statusFilter,
+    sortBy: 'date',
+    sortOrder: 'desc'
   })
 
   // --- Helpers ---
@@ -58,6 +62,47 @@ export default function OrdersTable() {
       showToast.success("Export Successful", `${data.length} records downloaded.`)
     } catch {
       showToast.error("Export Error", "System failed to generate CSV.")
+    }
+  }
+
+  const handleExportAll = async () => {
+    setIsExporting(true)
+    try {
+      // Fetch everything (high limit) with current search/filter
+      const response = await adminOrderService.getOrders({
+        limit: 10000, 
+        search: searchTerm,
+        status: statusFilter === 'all' ? '' : statusFilter,
+        sortBy: 'date',
+        sortOrder: 'desc'
+      })
+      
+      const rawRes = response.data?.data || response.data
+      const allRecords = Array.isArray(rawRes) ? rawRes 
+                       : (rawRes?.records ? rawRes.records 
+                       : (rawRes ? [rawRes] : []))
+      
+      const processed = allRecords.map(b => {
+        const routeParts = b.route?.split('→') || []
+        return {
+          id: b._id || b.orderId || b.id,
+          company: b.customer?.name || b.company || 'Unknown',
+          truckSize: b.truckType || b.truckSize || 'Standard',
+          goodsType: b.goodsType || 'General Cargo',
+          pickup: routeParts[0]?.trim() || b.pickup || 'N/A',
+          delivery: routeParts[1]?.trim() || b.delivery || 'N/A',
+          fleet: b.fleet || 'Direct Fleet',
+          status: b.status || 'Pending',
+          revenue: b.revenue,
+          date: b.date || b.createdAt
+        }
+      })
+      
+      handleExportCSV(processed)
+    } catch {
+      showToast.error("Export Failed", "Could not fetch all records for download.")
+    } finally {
+      setIsExporting(false)
     }
   }
 
@@ -157,10 +202,12 @@ export default function OrdersTable() {
           </button>
 
           <button 
-            onClick={() => handleExportCSV(filteredOrders)}
-            className="sm:col-span-2 lg:col-span-1 flex items-center justify-center gap-2 px-5 py-2 bg-blue-600 rounded-lg text-xs font-bold text-white hover:bg-blue-700 transition-all shadow-md shadow-blue-100/50 w-full lg:w-auto"
+            onClick={handleExportAll}
+            disabled={isExporting}
+            className="sm:col-span-2 lg:col-span-1 flex items-center justify-center gap-2 px-5 py-2 bg-blue-600 rounded-lg text-xs font-bold text-white hover:bg-blue-700 transition-all shadow-md shadow-blue-100/50 w-full lg:w-auto disabled:opacity-50"
           >
-            <Download className="w-3.5 h-3.5" /> Export CSV
+            {isExporting ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Download className="w-3.5 h-3.5" />}
+            {isExporting ? 'Preparing...' : 'Export Full CSV'}
           </button>
         </div>
       </div>

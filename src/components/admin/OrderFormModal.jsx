@@ -4,10 +4,11 @@ import {
   MapPin, CheckCircle2, AlertCircle, TrendingUp,
   Save, Loader2, ChevronDown, Check
 } from 'lucide-react'
+import NIGERIAN_STATES from '../../constants/nigerianStates'
 
 const goodsTypes = ['Cement', 'Pharmaceuticals', 'Frozen Foods', 'Construction Materials', 'Electronic Components', 'Consumer Goods', 'Chemicals']
 const truckSizes = ['15', '20', '30', 'Small (2 Ton)', 'Medium (5 Ton)', 'Reefer (10 Ton)', 'Large (20 Ton)', 'Trailer (30 Ton)']
-const locations = ['Lagos', 'Abuja', 'Kano', 'Ibadan', 'Port Harcourt', 'Benin City', 'Jos', 'Kaduna', 'Enugu']
+const locations = NIGERIAN_STATES
 const fleetCompanies = ['Fleet-A1', 'Dara Logistics', 'GIG Logistics', 'DHL Nigeria', 'Kobo360', 'Ace Logistics', 'Cold Hubs', 'EDV Ventures', 'Ide Richy Logistics', 'Sure Trucks Ltd', 'Azeez Jamal Transports', 'Retail Box']
 
 export default function OrderFormModal({ isOpen, onClose, onSubmit, initialData = null, isLoading = false }) {

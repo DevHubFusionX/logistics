@@ -21,7 +21,7 @@ export default function OrdersTableControls({
       </div>
       
       <div className="flex items-center bg-gray-50/80 p-1 rounded-[16px] border border-gray-100 w-full lg:w-auto lg:mr-1 overflow-x-auto no-scrollbar">
-        {['all', 'fulfilled', 'unfulfilled'].map((status) => (
+        {['all', 'Fulfilled', 'Unfulfilled'].map((status) => (
           <button
             key={status}
             onClick={() => setStatusFilter(status)}
