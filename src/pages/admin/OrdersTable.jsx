@@ -172,7 +172,30 @@ export default function OrdersTable() {
   })
 
   const totalPages = ordersData?.pagination?.totalPages || rawResponse?.pagination?.totalPages || 1
+  const totalRecords = ordersData?.pagination?.totalRecords || rawResponse?.pagination?.totalRecords || filteredOrders.length
   const paginatedOrders = filteredOrders 
+  
+  const startIdx = ((currentPage - 1) * itemsPerPage) + 1
+  const endIdx = Math.min(currentPage * itemsPerPage, totalRecords)
+
+  // Smart Pagination Logic (Truncates for mobile)
+  const getPageNumbers = () => {
+    const pages = []
+    const range = 1 // Pages to show around current
+    
+    for (let i = 1; i <= totalPages; i++) {
+      if (
+        i === 1 || 
+        i === totalPages || 
+        (i >= currentPage - range && i <= currentPage + range)
+      ) {
+        pages.push(i)
+      } else if (pages[pages.length - 1] !== '...') {
+        pages.push('...')
+      }
+    }
+    return pages
+  }
 
   return (
     <div className="pt-2 sm:pt-4 px-4 sm:px-6 lg:px-8 bg-gray-50/50 min-h-screen">
@@ -291,41 +314,56 @@ export default function OrdersTable() {
         </div>
 
         {/* Pagination Footer */}
-        <div className="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[11px] md:text-[12px] text-gray-400 font-bold uppercase tracking-wider text-center md:text-left">
-            Showing <span className="text-gray-900">{paginatedOrders.length}</span> of <span className="text-gray-900">{filteredOrders.length}</span> records
-          </p>
+        <div className="px-6 py-5 bg-gray-50/50 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-6">
+          <div className="flex flex-col items-center sm:items-start gap-1">
+            <p className="text-[10px] md:text-[11px] text-gray-400 font-black uppercase tracking-widest leading-none">
+              Records Overview
+            </p>
+            <p className="text-[12px] md:text-[13px] text-gray-500 font-medium">
+              Showing <span className="text-gray-900 font-bold">{startIdx}–{endIdx}</span> of <span className="text-gray-900 font-bold">{totalRecords}</span> dispatched
+            </p>
+          </div>
           
           {totalPages > 1 && (
-            <div className="flex items-center gap-1 sm:gap-1.5 flex-wrap justify-center">
+            <div className="flex items-center gap-2 justify-center">
               <button 
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="p-2 bg-white border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-gray-400 hover:text-blue-600 hover:border-blue-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
               
-              <div className="flex items-center gap-1 px-1 sm:px-2">
-                {[...Array(totalPages)].map((_, i) => (
-                  <button
-                    key={i + 1}
-                    onClick={() => setCurrentPage(i + 1)}
-                    className={`w-8 h-8 md:w-9 md:h-9 flex items-center justify-center rounded-lg md:rounded-xl text-[11px] md:text-xs font-bold transition-all ${
-                      currentPage === i + 1 
-                        ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
-                        : 'bg-white text-gray-500 hover:bg-gray-100 border border-gray-100'
-                    }`}
-                  >
-                    {i + 1}
-                  </button>
+              <div className="hidden xs:flex items-center gap-1.5">
+                {getPageNumbers().map((p, i) => (
+                  <React.Fragment key={i}>
+                    {p === '...' ? (
+                      <span className="px-2 text-gray-300 font-bold">...</span>
+                    ) : (
+                      <button
+                        onClick={() => setCurrentPage(p)}
+                        className={`w-10 h-10 flex items-center justify-center rounded-xl text-[12px] font-black transition-all ${
+                          currentPage === p 
+                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-200/50' 
+                            : 'bg-white text-gray-400 hover:text-gray-700 border border-gray-100'
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    )}
+                  </React.Fragment>
                 ))}
+              </div>
+
+              {/* Mobile Quick Page Indicator */}
+              <div className="xs:hidden px-4 py-2 bg-blue-50 rounded-xl border border-blue-100">
+                <span className="text-[11px] font-black text-blue-600 tracking-tighter uppercase">Page {currentPage} / {totalPages}</span>
               </div>
 
               <button 
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="p-2 bg-white border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                className="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-xl text-gray-400 hover:text-blue-600 hover:border-blue-100 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
