@@ -9,7 +9,7 @@ export default {
    * Fetch all dispatch orders with filtering and pagination
    */
   getOrders: (params = {}) => {
-    return httpClient.request('/admin/order', {}, params)
+    return httpClient.request('/admin/order/', {}, params)
   },
 
   /**
@@ -24,7 +24,7 @@ export default {
    * Create a new dispatch record
    */
   createOrder: (orderData) => {
-    return httpClient.request('/admin/order', {
+    return httpClient.request('/admin/order/', {
       method: 'POST',
       body: JSON.stringify(orderData)
     })

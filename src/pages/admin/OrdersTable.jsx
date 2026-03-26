@@ -25,6 +25,9 @@ export default function OrdersTable() {
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   
+  const [sortField, setSortField] = useState('date')
+  const [sortOrder, setSortOrder] = useState('desc')
+  
   const itemsPerPage = 10
   const { showToast } = useToast()
   const { addOrder, updateOrder, deleteOrder } = useOrderMutations()
@@ -34,8 +37,8 @@ export default function OrdersTable() {
     limit: itemsPerPage,
     search: searchTerm,
     status: statusFilter === 'all' ? '' : statusFilter,
-    sortBy: 'date',
-    sortOrder: 'desc'
+    sortBy: sortField,
+    sortOrder: sortOrder
   })
 
   // --- Helpers ---
@@ -73,8 +76,8 @@ export default function OrdersTable() {
         limit: 10000, 
         search: searchTerm,
         status: statusFilter === 'all' ? '' : statusFilter,
-        sortBy: 'date',
-        sortOrder: 'desc'
+        sortBy: sortField,
+        sortOrder: sortOrder
       })
       
       const rawRes = response.data?.data || response.data
@@ -219,6 +222,10 @@ export default function OrdersTable() {
           setSearchTerm={setSearchTerm}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
+          sortField={sortField}
+          setSortField={setSortField}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
           isLoading={isLoading}
         />
       </div>
@@ -233,14 +240,12 @@ export default function OrdersTable() {
             <thead>
               <tr className="bg-gray-50/50">
                 <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Company Name</th>
-                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Truck Size</th>
-                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Goods Type</th>
-                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Pickup Location</th>
-                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Delivery Destination</th>
-                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Fleet Company</th>
-                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 flex items-center gap-2 cursor-pointer hover:text-gray-600 transition-colors">
-                  Financials <ArrowUpDown className="w-3 h-3" />
-                </th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 hidden md:table-cell">Truck Size</th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 hidden lg:table-cell">Goods Type</th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Pickup</th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Delivery</th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100 hidden xl:table-cell">Fleet</th>
+                <th className="px-6 py-5 text-left text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Financials / Date</th>
                 <th className="px-6 py-5 text-center text-[11px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-100">Actions</th>
               </tr>
             </thead>

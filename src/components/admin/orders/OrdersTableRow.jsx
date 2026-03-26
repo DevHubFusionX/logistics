@@ -27,14 +27,14 @@ export default function OrdersTableRow({
         </div>
       </td>
       
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-4 whitespace-nowrap hidden md:table-cell">
         <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-lg w-fit border border-gray-100/50">
           <Truck className="w-3.5 h-3.5 text-gray-400" />
           <span className="text-xs font-semibold text-gray-600">{order.truckSize}</span>
         </div>
       </td>
 
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-4 whitespace-nowrap hidden lg:table-cell">
         <div className="flex items-center gap-2">
           <Package className="w-4 h-4 text-gray-300" />
           <span className="text-xs font-semibold text-gray-500">{order.goodsType}</span>
@@ -53,7 +53,7 @@ export default function OrdersTableRow({
         </div>
       </td>
 
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-4 whitespace-nowrap hidden xl:table-cell">
         <span className="text-xs font-medium italic text-gray-400">{order.fleet}</span>
       </td>
 
