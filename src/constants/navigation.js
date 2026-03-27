@@ -33,7 +33,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/dashboard',
         description: 'Dashboard summary',
         color: 'sky',
-        roles: ['Super Admin', 'Dispatcher']
+        roles: ['Super Admin', 'Dispatcher', 'Admin Manager']
       },
       {
         id: 'tracking',
@@ -42,7 +42,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/tracking/track',
         description: 'Real-time tracking',
         color: 'blue',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Finance', 'Support', 'Customer']
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Finance', 'Support', 'Customer', 'Admin Manager']
       },
       {
         id: 'driver-app',
@@ -52,7 +52,7 @@ export const NAVIGATION_SECTIONS = [
         description: 'Manage deliveries',
         color: 'purple',
         comingSoon: true,
-        roles: ['Super Admin', 'Dispatcher']
+        roles: ['Super Admin', 'Dispatcher', 'Admin Manager']
       },
       {
         id: 'bookings',
@@ -139,7 +139,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/admin/orders-list',
         description: 'View logical dispatch orders',
         color: 'blue',
-        roles: ['Super Admin', 'Dispatcher']
+        roles: ['Super Admin', 'Dispatcher', 'Admin Manager']
       },
       {
         id: 'fleet',
@@ -148,7 +148,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/fleet',
         description: 'Vehicles & maintenance',
         color: 'indigo',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher'],
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Admin Manager'],
         subItems: [
           { label: 'All Vehicles', path: '/fleet' },
         ]
@@ -162,7 +162,7 @@ export const NAVIGATION_SECTIONS = [
         color: 'cyan',
         comingSoon: true,
         badge: { count: 3, type: 'error' },
-        roles: ['Super Admin', 'Fleet Officer']
+        roles: ['Super Admin', 'Fleet Officer', 'Admin Manager']
       }
     ]
   },
@@ -177,7 +177,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/drivers',
         description: 'Personnel management',
         color: 'green',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Admin Manager']
       },
       {
         id: 'analytics',
@@ -213,7 +213,7 @@ export const NAVIGATION_SECTIONS = [
         description: 'Configure pricing',
         color: 'emerald',
         isNew: true,
-        roles: ['Super Admin', 'Finance']
+        roles: ['Super Admin', 'Finance', 'Admin Manager']
       }
     ]
   },

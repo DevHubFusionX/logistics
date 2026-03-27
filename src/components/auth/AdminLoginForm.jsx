@@ -29,6 +29,27 @@ export default function AdminLoginForm() {
     const [showPassword, setShowPassword] = useState(false)
     const [attempts, setAttempts] = useState(0)
     const [lockoutTime, setLockoutTime] = useState(0)
+    const [loadingMessage, setLoadingMessage] = useState('Authenticating...')
+
+    useEffect(() => {
+        const loadingMessages = [
+            'Establishing Secure Link...',
+            'Verifying Admin Credentials...',
+            'Authorizing Access Level...',
+            'Syncing Command Center...'
+        ]
+        let interval
+        if (isLoading) {
+            let i = 0
+            interval = setInterval(() => {
+                i = (i + 1) % loadingMessages.length
+                setLoadingMessage(loadingMessages[i])
+            }, 1000)
+        } else {
+            setLoadingMessage('Authenticating...')
+        }
+        return () => clearInterval(interval)
+    }, [isLoading])
 
     useEffect(() => {
         if (lockoutTime > 0) {
@@ -157,16 +178,40 @@ export default function AdminLoginForm() {
                 <motion.button
                     type="submit"
                     disabled={isLoading || lockoutTime > 0}
-                    className="w-full bg-sky-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-sky-950 transition-all shadow-xl shadow-sky-100 disabled:opacity-50"
+                    className="w-full relative overflow-hidden bg-sky-900 text-white py-4 rounded-xl font-bold text-lg hover:bg-sky-950 transition-all shadow-xl shadow-sky-100 disabled:opacity-50"
                     whileHover={{ scale: isLoading || lockoutTime > 0 ? 1 : 1.01 }}
                     whileTap={{ scale: isLoading || lockoutTime > 0 ? 1 : 0.99 }}
                 >
                     {isLoading ? (
-                        <div className="flex items-center justify-center gap-2">
-                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                            <span>Authenticating...</span>
+                        <div className="flex flex-col items-center justify-center py-1">
+                            <div className="flex items-center gap-3">
+                                <motion.div
+                                    animate={{ rotate: 360 }}
+                                    transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                                    className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full"
+                                />
+                                <motion.span
+                                    initial={{ opacity: 0, y: 5 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    key={loadingMessage}
+                                    className="text-sm tracking-wide"
+                                >
+                                    {loadingMessage}
+                                </motion.span>
+                            </div>
+                            <motion.div
+                                className="absolute bottom-0 left-0 h-1 bg-sky-400"
+                                initial={{ width: "0%" }}
+                                animate={{ width: "100%" }}
+                                transition={{ duration: 3, ease: "easeInOut" }}
+                            />
                         </div>
-                    ) : 'Authorized Login'}
+                    ) : (
+                        <span className="flex items-center justify-center gap-2">
+                            <ShieldCheck className="w-5 h-5" />
+                            Authorized Login
+                        </span>
+                    )}
                 </motion.button>
             </form>
             <div className="mt-6 text-center">

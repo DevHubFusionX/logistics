@@ -7,8 +7,8 @@ import SidebarHeader from './sidebar/SidebarHeader'
 import SidebarFooter from './sidebar/SidebarFooter'
 import SidebarSection from './sidebar/SidebarSection'
 
-function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
-  const { hasPermission } = useAuth()
+function Sidebar({ collapsed, isMobile, isOpen }) {
+  const { user, hasPermission } = useAuth()
   const [expandedItems, setExpandedItems] = useState({ shipments: true })
   const location = useLocation()
 
@@ -44,21 +44,49 @@ function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
         {!collapsed && <SidebarHeader />}
 
         <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
-          {NAVIGATION_SECTIONS.map((section) => {
-            const visibleItems = { ...section, items: section.items.filter(item => hasPermission(item.roles)) }
-            if (visibleItems.items.length === 0) return null
+          {(() => {
+            const isManager = user?.role === 'Admin Manager'
+            
+            // If Admin Manager, show a flat list of exactly these 8 items
+            if (isManager) {
+              const managerItemIds = [
+                'admin-dashboard', 'tracking', 'driver-app', 
+                'orders-list', 'fleet', 'temperature', 
+                'drivers', 'pricing'
+              ]
+              
+              const allItems = NAVIGATION_SECTIONS.flatMap(s => s.items)
+              const managerItems = managerItemIds.map(id => allItems.find(item => item.id === id)).filter(Boolean)
+              
+              return (
+                <SidebarSection
+                  key="Admin Manager Dashboard"
+                  section={{ title: 'Admin Manager', items: managerItems }}
+                  collapsed={collapsed}
+                  expandedItems={expandedItems}
+                  toggleExpanded={toggleExpanded}
+                  isActive={isActive}
+                />
+              )
+            }
 
-            return (
-              <SidebarSection
-                key={section.title}
-                section={visibleItems}
-                collapsed={collapsed}
-                expandedItems={expandedItems}
-                toggleExpanded={toggleExpanded}
-                isActive={isActive}
-              />
-            )
-          })}
+            // Default behavior for other roles
+            return NAVIGATION_SECTIONS.map((section) => {
+              const visibleItems = { ...section, items: section.items.filter(item => hasPermission(item.roles)) }
+              if (visibleItems.items.length === 0) return null
+
+              return (
+                <SidebarSection
+                  key={section.title}
+                  section={visibleItems}
+                  collapsed={collapsed}
+                  expandedItems={expandedItems}
+                  toggleExpanded={toggleExpanded}
+                  isActive={isActive}
+                />
+              )
+            })
+          })()}
         </nav>
 
         {!collapsed && <SidebarFooter />}

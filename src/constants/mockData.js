@@ -6,45 +6,45 @@ export const KPI_DATA = [
   {
     id: 'revenue_last_month',
     title: 'Net Revenue (Last Month)',
-    value: '₦2,190,000',
+    value: '₦23,000,000',
     change: 0,
-    period: 'vs prev month',
+    period: 'Total fulfilled revenue for February 2026.',
     sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'green'
   },
   {
     id: 'revenue_last_week',
     title: 'Net Revenue (Last Week)',
-    value: '₦520,000',
+    value: '₦5,200,000',
     change: 0,
-    period: 'vs prev week',
+    period: 'Rolling 7-day fulfilled revenue (Mar 20 – Mar 26).',
     sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'green'
   },
   {
     id: 'revenue_this_month',
     title: 'Net Revenue (MTD)',
-    value: '₦1,050,000',
+    value: '₦24,850,000',
     change: 0,
-    period: 'month to date',
+    period: 'Month-to-Date fulfilled revenue for March 2026.',
     sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'green'
   },
   {
     id: 'revenue_this_year',
     title: 'Net Revenue (YTD)',
-    value: '₦6,280,000',
+    value: '₦86,100,000',
     change: 0,
-    period: 'year to date',
+    period: 'Year-to-Date fulfilled revenue (Jan 1 – Mar 27, 2026).',
     sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'green'
   },
   {
     id: 'total_gmv',
     title: 'Total GMV',
-    value: '₦41,900,000',
+    value: '₦165,900,000',
     change: 0,
-    period: 'billed to clients',
+    period: 'Gross Merchandise Value (since Oct 2025).',
     sparklineData: [0, 0, 0, 0, 0, 0, 0],
     color: 'green'
   },

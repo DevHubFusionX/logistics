@@ -7,6 +7,7 @@ import {
 import { useToast } from '../../components/ui/advanced'
 import { useOrdersTableQuery, useOrderMutations } from '../../hooks/queries/useOrderQueries'
 import adminOrderService from '../../services/adminOrderService'
+import { useAuth } from '../../hooks/useAuth'
 import OrderDetailsModal from '../../components/admin/OrderDetailsModal'
 import OrderFormModal from '../../components/admin/OrderFormModal'
 import OrdersTableControls from '../../components/admin/orders/OrdersTableControls'
@@ -30,6 +31,7 @@ export default function OrdersTable() {
   
   const itemsPerPage = 10
   const { showToast } = useToast()
+  const { user } = useAuth()
   const { addOrder, updateOrder, deleteOrder } = useOrderMutations()
 
   const { data: ordersData, isLoading, refetch } = useOrdersTableQuery({
@@ -213,12 +215,14 @@ export default function OrdersTable() {
 
         {/* Action Buttons moved here */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex items-center gap-3 w-full xl:w-auto">
-          <button 
-            onClick={() => { setSelectedOrder(null); setIsFormOpen(true); }}
-            className="flex items-center justify-center gap-2 px-5 py-2 bg-gray-900 rounded-lg text-xs font-bold text-white hover:bg-gray-800 transition-all shadow-md shadow-gray-200/50 w-full sm:w-auto"
-          >
-            <Truck className="w-3.5 h-3.5" /> Add Dispatch
-          </button>
+          {user?.role !== 'Admin Manager' && (
+            <button 
+              onClick={() => { setSelectedOrder(null); setIsFormOpen(true); }}
+              className="flex items-center justify-center gap-2 px-5 py-2 bg-gray-900 rounded-lg text-xs font-bold text-white hover:bg-gray-800 transition-all shadow-md shadow-gray-200/50 w-full sm:w-auto"
+            >
+              <Truck className="w-3.5 h-3.5" /> Add Dispatch
+            </button>
+          )}
           
           <button 
             onClick={() => refetch()}

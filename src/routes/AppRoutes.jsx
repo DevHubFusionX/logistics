@@ -136,7 +136,7 @@ export default function AppRoutes() {
 
         {/* Admin Dashboard Protected Routes */}
         <Route element={
-          <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']}>
+          <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher', 'Admin Manager']}>
             <DashboardLayout />
           </ProtectedRoute>
         }>
