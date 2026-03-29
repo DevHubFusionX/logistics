@@ -6,6 +6,7 @@ import fleetService from '../../services/fleetService'
 import reportService from '../../services/reportService'
 import dashboardService from '../../services/dashboardService'
 import pricingService from '../../services/pricingService'
+import adminService from '../../services/adminService'
 import toast from 'react-hot-toast'
 
 /**
@@ -102,6 +103,29 @@ export function useDriversQuery(params = {}) {
             const apiBody = response.data
             const rawDrivers = apiBody?.data?.records || []
             return rawDrivers.map(normalizeDriver)
+        },
+        staleTime: 5 * 60 * 1000,
+    })
+}
+
+/**
+ * Hook for fetching all managers
+ */
+export function useManagersQuery(params = {}) {
+    return useQuery({
+        queryKey: ['admin', 'managers', params],
+        queryFn: async () => {
+            const response = await adminService.getManagers(params)
+            const apiBody = response.data?.data || response.data
+            const records = apiBody?.records || apiBody || []
+            
+            return records.map(manager => ({
+                ...manager,
+                id: manager._id || manager.id,
+                name: `${manager.firstName || ''} ${manager.lastName || ''}`.trim() || 'Unnamed Manager',
+                status: manager.status || 'active',
+                joinedDate: manager.createdAt
+            }))
         },
         staleTime: 5 * 60 * 1000,
     })
@@ -324,11 +348,41 @@ export function useAdminMutations() {
         }
     })
 
+    const createManagerMutation = useMutation({
+        mutationFn: (data) => adminService.createManager(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            toast.success('Manager created successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Failed to create manager')
+        }
+    })
+
+    const updateManagerMutation = useMutation({
+        mutationFn: ({ id, data }) => adminService.updateManager(id, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            toast.success('Manager updated successfully')
+        }
+    })
+
+    const deleteManagerMutation = useMutation({
+        mutationFn: (id) => adminService.deleteManager(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            toast.success('Manager deleted successfully')
+        }
+    })
+
     return {
         updateClient: updateClientMutation,
         updateDriver: updateDriverMutation,
         updateVehicle: updateVehicleMutation,
         updatePricingRules: updatePricingRulesMutation,
-        manageClientOverride: manageClientOverrideMutation
+        manageClientOverride: manageClientOverrideMutation,
+        createManager: createManagerMutation,
+        updateManager: updateManagerMutation,
+        deleteManager: deleteManagerMutation
     }
 }

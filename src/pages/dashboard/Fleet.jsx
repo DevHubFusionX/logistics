@@ -1,4 +1,5 @@
 import { useState, useMemo, memo } from 'react'
+import { useAuthStore } from '../../stores/authStore'
 import { PageHeader } from '../../components/dashboard'
 import { VirtualizedTable, useToast } from '../../components/ui/advanced'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
@@ -14,6 +15,8 @@ function Fleet() {
   const [selectedTruck, setSelectedTruck] = useState(null)
   const [isAddModalOpen, setIsAddModalOpen] = useState(false)
   const { showToast, ToastContainer } = useToast()
+  const { user } = useAuthStore()
+  const isAdminManager = user?.role === 'Admin Manager'
 
   const { data: fleetData = [], isLoading, isError, refetch } = useFleetQuery(filters)
   const { data: drivers = [] } = useDriversQuery()
@@ -123,100 +126,102 @@ function Fleet() {
 
       <FleetMetrics data={fleetData} statusCounts={statusCounts} />
 
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
-        <VirtualizedTable
-          data={filteredFleet}
-          columns={[
-            {
-              key: 'plateNumber',
-              label: 'Plate Number',
-              width: '120px',
-              render: (value) => (
-                <span className="font-semibold text-gray-900">{value || 'N/A'}</span>
-              )
-            },
-            {
-              key: 'driverId',
-              label: 'Driver',
-              width: '140px',
-              render: (value) => (
-                <span className="text-sm">{value ? (driverMap[value] || 'Unknown') : <span className="text-gray-400 italic">Unassigned</span>}</span>
-              )
-            },
-            {
-              key: 'vehicleType',
-              label: 'Type',
-              width: '100px',
-              render: (value) => (
-                <div className="flex items-center gap-1">
-                  <Truck className="w-3 h-3 text-gray-400" />
-                  <span className="text-sm">{value || 'N/A'}</span>
-                </div>
-              )
-            },
-            {
-              key: 'make',
-              label: 'Make & Model',
-              width: '150px',
-              render: (value, row) => (
-                <span className="text-sm">{value} {row.model} {row.yearOfManufacture !== 'N/A' ? `(${row.yearOfManufacture})` : ''}</span>
-              )
-            },
-            {
-              key: 'truckCapacity',
-              label: 'Capacity',
-              width: '100px'
-            },
-            {
-              key: 'temperatureRange',
-              label: 'Temp Range',
-              width: '130px',
-              render: (value) => (
-                <div className="flex items-center gap-1">
-                  <Thermometer className="w-3 h-3 text-blue-500" />
-                  <span className="text-sm">{value || 'N/A'}</span>
-                </div>
-              )
-            },
-            {
-              key: 'gpsTrackingInstalled',
-              label: 'GPS',
-              width: '70px',
-              render: (value) => value ? (
-                <CheckCircle className="w-4 h-4 text-green-500" />
-              ) : (
-                <XCircle className="w-4 h-4 text-gray-300" />
-              )
-            },
-            {
-              key: 'status',
-              label: 'Status',
-              width: '110px',
-              render: (value) => (
-                <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusColor(value)}`}>
-                  {value || 'unknown'}
-                </span>
-              )
-            },
-            {
-              key: 'actions',
-              label: 'Actions',
-              width: '100px',
-              render: (_, row) => (
-                <button
-                  onClick={() => handleViewTruck(row.id)}
-                  className="text-blue-600 hover:text-blue-800 text-sm font-bold border border-blue-100 px-3 py-1 rounded-lg hover:bg-blue-50 transition-colors"
-                >
-                  Details
-                </button>
-              )
-            }
-          ]}
-          height={500}
-          onExport={() => showToast.success('Fleet data exported successfully')}
-          onSaveView={() => showToast.info('View saved')}
-        />
-      </div>
+      {!isAdminManager && (
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
+          <VirtualizedTable
+            data={filteredFleet}
+            columns={[
+              {
+                key: 'plateNumber',
+                label: 'Plate Number',
+                width: '120px',
+                render: (value) => (
+                  <span className="font-semibold text-gray-900">{value || 'N/A'}</span>
+                )
+              },
+              {
+                key: 'driverId',
+                label: 'Driver',
+                width: '140px',
+                render: (value) => (
+                  <span className="text-sm">{value ? (driverMap[value] || 'Unknown') : <span className="text-gray-400 italic">Unassigned</span>}</span>
+                )
+              },
+              {
+                key: 'vehicleType',
+                label: 'Type',
+                width: '100px',
+                render: (value) => (
+                  <div className="flex items-center gap-1">
+                    <Truck className="w-3 h-3 text-gray-400" />
+                    <span className="text-sm">{value || 'N/A'}</span>
+                  </div>
+                )
+              },
+              {
+                key: 'make',
+                label: 'Make & Model',
+                width: '150px',
+                render: (value, row) => (
+                  <span className="text-sm">{value} {row.model} {row.yearOfManufacture !== 'N/A' ? `(${row.yearOfManufacture})` : ''}</span>
+                )
+              },
+              {
+                key: 'truckCapacity',
+                label: 'Capacity',
+                width: '100px'
+              },
+              {
+                key: 'temperatureRange',
+                label: 'Temp Range',
+                width: '130px',
+                render: (value) => (
+                  <div className="flex items-center gap-1">
+                    <Thermometer className="w-3 h-3 text-blue-500" />
+                    <span className="text-sm">{value || 'N/A'}</span>
+                  </div>
+                )
+              },
+              {
+                key: 'gpsTrackingInstalled',
+                label: 'GPS',
+                width: '70px',
+                render: (value) => value ? (
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                ) : (
+                  <XCircle className="w-4 h-4 text-gray-300" />
+                )
+              },
+              {
+                key: 'status',
+                label: 'Status',
+                width: '110px',
+                render: (value) => (
+                  <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${getStatusColor(value)}`}>
+                    {value || 'unknown'}
+                  </span>
+                )
+              },
+              {
+                key: 'actions',
+                label: 'Actions',
+                width: '100px',
+                render: (_, row) => (
+                  <button
+                    onClick={() => handleViewTruck(row.id)}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-bold border border-blue-100 px-3 py-1 rounded-lg hover:bg-blue-50 transition-colors"
+                  >
+                    Details
+                  </button>
+                )
+              }
+            ]}
+            height={500}
+            onExport={() => showToast.success('Fleet data exported successfully')}
+            onSaveView={() => showToast.info('View saved')}
+          />
+        </div>
+      )}
 
       <TruckDetailModal
         truck={selectedTruck}

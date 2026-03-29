@@ -10,7 +10,7 @@ import AuthTour from './AuthTour'
 export default function RegisterForm() {
   const navigate = useNavigate()
   const { showToast, ToastContainer } = useToast()
-  const { mutate: register, isLoading, reset } = useRegisterMutation()
+  const { mutate: register, isPending: isLoading, reset } = useRegisterMutation()
 
   const {
     fieldErrors,

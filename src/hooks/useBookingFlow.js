@@ -45,7 +45,7 @@ export const useBookingFlow = () => {
     try {
       const destinationCity = formData.dropoffLocation.city
       const truckSize = formData.truckSize || 5
-      const isAdmin = ['Super Admin', 'Dispatcher', 'admin', 'Admin', 'SUPER_ADMIN'].includes(user?.role)
+      const { isAdmin } = auth
 
       const response = await bookingService.getPrices(destinationCity, truckSize, isAdmin)
 

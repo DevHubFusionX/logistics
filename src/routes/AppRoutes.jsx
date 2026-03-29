@@ -79,6 +79,7 @@ const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
 const VerifyOTP = lazy(() => import('../pages/auth/VerifyOTP'))
 
 const AdminLogin = lazy(() => import('../pages/auth/AdminLogin'))
+const ManagerLogin = lazy(() => import('../pages/auth/ManagerLogin'))
 
 export default function AppRoutes() {
   return (
@@ -102,6 +103,7 @@ export default function AppRoutes() {
           <Route path="/auth/signup" element={<SignUp />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/admin/login" element={<AdminLogin />} />
+          <Route path="/auth/admin/managers/login" element={<ManagerLogin />} />
           <Route path="/auth/forgot-password" element={<ForgotPassword />} />
           <Route path="/auth/reset-password" element={<ResetPassword />} />
           <Route path="/auth/verify-otp" element={<VerifyOTP />} />
@@ -136,7 +138,7 @@ export default function AppRoutes() {
 
         {/* Admin Dashboard Protected Routes */}
         <Route element={
-          <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher', 'Admin Manager']}>
+          <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher', 'Admin Manager', 'manager']}>
             <DashboardLayout />
           </ProtectedRoute>
         }>

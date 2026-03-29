@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { PageHeader } from '../../components/dashboard'
 import { useToast } from '../../components/ui/advanced'
-import { Settings as SettingsIcon, Thermometer, Plug, Bell, FileText } from 'lucide-react'
 import SystemSettings from '../../components/settings/SystemSettings'
 import TemperatureThresholds from '../../components/settings/TemperatureThresholds'
 import IntegrationsSettings from '../../components/settings/IntegrationsSettings'
 import NotificationsSettings from '../../components/settings/NotificationsSettings'
 import AuditLogs from '../../components/settings/AuditLogs'
+import ManagersSettings from '../../components/settings/ManagersSettings'
+import { Settings as SettingsIcon, Thermometer, Plug, Bell, FileText, Shield } from 'lucide-react'
 
 export default function Settings() {
   const [activeTab, setActiveTab] = useState('system')
@@ -21,6 +22,7 @@ export default function Settings() {
     { id: 'temperature', label: 'Temperature', icon: Thermometer },
     { id: 'integrations', label: 'Integrations', icon: Plug },
     { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'managers', label: 'Managers', icon: Shield },
     { id: 'audit', label: 'Audit Logs', icon: FileText }
   ]
 
@@ -58,6 +60,7 @@ export default function Settings() {
         {activeTab === 'temperature' && <TemperatureThresholds onSave={() => handleSave('Temperature')} />}
         {activeTab === 'integrations' && <IntegrationsSettings onSave={() => handleSave('Integration')} />}
         {activeTab === 'notifications' && <NotificationsSettings onSave={() => handleSave('Notification')} />}
+        {activeTab === 'managers' && <ManagersSettings />}
         {activeTab === 'audit' && <AuditLogs />}
       </div>
 

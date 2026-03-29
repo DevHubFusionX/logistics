@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Search, ChevronDown, ListFilter, ArrowUpAZ, ArrowDownZA, Check } from 'lucide-react'
+import { 
+  Search, ChevronDown, ListFilter, 
+  ArrowUpAZ, ArrowDownZA, ArrowUpNarrowWide, 
+  ArrowDownWideNarrow, Check, X 
+} from 'lucide-react'
 
 const sortOptions = [
   { value: 'date', label: 'Shipment Date' },
@@ -7,7 +11,8 @@ const sortOptions = [
   { value: 'revenue', label: 'Financial Revenue' },
   { value: 'pickup', label: 'Pickup Point' },
   { value: 'delivery', label: 'Delivery Point' },
-  { value: 'fleet', label: 'Fleet Partner' }
+  { value: 'fleet', label: 'Fleet Partner' },
+  { value: 'default', label: 'Default (Newest First)', icon: X }
 ]
 
 export default function OrdersTableControls({ 
@@ -91,17 +96,25 @@ export default function OrdersTableControls({
                   <button
                     key={opt.value}
                     onClick={() => {
-                      setSortField(opt.value)
+                      if (opt.value === 'default') {
+                        setSortField('date')
+                        setSortOrder('desc')
+                      } else {
+                        setSortField(opt.value)
+                      }
                       setIsSortOpen(false)
                     }}
                     className={`flex items-center justify-between px-4 py-3 rounded-[16px] transition-all ${
-                      sortField === opt.value 
+                      (sortField === opt.value || (opt.value === 'default' && sortField === 'date' && sortOrder === 'desc'))
                         ? 'bg-blue-50 text-blue-700' 
                         : 'hover:bg-gray-50 text-gray-600 hover:text-gray-900'
                     }`}
                   >
-                    <span className="text-xs font-bold">{opt.label}</span>
-                    {sortField === opt.value && <Check className="w-4 h-4" />}
+                    <div className="flex items-center gap-2">
+                       {opt.icon && <opt.icon className="w-3.5 h-3.5 opacity-50" />}
+                       <span className="text-xs font-bold">{opt.label}</span>
+                    </div>
+                    {(sortField === opt.value || (opt.value === 'default' && sortField === 'date' && sortOrder === 'desc')) && <Check className="w-4 h-4" />}
                   </button>
                 ))}
               </div>
@@ -116,13 +129,25 @@ export default function OrdersTableControls({
         >
           {sortOrder === 'asc' ? (
             <div className="flex flex-col items-center">
-              <ArrowUpAZ className="w-5 h-5 text-blue-600" />
-              <span className="text-[8px] font-black uppercase text-blue-400 mt-0.5">Asc</span>
+              {sortField === 'company' || sortField === 'pickup' || sortField === 'delivery' || sortField === 'fleet' ? (
+                <ArrowUpAZ className="w-5 h-5 text-blue-600" />
+              ) : (
+                <ArrowUpNarrowWide className="w-5 h-5 text-blue-600" />
+              )}
+              <span className="text-[8px] font-black uppercase text-blue-400 mt-0.5">
+                {sortField === 'date' ? 'Oldest' : 'Asc'}
+              </span>
             </div>
           ) : (
             <div className="flex flex-col items-center">
-              <ArrowDownZA className="w-5 h-5 text-amber-600" />
-              <span className="text-[8px] font-black uppercase text-amber-400 mt-0.5">Desc</span>
+              {sortField === 'company' || sortField === 'pickup' || sortField === 'delivery' || sortField === 'fleet' ? (
+                <ArrowDownZA className="w-5 h-5 text-amber-600" />
+              ) : (
+                <ArrowDownWideNarrow className="w-5 h-5 text-amber-600" />
+              )}
+              <span className="text-[8px] font-black uppercase text-amber-400 mt-0.5">
+                {sortField === 'date' ? 'Newest' : 'Desc'}
+              </span>
             </div>
           )}
         </button>

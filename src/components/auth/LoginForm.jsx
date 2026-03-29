@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../../hooks/queries/useAuthQueries'
+import { useAuthStore } from '../../stores/authStore'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
 import AuthTour from './AuthTour'
@@ -13,7 +14,7 @@ const LOCKOUT_TIME = 60000 // 1 minute
 export default function LoginForm() {
   const navigate = useNavigate()
   const { showToast, ToastContainer } = useToast()
-  const { mutate: login, isLoading: isLoggingIn, error: loginError, reset: resetMutation } = useLoginMutation()
+  const { mutate: login, isPending: isLoggingIn, reset: resetMutation } = useLoginMutation()
 
   const {
     fieldErrors,
@@ -80,9 +81,9 @@ export default function LoginForm() {
     }
 
     login(formData, {
-      onSuccess: (response) => {
-        const userRole = response.data?.data?.user?.role || response.data?.data?.admin?.role
-        const isAdmin = ['admin', 'Super Admin', 'Dispatcher'].includes(userRole)
+      onSuccess: () => {
+        const { getIsAdmin } = useAuthStore.getState()
+        const isAdmin = getIsAdmin()
 
         showToast.success('Welcome back!', 'Redirecting to your dashboard...')
         setTimeout(() => {
@@ -211,13 +212,18 @@ export default function LoginForm() {
         </motion.button>
       </form>
 
-      <div className="mt-8 text-center">
+      <div className="mt-8 text-center space-y-4">
         <p className="text-gray-600">
           Not a member?{' '}
           <Link to="/auth/signup" className="text-sky-600 hover:text-sky-700 font-bold">
             Create an account
           </Link>
         </p>
+        <div className="pt-4 border-t border-gray-100">
+          <Link to="/auth/admin/managers/login" className="text-sm text-gray-400 hover:text-sky-600 transition-colors font-medium">
+            Staff & Manager Access
+          </Link>
+        </div>
       </div>
       <ToastContainer />
     </motion.div>

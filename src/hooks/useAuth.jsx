@@ -21,16 +21,22 @@ export const useAuthActions = () => {
   const store = useAuthStore()
 
   return {
-    login: store.setAuth, // Note: Components now use mutations, but we keep this for compat
+    login: store.setAuth,
     logout: store.logout,
     setUser: store.updateUser,
+    isAdmin: store.getIsAdmin(),
+    isSuperAdmin: store.getIsSuperAdmin(),
+    isManager: store.getIsManager(),
+    isCustomer: store.user?.role === 'Customer',
     updateUserRole: (role) => store.updateUser({ role }),
     hasPermission: (allowedRoles) => {
       if (!allowedRoles || allowedRoles.length === 0) return true
-      const rawRole = store.user?.role || 'Customer'
-      // Legacy support for 'user' string if not yet normalized in store
-      const userRole = rawRole === 'user' ? 'Customer' : rawRole
-      return allowedRoles.includes(userRole)
+      const userRole = store.user?.role || 'Customer'
+      
+      // Case-insensitive inclusion check
+      return allowedRoles.some(role => 
+        role.toLowerCase() === userRole.toLowerCase()
+      )
     }
   }
 }

@@ -8,7 +8,7 @@ import SidebarFooter from './sidebar/SidebarFooter'
 import SidebarSection from './sidebar/SidebarSection'
 
 function Sidebar({ collapsed, isMobile, isOpen }) {
-  const { user, hasPermission } = useAuth()
+  const { isManager, hasPermission } = useAuth()
   const [expandedItems, setExpandedItems] = useState({ shipments: true })
   const location = useLocation()
 
@@ -45,14 +45,17 @@ function Sidebar({ collapsed, isMobile, isOpen }) {
 
         <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
           {(() => {
-            const isManager = user?.role === 'Admin Manager'
-            
             // If Admin Manager, show a flat list of exactly these 8 items
             if (isManager) {
               const managerItemIds = [
-                'admin-dashboard', 'tracking', 'driver-app', 
-                'orders-list', 'fleet', 'temperature', 
-                'drivers', 'pricing'
+                'admin-dashboard', // Admin Overview
+                'tracking',        // Track Shipment
+                'driver-app',      // Driver App
+                'orders-list',     // Order List
+                'fleet',           // Fleet Management
+                'temperature',     // Temperature
+                'drivers',         // Drivers & Staff
+                'pricing'          // Pricing Rules
               ]
               
               const allItems = NAVIGATION_SECTIONS.flatMap(s => s.items)
@@ -61,7 +64,7 @@ function Sidebar({ collapsed, isMobile, isOpen }) {
               return (
                 <SidebarSection
                   key="Admin Manager Dashboard"
-                  section={{ title: 'Admin Manager', items: managerItems }}
+                  section={{ title: 'Management', items: managerItems }}
                   collapsed={collapsed}
                   expandedItems={expandedItems}
                   toggleExpanded={toggleExpanded}

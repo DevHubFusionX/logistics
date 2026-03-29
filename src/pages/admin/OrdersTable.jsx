@@ -215,7 +215,7 @@ export default function OrdersTable() {
 
         {/* Action Buttons moved here */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex items-center gap-3 w-full xl:w-auto">
-          {user?.role !== 'Admin Manager' && (
+          {!['Admin Manager', 'manager'].includes(user?.role) && (
             <button 
               onClick={() => { setSelectedOrder(null); setIsFormOpen(true); }}
               className="flex items-center justify-center gap-2 px-5 py-2 bg-gray-900 rounded-lg text-xs font-bold text-white hover:bg-gray-800 transition-all shadow-md shadow-gray-200/50 w-full sm:w-auto"

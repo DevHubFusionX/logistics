@@ -349,13 +349,13 @@ export const contactData = {
             icon: Mail,
             title: "Email Us",
             content: "hello@daraexpress.com\ncontact@daraexpress.com",
-            color: "bg-primary"
+            color: "bg-red-600"
         },
         {
             icon: MapPin,
             title: "Visit Us",
             content: "10, Hughes Avenue, Yaba, Lagos State",
-            color: "bg-primary"
+            color: "bg-blue-600"
         }
     ]
 }

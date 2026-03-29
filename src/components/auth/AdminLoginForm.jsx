@@ -12,7 +12,7 @@ const LOCKOUT_TIME = 120000 // 2 minutes for admins
 export default function AdminLoginForm() {
     const navigate = useNavigate()
     const { showToast, ToastContainer } = useToast()
-    const { mutate: login, isLoading, reset } = useAdminLoginMutation()
+    const { mutate: login, isPending: isLoading, reset } = useAdminLoginMutation()
 
     const {
         fieldErrors,
@@ -214,7 +214,11 @@ export default function AdminLoginForm() {
                     )}
                 </motion.button>
             </form>
-            <div className="mt-6 text-center">
+            <div className="mt-6 flex flex-col items-center gap-3">
+                <Link to="/auth/admin/managers/login" className="text-sm text-sky-600 hover:text-sky-700 transition-colors font-semibold flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4" />
+                    Manager Portal
+                </Link>
                 <Link to="/auth/login" className="text-sm text-gray-500 hover:text-sky-600 transition-colors font-medium">
                     Standard User Login
                 </Link>

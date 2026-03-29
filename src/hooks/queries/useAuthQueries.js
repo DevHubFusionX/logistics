@@ -11,8 +11,8 @@ export const authKeys = {
  * Hook to fetch current user profile
  */
 export function useProfileQuery() {
-    const { user, logout } = useAuthStore()
-    const isAdmin = user?.role === 'Super Admin' || user?.role === 'admin' || user?.role === 'SUPER_ADMIN'
+    const { user, logout, getIsAdmin } = useAuthStore()
+    const isAdmin = getIsAdmin()
 
     return useQuery({
         queryKey: [...authKeys.profile, user?.id],
@@ -69,6 +69,28 @@ export function useAdminLoginMutation() {
                 const user = payload.user || payload.admin
                 setAuth(user, payload.token)
                 toast.success('Admin access granted!')
+            }
+        }
+    })
+}
+
+/**
+ * Hook for manager login mutation
+ */
+export function useManagerLoginMutation() {
+    const { setAuth } = useAuthStore()
+
+    return useMutation({
+        mutationFn: (credentials) => authService.managerLogin(credentials),
+        onSuccess: (response) => {
+            const payload = response.data?.data
+            if (payload?.token) {
+                // Determine user object (backend may return user, admin, manager or flat fields)
+                const user = payload.user || payload.admin || payload.manager || { ...payload }
+                if (user.token) delete user.token // Clean up if flat
+                
+                setAuth(user, payload.token)
+                toast.success('Manager access granted!')
             }
         }
     })

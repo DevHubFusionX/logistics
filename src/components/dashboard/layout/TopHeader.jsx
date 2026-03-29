@@ -3,12 +3,12 @@ import { Search, Bell, Plus, Menu, HelpCircle, Globe, User, Settings, LogOut, Pa
 import { useAuth } from '../../../hooks/useAuth'
 import { useNavigate, Link } from 'react-router-dom'
 
-export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
+export default function TopHeader({ onToggleSidebar }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [showQuickAdd, setShowQuickAdd] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
-  const { user, logout, hasPermission } = useAuth()
+  const { user, logout, isSuperAdmin, hasPermission } = useAuth()
   const navigate = useNavigate()
 
   const userMenuRef = useRef(null)
@@ -204,13 +204,15 @@ export default function TopHeader({ onToggleSidebar, sidebarCollapsed }) {
                 <User className="w-4 h-4 text-gray-600" />
                 <span className="font-medium">My Profile</span>
               </button>
-              <button
-                onClick={() => { navigate('/user'); setShowUserMenu(false); }}
-                className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-sm flex items-center gap-3 transition-colors"
-              >
-                <Settings className="w-4 h-4 text-gray-600" />
-                <span className="font-medium">Settings</span>
-              </button>
+              {isSuperAdmin && (
+                <button
+                  onClick={() => { navigate('/settings'); setShowUserMenu(false); }}
+                  className="w-full px-4 py-2.5 text-left hover:bg-gray-50 text-sm flex items-center gap-3 transition-colors"
+                >
+                  <Settings className="w-4 h-4 text-gray-600" />
+                  <span className="font-medium">Settings</span>
+                </button>
+              )}
               <hr className="my-2" />
               <button
                 onClick={logout}

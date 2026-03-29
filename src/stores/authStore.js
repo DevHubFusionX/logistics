@@ -29,16 +29,22 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 
 const roleMap = {
     'user': 'Customer',
+    'customer': 'Customer',
     'admin': 'Super Admin',
-    'SUPER_ADMIN': 'Super Admin',
+    'super_admin': 'Super Admin',
+    'manager': 'Admin Manager',
+    'admin_manager': 'Admin Manager',
+    'admin manager': 'Admin Manager',
+    'dispatcher': 'Dispatcher',
     'driver': 'Driver'
 }
 
 const normalizeUser = (user) => {
     if (!user) return null
+    const rawRole = (user.role || '').toLowerCase().trim()
     return {
         ...user,
-        role: roleMap[user.role] || user.role || 'Customer'
+        role: roleMap[rawRole] || user.role || 'Customer'
     }
 }
 
@@ -92,6 +98,21 @@ export const useAuthStore = create(
                     return false
                 }
                 return true
+            },
+
+            // Role Selectors
+            getIsAdmin: () => {
+                const user = get().user
+                const adminRoles = ['Super Admin', 'Dispatcher', 'Admin Manager']
+                return adminRoles.includes(user?.role)
+            },
+            getIsSuperAdmin: () => {
+                const user = get().user
+                return user?.role === 'Super Admin'
+            },
+            getIsManager: () => {
+                const user = get().user
+                return user?.role === 'Admin Manager'
             }
         }),
         {

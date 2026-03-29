@@ -20,6 +20,11 @@ export default {
     body: JSON.stringify(credentials)
   }),
 
+  managerLogin: (credentials) => httpClient.request('/auth/admin/managers/login/', {
+    method: 'POST',
+    body: JSON.stringify(credentials)
+  }),
+
   getProfile: () => httpClient.request('/user/'),
 
   getAdminProfile: () => httpClient.request('/admin/'),

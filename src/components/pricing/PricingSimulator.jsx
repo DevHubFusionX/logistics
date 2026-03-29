@@ -11,7 +11,7 @@ const NIGERIAN_CITIES = [
 ]
 
 export default function PricingSimulator() {
-  const { user } = useAuth()
+  const { isAdmin } = useAuth()
   const [weight, setWeight] = useState(10)
   const [destination, setDestination] = useState('Enugu')
   const [isLoading, setIsLoading] = useState(false)
@@ -28,9 +28,6 @@ export default function PricingSimulator() {
     setError(null)
 
     try {
-      // Determine if the current user has an admin role
-      const isAdmin = ['Super Admin', 'Dispatcher', 'admin', 'Admin', 'SUPER_ADMIN'].includes(user?.role)
-
       // Access different pricing tiers or logic for admin users.
       const response = await pricingService.calculatePrice(destination, weight, isAdmin)
       // httpClient returns { data: { error, message, data: { price } } }
