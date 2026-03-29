@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { Plus, Search, Shield, Mail, Phone, MoreVertical, Trash2, Edit } from 'lucide-react'
 import { useManagersQuery, useAdminMutations } from '../../hooks/queries/useAdminQueries'
+import { useToast } from '../ui/advanced'
 import CreateManagerModal from './CreateManagerModal'
 
 export default function ManagersSettings() {
     const [searchTerm, setSearchTerm] = useState('')
     const [showCreateModal, setShowCreateModal] = useState(false)
+    const { showToast } = useToast()
     const { data: managers, isLoading } = useManagersQuery()
     const { deleteManager } = useAdminMutations()
 
@@ -22,6 +24,36 @@ export default function ManagersSettings() {
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            {/* Quick Share Link */}
+            <div className="bg-slate-900 rounded-2xl p-6 text-white overflow-hidden relative group">
+                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <Shield className="w-32 h-32 rotate-12" />
+                </div>
+                <div className="relative z-10">
+                    <div className="flex items-center gap-2 mb-4">
+                        <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-400">Manager Access Portal</span>
+                    </div>
+                    <h4 className="text-xl font-black mb-2 tracking-tight">Share Access Link</h4>
+                    <p className="text-slate-400 text-sm font-medium mb-6 max-w-md">Copy and share this secure entry point with your administrative team to grant them access to the command center.</p>
+                    
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                        <div className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 font-mono text-xs text-blue-300 truncate">
+                            {window.location.origin}/auth/admin/managers/login
+                        </div>
+                        <button 
+                            onClick={() => {
+                                navigator.clipboard.writeText(`${window.location.origin}/auth/admin/managers/login`);
+                                showToast.success('Link Copied', 'The manager login URL has been copied to your clipboard.');
+                            }}
+                            className="px-6 py-3 bg-white text-gray-900 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-blue-400 hover:text-white transition-all active:scale-95 whitespace-nowrap"
+                        >
+                            Copy Link
+                        </button>
+                    </div>
+                </div>
+            </div>
+
             {/* Header & Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
                 <div className="flex items-center gap-3">
