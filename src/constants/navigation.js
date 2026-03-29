@@ -177,7 +177,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/drivers',
         description: 'Personnel management',
         color: 'green',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Admin Manager']
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
       },
       {
         id: 'analytics',

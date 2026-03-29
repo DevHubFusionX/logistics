@@ -153,7 +153,11 @@ export default function AppRoutes() {
           <Route path="/orders" element={<Orders />} />
           <Route path="/admin/orders-list" element={<OrdersTable />} />
           <Route path="/customers" element={<Customers />} />
-          <Route path="/drivers" element={<Drivers />} />
+          <Route path="/drivers" element={
+            <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']}>
+              <Drivers />
+            </ProtectedRoute>
+          } />
           <Route path="/trips" element={<Trips />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/alerts" element={<Alerts />} />
@@ -166,7 +170,11 @@ export default function AppRoutes() {
           <Route path="/admin/customers/:id/bookings" element={<AdminUserBookings />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/settings/*" element={<Settings />} />
-          <Route path="/settings/roles" element={<UserRoles />} />
+          <Route path="/settings/roles" element={
+            <ProtectedRoute allowedRoles={['Super Admin', 'admin']}>
+              <UserRoles />
+            </ProtectedRoute>
+          } />
           <Route path="/user" element={<User />} />
         </Route>
 

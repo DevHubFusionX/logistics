@@ -54,7 +54,6 @@ function Sidebar({ collapsed, isMobile, isOpen }) {
                 'orders-list',     // Order List
                 'fleet',           // Fleet Management
                 'temperature',     // Temperature
-                'drivers',         // Drivers & Staff
                 'pricing'          // Pricing Rules
               ]
               
