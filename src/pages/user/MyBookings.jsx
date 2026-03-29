@@ -31,11 +31,12 @@ export default function MyBookings() {
   const [paymentMethod, setPaymentMethod] = useState('card')
   const { user } = useAuthState()
 
-  const { data: bookings = [], isLoading: loading, refetch } = useBookingsQuery({ limit: 50, page })
+  const { data: bookingsData = [], isLoading: loading, refetch } = useBookingsQuery({ limit: 50, page })
+  const bookings = Array.isArray(bookingsData) ? bookingsData : []
 
   // Search + Filter + Sort pipeline
   const processedBookings = useMemo(() => {
-    let result = bookings
+    let result = [...bookings]
 
     // Search by tracking number, destination, or name
     if (search.trim()) {
@@ -54,7 +55,7 @@ export default function MyBookings() {
     }
 
     // Sort
-    result = [...result].sort((a, b) => {
+    result.sort((a, b) => {
       const dateA = new Date(a.createdAt || a.created_at || 0)
       const dateB = new Date(b.createdAt || b.created_at || 0)
       return sortOrder === 'newest' ? dateB - dateA : dateA - dateB

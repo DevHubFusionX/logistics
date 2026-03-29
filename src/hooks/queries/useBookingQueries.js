@@ -9,7 +9,9 @@ export function useBookingsQuery(params = {}) {
     queryKey: ['bookings', 'user-list', params],
     queryFn: async () => {
       const response = await bookingService.getBookings(params)
-      return response.data
+      // Robust extraction of records from new and old API structures
+      const apiData = response.data?.data || response.data
+      return apiData?.records || apiData?.bookings || (Array.isArray(apiData) ? apiData : [])
     },
     staleTime: 5 * 60 * 1000,
   })
@@ -23,7 +25,11 @@ export function useAllBookingsQuery(params = {}) {
     queryKey: ['admin', 'all-bookings', params],
     queryFn: async () => {
       const response = await bookingService.getAdminBookings(params)
-      return response.data
+      const apiData = response.data?.data || response.data
+      return {
+        records: apiData?.records || apiData?.bookings || (Array.isArray(apiData) ? apiData : []),
+        pagination: apiData?.pagination || {}
+      }
     },
     staleTime: 5 * 60 * 1000,
   })
