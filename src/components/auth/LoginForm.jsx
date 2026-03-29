@@ -219,11 +219,6 @@ export default function LoginForm() {
             Create an account
           </Link>
         </p>
-        <div className="pt-4 border-t border-gray-100">
-          <Link to="/auth/admin/managers/login" className="text-sm text-gray-400 hover:text-sky-600 transition-colors font-medium">
-            Staff & Manager Access
-          </Link>
-        </div>
       </div>
       <ToastContainer />
     </motion.div>
