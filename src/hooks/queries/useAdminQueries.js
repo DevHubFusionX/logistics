@@ -313,7 +313,8 @@ export function useMoneyAnalyticsQuery(params = {}) {
             const response = await dashboardService.getMoneyAnalytics(params)
             return response.data?.data || response.data || {}
         },
-        staleTime: 5 * 60 * 1000,
+        staleTime: 2 * 60 * 1000,
+        refetchOnMount: 'always',
     })
 }
 
@@ -327,7 +328,8 @@ export function useOrderAnalyticsQuery(params = {}) {
             const response = await dashboardService.getOrderAnalytics(params)
             return response.data?.data || response.data || {}
         },
-        staleTime: 5 * 60 * 1000,
+        staleTime: 2 * 60 * 1000,
+        refetchOnMount: 'always',
     })
 }
 
@@ -341,7 +343,8 @@ export function useTruckAnalyticsQuery(params = {}) {
             const response = await dashboardService.getTruckAnalytics(params)
             return response.data?.data || response.data || {}
         },
-        staleTime: 5 * 60 * 1000,
+        staleTime: 2 * 60 * 1000,
+        refetchOnMount: 'always',
     })
 }
 

@@ -34,24 +34,32 @@ function AdminOverview() {
                 updatedKpi.value = `${fleetCount} Trucks`
             }
 
-            // Sync Financial Metrics (Prioritizing Money Analytics)
-            const money = moneyData || {}
-            if (kpi.id === 'revenue_last_month') updatedKpi.value = `₦${(money.netRevenueLastMonth || 0).toLocaleString()}`
-            if (kpi.id === 'revenue_last_week') updatedKpi.value = `₦${(money.netRevenueWTD || 0).toLocaleString()}`
-            if (kpi.id === 'revenue_this_month') updatedKpi.value = `₦${(money.netRevenueMTD || 0).toLocaleString()}`
-            if (kpi.id === 'revenue_this_year') updatedKpi.value = `₦${(money.netRevenueYTD || 0).toLocaleString()}`
-            if (kpi.id === 'total_gmv') updatedKpi.value = `₦${(money.totalGMV || 0).toLocaleString()}`
-            if (kpi.id === 'booking_mtd') updatedKpi.value = String(money.bookingCountMTD || 0)
-            if (kpi.id === 'booking_ytd') updatedKpi.value = String(money.bookingCountYTD || 0)
-            if (kpi.id === 'total_bookings') updatedKpi.value = String(money.totalBookings || 0)
-
-            // Sync Operational Metrics (Prioritizing Order Analytics)
+            // Sync Financial Metrics (Prioritizing Order Analytics as per user request)
             const orders = orderData || {}
+            const money = moneyData || {}
+            
+            // Financial Metrics from Order Analytics
+            if (kpi.id === 'revenue_this_month') updatedKpi.value = `₦${(orders.netRevenueMTD || 0).toLocaleString()}`
+            if (kpi.id === 'revenue_last_week') updatedKpi.value = `₦${(orders.netRevenueWTD || 0).toLocaleString()}`
+            if (kpi.id === 'revenue_this_year') updatedKpi.value = `₦${(orders.netRevenueYTD || 0).toLocaleString()}`
+            if (kpi.id === 'total_gmv') updatedKpi.value = `₦${(orders.totalGMV || 0).toLocaleString()}`
+            
+            // Fallbacks for financial metrics not in new endpoint
+            if (kpi.id === 'revenue_last_month' && !updatedKpi.value) {
+                updatedKpi.value = `₦${(money.netRevenueLastMonth || 0).toLocaleString()}`
+            }
+
+            // Sync Booking Metrics
+            if (kpi.id === 'booking_mtd') updatedKpi.value = String(orders.orderCountMTD || orders.bookingCountMTD || 0)
+            if (kpi.id === 'booking_ytd') updatedKpi.value = String(orders.orderCountYTD || orders.bookingCountYTD || 0)
+            if (kpi.id === 'total_bookings') updatedKpi.value = String(orders.totalOrders || orders.totalBookings || 0)
+
+            // Sync Operational Metrics
             const trucks = truckData || {}
-            if (kpi.id === 'completed_trips') updatedKpi.value = String(orders.totalDelivered || 0)
-            if (kpi.id === 'pending_trips') updatedKpi.value = String((orders.totalProcessing || 0) + (orders.totalInTransit || 0))
+            if (kpi.id === 'completed_trips') updatedKpi.value = String(orders.fulfilledCount || orders.totalDelivered || 0)
+            if (kpi.id === 'pending_trips') updatedKpi.value = String(orders.unfulfilledCount || (orders.totalProcessing || 0) + (orders.totalInTransit || 0))
             if (kpi.id === 'active_drivers') updatedKpi.value = String(trucks.activeDrivers || orders.activeDrivers || 0)
-            if (kpi.id === 'ontime_rate') updatedKpi.value = `${orders.onTimeRate || 0}%`
+            if (kpi.id === 'ontime_rate') updatedKpi.value = `${orders.fulfillmentRate || orders.onTimeRate || 0}%`
 
             // Sync Truck Analytics
             if (kpi.id === 'fleet_map') updatedKpi.value = `${trucks.totalTrucks || fleetCount} Trucks`
@@ -89,8 +97,11 @@ function AdminOverview() {
                         <h2 className="text-lg font-bold text-gray-900">Financial Performance</h2>
                         <div className="h-px flex-1 bg-gray-200"></div>
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4">
-                        {dynamicKPIs.filter(kpi => kpi.id.includes('revenue') || kpi.id.includes('gmv')).map((kpi) => (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
+                        {dynamicKPIs.filter(kpi => 
+                            (kpi.id.includes('revenue') || kpi.id.includes('gmv')) && 
+                            !['revenue_last_month', 'revenue_last_week'].includes(kpi.id)
+                        ).map((kpi) => (
                             <KPICard key={kpi.id} {...kpi} />
                         ))}
                     </div>
