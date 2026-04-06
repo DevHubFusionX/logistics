@@ -49,13 +49,13 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
     if (!isAllowed) {
       return (
         <div className="min-h-screen flex items-center justify-center px-4 bg-gray-50">
-          <div className="max-w-md w-full text-center p-8 bg-white rounded-2xl shadow-xl border border-red-100">
-            <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <ShieldAlert className="w-10 h-10 text-red-500" />
+          <div className="max-w-md w-full text-center p-8 bg-white rounded-2xl shadow-xl border border-gray-100">
+            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+              <ShieldAlert className="w-10 h-10 text-gray-400" />
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-            <p className="text-gray-600 mb-8">
-              You don't have the required permissions to access this administrative zone.
+            <h1 className="text-xl font-bold text-gray-900 mb-2">Restricted Area</h1>
+            <p className="text-gray-500 mb-8">
+              You might need additional permissions to view this page.
             </p>
             <button
               onClick={() => window.history.back()}
