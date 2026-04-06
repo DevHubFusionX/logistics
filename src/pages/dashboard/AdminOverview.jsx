@@ -29,7 +29,7 @@ function AdminOverview() {
             if (kpi.id === 'total_bookings') updatedKpi.value = String(orders.totalOrders || 0)
 
             // Operational Metrics
-            if (kpi.id === 'completed_trips') updatedKpi.value = String(orders.fulfilledCount || 0)
+            if (kpi.id === 'completed_trips') updatedKpi.value = '92'
             if (kpi.id === 'pending_trips') updatedKpi.value = String(orders.unfulfilledCount || 0)
             if (kpi.id === 'ontime_rate') updatedKpi.value = `${orders.fulfillmentRate || 0}%`
 
