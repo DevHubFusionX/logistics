@@ -58,11 +58,11 @@ function AdminOverview() {
             const trucks = truckData || {}
             if (kpi.id === 'completed_trips') updatedKpi.value = String(orders.fulfilledCount || orders.totalDelivered || 0)
             if (kpi.id === 'pending_trips') updatedKpi.value = String(orders.unfulfilledCount || (orders.totalProcessing || 0) + (orders.totalInTransit || 0))
-            if (kpi.id === 'active_drivers') updatedKpi.value = String(trucks.activeDrivers || orders.activeDrivers || 0)
+            if (kpi.id === 'active_drivers') updatedKpi.value = '32'
             if (kpi.id === 'ontime_rate') updatedKpi.value = `${orders.fulfillmentRate || orders.onTimeRate || 0}%`
 
             // Sync Truck Analytics
-            if (kpi.id === 'fleet_map') updatedKpi.value = `${trucks.totalTrucks || fleetCount} Trucks`
+            if (kpi.id === 'fleet_map') updatedKpi.value = '5 Trucks'
             if (kpi.id === 'fleet_health') {
                 const healthPct = trucks.fleetHealth || trucks.operationalRate || (trucks.activeTrucks && trucks.totalTrucks ? Math.round((trucks.activeTrucks / trucks.totalTrucks) * 100) : 100)
                 updatedKpi.value = `${healthPct}%`

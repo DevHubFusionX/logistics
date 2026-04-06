@@ -146,14 +146,14 @@ export default function AppRoutes() {
           <Route path="/dashboard/overview" element={<Dashboard />} />
           
           {/* Admin Managed/Shared Routes - Allowed for Admin Managers */}
-          <Route path="/fleet" element={<Fleet />} />
           <Route path="/admin/orders-list" element={<OrdersTable />} />
           <Route path="/temperature" element={<Temperature />} />
           <Route path="/pricing-management" element={<PricingManagement />} />
           <Route path="/user" element={<User />} />
 
           {/* Super Admin & Dispatcher ONLY Routes - Restricted for Manager */}
-          <Route element={<ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher', 'Admin Manager']} />}>
+          <Route element={<ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']} />}>
+            <Route path="/fleet" element={<Fleet />} />
             <Route path="/shipments" element={<Shipments />} />
             <Route path="/shipments/*" element={<Shipments />} />
             <Route path="/routes" element={<RoutesPage />} />
