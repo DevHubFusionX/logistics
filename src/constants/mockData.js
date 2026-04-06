@@ -52,7 +52,7 @@ export const KPI_DATA = [
   {
     id: 'completed_trips',
     title: 'Cold-Chain Trips Completed',
-    value: '0',
+    value: '92',
     change: 0,
     period: 'Total completed to date.',
     sparklineData: [],
