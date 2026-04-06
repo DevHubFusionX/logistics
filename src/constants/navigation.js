@@ -121,7 +121,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/bookings-management',
         description: 'Manage all shipments',
         color: 'blue',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher', 'Admin Manager']
       },
       {
         id: 'user-bookings',

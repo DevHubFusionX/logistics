@@ -144,38 +144,48 @@ export default function AppRoutes() {
         }>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/overview" element={<Dashboard />} />
-          <Route path="/shipments" element={<Shipments />} />
-          <Route path="/shipments/*" element={<Shipments />} />
+          
+          {/* Admin Managed/Shared Routes - Allowed for Admin Managers */}
           <Route path="/fleet" element={<Fleet />} />
-          <Route path="/routes" element={<RoutesPage />} />
-          <Route path="/warehouses" element={<Warehouses />} />
-          <Route path="/warehouses/*" element={<Warehouses />} />
-          <Route path="/orders" element={<Orders />} />
           <Route path="/admin/orders-list" element={<OrdersTable />} />
-          <Route path="/customers" element={<Customers />} />
-          <Route path="/drivers" element={
-            <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']}>
-              <Drivers />
-            </ProtectedRoute>
-          } />
-          <Route path="/trips" element={<Trips />} />
-          <Route path="/reports" element={<Reports />} />
-          <Route path="/alerts" element={<Alerts />} />
-          <Route path="/tasks" element={<Tasks />} />
           <Route path="/temperature" element={<Temperature />} />
-          <Route path="/payments" element={<Payments />} />
-          <Route path="/payments/reconciliation" element={<Reconciliation />} />
           <Route path="/pricing-management" element={<PricingManagement />} />
-          <Route path="/bookings-management" element={<BookingsManagement />} />
-          <Route path="/admin/customers/:id/bookings" element={<AdminUserBookings />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/settings/*" element={<Settings />} />
+          <Route path="/user" element={<User />} />
+
+          {/* Super Admin & Dispatcher ONLY Routes - Restricted for Manager */}
+          <Route element={<ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher', 'Admin Manager']} />}>
+            <Route path="/shipments" element={<Shipments />} />
+            <Route path="/shipments/*" element={<Shipments />} />
+            <Route path="/routes" element={<RoutesPage />} />
+            <Route path="/warehouses" element={<Warehouses />} />
+            <Route path="/warehouses/*" element={<Warehouses />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/customers" element={<Customers />} />
+            <Route path="/trips" element={<Trips />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/alerts" element={<Alerts />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/payments" element={<Payments />} />
+            <Route path="/payments/reconciliation" element={<Reconciliation />} />
+            <Route path="/bookings-management" element={<BookingsManagement />} />
+            <Route path="/admin/customers/:id/bookings" element={<AdminUserBookings />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings/*" element={<Settings />} />
+          </Route>
+
+          {/* Super Admin ONLY Routes */}
           <Route path="/settings/roles" element={
             <ProtectedRoute allowedRoles={['Super Admin', 'admin']}>
               <UserRoles />
             </ProtectedRoute>
           } />
-          <Route path="/user" element={<User />} />
+          
+          {/* Special Driver restriction already exists */}
+          <Route path="/drivers" element={
+            <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']}>
+              <Drivers />
+            </ProtectedRoute>
+          } />
         </Route>
 
         {/* 404 Not Found - Catch all */}

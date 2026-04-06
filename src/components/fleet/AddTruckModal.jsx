@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { X, ChevronLeft, ChevronRight, Loader2, Truck } from 'lucide-react'
-import fleetService from '../../services/fleetService'
-import { useDriversQuery } from '../../hooks/queries/useAdminQueries'
+import { useDriversQuery, useAdminMutations } from '../../hooks/queries/useAdminQueries'
 import { useToast } from '../ui/advanced'
 
 import VehicleInfoStep from './AddTruckModal/VehicleInfoStep'
@@ -65,8 +64,9 @@ export default function AddTruckModal({ isOpen, onClose, onRefresh, assignedDriv
   const [currentStep, setCurrentStep] = useState(0)
   const [formData, setFormData] = useState(initialFormData)
   const [files, setFiles] = useState(initialFileData)
-  const [isSubmitting, setIsSubmitting] = useState(false)
   const { showToast, ToastContainer } = useToast()
+  const { createVehicle } = useAdminMutations()
+  const isSubmitting = createVehicle.isLoading
 
   const { data: drivers = [] } = useDriversQuery()
 
@@ -88,34 +88,28 @@ export default function AddTruckModal({ isOpen, onClose, onRefresh, assignedDriv
   }
 
   const handleSubmit = async () => {
-    setIsSubmitting(true)
-    try {
-      const fd = new FormData()
+    const fd = new FormData()
 
-      // Append text fields
-      Object.entries(formData).forEach(([key, value]) => {
-        if (value !== '' && value !== null && value !== undefined) {
-          fd.append(key, String(value))
-        }
-      })
+    // Append text fields
+    Object.entries(formData).forEach(([key, value]) => {
+      if (value !== '' && value !== null && value !== undefined) {
+        fd.append(key, String(value))
+      }
+    })
 
-      // Append files
-      Object.entries(files).forEach(([key, file]) => {
-        if (file) fd.append(key, file)
-      })
+    // Append files
+    Object.entries(files).forEach(([key, file]) => {
+      if (file) fd.append(key, file)
+    })
 
-      await fleetService.createTruck(fd)
-      showToast.success('Truck created successfully!')
-      setFormData(initialFormData)
-      setFiles(initialFileData)
-      setCurrentStep(0)
-      onRefresh?.()
-      onClose()
-    } catch (error) {
-      showToast.error(error.message || 'Failed to create truck')
-    } finally {
-      setIsSubmitting(false)
-    }
+    createVehicle.mutate(fd, {
+      onSuccess: () => {
+        setFormData(initialFormData)
+        setFiles(initialFileData)
+        setCurrentStep(0)
+        onClose()
+      }
+    })
   }
 
   const handleNext = () => {

@@ -14,7 +14,9 @@ export default function AdminUserBookings() {
     const { id: userId } = useParams()
     const navigate = useNavigate()
     const [searchTerm, setSearchTerm] = useState('')
+    const [statusFilter, setStatusFilter] = useState('all')
     const [showAssignModal, setShowAssignModal] = useState(false)
+    const [showDetailsModal, setShowDetailsModal] = useState(false)
     const [selectedBooking, setSelectedBooking] = useState(null)
     const [page, setPage] = useState(1)
     const { showToast, ToastContainer } = useToast()
@@ -26,12 +28,11 @@ export default function AdminUserBookings() {
         ...(searchTerm && { search: searchTerm })
     }), [statusFilter, searchTerm, page])
 
-    const { data: rawData, isLoading, isError, error, refetch } = useAdminUserBookingsQuery(userId, queryParams)
-    const rawBookings = rawData?.records || []
+    const { data: rawData, isLoading, isError, refetch } = useAdminUserBookingsQuery(userId, queryParams)
     const pagination = rawData?.pagination || {}
 
     const mappedBookings = useMemo(() => {
-        const records = Array.isArray(rawBookings) ? rawBookings : []
+        const records = rawData?.records || []
         return records.map(b => ({
             ...b,
             id: b._id || b.id,
@@ -51,7 +52,7 @@ export default function AdminUserBookings() {
             driverId: b.driver?.id || b.driverId,
             driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : (b.driverName || null)
         }))
-    }, [rawBookings])
+    }, [rawData])
 
     const handleViewDetails = (booking) => {
         setSelectedBooking(booking)

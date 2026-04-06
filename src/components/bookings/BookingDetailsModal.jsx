@@ -1,7 +1,18 @@
-import { X, MapPin, Package, Calendar, Info } from 'lucide-react'
+import { X, MapPin, Package, Calendar, Info, Clock, UserCheck, Truck, CheckCircle, AlertCircle } from 'lucide-react'
 
 export default function BookingDetailsModal({ booking, onClose, getStatusBadge, getStatusText }) {
   if (!booking) return null
+
+  const statuses = [
+    { id: 'pending', label: 'Requested', icon: Clock },
+    { id: 'confirmed', label: 'Assigned', icon: UserCheck },
+    { id: 'processing', label: 'Processing', icon: Package },
+    { id: 'in_transit', label: 'In Transit', icon: Truck },
+    { id: 'delivered', label: 'Delivered', icon: CheckCircle },
+  ]
+
+  const currentStatusIndex = statuses.findIndex(s => s.id === booking.status)
+  const isCancelled = booking.status === 'cancelled'
 
   const pickupAddr = typeof booking.pickupLocation === 'string'
     ? booking.pickupLocation
@@ -27,17 +38,61 @@ export default function BookingDetailsModal({ booking, onClose, getStatusBadge, 
         </div>
 
         <div className="p-6 space-y-8">
-          {/* Status and Overview */}
-          <div className="flex items-center justify-between bg-gray-50 p-4 rounded-2xl border border-gray-100">
+          {/* Status Stepper */}
+          <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+            {isCancelled ? (
+              <div className="flex items-center gap-3 text-red-600 bg-red-50 p-4 rounded-xl border border-red-100">
+                <AlertCircle className="w-6 h-6" />
+                <div>
+                  <p className="font-black uppercase text-xs tracking-widest">Shipment Cancelled</p>
+                  <p className="text-sm font-medium opacity-80">This booking is no longer active.</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between relative px-2">
+                {/* Background Line */}
+                <div className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-200 -translate-y-1/2 z-0" />
+                <div 
+                  className="absolute top-1/2 left-0 h-0.5 bg-blue-600 -translate-y-1/2 z-0 transition-all duration-500" 
+                  style={{ width: `${(currentStatusIndex / (statuses.length - 1)) * 100}%` }}
+                />
+
+                {statuses.map((step, index) => {
+                  const Icon = step.icon
+                  const isCompleted = index < currentStatusIndex
+                  const isCurrent = index === currentStatusIndex
+                  
+                  return (
+                    <div key={step.id} className="relative z-10 flex flex-col items-center gap-2">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shadow-sm ${
+                        isCompleted ? 'bg-blue-600 text-white' : 
+                        isCurrent ? 'bg-white border-2 border-blue-600 text-blue-600 scale-110 shadow-lg ring-4 ring-blue-50' : 
+                        'bg-white border-2 border-gray-200 text-gray-400'
+                      }`}>
+                        <Icon className="w-5 h-5" />
+                      </div>
+                      <p className={`text-[9px] font-black uppercase tracking-widest ${
+                        isCurrent ? 'text-blue-600' : 'text-gray-400'
+                      }`}>
+                        {step.label}
+                      </p>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+
+          <div className="flex items-center justify-between px-2">
             <div>
-              <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Current Status</p>
+              <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Billing Summary</p>
+              <p className="text-2xl font-black text-gray-900 tracking-tighter">₦{(booking.amount || booking.price || 0).toLocaleString()}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Status Badge</p>
               <span className={`px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm border border-transparent ${getStatusBadge(booking.status)}`}>
                 {getStatusText(booking.status)}
               </span>
-            </div>
-            <div className="text-right">
-              <p className="text-[10px] text-gray-400 font-black uppercase tracking-widest mb-1">Total Amount</p>
-              <p className="text-xl font-black text-gray-900 tracking-tighter">₦{(booking.amount || booking.price || 0).toLocaleString()}</p>
             </div>
           </div>
 

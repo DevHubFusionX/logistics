@@ -8,14 +8,16 @@ import { useClientShipmentsQuery } from '../../hooks/queries/useAdminQueries'
 
 export default function ClientDetail({ client, onClose }) {
   const [activeTab, setActiveTab] = useState('overview')
-  const { data: shipments = [], isLoading: loadingShipments } = useClientShipmentsQuery(client.id)
+  const { data: shipmentsData, isLoading: loadingShipments } = useClientShipmentsQuery(client.id)
+  const shipments = shipmentsData?.records || []
 
   const getStatusBadge = (status) => {
     const styles = {
       'in-transit': 'bg-blue-100 text-blue-700',
       'delivered': 'bg-green-100 text-green-700',
       'pending': 'bg-amber-100 text-amber-700',
-      'cancelled': 'bg-rose-100 text-rose-700'
+      'cancelled': 'bg-rose-100 text-rose-700',
+      'confirmed': 'bg-indigo-100 text-indigo-700'
     }
     return `px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${styles[status] || 'bg-gray-100 text-gray-700'}`
   }
@@ -40,7 +42,7 @@ export default function ClientDetail({ client, onClose }) {
               <div className="w-20 h-20 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl font-bold shadow-xl">
                 {client.avatar ? (
                   <img src={client.avatar} alt={client.name} className="w-full h-full object-cover rounded-2xl" />
-                ) : client.name.charAt(0)}
+                ) : (client.name || 'C').charAt(0)}
               </div>
               <div>
                 <h2 className="text-3xl font-extrabold tracking-tight">{client.name}</h2>
@@ -143,8 +145,19 @@ export default function ClientDetail({ client, onClose }) {
           {activeTab === 'activity' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 space-y-6">
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-bold text-gray-900 border-l-4 border-blue-600 pl-4 uppercase tracking-widest text-[11px]">Recent Shipments</h3>
-                <span className="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{shipments.length} Records</span>
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900 border-l-4 border-blue-600 pl-4 uppercase tracking-widest text-[11px]">Recent Shipments</h3>
+                  <p className="text-[10px] text-gray-400 font-bold ml-4 mt-1">Showing latest activity from record</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1 rounded-full">{shipments.length} Records</span>
+                  <a
+                    href={`/admin/customers/${client.id}/bookings`}
+                    className="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1 rounded-full transition-colors flex items-center gap-1.5"
+                  >
+                    View All <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
               </div>
 
               {loadingShipments ? (

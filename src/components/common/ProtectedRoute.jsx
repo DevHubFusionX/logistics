@@ -1,4 +1,4 @@
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation, Outlet } from 'react-router-dom'
 import { useAuthStore } from '../../stores/authStore'
 import { ShieldAlert } from 'lucide-react'
 
@@ -69,5 +69,5 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
     }
   }
 
-  return children
+  return children || <Outlet />
 }

@@ -52,6 +52,7 @@ function Sidebar({ collapsed, isMobile, isOpen }) {
                 'tracking',        // Track Shipment
                 'driver-app',      // Driver App
                 'orders-list',     // Order List
+                'admin-bookings',  // Bookings Management
                 'fleet',           // Fleet Management
                 'temperature',     // Temperature
                 'pricing'          // Pricing Rules

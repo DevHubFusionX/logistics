@@ -17,16 +17,15 @@ export function useCustomersQuery(params = {}) {
         queryKey: queryKeys.admin.customers(params),
         queryFn: async () => {
             const response = await clientService.getClients(params)
-            // Handle new API structure { error, message, data: { records, pagination } }
-            const apiBody = response.data?.data || response.data
-            const rawUsers = apiBody?.records || apiBody?.users || []
+            // getClients now returns { data: { records, pagination }, status }
+            const rawUsers = response.data?.records || []
 
             return rawUsers.map(user => ({
                 ...user,
                 id: user._id || user.id,
                 name: user.fullNameOrBusiness || user.companyName || `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unnamed Client',
-                contactName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'No Name',
-                industry: user.clientCategory || 'Individual',
+                contactName: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.fullNameOrBusiness || 'No Name',
+                industry: user.clientCategory || user.customerType || 'Individual',
                 accountOfficer: 'Standard Account',
                 totalTrips: user.stats?.shipments || 0,
                 revenue: user.stats?.volume || 0,
@@ -46,14 +45,34 @@ export function useCustomersQuery(params = {}) {
 }
 
 /**
- * Hook for fetching a specific client's shipments
+ * Hook for fetching a specific client's shipments (User Bookings)
  */
 export function useClientShipmentsQuery(clientId, params = {}) {
     return useQuery({
         queryKey: ['admin', 'clients', clientId, 'shipments', params],
         queryFn: async () => {
             const response = await clientService.getClientShipments(clientId, params)
-            return response.data?.shipments || response.data || []
+            // Handle new API structure { error, message, data: { records, pagination } }
+            const apiBody = response.data
+            const apiData = apiBody?.data || apiBody
+            const records = apiData?.records || []
+            const pagination = apiData?.pagination || {}
+
+            // Normalize for the UI components
+            const mappedRecords = records.map(booking => ({
+                ...booking,
+                id: booking._id || booking.id,
+                trackingNumber: booking.tracking_number || booking._id,
+                origin: booking.pickupLocation?.city || booking.pickupLocation?.address || 'N/A',
+                destination: booking.dropoffLocation?.city || booking.dropoffLocation?.address || 'N/A',
+                cost: booking.price || booking.shipping_fee || 0,
+                status: booking.status
+            }))
+
+            return {
+                records: mappedRecords,
+                pagination
+            }
         },
         enabled: !!clientId,
         staleTime: 2 * 60 * 1000,
@@ -150,6 +169,27 @@ export function useDriverQuery(driverId) {
 }
 
 /**
+ * Hook for fetching a driver's assigned trips
+ */
+export function useDriverTripsQuery(driverId, params = {}) {
+    return useQuery({
+        queryKey: ['admin', 'driver', driverId, 'trips', params],
+        queryFn: async () => {
+            const response = await driverService.getDriverTrips(driverId, params)
+            const apiBody = response.data
+            // Backend usually returns { error, message, data: { records, pagination } }
+            const apiData = apiBody?.data || apiBody
+            return {
+                records: apiData?.records || apiData?.trips || (Array.isArray(apiData) ? apiData : []),
+                pagination: apiData?.pagination || {}
+            }
+        },
+        enabled: !!driverId,
+        staleTime: 5 * 60 * 1000,
+    })
+}
+
+/**
  * Normalizes truck data from the API to match the frontend expectations
  */
 const normalizeTruck = (truck) => ({
@@ -206,10 +246,16 @@ export function useFleetQuery(params = {}) {
         queryKey: queryKeys.admin.fleet(params),
         queryFn: async () => {
             const response = await fleetService.getTrucks(params)
-            // httpClient returns { data: { error, message, data: { records } }, status }
+            // httpClient returns { data: { error, message, data: { records, pagination } }, status }
             const apiBody = response.data
             const rawTrucks = apiBody?.data?.records || []
-            return rawTrucks.map(normalizeTruck)
+            const pagination = apiBody?.data?.pagination || {}
+            
+            return {
+                records: rawTrucks.map(normalizeTruck),
+                total: pagination.totalRecords || 0,
+                pagination
+            }
         },
         staleTime: 3 * 60 * 1000,
     })
@@ -258,16 +304,44 @@ export function usePricingAuditQuery() {
 }
 
 /**
- * Hook for fetching dashboard analytics summary
+ * Hook for fetching money/revenue analytics
  */
-export function useDashboardSummaryQuery(params = {}) {
+export function useMoneyAnalyticsQuery(params = {}) {
     return useQuery({
-        queryKey: queryKeys.admin.dashboardSummary(params),
+        queryKey: ['admin', 'analytics', 'money', params],
         queryFn: async () => {
-            const response = await dashboardService.getSummary(params)
-            return response.data || response
+            const response = await dashboardService.getMoneyAnalytics(params)
+            return response.data?.data || response.data || {}
         },
-        staleTime: 2 * 60 * 1000, // 2 minutes
+        staleTime: 5 * 60 * 1000,
+    })
+}
+
+/**
+ * Hook for fetching order/trip analytics
+ */
+export function useOrderAnalyticsQuery(params = {}) {
+    return useQuery({
+        queryKey: ['admin', 'analytics', 'orders', params],
+        queryFn: async () => {
+            const response = await dashboardService.getOrderAnalytics(params)
+            return response.data?.data || response.data || {}
+        },
+        staleTime: 5 * 60 * 1000,
+    })
+}
+
+/**
+ * Hook for fetching truck/fleet analytics
+ */
+export function useTruckAnalyticsQuery(params = {}) {
+    return useQuery({
+        queryKey: ['admin', 'analytics', 'trucks', params],
+        queryFn: async () => {
+            const response = await dashboardService.getTruckAnalytics(params)
+            return response.data?.data || response.data || {}
+        },
+        staleTime: 5 * 60 * 1000,
     })
 }
 
@@ -305,7 +379,7 @@ export function useAdminMutations() {
     const updateClientMutation = useMutation({
         mutationFn: ({ id, data }) => clientService.updateClient(id, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.admin.customers() })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Client updated successfully')
         }
     })
@@ -313,15 +387,26 @@ export function useAdminMutations() {
     const updateDriverMutation = useMutation({
         mutationFn: ({ id, data }) => driverService.updateDriver(id, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.admin.drivers() })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Driver updated successfully')
+        }
+    })
+
+    const createVehicleMutation = useMutation({
+        mutationFn: (data) => fleetService.createTruck(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            toast.success('Vehicle added successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Failed to add vehicle')
         }
     })
 
     const updateVehicleMutation = useMutation({
         mutationFn: ({ id, data }) => fleetService.updateVehicle(id, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Vehicle updated successfully')
         }
     })
@@ -329,7 +414,7 @@ export function useAdminMutations() {
     const updatePricingRulesMutation = useMutation({
         mutationFn: ({ rules, user }) => pricingService.updateGlobalRules(rules, user),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.admin.pricing('global') })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Pricing rules updated successfully')
         }
     })
@@ -344,14 +429,14 @@ export function useAdminMutations() {
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: queryKeys.admin.pricing('clients') })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
         }
     })
 
     const createManagerMutation = useMutation({
         mutationFn: (data) => adminService.createManager(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Manager created successfully')
         },
         onError: (error) => {
@@ -362,7 +447,7 @@ export function useAdminMutations() {
     const updateManagerMutation = useMutation({
         mutationFn: ({ id, data }) => adminService.updateManager(id, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Manager updated successfully')
         }
     })
@@ -370,7 +455,7 @@ export function useAdminMutations() {
     const deleteManagerMutation = useMutation({
         mutationFn: (id) => adminService.deleteManager(id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            queryClient.invalidateQueries({ queryKey: ['admin'] })
             toast.success('Manager deleted successfully')
         }
     })
@@ -378,6 +463,7 @@ export function useAdminMutations() {
     return {
         updateClient: updateClientMutation,
         updateDriver: updateDriverMutation,
+        createVehicle: createVehicleMutation,
         updateVehicle: updateVehicleMutation,
         updatePricingRules: updatePricingRulesMutation,
         manageClientOverride: manageClientOverrideMutation,

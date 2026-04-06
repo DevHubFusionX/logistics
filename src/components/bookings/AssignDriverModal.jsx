@@ -1,42 +1,27 @@
-import { useState, useEffect } from 'react'
-import { X, UserCheck, Truck, Star, MapPin, Phone, RefreshCcw } from 'lucide-react'
-import driverService from '../../services/driverService'
-import bookingService from '../../services/bookingService'
+import { useState } from 'react'
+import { X, UserCheck, Truck, Star, MapPin, Phone, RefreshCcw, AlertTriangle } from 'lucide-react'
+import { useDriversQuery } from '../../hooks/queries/useAdminQueries'
+import { useBookingMutations } from '../../hooks/queries/useBookingQueries'
 
 export default function AssignDriverModal({ booking, onClose, onAssign }) {
-  const [drivers, setDrivers] = useState([])
-  const [loadingDrivers, setLoadingDrivers] = useState(true)
+  const { data: drivers = [], isLoading: loadingDrivers, isError, refetch: fetchDrivers } = useDriversQuery({ status: 'active' })
+  const { updateBookingStatus } = useBookingMutations()
   const [selectedDriver, setSelectedDriver] = useState(null)
   const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    fetchDrivers()
-  }, [])
-
-  const fetchDrivers = async () => {
-    setLoadingDrivers(true)
-    try {
-      const response = await driverService.getDrivers({ status: 'active' })
-      const driversData = response.data?.drivers || response.data || []
-      setDrivers(driversData)
-    } catch (error) {
-      console.error('Error fetching drivers:', error)
-    } finally {
-      setLoadingDrivers(false)
-    }
-  }
 
   const handleAssign = async () => {
     if (!selectedDriver) return
     setLoading(true)
     try {
-      // Update shipment with driver_id
-      await bookingService.updateBooking(booking.id, {
-        driverId: selectedDriver.id,
+      // Use the mutation hook to ensure Admin Overview refreshes
+      await updateBookingStatus.mutateAsync({ 
+        id: booking.id, 
         status: 'confirmed',
-        statusDescription: `Driver ${selectedDriver.profile?.first_name} ${selectedDriver.profile?.last_name} has been assigned.`
+        data: { driverId: selectedDriver.id } // Pass driverId if needed
       })
+      
       onAssign(booking.id, selectedDriver)
+      onClose()
     } catch (error) {
       console.error('Error assigning driver:', error)
     } finally {
@@ -89,6 +74,14 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
+          ) : isError ? (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertTriangle className="w-12 h-12 text-red-500 mb-4" />
+              <p className="text-gray-600 mb-4">Failed to load active drivers</p>
+              <button onClick={() => fetchDrivers()} className="text-blue-600 font-semibold underline">
+                Try again
+              </button>
+            </div>
           ) : (
             <div className="space-y-3">
               {drivers.length === 0 ? (
@@ -108,21 +101,21 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg overflow-hidden">
-                          {driver.profile?.avatar_url ? (
-                            <img src={driver.profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                          {driver.passportPhotoUrl ? (
+                            <img src={driver.passportPhotoUrl} alt="" className="w-full h-full object-cover" />
                           ) : (
-                            driver.profile?.first_name ? `${driver.profile.first_name[0]}${driver.profile.last_name[0]}` : '?'
+                            <span>{driver.name ? driver.name[0] : '?'}</span>
                           )}
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900">{driver.profile?.first_name} {driver.profile?.last_name}</p>
+                          <p className="font-semibold text-gray-900">{driver.name}</p>
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <div className="flex items-center gap-1">
-                              < Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
+                              <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                               <span>{driver.rating || '4.5'}</span>
                             </div>
                             <span>•</span>
-                            <span>{driver.total_trips || '0'} trips</span>
+                            <span>{driver.totalDeliveries || '0'} deliveries</span>
                           </div>
                         </div>
                       </div>
@@ -137,7 +130,7 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
                       <div className="flex items-center gap-2">
                         <Truck className="w-4 h-4 text-gray-400" />
                         <span className="text-gray-600 truncate">
-                          {driver.vehicle?.make} {driver.vehicle?.model} • {driver.vehicle?.plate_number}
+                          {driver.assignedTruck || 'No Truck Assigned'}
                         </span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -146,7 +139,7 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
                       </div>
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-600">{driver.profile?.phone || 'N/A'}</span>
+                        <span className="text-gray-600">{driver.phone || 'N/A'}</span>
                       </div>
                       <div className="flex justify-end">
                         <span className={`px-2 py-1 ${driver.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} rounded-full text-xs font-semibold`}>

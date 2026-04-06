@@ -18,7 +18,9 @@ function Fleet() {
   const { user } = useAuthStore()
   const isAdminManager = user?.role === 'Admin Manager'
 
-  const { data: fleetData = [], isLoading, isError, refetch } = useFleetQuery(filters)
+  const { data: fleetResponse, isLoading, isError, refetch } = useFleetQuery(filters)
+  const fleetData = useMemo(() => fleetResponse?.records || [], [fleetResponse])
+  const totalFleetCount = useMemo(() => fleetResponse?.total || 0, [fleetResponse])
   const { data: drivers = [] } = useDriversQuery()
 
   // Create a lookup map: driverId -> driver name
@@ -68,12 +70,12 @@ function Fleet() {
 
   const statusCounts = useMemo(() => {
     return {
-      total: 73,
-      approved: 32,
-      pending: 41,
-      gpsEnabled: 12
+      total: totalFleetCount,
+      approved: fleetData.filter(t => t.status === 'approved').length,
+      pending: fleetData.filter(t => t.status === 'pending').length,
+      gpsEnabled: fleetData.filter(t => t.gpsTrackingInstalled).length
     }
-  }, [])
+  }, [totalFleetCount, fleetData])
 
   const getStatusColor = (status) => {
     switch (status) {

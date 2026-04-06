@@ -45,7 +45,7 @@ export default function Customers() {
     }
   }, [clients])
 
-  const handleCreateOrder = (orderData) => {
+  const handleCreateOrder = () => {
     showToast.success('Order created successfully', `Trip ID: TRP-${Date.now()}`)
     setShowOrderModal(false)
   }

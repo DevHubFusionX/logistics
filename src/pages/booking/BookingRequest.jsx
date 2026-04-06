@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { MapPin, Package, Banknote, CheckCircle, CreditCard, Loader2 } from 'lucide-react'
 import { useBookingFlow } from '../../hooks/useBookingFlow'
 import ProgressSteps from '../../components/booking/ProgressSteps'
@@ -42,6 +43,11 @@ export default function BookingRequest() {
     handleSimpleChange,
     handleNestedChange
   } = useBookingFlow()
+
+  // Ensure we start from Step 1 on every new request
+  useEffect(() => {
+    handleResetBooking()
+  }, [handleResetBooking])
 
   const steps = [
     { num: 1, name: 'Locations', icon: MapPin },

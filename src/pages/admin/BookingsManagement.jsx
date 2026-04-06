@@ -12,6 +12,7 @@ export default function BookingsManagement() {
   const [searchTerm, setSearchTerm] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
+  const [currentPage, setCurrentPage] = useState(1)
   const [showAssignModal, setShowAssignModal] = useState(false)
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [selectedBooking, setSelectedBooking] = useState(null)
@@ -21,20 +22,21 @@ export default function BookingsManagement() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(searchTerm)
+      setCurrentPage(1) // Reset to first page on search
     }, 500)
     return () => clearTimeout(timer)
   }, [searchTerm])
 
   const queryParams = useMemo(() => ({
-    limit: 100,
-    page: 1,
+    limit: 10, // Matching documented limit
+    page: currentPage,
     ...(statusFilter !== 'all' && { status: statusFilter }),
     ...(debouncedSearch && { search: debouncedSearch })
-  }), [statusFilter, debouncedSearch])
+  }), [statusFilter, debouncedSearch, currentPage])
 
   const { data: rawData, isLoading, isError, refetch } = useAllBookingsQuery(queryParams)
-  const rawBookings = rawData?.records || []
-  const pagination = rawData?.pagination || {}
+  const rawBookings = useMemo(() => rawData?.records || [], [rawData])
+  const pagination = useMemo(() => rawData?.pagination || {}, [rawData])
 
   const mappedBookings = useMemo(() => {
     const records = Array.isArray(rawBookings) ? rawBookings : []
@@ -42,7 +44,7 @@ export default function BookingsManagement() {
       ...b,
       id: b._id || b.id,
       trackingNumber: b.tracking_number || b._id,
-      customerName: b.fullNameOrBusiness || (b.sender ? `${b.sender.first_name} ${b.sender.last_name}` : (b.receiver_name || 'Guest')),
+      customerName: b.fullNameOrBusiness || b.name || (b.sender ? `${b.sender.first_name} ${b.sender.last_name}` : (b.receiver_name || 'Guest')),
       customerEmail: b.email || b.sender?.email || b.receiver_email,
       customerPhone: b.contactPhone || b.sender?.phone || b.receiver_phone,
       pickupCity: b.pickupLocation?.city || b.origin?.split(',').pop()?.trim() || 'N/A',
@@ -54,6 +56,7 @@ export default function BookingsManagement() {
       amount: b.price || b.shipping_fee,
       createdAt: b.createdAt || b.created_at,
       pickupDate: b.estimatedPickupDate || b.pickupDate || b.estimated_delivery,
+      deliveryDate: b.estimatedDeliveryDate || b.deliveryDate,
       driverId: b.driver?.id || b.driverId,
       driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : (b.driverName || null)
     }))
@@ -61,8 +64,8 @@ export default function BookingsManagement() {
 
   const stats = useMemo(() => {
     return {
-      pending: mappedBookings.filter(b => b.status === 'pending' || b.status === 'pending_assignment').length,
-      assigned: mappedBookings.filter(b => b.status === 'confirmed' || b.status === 'driver_assigned').length,
+      pending: mappedBookings.filter(b => ['pending', 'pending_assignment'].includes(b.status)).length,
+      assigned: mappedBookings.filter(b => ['confirmed', 'driver_assigned'].includes(b.status)).length,
       inTransit: mappedBookings.filter(b => b.status === 'in_transit').length,
       completed: mappedBookings.filter(b => b.status === 'delivered').length
     }
@@ -88,7 +91,7 @@ export default function BookingsManagement() {
     <div className="space-y-6 pb-6">
       <PageHeader
         title="Bookings Management"
-        subtitle="Manage all bookings and assign drivers"
+        subtitle={`Viewing ${mappedBookings.length} of ${pagination.totalRecords || 0} total bookings`}
         action={
           <button
             onClick={() => refetch()}
@@ -164,7 +167,10 @@ export default function BookingsManagement() {
           </div>
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            onChange={(e) => {
+              setStatusFilter(e.target.value)
+              setCurrentPage(1)
+            }}
             className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50 font-medium"
           >
             <option value="all">All Status</option>
@@ -205,6 +211,56 @@ export default function BookingsManagement() {
             <div className="bg-white rounded-xl border border-gray-200 p-12 text-center shadow-sm">
               <Package className="w-12 h-12 text-gray-400 mx-auto mb-3" />
               <p className="text-gray-600">No bookings found</p>
+            </div>
+          )}
+
+          {/* Pagination Controls */}
+          {pagination.totalPages > 1 && (
+            <div className="flex items-center justify-between bg-white px-4 py-3 rounded-xl border border-gray-200 shadow-sm sm:px-6">
+              <div className="flex flex-1 justify-between sm:hidden">
+                <button
+                  disabled={!pagination.hasPrev}
+                  onClick={() => setCurrentPage(prev => prev - 1)}
+                  className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={!pagination.hasNext}
+                  onClick={() => setCurrentPage(prev => prev + 1)}
+                  className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
+                >
+                  Next
+                </button>
+              </div>
+              <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm text-gray-700">
+                    Showing page <span className="font-medium">{pagination.currentPage}</span> of{' '}
+                    <span className="font-medium">{pagination.totalPages}</span> pages
+                  </p>
+                </div>
+                <div>
+                  <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <button
+                      disabled={!pagination.hasPrev}
+                      onClick={() => setCurrentPage(prev => prev - 1)}
+                      className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
+                    >
+                      <span className="sr-only">Previous</span>
+                      <RefreshCcw className="h-5 w-5 rotate-180" aria-hidden="true" /> {/* Using RefreshCcw icon as a placeholder for chevron */}
+                    </button>
+                    <button
+                      disabled={!pagination.hasNext}
+                      onClick={() => setCurrentPage(prev => prev + 1)}
+                      className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 disabled:opacity-50"
+                    >
+                      <span className="sr-only">Next</span>
+                      <RefreshCcw className="h-5 w-5" aria-hidden="true" />
+                    </button>
+                  </nav>
+                </div>
+              </div>
             </div>
           )}
         </>

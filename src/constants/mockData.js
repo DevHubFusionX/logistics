@@ -6,111 +6,138 @@ export const KPI_DATA = [
   {
     id: 'revenue_last_month',
     title: 'Net Revenue (Last Month)',
-    value: '₦23,000,000',
+    value: '₦0',
     change: 0,
-    period: 'Total fulfilled revenue for February 2026.',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Total fulfilled revenue for the previous month.',
+    sparklineData: [],
     color: 'green'
   },
   {
     id: 'revenue_last_week',
     title: 'Net Revenue (Last Week)',
-    value: '₦5,200,000',
+    value: '₦0',
     change: 0,
-    period: 'Rolling 7-day fulfilled revenue (Mar 20 – Mar 26).',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Rolling 7-day fulfilled revenue.',
+    sparklineData: [],
     color: 'green'
   },
   {
     id: 'revenue_this_month',
     title: 'Net Revenue (MTD)',
-    value: '₦24,850,000',
+    value: '₦0',
     change: 0,
-    period: 'Month-to-Date fulfilled revenue for March 2026.',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Month-to-Date fulfilled revenue.',
+    sparklineData: [],
     color: 'green'
   },
   {
     id: 'revenue_this_year',
     title: 'Net Revenue (YTD)',
-    value: '₦86,100,000',
+    value: '₦0',
     change: 0,
-    period: 'Year-to-Date fulfilled revenue (Jan 1 – Mar 27, 2026).',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Year-to-Date fulfilled revenue.',
+    sparklineData: [],
     color: 'green'
   },
   {
     id: 'total_gmv',
     title: 'Total GMV',
-    value: '₦165,900,000',
+    value: '₦0',
     change: 0,
-    period: 'Gross Merchandise Value (since Oct 2025).',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Gross Merchandise Value.',
+    sparklineData: [],
     color: 'green'
   },
   // Trips & Fulfillment
   {
     id: 'completed_trips',
     title: 'Cold-Chain Trips Completed',
-    value: '42',
+    value: '0',
     change: 0,
-    period: 'total to date',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Total completed to date.',
+    sparklineData: [],
     color: 'blue'
   },
   {
     id: 'pending_trips',
     title: 'Trips Pending/In Progress',
-    value: '4',
+    value: '0',
     change: 0,
-    period: 'currently active',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Currently active.',
+    sparklineData: [],
     color: 'orange'
   },
   {
     id: 'trip_timeline',
     title: 'Trip Timeline',
-    value: 'Real-time',
+    value: 'Active',
     change: 0,
-    period: 'live updates',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Live updates from fleet.',
+    sparklineData: [],
     color: 'blue'
   },
   {
     id: 'fleet_map',
     title: 'Live Fleet Map',
-    value: '6 Trucks',
+    value: '0 Trucks',
     change: 0,
-    period: 'active vehicles',
-    sparklineData: [0, 0, 0, 0, 0, 0, 0],
+    period: 'Active vehicles.',
+    sparklineData: [],
     color: 'blue'
   },
   {
     id: 'active_drivers',
     title: 'Active Drivers',
-    value: '18',
-    change: 2,
-    period: 'on duty',
-    sparklineData: [15, 16, 18, 17, 18, 18, 18],
+    value: '0',
+    change: 0,
+    period: 'Currently on duty.',
+    sparklineData: [],
     color: 'green'
   },
   {
     id: 'fleet_health',
     title: 'Fleet Health',
-    value: '98%',
+    value: '100%',
     change: 0,
-    period: 'operational',
-    sparklineData: [95, 96, 98, 98, 98, 98, 98],
+    period: 'Operational status.',
+    sparklineData: [],
     color: 'emerald'
   },
   {
     id: 'ontime_rate',
     title: 'On-time Rate',
-    value: '99.2%',
-    change: 0.5,
-    period: 'vs last month',
-    sparklineData: [98, 98.5, 99, 99.2, 99.2, 99.2, 99.2],
+    value: '0%',
+    change: 0,
+    period: 'Performance vs target.',
+    sparklineData: [],
     color: 'purple'
+  },
+  {
+    id: 'booking_mtd',
+    title: 'Bookings (MTD)',
+    value: '0',
+    change: 0,
+    period: 'Volume for current month.',
+    sparklineData: [],
+    color: 'blue'
+  },
+  {
+    id: 'booking_ytd',
+    title: 'Bookings (YTD)',
+    value: '0',
+    change: 0,
+    period: 'Volume for current year.',
+    sparklineData: [],
+    color: 'blue'
+  },
+  {
+    id: 'total_bookings',
+    title: 'Total Bookings',
+    value: '0',
+    change: 0,
+    period: 'All-time system volume.',
+    sparklineData: [],
+    color: 'blue'
   }
 ]
 

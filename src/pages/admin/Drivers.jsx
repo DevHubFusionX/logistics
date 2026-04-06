@@ -23,7 +23,8 @@ export default function Drivers() {
   const [driverToEdit, setDriverToEdit] = useState(null)
 
   const { data: drivers = [], isLoading: isLoadingDrivers, isError: isErrorDrivers, refetch: refetchDrivers } = useDriversQuery()
-  const { data: fleet = [], isLoading: isLoadingFleet, refetch: refetchFleet } = useFleetQuery()
+  const { data: fleetResponse, isLoading: isLoadingFleet, refetch: refetchFleet } = useFleetQuery()
+  const fleet = useMemo(() => fleetResponse?.records || [], [fleetResponse])
 
   const isLoading = isLoadingDrivers || isLoadingFleet
   const isError = isErrorDrivers

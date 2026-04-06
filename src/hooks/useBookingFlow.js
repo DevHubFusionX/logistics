@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useBookingStore } from '../stores/bookingStore'
 import {
@@ -35,11 +35,11 @@ export const useBookingFlow = () => {
   }, [user, syncUserToForm])
 
   // Handlers
-  const handleLocationNext = () => {
+  const handleLocationNext = useCallback(() => {
     setStep(2)
-  }
+  }, [setStep])
 
-  const handlePackageNext = async () => {
+  const handlePackageNext = useCallback(async () => {
     setStep(2) // Stay while loading
     const loadingToast = toast.loading('Calculating price...')
     try {
@@ -59,13 +59,13 @@ export const useBookingFlow = () => {
     } catch (err) {
       toast.error(err.message || 'Failed to calculate price', { id: loadingToast })
     }
-  }
+  }, [setStep, setEstimatedCost, formData.dropoffLocation.city, formData.truckSize, auth])
 
-  const handlePriceNext = () => {
+  const handlePriceNext = useCallback(() => {
     setStep(4)
-  }
+  }, [setStep])
 
-  const handleConfirmBooking = async () => {
+  const handleConfirmBooking = useCallback(async () => {
     toast.loading('Creating booking...', { id: 'booking-submit' })
     try {
       if (!formData.cargoWeightKg || isNaN(Number(formData.cargoWeightKg))) throw new Error('Valid cargo weight is required')
@@ -136,37 +136,37 @@ export const useBookingFlow = () => {
       const friendlyMessage = getUserFriendlyMessage(err)
       toast.error(friendlyMessage, { id: 'booking-submit' })
     }
-  }
+  }, [formData, createBookingMutation, setBookingId, setStep])
 
-  const handleRetryBooking = () => {
+  const handleRetryBooking = useCallback(() => {
     handleConfirmBooking()
-  }
+  }, [handleConfirmBooking])
 
-  const handleResetBooking = () => {
+  const handleResetBooking = useCallback(() => {
     resetBooking()
-  }
+  }, [resetBooking])
 
-  const handlePaymentSuccess = async (reference) => {
+  const handlePaymentSuccess = useCallback(async (reference) => {
     try {
       await verifyPaymentMutation.mutateAsync(bookingId)
       setStep(6)
     } catch (error) {
       // Error handled by mutation toast
     }
-  }
+  }, [bookingId, verifyPaymentMutation, setStep])
 
-  const handlePaymentClose = () => toast.error('Payment cancelled')
+  const handlePaymentClose = useCallback(() => toast.error('Payment cancelled'), [])
 
-  const handlePayLater = () => {
+  const handlePayLater = useCallback(() => {
     toast.success('Booking confirmed! Pay on delivery')
     setStep(6)
-  }
+  }, [setStep])
 
-  const handleSimpleChange = (name, value) => updateFormData({ [name]: value })
+  const handleSimpleChange = useCallback((name, value) => updateFormData({ [name]: value }), [updateFormData])
 
-  const handleNestedChange = (parent, field, value) => {
+  const handleNestedChange = useCallback((parent, field, value) => {
     updateNestedFormData(parent, { [field]: value })
-  }
+  }, [updateNestedFormData])
 
   return {
     step, setStep,

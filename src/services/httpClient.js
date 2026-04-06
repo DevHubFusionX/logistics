@@ -59,6 +59,7 @@ class HttpClient {
     }
 
     try {
+      console.debug(`[HTTP_CLIENT] Requesting: ${config.method || 'GET'} ${url}`)
       const response = await fetch(url, config)
 
       // Validate redirect origin
@@ -68,12 +69,14 @@ class HttpClient {
       }
 
       const data = await response.json()
+      console.debug(`[HTTP_CLIENT] Response from ${url}:`, { status: response.status, data })
 
       if (!response.ok) {
         if (response.status === 401) {
           logout()
         }
         const errorMsg = data.msg || data.message || 'Request failed'
+        console.error(`[HTTP_CLIENT] Error ${response.status}: ${errorMsg}`, data)
         const error = new ApiError(errorMsg, response.status, data)
         handleApiError(error)
         throw error

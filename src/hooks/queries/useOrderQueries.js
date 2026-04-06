@@ -43,7 +43,7 @@ export function useOrderMutations() {
             const response = await adminOrderService.createOrder(newOrder)
             return response.data
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'orders-list'] })
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin'] })
     })
 
     const updateOrder = useMutation({
@@ -51,7 +51,7 @@ export function useOrderMutations() {
             const response = await adminOrderService.updateOrder(updatedOrder.id, updatedOrder)
             return response.data
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'orders-list'] })
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin'] })
     })
 
     const deleteOrder = useMutation({
@@ -59,7 +59,7 @@ export function useOrderMutations() {
             await adminOrderService.deleteOrder(id)
             return id
         },
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin', 'orders-list'] })
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['admin'] })
     })
 
     return { addOrder, updateOrder, deleteOrder }
