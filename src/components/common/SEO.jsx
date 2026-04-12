@@ -9,7 +9,7 @@ export default function SEO({
   description,
   keywords,
   canonical,
-  ogImage = '/og-image.png',
+  ogImage = '/og-image.png?v=2',
   ogType = 'website',
 }) {
   const siteUrl = 'https://daraexpress.com'
