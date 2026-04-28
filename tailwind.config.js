@@ -30,6 +30,7 @@ export default {
       animation: {
         'fade-in': 'fadeIn 0.2s ease-out',
         'slide-up': 'slideUp 0.3s ease-out',
+        'marquee-slow': 'marqueeSlow 30s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -45,7 +46,11 @@ export default {
             opacity: '1',
             transform: 'translateY(0)'
           },
-        }
+        },
+        marqueeSlow: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
       }
     },
   },

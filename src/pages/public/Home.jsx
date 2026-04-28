@@ -1,16 +1,6 @@
-import { DaraHero, DaraAbout, DaraServices, DaraClimateTech, DaraWhyUs, DaraClients, DaraTestimonials, DaraContact } from '../../components/landing'
+import { DaraHero, DaraHowItWorks, DaraTrustedBy, DaraJourney, DaraServices, DaraCTA } from '../../components/landing'
+import { SectionReveal, SectionDivider } from '../../components/common'
 import SEO from '../../components/common/SEO'
-
-const homeComponents = [
-  DaraHero,
-  DaraAbout,
-  DaraServices,
-  DaraClimateTech,
-  DaraWhyUs,
-  DaraClients,
-  DaraTestimonials,
-  DaraContact
-]
 
 export default function Home() {
   return (
@@ -21,10 +11,36 @@ export default function Home() {
         keywords="cold chain logistics Nigeria, refrigerated transport Lagos, reefer trucks in Nigeria, logistics companies in Nigeria, trucking services in Lagos, transport company in Abuja, haulage services Nigeria, pharma logistics, frozen food transport, temperature controlled logistics"
         canonical="/"
       />
-      {homeComponents.map((Component, index) => (
-        <Component key={index} />
-      ))}
+
+      <DaraHero />
+
+      <SectionReveal>
+        <DaraHowItWorks />
+      </SectionReveal>
+
+      <SectionDivider />
+
+      <SectionReveal>
+        <DaraTrustedBy />
+      </SectionReveal>
+
+      <SectionDivider />
+
+      <SectionReveal>
+        <DaraJourney />
+      </SectionReveal>
+
+      <SectionDivider />
+
+      <SectionReveal>
+        <DaraServices />
+      </SectionReveal>
+
+      <SectionDivider />
+
+      <SectionReveal>
+        <DaraCTA />
+      </SectionReveal>
     </>
   )
 }
-

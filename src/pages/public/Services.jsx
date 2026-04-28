@@ -1,208 +1,356 @@
-// eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion'
-import { Truck, Warehouse, Globe, Users, CheckCircle, Thermometer, Shield, MapPin, Clock, Package, TrendingUp } from 'lucide-react'
-import { servicesData } from './ServicesData'
+import { motion, useInView } from 'framer-motion'
+import { ArrowUpRight, Thermometer, Clock, MapPin, Shield, CheckCircle } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { useRef } from 'react'
 import SEO from '../../components/common/SEO'
 
-export default function Services() {
-  const services = servicesData.services;
+const ease = [0.22, 1, 0.36, 1]
+
+const services = [
+  {
+    num: '01',
+    tag: 'Pharmaceutical',
+    title: 'Pharma\nLogistics',
+    temp: '2°C – 8°C',
+    tempLabel: 'Controlled cold chain',
+    description: 'Hospital-grade transport for vaccines, insulin, biologics and temperature-sensitive medicines. Every shipment is IoT-monitored end-to-end with a full temperature excursion report on delivery.',
+    points: [
+      'Dedicated pharma-grade reefer trucks',
+      'Real-time IoT temperature logging',
+      'Goods-in-Transit (GIT) insurance',
+      'Same-day available in Lagos & Abuja',
+      'Full compliance documentation',
+    ],
+    delivery: 'Same-day available',
+    coverage: 'Lagos · Abuja · Port Harcourt',
+    img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85',
+    accent: 'bg-blue-500',
+    accentText: 'text-blue-500',
+    accentLight: 'bg-blue-50',
+  },
+  {
+    num: '02',
+    tag: 'Frozen Cargo',
+    title: 'Frozen Food\nTransport',
+    temp: '−18°C',
+    tempLabel: 'Sub-zero maintained',
+    description: 'Sub-zero reefer trucking for seafood, meat, poultry and frozen goods. Our dedicated frozen fleet maintains −18°C throughout transit — from cold store to final destination.',
+    points: [
+      'Sub-zero −18°C throughout transit',
+      'Seafood, meat & poultry specialists',
+      'Express Lagos to Abuja corridor',
+      'Nationwide frozen haulage network',
+      '24/7 driver & cargo support',
+    ],
+    delivery: '1–3 days',
+    coverage: 'Nationwide',
+    img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=85',
+    accent: 'bg-cyan-500',
+    accentText: 'text-cyan-600',
+    accentLight: 'bg-cyan-50',
+  },
+  {
+    num: '03',
+    tag: 'Fresh Produce',
+    title: 'Refrigerated\nTransport',
+    temp: '2°C – 12°C',
+    tempLabel: 'Farm-fresh cold chain',
+    description: 'Farm-to-market cold chain keeping fruits, vegetables and dairy fresh from source to shelf. Advanced reefer trucks covering all 36 states with optimised routing.',
+    points: [
+      'Fruits, vegetables & dairy specialists',
+      'Farm-to-market optimised routing',
+      'Truck hire Lagos for perishables',
+      'Direct Lagos–Abuja express lane',
+      'All 36 states coverage',
+    ],
+    delivery: '12–48 hours',
+    coverage: 'All 36 States',
+    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=85',
+    accent: 'bg-green-500',
+    accentText: 'text-green-600',
+    accentLight: 'bg-green-50',
+  },
+  {
+    num: '04',
+    tag: 'Enterprise',
+    title: 'Haulage\nServices',
+    temp: 'Ambient',
+    tempLabel: 'Dry & temp-controlled',
+    description: 'Scalable freight contracts for enterprises — port-to-warehouse, long-haul trucking, and custom logistics agreements. Built for businesses that move volume.',
+    points: [
+      'Long-haul trucking Nigeria-wide',
+      'Port to warehouse logistics',
+      'Custom enterprise contracts',
+      'Dry & temperature-controlled options',
+      'Daily departure schedules',
+    ],
+    delivery: 'Daily departures',
+    coverage: 'Regional Hubs',
+    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=85',
+    accent: 'bg-[#1e3a5f]',
+    accentText: 'text-[#1e3a5f]',
+    accentLight: 'bg-gray-100',
+  },
+]
+
+function ServiceRow({ service, index }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-8% 0px' })
+  const isEven = index % 2 === 0
 
   return (
-    <div className="pt-20">
+    <div ref={ref} className="border-b border-gray-100 last:border-0">
+      <div className={`grid grid-cols-1 lg:grid-cols-2 min-h-[600px] ${isEven ? '' : 'lg:[direction:rtl]'}`}>
+
+        {/* Image side */}
+        <motion.div
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={inView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.9, ease }}
+          className="relative overflow-hidden lg:[direction:ltr]"
+          style={{ minHeight: 400 }}
+        >
+          <img
+            src={service.img}
+            alt={service.title}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* dark overlay */}
+          <div className="absolute inset-0 bg-[#1e3a5f]/40" />
+
+          {/* temp badge — bottom left */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.4, ease }}
+            className="absolute bottom-8 left-8"
+          >
+            <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4">
+              <div className="flex items-center gap-2 mb-1">
+                <Thermometer className="w-4 h-4 text-blue-400" />
+                <span className="text-white/50 text-xs font-bold tracking-widest uppercase">{service.tempLabel}</span>
+              </div>
+              <p className="font-heading font-black text-white text-3xl leading-none">{service.temp}</p>
+            </div>
+          </motion.div>
+
+          {/* service number — top right */}
+          <div className="absolute top-8 right-8">
+            <span className="font-heading font-black text-white/15 leading-none select-none" style={{ fontSize: '6rem' }}>
+              {service.num}
+            </span>
+          </div>
+        </motion.div>
+
+        {/* Content side */}
+        <motion.div
+          initial={{ opacity: 0, x: isEven ? 40 : -40 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.75, delay: 0.15, ease }}
+          className="lg:[direction:ltr] bg-white flex flex-col justify-center px-10 sm:px-14 lg:px-16 py-16"
+        >
+          {/* tag */}
+          <span className={`inline-flex items-center self-start px-3 py-1 rounded-lg ${service.accentLight} ${service.accentText} text-[10px] font-black tracking-widest uppercase mb-6`}>
+            {service.tag}
+          </span>
+
+          {/* title */}
+          <h2
+            className="font-heading font-black text-[#1e3a5f] leading-[0.92] tracking-tight mb-6 whitespace-pre-line"
+            style={{ fontSize: 'clamp(2.4rem, 4vw, 3.6rem)' }}
+          >
+            {service.title}
+          </h2>
+
+          <p className="text-[#4a6080] text-base leading-relaxed mb-8 max-w-md">
+            {service.description}
+          </p>
+
+          {/* checklist */}
+          <ul className="space-y-3 mb-10">
+            {service.points.map((p, i) => (
+              <motion.li
+                key={i}
+                initial={{ opacity: 0, x: 16 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.4, delay: 0.3 + i * 0.07, ease }}
+                className="flex items-start gap-3"
+              >
+                <CheckCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${service.accentText}`} />
+                <span className="text-sm text-[#4a6080]">{p}</span>
+              </motion.li>
+            ))}
+          </ul>
+
+          {/* meta + CTA */}
+          <div className="flex flex-wrap items-center gap-4">
+            <Link
+              to="/booking/request"
+              className={`inline-flex items-center gap-2 px-6 py-3 ${service.accent} hover:opacity-90 active:scale-95 text-white font-bold rounded-xl text-sm transition-all`}
+            >
+              Get a quote
+              <ArrowUpRight className="w-4 h-4" />
+            </Link>
+            <div className="flex items-center gap-4 text-xs text-gray-400 font-semibold">
+              <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{service.delivery}</span>
+              <span className="flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" />{service.coverage}</span>
+            </div>
+          </div>
+        </motion.div>
+
+      </div>
+    </div>
+  )
+}
+
+export default function Services() {
+  const heroRef = useRef(null)
+  const ctaRef = useRef(null)
+  const ctaInView = useInView(ctaRef, { once: true, margin: '-10% 0px' })
+
+  return (
+    <>
       <SEO
         title="Precision Cold Chain & Freight Services Nigeria"
-        description="Explore Dara Express reefer trucks in Nigeria. Specialized pharma logistics Nigeria, frozen food transport Lagos, and refrigerated transport Lagos to Abuja. Expert haulage services."
-        keywords="pharma logistics Nigeria, frozen food transport Lagos, refrigerated transport Lagos, reefer trucks in Nigeria, cold room services Lagos, refrigerated warehouse Abuja, haulage services Nigeria, logistics services"
+        description="Dara Express reefer trucks in Nigeria. Pharma logistics, frozen food transport Lagos, refrigerated transport Lagos to Abuja. Expert haulage services."
+        keywords="pharma logistics Nigeria, frozen food transport Lagos, refrigerated transport Lagos, reefer trucks Nigeria, haulage services Nigeria"
         canonical="/services"
       />
-      {/* Hero Section */}
-      <section className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-cyan-50">
-        <div className="max-w-7xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-              {servicesData.hero.title} <span className="text-blue-600">{servicesData.hero.highlight}</span>
-            </h1>
-            <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              {servicesData.hero.description}
-            </p>
-            <p className="text-lg text-gray-600 max-w-3xl mx-auto mt-4">
-              {servicesData.hero.subDescription}
-            </p>
+
+      {/* ── Hero ── */}
+      <section
+        ref={heroRef}
+        className="relative w-full overflow-hidden bg-[#1e3a5f]"
+        style={{ minHeight: '80vh' }}
+      >
+        <video
+          src="/herovideo.mp4"
+          autoPlay muted loop playsInline
+          className="absolute inset-0 w-full h-full object-cover object-bottom"
+        />
+        <div className="absolute inset-0 bg-[#1e3a5f]/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/90 via-[#1e3a5f]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-transparent to-transparent" />
+
+        <div className="relative z-10 flex flex-col justify-end h-full px-8 sm:px-14 lg:px-20 pb-16 pt-36">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease }}
+            className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-5"
+          >
+            What we move
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.8, delay: 0.1, ease }}
+            className="font-heading font-black text-white leading-[0.92] tracking-tight max-w-3xl"
+            style={{ fontSize: 'clamp(3rem, 7vw, 6.5rem)' }}
+          >
+            Cold chain
+            <br />
+            <span className="text-blue-400">done right.</span>
+          </motion.h1>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.35, ease }}
+            className="mt-10 flex flex-wrap gap-6"
+          >
+            {[
+              { icon: Thermometer, label: '±0.1°C precision' },
+              { icon: Shield,      label: 'GIT insured' },
+              { icon: MapPin,      label: 'All 36 states' },
+              { icon: Clock,       label: 'Same-day available' },
+            ].map(({ icon: Icon, label }) => (
+              <span key={label} className="inline-flex items-center gap-2 text-white/55 text-sm font-semibold">
+                <Icon className="w-4 h-4 text-blue-400" />
+                {label}
+              </span>
+            ))}
           </motion.div>
         </div>
       </section>
 
-      {/* Services Grid */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto space-y-24">
-          {services.map((service, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="relative"
+      {/* ── Service rows ── */}
+      <section className="bg-white">
+        {services.map((service, i) => (
+          <ServiceRow key={service.num} service={service} index={i} />
+        ))}
+      </section>
+
+      {/* ── CTA ── */}
+      <section ref={ctaRef} className="bg-[#1e3a5f] relative overflow-hidden">
+        <video
+          src="/herovideo.mp4"
+          autoPlay muted loop playsInline
+          className="absolute inset-0 w-full h-full object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-[#1e3a5f]/80" />
+
+        <div className="relative z-10 px-8 sm:px-14 lg:px-20 py-24 flex flex-col lg:flex-row items-center justify-between gap-12">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, ease }}
+            className="max-w-xl"
+          >
+            <p className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-4">Ready to ship?</p>
+            <h2
+              className="font-heading font-black text-white leading-tight"
+              style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}
             >
-              {/* Service Number Badge */}
-              <div className="absolute -top-6 left-8 z-10">
-                <div className={`w-12 h-12 ${service.iconBg} rounded-xl flex items-center justify-center shadow-lg`}>
-                  <span className="text-white font-bold text-xl">{index + 1}</span>
-                </div>
-              </div>
+              Your cold chain,{' '}
+              <span className="text-blue-400">handled right.</span>
+            </h2>
+            <p className="mt-5 text-white/50 text-base leading-relaxed">
+              Get a quote in minutes. Lagos, Abuja, Port Harcourt and all 36 states.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link
+                to="/booking/request"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-blue-500 hover:bg-blue-400 active:scale-95 text-white font-bold rounded-xl text-sm transition-all"
+              >
+                Get a free quote <ArrowUpRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 px-7 py-3.5 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-bold rounded-xl text-sm transition-all"
+              >
+                Talk to us
+              </Link>
+            </div>
+          </motion.div>
 
-              <div className={`bg-gradient-to-br ${service.gradient} rounded-3xl shadow-2xl border border-gray-100 overflow-hidden`}>
-                <div className={`grid lg:grid-cols-5 gap-0`}>
-                  {/* Content Side */}
-                  <div className={`lg:col-span-3 p-8 sm:p-12 ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                    <div className="flex items-center gap-4 mb-6">
-                      <div className={`w-16 h-16 ${service.iconBg} rounded-2xl flex items-center justify-center shadow-lg`}>
-                        <service.icon className="w-8 h-8 text-white" />
-                      </div>
-                      <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">{service.title}</h2>
-                    </div>
-
-                    <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-
-                    <div className="bg-white/50 rounded-xl p-6 backdrop-blur-sm">
-                      <p className="text-gray-700 leading-relaxed">
-                        {service.highlight}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Features Side */}
-                  <div className={`lg:col-span-2 bg-white p-8 sm:p-10 ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-                    <div className="sticky top-8">
-                      <div className="flex items-center gap-3 mb-8">
-                        <div className={`w-2 h-8 ${service.iconBg} rounded-full`}></div>
-                        <h3 className="text-xl font-bold text-gray-900">
-                          {service.guarantee}
-                        </h3>
-                      </div>
-                      <ul className="space-y-5">
-                        {service.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-3 group">
-                            <div className={`w-6 h-6 ${service.iconBg} rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
-                              <CheckCircle className="w-4 h-4 text-white" />
-                            </div>
-                            <span className="text-gray-700 leading-relaxed">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* Service Stats */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-900 to-blue-900 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
-        </div>
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Trusted by Leading Businesses</h2>
-            <p className="text-xl text-blue-200">Delivering excellence across Nigeria</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            {servicesData.stats.map((stat, idx) => (
-              <div key={idx} className="text-center">
-                <div className="text-4xl sm:text-5xl font-bold text-white mb-2 flex justify-center items-center">
-                  {stat.value === 'TrendingUp' ? <TrendingUp className="w-12 h-12" /> : stat.value}
-                </div>
-                <div className="text-blue-200">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Why Choose Us */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Why Choose Dara?</h2>
-            <p className="text-xl text-gray-600">We combine technology, reliability, and experience</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            {servicesData.whyChooseUs.map((item, idx) => {
-              const borderColors = {
-                blue: 'border-blue-600',
-                green: 'border-green-600',
-                purple: 'border-purple-600'
-              };
-              const gradients = {
-                blue: 'from-blue-500 to-blue-600',
-                green: 'from-green-500 to-green-600',
-                purple: 'from-purple-500 to-purple-600'
-              };
-              return (
-                <motion.div key={idx} whileHover={{ y: -10, scale: 1.02 }} className={`bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all text-center border-t-4 ${borderColors[item.color]}`}>
-                  <div className={`w-20 h-20 bg-gradient-to-br ${gradients[item.color]} rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg`}>
-                    <item.icon className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{item.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Industries We Serve */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Industries We Serve</h2>
-            <p className="text-xl text-gray-600">Specialized cold chain solutions for critical sectors</p>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {servicesData.industries.map((industry, idx) => (
-              <motion.div key={idx} whileHover={{ scale: 1.05 }} className="bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200 text-center">
-                <industry.icon className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-                <h4 className="font-bold text-gray-900 mb-2">{industry.name}</h4>
-                <p className="text-sm text-gray-600">{industry.desc}</p>
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            animate={ctaInView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.25, ease }}
+            className="grid grid-cols-2 gap-4 flex-shrink-0"
+          >
+            {[
+              { value: '69+',    label: 'Reefer trucks\non network' },
+              { value: '137+',   label: 'Cold chain\ntrips completed' },
+              { value: '36',     label: 'States\ncovered' },
+              { value: '±0.1°C', label: 'Temperature\nprecision' },
+            ].map(({ value, label }, i) => (
+              <motion.div
+                key={value}
+                initial={{ opacity: 0, y: 20 }}
+                animate={ctaInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.35 + i * 0.08, ease }}
+                className="bg-white/8 backdrop-blur-md border border-white/10 rounded-2xl px-6 py-5"
+              >
+                <p className="font-heading font-black text-white text-2xl leading-none mb-1">{value}</p>
+                <p className="text-white/35 text-xs leading-snug whitespace-pre-line">{label}</p>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10"
-          style={{ background: 'radial-gradient(ellipse at top left, rgba(255,255,255,0.3) 0%, transparent 60%)' }}
-        />
-        <div className="max-w-5xl mx-auto text-center relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="inline-block px-4 py-2 bg-white/20 rounded-full text-white text-sm font-semibold mb-6 backdrop-blur-sm">
-              {servicesData.cta.badge}
-            </div>
-            <h2 className="text-3xl sm:text-5xl font-bold text-white mb-6">
-              {servicesData.cta.title}
-            </h2>
-            <p className="text-xl text-blue-100 mb-10 leading-relaxed">
-              {servicesData.cta.description}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a href={servicesData.cta.primaryBtn.link} className="px-10 py-4 bg-white text-blue-600 rounded-xl hover:bg-gray-100 transition-all font-bold shadow-2xl hover:shadow-xl text-lg">
-                {servicesData.cta.primaryBtn.text}
-              </a>
-              <a href={servicesData.cta.secondaryBtn.link} className="px-10 py-4 bg-transparent text-white rounded-xl hover:bg-white/10 transition-all font-bold border-2 border-white text-lg">
-                {servicesData.cta.secondaryBtn.text}
-              </a>
-            </div>
           </motion.div>
         </div>
       </section>
-    </div>
+    </>
   )
 }

@@ -1,238 +1,243 @@
+import { motion, useInView } from 'framer-motion'
+import { ArrowUpRight, ChevronRight, Thermometer, Clock, MapPin } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { useRef } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import { Package, Shield, MapPin, Zap, TrendingUp, ArrowRight, Truck, Globe, Clock, CheckCircle } from 'lucide-react'
-import { SectionHeader, Button } from '../ui'
 import { servicesData } from './Data'
 
-const handleLearnMore = () => {
-  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+const ease = [0.22, 1, 0.36, 1]
+
+const images = [
+  'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80',
+  'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
+]
+
+const container = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.11, delayChildren: 0.25 } },
 }
 
-const handleContactSales = () => {
-  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+const cardAnim = {
+  hidden: { opacity: 0, y: 56, scale: 0.95, filter: 'blur(4px)' },
+  visible: {
+    opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+    transition: { duration: 0.65, ease },
+  },
 }
 
-const handleViewServices = () => {
-  document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' })
-}
-
-const ServiceCard = ({ service, index }) => {
-  const Icon = service.icon === 'Package' ? Package
-    : service.icon === 'Shield' ? Shield
-      : service.icon === 'MapPin' ? MapPin
-        : service.icon === 'Zap' ? Zap
-          : service.icon === 'TrendingUp' ? TrendingUp
-            : Package // Default fallback
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30, scale: 0.95 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{
-        duration: 0.6,
-        delay: index * 0.15,
-        ease: [0.25, 0.46, 0.45, 0.94]
-      }}
-      whileHover={{ y: -8, scale: 1.02 }}
-      className="group relative h-full"
-    >
-      <div className="relative h-full bg-white rounded-xl md:rounded-[2rem] shadow-lg border border-gray-100 hover:shadow-2xl hover:border-emerald-200 transition-all duration-700 flex flex-col overflow-hidden">
-        {/* Image */}
-        <div className="relative h-48 md:h-56 overflow-hidden">
-          <motion.img
-            src={service.image}
-            alt={service.title}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-            whileHover={{ scale: 1.05 }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-
-          {/* Icon overlay */}
-          <motion.div
-            className="absolute top-4 right-4 z-10"
-            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="w-10 h-10 md:w-12 md:h-12 bg-white/90 backdrop-blur-sm rounded-xl flex items-center justify-center shadow-lg">
-              <Icon className="w-5 h-5 md:w-6 md:h-6 text-emerald-600" />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Content */}
-        <div className="p-6 md:p-8 flex-1 flex flex-col">
-          {/* Subtle background gradient on hover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/0 to-green-50/0 group-hover:from-emerald-50/50 group-hover:to-green-50/30 transition-all duration-700 rounded-xl md:rounded-[2rem] pointer-events-none" />
-          <motion.h3
-            className="text-xl md:text-2xl font-bold text-gray-900 mb-3 group-hover:text-emerald-700 transition-colors duration-500"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: index * 0.15 + 0.2 }}
-          >
-            {service.title}
-          </motion.h3>
-          <motion.p
-            className="text-gray-600 text-sm md:text-base leading-relaxed mb-6 flex-1"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: index * 0.15 + 0.3 }}
-          >
-            {service.description}
-          </motion.p>
-
-          {/* Features */}
-          {service.features && (
-            <motion.div
-              className="space-y-3 mb-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.15 + 0.4, duration: 0.5 }}
-            >
-              {service.features.slice(0, 3).map((feature, i) => (
-                <motion.div
-                  key={i}
-                  className="flex items-center gap-3 text-sm text-gray-600"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.15 + 0.5 + (i * 0.1) }}
-                >
-                  <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
-                  <span>{feature}</span>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-
-          {/* Action */}
-          <motion.div
-            onClick={handleLearnMore}
-            className="flex items-center gap-2 text-emerald-600 font-semibold group-hover:text-emerald-700 transition-colors cursor-pointer mt-auto"
-            whileHover={{ x: 5 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-          >
-            <span>Learn More</span>
-            <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
-          </motion.div>
-        </div>
-      </div>
-    </motion.div>
-  )
+const headerAnim = {
+  hidden: { opacity: 0, y: 36, filter: 'blur(8px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease } },
 }
 
 export default function DaraServices() {
-  const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  })
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-10% 0px' })
+
+  const [featured, ...rest] = servicesData.map((s, i) => ({ ...s, img: images[i] }))
 
   return (
-    <section id="services" className="py-12 md:py-24 bg-gray-50 relative overflow-hidden" ref={containerRef}>
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[radial-gradient(#10b981_1px,transparent_1px)] [background-size:20px_20px]" />
+    <section ref={ref} className="relative bg-[#e8f0f7] overflow-hidden">
+      <div className="px-8 sm:px-14 lg:px-20 pt-24 pb-20">
 
-      <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 md:mb-16 gap-8">
-          <SectionHeader
-            badge={{ icon: Package, text: 'Our Services' }}
-            title="Logistics Solutions"
-            subtitle="For Every Scale"
-            description="Comprehensive shipping and supply chain services designed to move your business forward with speed, security, and precision."
-            className="text-left mb-0 md:max-w-2xl"
-          />
+        {/* ── Header ── */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          className="flex items-end justify-between mb-16"
+        >
+          <motion.div variants={headerAnim}>
+            <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-3">
+              What we move
+            </p>
+            <h2 className="font-heading font-black text-[#1e3a5f] text-3xl sm:text-4xl lg:text-5xl leading-tight">
+              Services built for{' '}
+              <motion.span
+                className="text-blue-500 inline-block"
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ duration: 0.6, delay: 0.5, ease }}
+              >
+                cold cargo
+              </motion.span>
+            </h2>
+          </motion.div>
 
-          <Button
-            onClick={handleViewServices}
-            className="bg-slate-900 text-white hover:bg-slate-800 rounded-xl px-6 py-3 hidden md:flex items-center gap-2"
+          <motion.div variants={headerAnim} className="hidden sm:block">
+            <Link
+              to="/services"
+              className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
+            >
+              All services
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </motion.div>
+        </motion.div>
+
+        {/* ── Grid: 1 featured + 3 cards ── */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+        >
+
+          {/* Featured card — spans 1 col, tall */}
+          <motion.div
+            variants={cardAnim}
+            whileHover={{ y: -6, transition: { duration: 0.25 } }}
+            className="relative bg-white rounded-2xl overflow-hidden shadow-sm group flex flex-col min-h-[520px] lg:row-span-2"
           >
-            View All Services
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
+            {/* image */}
+            <div className="relative h-56 overflow-hidden flex-shrink-0">
+              <img
+                src={featured.img}
+                alt={featured.title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
+              {/* temp badge */}
+              <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-lg text-[11px] font-black text-blue-600 tracking-wider uppercase shadow-sm">
+                <Thermometer className="w-3 h-3" />
+                2°C – 8°C
+              </span>
+            </div>
 
-        {/* Responsive Grid: 1 col mobile, 2 col tablet, 3 col desktop */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {servicesData.map((service, index) => (
-            <ServiceCard key={index} service={service} index={index} />
+            {/* ghost number */}
+            <span
+              className="absolute bottom-2 right-3 font-black leading-none text-blue-50 select-none pointer-events-none"
+              style={{ fontSize: '7rem' }}
+            >
+              01
+            </span>
+
+            <div className="relative z-10 p-7 flex flex-col flex-1">
+              <div className="flex items-start justify-between mb-4">
+                <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
+                  Featured
+                </span>
+                <motion.div
+                  initial={{ rotate: 0, opacity: 0.3 }}
+                  whileHover={{ rotate: 45, opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
+                </motion.div>
+              </div>
+
+              <h3 className="font-heading font-black text-[#1e3a5f] text-2xl leading-tight mb-2">
+                {featured.title}
+              </h3>
+              <p className="text-gray-400 text-sm leading-relaxed mb-6">{featured.description}</p>
+
+              <ul className="mt-auto space-y-2">
+                {featured.features.slice(0, 3).map((f, i) => (
+                  <li key={i} className="flex items-start gap-2 text-xs text-gray-500">
+                    <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
+                    {f}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-6 flex items-center gap-4 text-xs text-gray-400 font-semibold">
+                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{featured.deliveryTime}</span>
+                <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{featured.coverage}</span>
+              </div>
+            </div>
+
+            {/* hover accent line */}
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
+              initial={{ scaleX: 0 }}
+              whileHover={{ scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.div>
+
+          {/* 3 smaller cards */}
+          {rest.map(({ title, subtitle, description, features, deliveryTime, coverage, img }, i) => (
+            <motion.div
+              key={title}
+              variants={cardAnim}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="relative bg-white rounded-2xl overflow-hidden shadow-sm group flex flex-col min-h-[240px]"
+            >
+              {/* image strip */}
+              <div className="relative h-36 overflow-hidden flex-shrink-0">
+                <img
+                  src={img}
+                  alt={title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-white/50 to-transparent" />
+              </div>
+
+              {/* ghost number */}
+              <span
+                className="absolute bottom-1 right-3 font-black leading-none text-blue-50 select-none pointer-events-none"
+                style={{ fontSize: '5rem' }}
+              >
+                0{i + 2}
+              </span>
+
+              <div className="relative z-10 p-6 flex flex-col flex-1">
+                <div className="flex items-start justify-between mb-3">
+                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
+                    {subtitle}
+                  </span>
+                  <motion.div
+                    initial={{ rotate: 0, opacity: 0.3 }}
+                    whileHover={{ rotate: 45, opacity: 1 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
+                  </motion.div>
+                </div>
+
+                <h3 className="font-heading font-black text-[#1e3a5f] text-lg leading-tight mb-2">
+                  {title}
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">{description}</p>
+
+                <div className="mt-auto pt-4 flex items-center gap-4 text-xs text-gray-400 font-semibold">
+                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{deliveryTime}</span>
+                  <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{coverage}</span>
+                </div>
+              </div>
+
+              {/* hover accent line */}
+              <motion.div
+                className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
+                initial={{ scaleX: 0 }}
+                whileHover={{ scaleX: 1 }}
+                transition={{ duration: 0.3 }}
+              />
+            </motion.div>
           ))}
 
-          {/* CTA Card for last slot if odd number or just extra visual */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.7,
-              delay: servicesData.length * 0.15,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-            whileHover={{
-              scale: 1.05,
-              y: -10,
-              transition: { duration: 0.3 }
-            }}
-            className="relative h-full min-h-[400px] flex flex-col justify-center items-center text-center p-8 rounded-xl md:rounded-[2rem] border-2 border-dashed border-gray-200 hover:border-emerald-300 hover:bg-emerald-50/50 transition-all duration-500 group cursor-pointer overflow-hidden"
+        </motion.div>
+
+        {/* ── Bottom CTA strip ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6, delay: 0.7, ease }}
+          className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl px-8 py-5 shadow-sm"
+        >
+          <p className="text-[#1e3a5f] font-bold text-base">
+            Not sure which service fits your cargo?
+          </p>
+          <Link
+            to="/booking/request"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl text-sm transition-colors flex-shrink-0"
           >
-            {/* Animated background effect */}
-            <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-emerald-100/0 to-green-100/0 group-hover:from-emerald-100/30 group-hover:to-green-100/20 transition-all duration-700 rounded-xl md:rounded-[2rem]"
-              whileHover={{ scale: 1.1 }}
-            />
+            Get a custom quote
+            <ArrowUpRight className="w-4 h-4" />
+          </Link>
+        </motion.div>
 
-            <motion.div
-              className="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mb-6 group-hover:bg-emerald-200 transition-colors relative z-10"
-              whileHover={{
-                rotate: [0, -15, 15, 0],
-                scale: 1.1
-              }}
-              transition={{ duration: 0.6 }}
-            >
-              <Truck className="w-8 h-8 text-emerald-600 group-hover:text-emerald-700 transition-colors" />
-            </motion.div>
-
-            <motion.h3
-              className="text-xl font-bold text-gray-900 mb-2 relative z-10"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: servicesData.length * 0.15 + 0.2 }}
-            >
-              Need a Custom Solution?
-            </motion.h3>
-
-            <motion.p
-              className="text-gray-600 mb-6 max-w-xs relative z-10"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: servicesData.length * 0.15 + 0.3 }}
-            >
-              We specialize in tailored logistics strategies for complex supply chains.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: servicesData.length * 0.15 + 0.4 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="relative z-10"
-            >
-              <Button onClick={handleContactSales} className="bg-emerald-600 text-white hover:bg-emerald-700 rounded-xl px-6 py-2">
-                Contact Sales
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-
-        <div className="mt-12 md:hidden text-center">
-          <Button
-            onClick={handleViewServices}
-            className="bg-slate-900 text-white hover:bg-slate-800 rounded-xl px-6 py-3 w-full justify-center flex items-center gap-2"
-          >
-            View All Services
-            <ArrowRight className="w-4 h-4" />
-          </Button>
-        </div>
       </div>
     </section>
   )

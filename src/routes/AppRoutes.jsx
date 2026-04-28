@@ -4,6 +4,7 @@ import { ProtectedRoute } from '../components/common'
 import PublicLayout from '../components/layout/PublicLayout'
 import AuthLayout from '../components/layout/AuthLayout'
 import DashboardLayout from '../components/layout/DashboardLayout'
+import ScrollToTop from '../components/common/ScrollToTop'
 
 // Loading Component
 const LoadingSpinner = () => (
@@ -84,6 +85,7 @@ const ManagerLogin = lazy(() => import('../pages/auth/ManagerLogin'))
 export default function AppRoutes() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
+      <ScrollToTop />
       <Routes>
         {/* Public Routes with Navbar/Footer */}
         <Route element={<PublicLayout />}>

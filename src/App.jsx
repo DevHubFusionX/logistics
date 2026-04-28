@@ -6,6 +6,12 @@ import { AuthProvider } from './hooks'
 import { Toaster } from 'react-hot-toast'
 
 function AppContent() {
+  const location = useLocation()
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }, [location.pathname])
+
   const [isLoading, setIsLoading] = useState(() => {
     return !sessionStorage.getItem('hasVisited')
   })

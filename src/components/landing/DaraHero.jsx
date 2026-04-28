@@ -1,183 +1,173 @@
-// eslint-disable-next-line no-unused-vars
-import { motion } from 'framer-motion'
-import { ArrowRight, Package, Truck, MapPin, Clock, Users, TrendingUp } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { heroData } from './Data'
-import { Button } from '../ui'
 import { ScheduleDemoModal } from './demo'
 
+const headlines = [
+  { line1: "Nigeria's Cold", line2: 'Chain Standard.' },
+  { line1: 'Keep It Cold.', line2: 'Move It Fast.' },
+]
+
+const subtitles = [
+  'Temperature-controlled transport for pharmaceuticals, vaccines & perishables — tracked in real time across Nigeria.',
+  'Reefer trucks built for Nigeria — delivering frozen foods, fresh produce and medical supplies with zero compromise.',
+  'From Lagos to Abuja and all 36 states — your cold chain, on time, every time.',
+  'Goods-in-Transit insured. IoT monitored. Hospital-grade precision. This is how cold chain should work.',
+]
+
 export default function DaraHero() {
-  const [currentFeature, setCurrentFeature] = useState(0)
-  const [currentImage, setCurrentImage] = useState(0)
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false)
+  const [isDemoOpen, setIsDemoOpen] = useState(false)
+  const [subIndex, setSubIndex] = useState(0)
+  const [headIndex, setHeadIndex] = useState(0)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const featureInterval = setInterval(() => {
-      setCurrentFeature((prev) => (prev + 1) % heroData.features.length)
-    }, 3000)
-    return () => clearInterval(featureInterval)
+    const t = setInterval(() => {
+      setSubIndex(p => (p + 1) % subtitles.length)
+      setHeadIndex(p => (p + 1) % headlines.length)
+    }, 4000)
+    return () => clearInterval(t)
   }, [])
 
-  useEffect(() => {
-    const imageInterval = setInterval(() => {
-      setCurrentImage((prev) => (prev + 1) % heroData.backgroundImages.length)
-    }, 5000)
-    return () => clearInterval(imageInterval)
-  }, [])
   return (
     <section
       id="home"
-      className="min-h-screen flex items-center relative overflow-hidden px-4 sm:px-6 lg:px-8"
+      className="relative w-full overflow-hidden bg-[#1e3a5f]"
+      style={{ height: '100dvh', minHeight: 600 }}
     >
-      {/* Background Images - only render current + next to reduce bandwidth */}
-      {heroData.backgroundImages.map((image, index) => {
-        const nextIndex = (currentImage + 1) % heroData.backgroundImages.length
-        if (index !== currentImage && index !== nextIndex) return null
-        return (
-          <motion.div
-            key={index}
-            role="img"
-            aria-label={heroData.imageAlts[index]}
-            className="absolute inset-0"
-            initial={{ opacity: 0, scale: 1 }}
-            animate={{
-              opacity: currentImage === index ? 1 : 0,
-              scale: currentImage === index ? 1.05 : 1
-            }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            style={{
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          />
-        )
-      })}
-      <div className="container mx-auto pt-16 sm:pt-20 lg:pt-24 pb-12 sm:pb-16 relative z-10">
-        <div className="flex justify-center">
-          {/* Main Content */}
-          <div className="max-w-5xl text-center space-y-6 sm:space-y-8 lg:space-y-10">
+      {/* ── Video ── */}
+      <video
+        src="/herovideo.mp4"
+        autoPlay muted loop playsInline
+        className="absolute inset-0 w-full h-full object-cover object-bottom"
+      />
+      {/* overlays */}
+      <div className="absolute inset-0 bg-[#1e3a5f]/55" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/80 via-[#1e3a5f]/30 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-transparent to-transparent" />
 
+      {/* ── All content ── */}
+      <div className="relative z-10 h-full flex flex-col px-8 sm:px-14 lg:px-20">
 
-            {/* Dynamic Heading */}
-            <div className="space-y-4 sm:space-y-6">
-              <motion.h1
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="font-heading text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-white leading-[1.1] tracking-tight"
-              >
-                {heroData.title.prefix}
-                <br />
-                <span className="text-blue-400">{heroData.title.highlight}</span> {heroData.title.suffix}
-              </motion.h1>
+        {/* ── MIDDLE: headline + CTA card ── */}
+        <div className="flex-1 flex items-center justify-between gap-8 py-6">
 
-              {/* Rotating Features */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="h-14 sm:h-16 lg:h-20 overflow-hidden"
-              >
-                <motion.p
-                  key={currentFeature}
-                  initial={{ y: 30, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -30, opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white/95 font-medium leading-relaxed tracking-wide px-2"
-                  aria-live="polite"
+          {/* Left — headline */}
+          <div className="max-w-xl">
+            <div
+              className="font-heading font-black text-white leading-[0.95] tracking-tight"
+              style={{ fontSize: 'clamp(2.8rem, 6vw, 6rem)' }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={headIndex}
+                  initial={{ opacity: 0, y: 32, filter: 'blur(6px)' }}
+                  animate={{ opacity: 1, y: 0,  filter: 'blur(0px)' }}
+                  exit={{    opacity: 0, y: -24, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                 >
-                  {heroData.features[currentFeature]}
-                </motion.p>
-              </motion.div>
+                  <span className="block text-white">{headlines[headIndex].line1}</span>
+                  <span className="block text-blue-400">{headlines[headIndex].line2}</span>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3, ease: "easeOut" }}
-              className="max-w-3xl mx-auto text-base sm:text-lg md:text-xl lg:text-2xl text-white/90 font-normal leading-relaxed tracking-wide px-4"
-            >
-              Temperature-controlled logistics for pharmaceuticals, vaccines, and perishable goods.
-              <br className="hidden sm:block" />
-              Reliable cold chain solutions across Nigeria.
-            </motion.p>
+            <div className="mt-5 h-16 max-w-sm">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={subIndex}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="text-white/55 text-sm sm:text-base leading-relaxed"
+                >
+                  {subtitles[subIndex]}
+                </motion.p>
+              </AnimatePresence>
+            </div>
 
-            {/* Action Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.4, ease: "easeOut" }}
-              className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.42 }}
+              className="flex items-center gap-3 mt-7"
             >
-              <Button to={heroData.buttons.primary.link} size="lg" className="shadow-2xl">
-                {heroData.buttons.primary.text}
-                <ArrowRight className="w-5 h-5 sm:w-6 sm:h-6 group-hover:translate-x-2 transition-transform" />
-              </Button>
-
-              <Button
-                onClick={() => setIsDemoModalOpen(true)}
-                variant="secondary"
-                size="lg"
+              <Link
+                to={heroData.buttons.primary.link}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl text-sm transition-colors"
               >
-                <Package className="w-5 h-5 sm:w-6 sm:h-6 group-hover:rotate-12 transition-transform" />
-                {heroData.buttons.secondary.text}
-              </Button>
-            </motion.div>
-
-            {/* Trust Indicators & Stats */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5, ease: "easeOut" }}
-              className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto px-2"
-            >
-              {heroData.stats.map((stat, index) => {
-                const IconComponent = { Truck, Clock, MapPin, Users, TrendingUp }[stat.icon]
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.3, delay: 0.6 + (index * 0.1), ease: "easeOut" }}
-                    className="flex flex-col items-center text-center text-white/90"
-                  >
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-white/10 rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 backdrop-blur-sm">
-                      <IconComponent className="w-6 h-6 sm:w-8 sm:h-8" />
-                    </div>
-                    <div className="text-2xl sm:text-3xl font-black mb-1">
-                      {stat.value === 'TrendingUp' ? <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 text-white" /> : stat.value}
-                    </div>
-                    <div className="text-xs sm:text-sm font-medium opacity-80">{stat.label}</div>
-                  </motion.div>
-                )
-              })}
+                Start Shipping
+                <ArrowUpRight className="w-4 h-4" />
+              </Link>
+              <button
+                onClick={() => setIsDemoOpen(true)}
+                className="px-6 py-3 border border-white/20 hover:border-white/40 text-white/70 hover:text-white font-semibold rounded-xl text-sm transition-all"
+              >
+                Book a Demo
+              </button>
             </motion.div>
           </div>
 
-
+          {/* Right — white CTA card */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.45 }}
+            className="hidden lg:block flex-shrink-0 w-80"
+          >
+            <div className="bg-white rounded-2xl p-7 shadow-2xl shadow-black/50">
+              <p className="text-[#1e3a5f] font-bold text-xl leading-snug">
+                Get an instant rate estimate for your cargo move
+              </p>
+              <p className="text-gray-400 text-xs mt-1.5 mb-6">
+                Lagos · Abuja · Port Harcourt
+              </p>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => navigate(heroData.buttons.primary.link)}
+                  className="inline-flex items-center gap-2 bg-[#1e3a5f] hover:bg-blue-600 text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-colors"
+                >
+                  Get a Quote
+                  <ArrowUpRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setIsDemoOpen(true)}
+                  className="text-xs font-semibold text-gray-400 hover:text-[#1e3a5f] transition-colors underline underline-offset-2"
+                >
+                  Book a demo
+                </button>
+              </div>
+            </div>
+          </motion.div>
         </div>
+
+        {/* ── BOTTOM: company story card ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.55 }}
+          className="flex-shrink-0 pb-6 pt-4 flex justify-center"
+        >
+          <div className="w-full bg-white/8 backdrop-blur-md border border-white/10 rounded-2xl px-8 py-5 flex items-center justify-between gap-8">
+            <div>
+              <p className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase mb-2">Est. 2025 · Lagos, Nigeria</p>
+              <p className="text-white/70 text-sm leading-relaxed max-w-xl">
+                Founded to fix Nigeria's broken cold chain — Dara was built from the ground up to move pharmaceuticals, vaccines and perishables with the precision they deserve.
+              </p>
+            </div>
+            <div className="hidden sm:block flex-shrink-0 text-right">
+              <p className="text-white/20 text-[10px] font-bold tracking-[0.2em] uppercase mb-1">Headquarters</p>
+              <p className="text-white/50 text-sm font-semibold">Yaba, Lagos</p>
+            </div>
+          </div>
+        </motion.div>
+
       </div>
 
-      {/* Subtle gradient overlay - CSS only, zero JS cost */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20"
-        style={{ background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.1) 0%, transparent 70%)' }}
-      />
-
-
-      <ScheduleDemoModal
-        isOpen={isDemoModalOpen}
-        onClose={() => setIsDemoModalOpen(false)}
-      />
+      <ScheduleDemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </section>
   )
 }
