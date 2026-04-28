@@ -39,7 +39,7 @@ export default function DaraHero() {
     >
       {/* ── Video ── */}
       <video
-        src="/herovideo.mp4"
+        src="https://res.cloudinary.com/degktbk01/video/upload/v1777375603/herovideo_cpx5ut.mp4"
         autoPlay muted loop playsInline
         className="absolute inset-0 w-full h-full object-cover object-bottom"
       />
