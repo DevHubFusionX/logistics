@@ -49,7 +49,7 @@ export default function DaraHero() {
       <div className="relative z-10 h-full flex flex-col px-8 sm:px-14 lg:px-20">
 
         {/* ── MIDDLE: headline + CTA card ── */}
-        <div className="flex-1 flex items-end justify-between gap-8 py-6 pb-12">
+        <div className="flex-1 flex items-center lg:items-end justify-between gap-8 py-6 pb-6 lg:pb-12">
 
           {/* Left — headline */}
           <div className="max-w-xl">
