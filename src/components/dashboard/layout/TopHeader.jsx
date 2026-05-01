@@ -55,7 +55,7 @@ export default function TopHeader({ onToggleSidebar }) {
         {/* Logo */}
         <Link to="/" className="flex-shrink-0 hidden sm:block hover:opacity-80 transition-opacity">
           <img
-            src="/assets/img/dara-logo.png"
+            src="/assets/img/Dara.svg"
             alt="Dara Express"
             className="h-8 sm:h-10 w-auto object-contain"
           />

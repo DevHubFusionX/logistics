@@ -20,10 +20,10 @@ export default function DaraTrustedBy() {
           {/* Left */}
           <div className="flex-1 max-w-lg">
             <motion.h2
-              initial={{ opacity: 0, y: 36, filter: 'blur(6px)' }}
-              animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+              initial={{ opacity: 0, y: 36 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, ease }}
-              className="font-heading font-black text-[#1e3a5f] leading-tight tracking-tight"
+              className="font-heading font-black text-sky-900 leading-tight tracking-tight"
               style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}
             >
               Cost-Effective, reliable and seamless operations
@@ -63,7 +63,7 @@ export default function DaraTrustedBy() {
                 initial={{ opacity: 0, rotate: 0, x: 40, y: -20 }}
                 animate={inView ? { opacity: 1, rotate: -5, x: 10, y: -10 } : {}}
                 transition={{ duration: 0.8, delay: 0.15, ease }}
-                className="absolute top-0 right-0 w-[78%] h-[88%] bg-[#1e3a5f] rounded-2xl"
+                className="absolute top-0 right-0 w-[78%] h-[88%] bg-sky-800 rounded-2xl"
               />
 
               {/* Mid card */}
@@ -89,20 +89,20 @@ export default function DaraTrustedBy() {
                   {/* Route line SVG */}
                   <svg viewBox="0 0 200 120" className="w-full max-w-[220px]" fill="none">
                     {/* road */}
-                    <path d="M10,100 Q60,40 100,60 Q140,80 190,20" stroke="#1e3a5f" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 4" opacity="0.2"/>
+                    <path d="M10,100 Q60,40 100,60 Q140,80 190,20" stroke="#075985" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 4" opacity="0.2"/>
                     <path d="M10,100 Q60,40 100,60 Q140,80 190,20" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="6 4"/>
                     {/* origin dot */}
-                    <circle cx="10" cy="100" r="6" fill="#1e3a5f"/>
+                    <circle cx="10" cy="100" r="6" fill="#075985"/>
                     <circle cx="10" cy="100" r="3" fill="white"/>
                     {/* destination dot */}
                     <circle cx="190" cy="20" r="6" fill="#3b82f6"/>
                     <circle cx="190" cy="20" r="3" fill="white"/>
                     {/* truck icon */}
                     <g transform="translate(88,48)">
-                      <rect x="-14" y="-10" width="28" height="18" rx="3" fill="#1e3a5f"/>
+                      <rect x="-14" y="-10" width="28" height="18" rx="3" fill="#075985"/>
                       <rect x="-10" y="-14" width="16" height="8" rx="2" fill="#3b82f6"/>
-                      <circle cx="-8" cy="10" r="4" fill="#e8f0f7" stroke="#1e3a5f" strokeWidth="1.5"/>
-                      <circle cx="8" cy="10" r="4" fill="#e8f0f7" stroke="#1e3a5f" strokeWidth="1.5"/>
+                      <circle cx="-8" cy="10" r="4" fill="#e8f0f7" stroke="#075985" strokeWidth="1.5"/>
+                      <circle cx="8" cy="10" r="4" fill="#e8f0f7" stroke="#075985" strokeWidth="1.5"/>
                     </g>
                     {/* temp badge */}
                     <rect x="130" y="55" width="52" height="22" rx="6" fill="white" opacity="0.9"/>
@@ -118,7 +118,7 @@ export default function DaraTrustedBy() {
                     ].map(({ label, value }) => (
                       <div key={label} className="flex items-center justify-between bg-white rounded-xl px-4 py-2.5 shadow-sm">
                         <span className="text-xs text-[#4a6080] font-semibold">{label}</span>
-                        <span className="text-xs font-black text-[#1e3a5f]">{value}</span>
+                        <span className="text-xs font-black text-sky-900">{value}</span>
                       </div>
                     ))}
                   </div>
@@ -138,10 +138,10 @@ export default function DaraTrustedBy() {
         <div className="max-w-7xl mx-auto px-8 sm:px-14 lg:px-20 pt-20 pb-12 flex flex-col lg:flex-row gap-12 lg:gap-24">
 
           <motion.h2
-            initial={{ opacity: 0, x: -40, filter: 'blur(6px)' }}
-            animate={trustInView ? { opacity: 1, x: 0, filter: 'blur(0px)' } : {}}
+            initial={{ opacity: 0, x: -40 }}
+            animate={trustInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, ease }}
-            className="font-heading font-black text-[#1e3a5f] leading-tight tracking-tight flex-shrink-0"
+            className="font-heading font-black text-sky-900 leading-tight tracking-tight flex-shrink-0"
             style={{ fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)', maxWidth: '14ch' }}
           >
             Trust and safety are our #1 priority

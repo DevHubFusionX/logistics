@@ -28,7 +28,7 @@ export default function SectionDivider() {
       initial={{ opacity: 0 }}
       animate={inView ? { opacity: 1 } : {}}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="bg-[#1e3a5f] overflow-hidden py-4 border-y border-white/5"
+      className="bg-sky-800 overflow-hidden py-4 border-y border-white/5"
     >
       <div className="flex items-center gap-0 w-max">
         <motion.div

@@ -1,19 +1,24 @@
 import { motion } from 'framer-motion'
 import { MessageCircle } from 'lucide-react'
 import { contactData } from '../Data'
+import HeroVideo from '../../common/HeroVideo'
 
 export default function ContactHero() {
   return (
-    <div className="text-center mb-20">
+    <div className="relative text-center mb-20 py-32 overflow-hidden">
+      <HeroVideo />
+      <div className="absolute inset-0 bg-sky-800/55" />
+      <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
+      <div className="relative z-10">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="inline-flex items-center gap-2 px-6 py-3  rounded-full mb-8"
+        className="inline-flex items-center gap-2 px-6 py-3 rounded-full mb-8"
       >
         <MessageCircle className="w-4 h-4 text-primary" />
-        <span className="text-sm font-bold text-gray-700 uppercase tracking-wide">{contactData.hero.badge}</span>
+        <span className="text-sm font-bold text-white/70 uppercase tracking-wide">{contactData.hero.badge}</span>
       </motion.div>
 
       <motion.h2
@@ -21,7 +26,7 @@ export default function ContactHero() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-4xl md:text-5xl lg:text-6xl font-heading text-gray-900 mb-8"
+        className="text-4xl md:text-5xl lg:text-6xl font-heading text-white mb-8"
       >
         {contactData.hero.title}
         <br />
@@ -33,10 +38,11 @@ export default function ContactHero() {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"
+        className="text-xl text-white/70 max-w-3xl mx-auto leading-relaxed"
       >
         {contactData.hero.description}
       </motion.p>
+      </div>
     </div>
   )
 }

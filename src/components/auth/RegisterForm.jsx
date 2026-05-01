@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRegisterMutation } from '../../hooks/queries/useAuthQueries'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
-import AuthTour from './AuthTour'
+
 
 export default function RegisterForm() {
   const navigate = useNavigate()
@@ -37,33 +37,7 @@ export default function RegisterForm() {
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [passwordStrength, setPasswordStrength] = useState(0)
 
-  const tourSteps = [
-    {
-      target: '.name-fields',
-      content: 'Enter your first and last name to personalize your account.',
-      disableBeacon: true,
-    },
-    {
-      target: '.email-field',
-      content: 'Provide your email address for account verification and notifications.',
-    },
-    {
-      target: '.phone-field',
-      content: 'Add your phone number for important delivery updates.',
-    },
-    {
-      target: '.company-fields',
-      content: 'Tell us about your business and location.',
-    },
-    {
-      target: '.password-field',
-      content: 'Create a strong password with at least 8 characters.',
-    },
-    {
-      target: '.terms-checkbox',
-      content: 'Review and accept our terms to complete registration.',
-    },
-  ]
+
 
   const handlePasswordChange = (password) => {
     setFormData({ ...formData, password })
@@ -138,7 +112,7 @@ export default function RegisterForm() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <AuthTour steps={tourSteps} />
+
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
         <p className="text-gray-600">Start shipping smarter today</p>

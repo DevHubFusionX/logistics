@@ -1,165 +1,103 @@
 import { motion } from 'framer-motion'
-import { Truck } from 'lucide-react'
+
+const ease = [0.16, 1, 0.3, 1]
 
 export default function LoadingScreen() {
+  // Path animation variants
+  const pathVariants = {
+    hidden: { 
+      pathLength: 0, 
+      opacity: 0,
+      fillOpacity: 0,
+    },
+    visible: (i) => ({
+      pathLength: 1,
+      opacity: 1,
+      fillOpacity: 1,
+      transition: {
+        pathLength: { delay: 0.3 + i * 0.09, duration: 1.4, ease: [0.37, 0, 0.63, 1] },
+        opacity: { delay: 0.3 + i * 0.09, duration: 0.5, ease: 'easeOut' },
+        fillOpacity: { delay: 0.3 + i * 0.09 + 0.8, duration: 0.6, ease: 'easeOut' },
+      }
+    })
+  }
+
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-sky-900 to-blue-900 flex items-center justify-center z-50 overflow-hidden">
-      {/* Animated Background Elements */}
-      <div className="absolute inset-0">
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ x: '-100%', opacity: 0 }}
+      transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
+      className="fixed inset-0 bg-[#0a152a] flex flex-col items-center justify-center z-[100] overflow-hidden"
+      style={{ willChange: 'transform, opacity' }}
+    >
+      {/* Subtle Floating Particles */}
+      <div className="absolute inset-0 pointer-events-none">
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full"
+            className="absolute rounded-full"
             style={{
+              width: Math.random() > 0.7 ? 2 : 1,
+              height: Math.random() > 0.7 ? 2 : 1,
               left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
+              background: `rgba(96, 165, 250, ${0.15 + Math.random() * 0.25})`,
             }}
-            animate={{
-              opacity: [0, 1, 0],
-              scale: [0, 1, 0]
+            initial={{ y: "110%", opacity: 0 }}
+            animate={{ 
+              y: "-10%",
+              opacity: [0, 0.8, 0],
             }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              delay: Math.random() * 2
+            transition={{ 
+              duration: 6 + Math.random() * 6, 
+              repeat: Infinity, 
+              delay: Math.random() * 4,
+              ease: "easeInOut"
             }}
           />
         ))}
       </div>
 
-      <div className="relative z-10 text-center">
-        {/* Main Logo Container */}
+      <div className="relative flex flex-col items-center">
+        {/* Main Animated SVG Logo */}
         <motion.div
-          className="relative mb-8"
-          initial={{ scale: 0, rotate: -180 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{
-            duration: 1.2,
-            ease: "backOut",
-            delay: 0.3
-          }}
+          initial={{ y: 16, opacity: 0, scale: 0.97 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          transition={{ duration: 1.2, ease }}
+          className="relative"
+          style={{ willChange: 'transform, opacity' }}
         >
-          {/* Professional Truck Icon */}
-          <div className="relative w-40 h-40 mx-auto flex items-center justify-center">
-            {/* Outer Ring - Subtle rotating border */}
-            <motion.div
-              className="absolute w-40 h-40 rounded-full"
-              style={{
-                background: 'conic-gradient(from 0deg, transparent, rgba(56, 189, 248, 0.4), transparent)',
-              }}
-              animate={{ rotate: 360 }}
-              transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            />
-
-            {/* Middle Ring - Static elegant border */}
-            <div className="absolute w-36 h-36 rounded-full border border-white/10" />
-
-            {/* Inner Glow Ring */}
-            <motion.div
-              className="absolute w-32 h-32 rounded-full"
-              style={{
-                background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)',
-              }}
-              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-
-            {/* Main Icon Container - Glassmorphism style */}
-            <motion.div
-              className="relative w-24 h-24 rounded-2xl flex items-center justify-center"
-              style={{
-                background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.15)',
-                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
-              }}
-              animate={{
-                boxShadow: [
-                  '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
-                  '0 8px 48px rgba(56, 189, 248, 0.3), inset 0 1px 0 rgba(255,255,255,0.15)',
-                  '0 8px 32px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1)',
-                ]
-              }}
-              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <Truck className="w-12 h-12 text-white/90" strokeWidth={1.5} />
-            </motion.div>
-          </div>
-        </motion.div>
-
-        {/* Company Name with Typewriter Effect */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.8 }}
-        >
-          <motion.h1
-            className="text-7xl font-bold text-white mb-4 tracking-wider"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.8 }}
+          <svg 
+            width="320" 
+            height="110" 
+            viewBox="0 0 241 78" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
           >
-            {'Dara'.split('').map((letter, i) => (
-              <motion.span
-                key={i}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  delay: 1.8 + i * 0.1,
-                  duration: 0.5,
-                  ease: "backOut"
-                }}
-              >
-                {letter}
-              </motion.span>
-            ))}
-          </motion.h1>
+            {/* LOGO MARK (Blue/Green) */}
+            <motion.path custom={0} variants={pathVariants} initial="hidden" animate="visible" fill="#0343AC" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M271.423 345.8L427.272 345.8L478.733 345.754C504.244 345.706 524.398 344.676 549.589 351.053C576.387 357.996 600.88 371.886 620.596 391.323C650.899 421.397 667.832 462.4 667.58 505.098C667.803 548.451 650.826 590.123 620.372 620.972C594.897 646.093 561.639 661.802 526.06 665.522C511.314 667.119 494.023 666.768 479.077 666.729L422.864 666.739C416.272 665.944 403.272 650.82 398.029 645.428L364.674 611.167C365.71 611.192 366.747 611.212 367.783 611.225L445.696 611.322C492.436 611.361 539.817 618.02 576.007 582.574C596.565 562.523 608.292 535.107 608.595 506.388C609.048 453.279 571.879 409.128 518.827 401.745C506.778 400.069 494.067 400.592 481.896 400.612L438.537 400.636L271.379 400.711L271.423 345.8Z" />
+            <motion.path custom={1} variants={pathVariants} initial="hidden" animate="visible" fill="#0343AC" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M271.516 428.585C273.083 428.533 274.65 428.494 276.217 428.468C324.856 427.698 375.627 428.563 424.462 428.52L474.743 428.43C491.098 428.403 507.611 427.707 523.687 430.981C536.44 433.58 548.168 439.815 557.457 448.933C587.534 478.554 587.327 532.94 557.555 562.615C548.21 571.792 536.508 578.202 523.744 581.135C504.34 585.773 480.319 583.738 459.967 583.716L373.442 583.767L338.704 583.93C334.02 580.169 323.547 569.242 318.729 564.466C331.22 552.168 346.64 538.917 359.83 527.301C393.439 526.696 427.519 527.475 461.127 527.15C471.55 527.049 498.752 527.999 507.65 526.706C511.122 526.226 514.36 524.684 516.922 522.291C524.5 515.084 524.84 496.403 517.53 489.789C510.924 483.812 485.387 485.682 476.223 485.74L428.363 485.959L271.399 486.022L271.516 428.585Z" />
+            <motion.path custom={2} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M271.23 496.991C298.549 495.927 332.559 497.149 360.573 497.275C340.11 517.304 311.485 543.627 289.588 562.193C297.095 568.717 308.149 580.722 315.772 588.257L385.651 658.129C378.727 659.059 361.954 658.702 354.565 658.712C335.874 658.803 317.182 658.767 298.491 658.603C282.954 644.369 264.53 624.284 249.235 609.079C235.197 595.122 214.554 575.414 201.827 560.933C204.033 558.658 210.453 552.287 212.424 550.663C221.534 543.156 265.274 497.744 271.23 496.991Z" />
 
-          <motion.div
-            className="flex items-center justify-center gap-2 text-2xl text-sky-200 font-light"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 2.2, duration: 0.6 }}
-          >
-            <motion.span
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              Global
-            </motion.span>
-            <motion.div
-              className="w-2 h-2 bg-sky-400 rounded-full"
-              animate={{ scale: [1, 1.5, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            />
-            <motion.span
-              animate={{ opacity: [1, 0.3, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: 0.5 }}
-            >
-              Logistics
-            </motion.span>
-          </motion.div>
+            {/* DARA (White) */}
+            <motion.path custom={3} variants={pathVariants} initial="hidden" animate="visible" fill="#FFFFFF" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M727.046 356.443C742.855 356.222 760.147 356.944 776.255 356.836C813.349 356.588 853.132 354.322 882.428 381.1C901.324 398.373 911.752 423.956 912.485 449.362C913.372 480.046 905.838 502.127 885.251 524.642L884.836 525.061C855.092 554.552 823.16 552.864 784.523 552.866L726.812 552.818L727.046 356.443ZM853.429 502.496C877.874 475.457 878.745 429.787 851.162 404.754C830.338 385.856 793.801 389.058 767.559 389.538C767.978 433.055 768.025 476.574 767.701 520.092C796.377 520.517 830.927 524.071 853.429 502.496Z" />
+            <motion.path custom={4} variants={pathVariants} initial="hidden" animate="visible" fill="#FFFFFF" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M998.655 398.619C1019.73 396.172 1037.83 407.706 1052.06 421.775C1051.8 415.027 1051.91 408.793 1052.04 402.044L1089.71 402.097L1089.58 552.902L1051.65 552.886L1051.77 534.276C1049.36 536.655 1046.66 538.997 1044.12 541.267C1033.89 549.591 1021.38 554.632 1008.24 555.73C989.009 557.602 969.842 551.58 955.135 539.044C921.542 510.771 920.29 455.209 947.604 421.534C960.353 405.817 979.003 400.145 998.655 398.619ZM1012.69 522.48C1016.1 521.857 1019.49 521.279 1022.8 520.18C1057.93 508.522 1062.2 458.111 1032.41 438.068C1024.57 432.792 1017.32 431.475 1008.07 430.767C1005.02 431.23 999.91 431.87 997.134 432.906C950.52 450.31 959.58 521.948 1012.69 522.48Z" />
+            <motion.path custom={5} variants={pathVariants} initial="hidden" animate="visible" fill="#FFFFFF" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1274.75 398.629L1275.35 398.634C1298.46 398.973 1309.5 405.877 1325.25 421.87L1325.21 401.913C1337.77 401.822 1350.34 401.881 1362.9 402.088C1362.35 452.356 1362.27 502.629 1362.66 552.899L1325.17 552.875L1325.2 534.319C1321.66 537.562 1318.59 540.056 1314.86 543.026C1304.51 550.884 1292.9 554.597 1279.91 555.583C1206.11 561.183 1178.98 469.369 1222.53 420.068C1236.76 403.952 1254.16 399.599 1274.75 398.629ZM1288.8 521.98C1345.8 512.262 1332.07 422.729 1276.38 431.522C1220.34 444.725 1234.28 527.797 1288.8 521.98Z" />
+            <motion.path custom={6} variants={pathVariants} initial="hidden" animate="visible" fill="#FFFFFF" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1192.26 398.61C1193.96 398.354 1199.39 398.216 1201.37 398.111C1202.57 410.339 1202.18 423.963 1201.97 436.32C1200.56 436.223 1199.15 436.174 1197.74 436.173C1147.99 436.097 1150.64 470.603 1150.99 507.908L1151.15 552.871L1112.23 552.827L1112.12 545.129L1112.22 401.963C1125.25 402.115 1138.05 401.843 1151.21 402.1L1151.14 423.597C1163.24 408.33 1172.56 401.398 1192.26 398.61Z" />
+
+            {/* LOGISTICS (Green) */}
+            <motion.path custom={7} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M814.682 588.515C830.085 584.969 845.45 594.568 849.022 609.969C852.594 625.369 843.024 640.755 827.633 644.355C812.204 647.964 796.776 638.363 793.195 622.924C789.614 607.485 799.24 592.07 814.682 588.515ZM826.091 635.897C836.68 633.184 843.164 622.508 840.69 611.859C838.216 601.209 827.691 594.486 816.991 596.721C809.853 598.211 804.081 603.451 801.907 610.413C799.732 617.375 801.496 624.969 806.517 630.259C811.537 635.549 819.027 637.706 826.091 635.897Z" />
+            <motion.path custom={8} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M910.037 588.37C926.96 587.249 934.929 589.768 942.867 605.182L933.127 605.3C922.958 590.45 904.023 593.229 897.956 609.173C895.968 614.315 896.159 620.044 898.484 625.043C902.663 633.95 916.202 640.936 925.396 635.819C931.487 632.43 933.401 627.452 935.338 621.126C931.296 621.013 927.117 621.035 923.062 621.001C919.597 621.151 916.848 621.511 914.22 619.3C913.337 617.357 913.37 617.469 913.796 615.363C918.359 611.95 937.563 613.456 944.207 613.733C944.283 620.148 944.279 625.167 941.315 631.037C938.338 636.978 933.063 641.445 926.713 643.401C918.629 645.891 909.887 645.054 902.423 641.074C879.718 628.736 884.133 595.492 910.037 588.37Z" />
+            <motion.path custom={9} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1258.96 588.282C1270.98 587.451 1280.9 590.067 1288.52 600.602C1289.71 602.251 1289.2 603.481 1288.64 605.124C1286.49 606.623 1283.95 606.102 1281.15 605.983C1272.08 596.94 1259.27 589.25 1249.61 603.512C1240.37 617.162 1247.28 638.341 1265.92 636.455C1268.72 636.171 1271.11 635.564 1273.85 634.834C1278.29 632.071 1280.97 623.896 1288.16 626.459L1288.85 627.917C1288.72 634.622 1280.55 641.617 1274.49 643.566C1249.67 651.548 1228.36 627.086 1238.99 603.566C1242.77 595.216 1250.58 590.979 1258.96 588.282Z" />
+            <motion.path custom={10} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1046.87 588.437C1054.48 587.861 1063.66 587.178 1068.93 593.795C1070.77 596.091 1073.1 600.659 1072.8 603.613C1064.93 607.713 1060.22 594.77 1052.65 595.629C1049.73 595.96 1046.04 597.586 1044.41 600.179C1043.7 601.324 1043.52 602.723 1043.92 604.009C1046.7 612.969 1072.03 612.873 1073.77 624.741C1075.53 636.68 1069.23 642.236 1058.3 644.711C1052.13 644.826 1046.14 644.88 1041.1 640.77C1037.78 638.064 1033.05 631.706 1033.96 627.348L1035.47 626.986C1041.93 628.407 1045.96 632.649 1051.12 636.393C1055.09 639.283 1062.57 634.905 1065.03 631.328C1066.83 619.618 1039.46 619.681 1035.24 608.092C1031.44 597.659 1038.54 592.291 1046.87 588.437Z" />
+            <motion.path custom={11} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1338.21 588.334C1353.91 587.135 1359.27 588.686 1364.79 603.82C1361.75 603.941 1358.51 603.617 1355.46 603.394C1351.93 599.384 1348.3 593.416 1342.51 595.867C1322.3 604.42 1346.72 611.431 1352.3 613.869C1370.86 621.977 1369.71 638.099 1350.37 644.581C1334.96 645.533 1330.06 641.807 1324.34 627.96L1334.26 628.739C1336.5 632.029 1337.57 634.162 1341.26 635.935C1345.29 637.874 1354.96 636.977 1355.78 631.547C1358.13 617.279 1330.23 620.583 1326.36 609.086C1323 599.113 1330.06 591.935 1338.21 588.334Z" />
+            <motion.path custom={12} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1109.84 588.12C1115.51 588.013 1147.63 586.52 1150.07 589.72C1150.34 593.213 1150.68 592.013 1149.22 594.697C1146 596.751 1139 596.135 1134.78 596.121L1134.79 629.779L1134.75 645.086L1125.96 644.86L1125.85 596.047C1120.72 595.987 1115.31 597.331 1111.28 594.596C1109.68 592.595 1109.95 590.781 1109.84 588.12Z" />
+            <motion.path custom={13} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M726.997 588.265C729.8 588.188 732.879 587.996 735.212 589.416C736.755 594.163 735.834 630.497 735.756 637.979C741.875 638.026 747.876 636.47 753.014 639.169C754.926 641.749 754.351 641.222 754.596 644.885C745.761 645.18 735.879 645.005 726.959 645.046L726.997 588.265Z" />
+            <motion.path custom={14} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M1188.08 588.108L1197.12 588.153L1197.22 644.967L1188.2 644.904L1188.08 588.108Z" />
+            <motion.path custom={15} variants={pathVariants} initial="hidden" animate="visible" fill="#008B3F" transform="matrix(0.191422 0 0 0.191646 -33.6902 -59.4103)" d="M984.061 588.117C987.413 588.035 990.143 587.614 992.639 589.733C993.908 601.374 992.993 631.918 992.954 644.931L984.186 644.925C983.894 626.171 984.089 606.911 984.061 588.117Z" />
+          </svg>
         </motion.div>
 
-        {/* Progress Bar */}
-        <motion.div
-          className="mt-12 w-64 h-1 bg-white/20 rounded-full mx-auto overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2.5 }}
-        >
-          <motion.div
-            className="h-full bg-gradient-to-r from-sky-400 to-blue-500 rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            transition={{
-              delay: 2.5,
-              duration: 0.8,
-              ease: "easeOut"
-            }}
-          />
-        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
 }

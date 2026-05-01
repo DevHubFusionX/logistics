@@ -36,7 +36,7 @@ export default function Footer() {
   const inView = useInView(ref, { once: true, margin: '-6% 0px' })
 
   return (
-    <footer ref={ref} className="bg-[#1e3a5f] text-white overflow-hidden">
+    <footer ref={ref} className="bg-sky-800 text-white overflow-hidden">
 
       {/* ── Top divider accent ── */}
       <motion.div

@@ -1,11 +1,14 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Zap } from 'lucide-react'
+import HeroVideo from '../../common/HeroVideo'
 
 export default function HeroSection() {
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-     
+      <HeroVideo />
+      <div className="absolute inset-0 bg-sky-800/55" />
+      <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
 
       <div className="container mx-auto px-6 text-center relative z-10">
         <motion.div
@@ -13,7 +16,7 @@ export default function HeroSection() {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-blue-100 text-primary rounded-full text-sm font-bold mb-8"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-white/15 text-white rounded-full text-sm font-bold mb-8"
         >
           <Zap className="w-4 h-4" />
           Complete Logistics Solutions
@@ -24,7 +27,7 @@ export default function HeroSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="font-heading text-4xl sm:text-5xl lg:text-7xl font-black text-gray-900 mb-6 leading-tight"
+          className="font-heading text-4xl sm:text-5xl lg:text-7xl font-black text-white mb-6 leading-tight"
         >
           Services Built for
           <br />
@@ -36,7 +39,7 @@ export default function HeroSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto mb-10 leading-relaxed"
+          className="text-lg sm:text-xl text-white/70 max-w-4xl mx-auto mb-10 leading-relaxed"
         >
           From express delivery to enterprise solutions, we provide comprehensive logistics services 
           that scale with your business across Nigeria and beyond.

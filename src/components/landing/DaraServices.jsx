@@ -1,16 +1,21 @@
-import { motion, useInView } from 'framer-motion'
+import { motion as Motion, useInView } from 'framer-motion'
 import { ArrowUpRight, ChevronRight, Thermometer, Clock, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useRef } from 'react'
 import { servicesData } from './Data'
 
+import PharmaImg from '../../assets/climateImage/Pharma.jpg'
+import FrozenImg from '../../assets/climateImage/frozen-foods.jpg'
+import FreshImg from '../../assets/climateImage/fresh-produce.jpg'
+import HaulageImg from '../../assets/climateImage/enterprise-Haulage.png'
+
 const ease = [0.22, 1, 0.36, 1]
 
 const images = [
-  'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=800&q=80',
-  'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
+  PharmaImg,
+  FrozenImg,
+  FreshImg,
+  HaulageImg,
 ]
 
 const container = {
@@ -19,16 +24,16 @@ const container = {
 }
 
 const cardAnim = {
-  hidden: { opacity: 0, y: 56, scale: 0.95, filter: 'blur(4px)' },
+  hidden: { opacity: 0, y: 56, scale: 0.96 },
   visible: {
-    opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+    opacity: 1, y: 0, scale: 1,
     transition: { duration: 0.65, ease },
   },
 }
 
 const headerAnim = {
-  hidden: { opacity: 0, y: 36, filter: 'blur(8px)' },
-  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.7, ease } },
+  hidden: { opacity: 0, y: 36 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease } },
 }
 
 export default function DaraServices() {
@@ -42,30 +47,30 @@ export default function DaraServices() {
       <div className="px-8 sm:px-14 lg:px-20 pt-24 pb-20">
 
         {/* ── Header ── */}
-        <motion.div
+        <Motion.div
           variants={container}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
           className="flex items-end justify-between mb-16"
         >
-          <motion.div variants={headerAnim}>
+          <Motion.div variants={headerAnim}>
             <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-3">
               What we move
             </p>
-            <h2 className="font-heading font-black text-[#1e3a5f] text-3xl sm:text-4xl lg:text-5xl leading-tight">
+            <h2 className="font-heading font-black text-sky-900 text-3xl sm:text-4xl lg:text-5xl leading-tight">
               Services built for{' '}
-              <motion.span
+              <Motion.span
                 className="text-blue-500 inline-block"
                 initial={{ opacity: 0, x: -20 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.5, ease }}
               >
                 cold cargo
-              </motion.span>
+              </Motion.span>
             </h2>
-          </motion.div>
+          </Motion.div>
 
-          <motion.div variants={headerAnim} className="hidden sm:block">
+          <Motion.div variants={headerAnim} className="hidden sm:block">
             <Link
               to="/services"
               className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
@@ -73,11 +78,11 @@ export default function DaraServices() {
               All services
               <ChevronRight className="w-4 h-4" />
             </Link>
-          </motion.div>
-        </motion.div>
+          </Motion.div>
+        </Motion.div>
 
         {/* ── Grid: 1 featured + 3 cards ── */}
-        <motion.div
+        <Motion.div
           variants={container}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
@@ -85,7 +90,7 @@ export default function DaraServices() {
         >
 
           {/* Featured card — spans 1 col, tall */}
-          <motion.div
+          <Motion.div
             variants={cardAnim}
             whileHover={{ y: -6, transition: { duration: 0.25 } }}
             className="relative bg-white rounded-2xl overflow-hidden shadow-sm group flex flex-col min-h-[520px] lg:row-span-2"
@@ -118,16 +123,16 @@ export default function DaraServices() {
                 <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
                   Featured
                 </span>
-                <motion.div
+                <Motion.div
                   initial={{ rotate: 0, opacity: 0.3 }}
                   whileHover={{ rotate: 45, opacity: 1 }}
                   transition={{ duration: 0.2 }}
                 >
                   <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
-                </motion.div>
+                </Motion.div>
               </div>
 
-              <h3 className="font-heading font-black text-[#1e3a5f] text-2xl leading-tight mb-2">
+              <h3 className="font-heading font-black text-sky-900 text-2xl leading-tight mb-2">
                 {featured.title}
               </h3>
               <p className="text-gray-400 text-sm leading-relaxed mb-6">{featured.description}</p>
@@ -148,17 +153,17 @@ export default function DaraServices() {
             </div>
 
             {/* hover accent line */}
-            <motion.div
+            <Motion.div
               className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
               initial={{ scaleX: 0 }}
               whileHover={{ scaleX: 1 }}
               transition={{ duration: 0.3 }}
             />
-          </motion.div>
+          </Motion.div>
 
           {/* 3 smaller cards */}
           {rest.map(({ title, subtitle, description, features, deliveryTime, coverage, img }, i) => (
-            <motion.div
+            <Motion.div
               key={title}
               variants={cardAnim}
               whileHover={{ y: -6, transition: { duration: 0.25 } }}
@@ -187,16 +192,16 @@ export default function DaraServices() {
                   <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
                     {subtitle}
                   </span>
-                  <motion.div
+                  <Motion.div
                     initial={{ rotate: 0, opacity: 0.3 }}
                     whileHover={{ rotate: 45, opacity: 1 }}
                     transition={{ duration: 0.2 }}
                   >
                     <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
-                  </motion.div>
+                  </Motion.div>
                 </div>
 
-                <h3 className="font-heading font-black text-[#1e3a5f] text-lg leading-tight mb-2">
+                <h3 className="font-heading font-black text-sky-900 text-lg leading-tight mb-2">
                   {title}
                 </h3>
                 <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">{description}</p>
@@ -208,25 +213,25 @@ export default function DaraServices() {
               </div>
 
               {/* hover accent line */}
-              <motion.div
+              <Motion.div
                 className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
                 initial={{ scaleX: 0 }}
                 whileHover={{ scaleX: 1 }}
                 transition={{ duration: 0.3 }}
               />
-            </motion.div>
+            </Motion.div>
           ))}
 
-        </motion.div>
+        </Motion.div>
 
         {/* ── Bottom CTA strip ── */}
-        <motion.div
+        <Motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.7, ease }}
           className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl px-8 py-5 shadow-sm"
         >
-          <p className="text-[#1e3a5f] font-bold text-base">
+          <p className="text-sky-900 font-bold text-base">
             Not sure which service fits your cargo?
           </p>
           <Link
@@ -236,7 +241,7 @@ export default function DaraServices() {
             Get a custom quote
             <ArrowUpRight className="w-4 h-4" />
           </Link>
-        </motion.div>
+        </Motion.div>
 
       </div>
     </section>

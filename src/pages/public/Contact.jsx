@@ -3,6 +3,7 @@ import { useState, useRef } from 'react'
 import { ArrowUpRight, Phone, Mail, MapPin, Clock, MessageSquare, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SEO from '../../components/common/SEO'
+import HeroVideo from '../../components/common/HeroVideo'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -58,17 +59,14 @@ export default function Contact() {
       />
 
       {/* ── 1. Hero ── */}
-      <section className="relative w-full overflow-hidden bg-[#1e3a5f]" style={{ minHeight: '85vh' }}>
-        <video
-          src="/herovideo.mp4"
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover object-bottom"
-        />
-        <div className="absolute inset-0 bg-[#1e3a5f]/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/95 via-[#1e3a5f]/50 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-transparent to-transparent" />
+      <section className="relative w-full overflow-hidden bg-sky-800" style={{ minHeight: '80vh' }}>
+        <HeroVideo />
+        <div className="absolute inset-0 bg-sky-800/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-900/95 via-sky-800/50 to-transparent lg:block hidden" />
+        <div className="absolute inset-0 bg-sky-800/40 lg:hidden block" />
+        <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
 
-        <div className="relative z-10 flex flex-col lg:flex-row items-end justify-between h-full px-8 sm:px-14 lg:px-20 pb-20 pt-40 gap-12">
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between h-full px-6 sm:px-14 lg:px-20 pb-16 lg:pb-20 pt-32 lg:pt-40 gap-10 lg:gap-12">
 
           {/* Left — headline + contact details */}
           <div className="flex-1 max-w-xl">
@@ -82,11 +80,11 @@ export default function Contact() {
             </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 48, filter: 'blur(8px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              initial={{ opacity: 0, y: 48 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.1, ease }}
-              className="font-heading font-black text-white leading-[0.92] tracking-tight mb-10"
-              style={{ fontSize: 'clamp(3rem, 7vw, 6rem)' }}
+              className="font-heading font-black text-white leading-[0.95] tracking-tight mb-8 lg:mb-10"
+              style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)' }}
             >
               {"Let's move"}
               <br />
@@ -126,16 +124,18 @@ export default function Contact() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.5, ease }}
-            className="flex-shrink-0"
+            className="flex-shrink-0 w-full lg:w-auto"
           >
-            <div className="bg-white/8 backdrop-blur-md border border-white/10 rounded-2xl p-6 space-y-3 w-64">
+            <div className="bg-white/8 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-7 w-full lg:w-64">
               <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-4">How can we help?</p>
-              {reasons.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors">
-                  <Icon className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                  <span className="text-white/70 text-sm font-semibold">{label}</span>
-                </div>
-              ))}
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
+                {reasons.map(({ icon: Icon, label }) => (
+                  <div key={label} className="flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors group">
+                    <Icon className="w-4 h-4 text-blue-400 flex-shrink-0 group-hover:scale-110 transition-transform" />
+                    <span className="text-white/70 text-sm font-semibold">{label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
 
@@ -151,7 +151,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 40 }}
             animate={formInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.75, ease }}
-            className="lg:col-span-3 px-8 sm:px-14 lg:px-16 py-20 border-r border-gray-100"
+            className="lg:col-span-3 px-6 sm:px-14 lg:px-16 py-16 lg:py-20 border-b lg:border-b-0 lg:border-r border-gray-100"
           >
             {sent ? (
               <motion.div
@@ -163,7 +163,7 @@ export default function Contact() {
                 <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
                   <ArrowUpRight className="w-6 h-6 text-blue-500" />
                 </div>
-                <h2 className="font-heading font-black text-[#1e3a5f] text-3xl leading-tight">
+                <h2 className="font-heading font-black text-sky-900 text-3xl leading-tight">
                   Message received!
                 </h2>
                 <p className="text-[#4a6080] text-base leading-relaxed max-w-md">
@@ -180,7 +180,7 @@ export default function Contact() {
               <>
                 <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-3">Send a message</p>
                 <h2
-                  className="font-heading font-black text-[#1e3a5f] leading-tight mb-10"
+                  className="font-heading font-black text-sky-900 leading-tight mb-10"
                   style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}
                 >
                   Tell us about
@@ -199,7 +199,7 @@ export default function Contact() {
                         placeholder="Adebayo Ogundimu"
                         value={form.name}
                         onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                        className="w-full bg-transparent text-[#1e3a5f] placeholder-gray-300 text-base outline-none font-semibold"
+                        className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none font-semibold"
                       />
                     </div>
                     <div className="border-b border-gray-200 pb-4">
@@ -210,7 +210,7 @@ export default function Contact() {
                         placeholder="you@company.com"
                         value={form.email}
                         onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        className="w-full bg-transparent text-[#1e3a5f] placeholder-gray-300 text-base outline-none font-semibold"
+                        className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none font-semibold"
                       />
                     </div>
                   </div>
@@ -224,7 +224,7 @@ export default function Contact() {
                         placeholder="+234 800 000 0000"
                         value={form.phone}
                         onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                        className="w-full bg-transparent text-[#1e3a5f] placeholder-gray-300 text-base outline-none font-semibold"
+                        className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none font-semibold"
                       />
                     </div>
                     <div className="border-b border-gray-200 pb-4">
@@ -232,7 +232,7 @@ export default function Contact() {
                       <select
                         value={form.cargo}
                         onChange={e => setForm(f => ({ ...f, cargo: e.target.value }))}
-                        className="w-full bg-transparent text-[#1e3a5f] text-base outline-none font-semibold appearance-none cursor-pointer"
+                        className="w-full bg-transparent text-sky-900 text-base outline-none font-semibold appearance-none cursor-pointer"
                       >
                         <option value="">Select cargo type</option>
                         <option>Pharmaceuticals / Vaccines</option>
@@ -252,7 +252,7 @@ export default function Contact() {
                       placeholder="Tell us your route, volume, temperature requirements..."
                       value={form.message}
                       onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      className="w-full bg-transparent text-[#1e3a5f] placeholder-gray-300 text-base outline-none resize-none font-semibold"
+                      className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none resize-none font-semibold"
                     />
                   </div>
 
@@ -275,7 +275,7 @@ export default function Contact() {
             initial={{ opacity: 0, x: 32 }}
             animate={formInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.75, delay: 0.2, ease }}
-            className="lg:col-span-2 bg-[#e8f0f7] px-8 sm:px-10 py-20 flex flex-col justify-between gap-12"
+            className="lg:col-span-2 bg-[#e8f0f7] px-6 sm:px-10 py-16 lg:py-20 flex flex-col justify-between gap-12"
           >
             <div>
               <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-8">Contact details</p>
@@ -294,7 +294,7 @@ export default function Contact() {
                     <div>
                       <p className="text-[#4a6080] text-[10px] font-bold tracking-widest uppercase mb-1">{label}</p>
                       {lines.map(l => (
-                        <p key={l} className="text-[#1e3a5f] font-bold text-sm leading-snug">{l}</p>
+                        <p key={l} className="text-sky-900 font-bold text-sm leading-snug">{l}</p>
                       ))}
                       <p className="text-[#4a6080] text-xs mt-0.5">{sub}</p>
                     </div>
@@ -310,14 +310,14 @@ export default function Contact() {
                 to="/booking/request"
                 className="flex items-center justify-between px-5 py-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group"
               >
-                <span className="font-bold text-[#1e3a5f] text-sm">Get an instant quote</span>
+                <span className="font-bold text-sky-900 text-sm">Get an instant quote</span>
                 <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
               <Link
                 to="/tracking"
                 className="flex items-center justify-between px-5 py-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group"
               >
-                <span className="font-bold text-[#1e3a5f] text-sm">Track a shipment</span>
+                <span className="font-bold text-sky-900 text-sm">Track a shipment</span>
                 <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </Link>
             </div>
@@ -337,7 +337,7 @@ export default function Contact() {
           referrerPolicy="no-referrer-when-downgrade"
         />
         {/* overlay card */}
-        <div className="absolute bottom-6 left-6 sm:left-14 bg-[#1e3a5f] rounded-2xl px-6 py-4 shadow-2xl">
+        <div className="absolute bottom-6 left-6 right-6 sm:left-14 sm:right-auto bg-sky-800 rounded-2xl px-6 py-4 shadow-2xl">
           <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>
           <p className="text-white font-bold text-sm">10, Hughes Avenue, Yaba, Lagos</p>
           <a

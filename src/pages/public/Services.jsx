@@ -3,6 +3,12 @@ import { ArrowUpRight, Thermometer, Clock, MapPin, Shield, CheckCircle } from 'l
 import { Link } from 'react-router-dom'
 import { useRef } from 'react'
 import SEO from '../../components/common/SEO'
+import HeroVideo from '../../components/common/HeroVideo'
+
+import PharmaImg from '../../assets/climateImage/Pharma.jpg'
+import FrozenImg from '../../assets/climateImage/frozen-foods.jpg'
+import FreshImg from '../../assets/climateImage/fresh-produce.jpg'
+import HaulageImg from '../../assets/climateImage/enterprise-Haulage.png'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -23,7 +29,7 @@ const services = [
     ],
     delivery: 'Same-day available',
     coverage: 'Lagos · Abuja · Port Harcourt',
-    img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=1200&q=85',
+    img: PharmaImg,
     accent: 'bg-blue-500',
     accentText: 'text-blue-500',
     accentLight: 'bg-blue-50',
@@ -44,7 +50,7 @@ const services = [
     ],
     delivery: '1–3 days',
     coverage: 'Nationwide',
-    img: 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=85',
+    img: FrozenImg,
     accent: 'bg-cyan-500',
     accentText: 'text-cyan-600',
     accentLight: 'bg-cyan-50',
@@ -65,7 +71,7 @@ const services = [
     ],
     delivery: '12–48 hours',
     coverage: 'All 36 States',
-    img: 'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1200&q=85',
+    img: FreshImg,
     accent: 'bg-green-500',
     accentText: 'text-green-600',
     accentLight: 'bg-green-50',
@@ -86,9 +92,9 @@ const services = [
     ],
     delivery: 'Daily departures',
     coverage: 'Regional Hubs',
-    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=85',
-    accent: 'bg-[#1e3a5f]',
-    accentText: 'text-[#1e3a5f]',
+    img: HaulageImg,
+    accent: 'bg-sky-800',
+    accentText: 'text-sky-900',
     accentLight: 'bg-gray-100',
   },
 ]
@@ -116,7 +122,7 @@ function ServiceRow({ service, index }) {
             className="absolute inset-0 w-full h-full object-cover"
           />
           {/* dark overlay */}
-          <div className="absolute inset-0 bg-[#1e3a5f]/40" />
+          <div className="absolute inset-0 bg-sky-800/40" />
 
           {/* temp badge — bottom left */}
           <motion.div
@@ -156,7 +162,7 @@ function ServiceRow({ service, index }) {
 
           {/* title */}
           <h2
-            className="font-heading font-black text-[#1e3a5f] leading-[0.92] tracking-tight mb-6 whitespace-pre-line"
+            className="font-heading font-black text-sky-900 leading-[0.92] tracking-tight mb-6 whitespace-pre-line"
             style={{ fontSize: 'clamp(2.4rem, 4vw, 3.6rem)' }}
           >
             {service.title}
@@ -220,17 +226,13 @@ export default function Services() {
       {/* ── Hero ── */}
       <section
         ref={heroRef}
-        className="relative w-full overflow-hidden bg-[#1e3a5f]"
+        className="relative w-full overflow-hidden bg-sky-800"
         style={{ minHeight: '80vh' }}
       >
-        <video
-          src="/herovideo.mp4"
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover object-bottom"
-        />
-        <div className="absolute inset-0 bg-[#1e3a5f]/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/90 via-[#1e3a5f]/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-transparent to-transparent" />
+        <HeroVideo />
+        <div className="absolute inset-0 bg-sky-800/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-900/90 via-sky-800/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
 
         <div className="relative z-10 flex flex-col justify-end h-full px-8 sm:px-14 lg:px-20 pb-16 pt-36">
           <motion.p
@@ -283,13 +285,9 @@ export default function Services() {
       </section>
 
       {/* ── CTA ── */}
-      <section ref={ctaRef} className="bg-[#1e3a5f] relative overflow-hidden">
-        <video
-          src="/herovideo.mp4"
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-[#1e3a5f]/80" />
+      <section ref={ctaRef} className="bg-sky-800 relative overflow-hidden">
+        <HeroVideo className="absolute inset-0 w-full h-full object-cover opacity-20" />
+        <div className="absolute inset-0 bg-sky-800/80" />
 
         <div className="relative z-10 px-8 sm:px-14 lg:px-20 py-24 flex flex-col lg:flex-row items-center justify-between gap-12">
           <motion.div

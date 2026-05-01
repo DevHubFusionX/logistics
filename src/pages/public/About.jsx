@@ -3,6 +3,7 @@ import { ArrowUpRight, Thermometer, Shield, Zap, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useRef } from 'react'
 import SEO from '../../components/common/SEO'
+import HeroVideo from '../../components/common/HeroVideo'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -80,7 +81,7 @@ function ValueRow({ icon: Icon, num, title, body, alt }) {
         <Icon className="w-5 h-5 text-blue-500" />
       </div>
       <div className="flex-1">
-        <h3 className="font-heading font-black text-[#1e3a5f] text-2xl mb-2">{title}</h3>
+        <h3 className="font-heading font-black text-sky-900 text-2xl mb-2">{title}</h3>
         <p className="text-[#4a6080] text-base leading-relaxed max-w-2xl">{body}</p>
       </div>
     </motion.div>
@@ -103,15 +104,11 @@ export default function About() {
       />
 
       {/* ── 1. Hero ── */}
-      <section className="relative w-full overflow-hidden bg-[#1e3a5f]" style={{ minHeight: '90vh' }}>
-        <video
-          src="/herovideo.mp4"
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover object-bottom"
-        />
-        <div className="absolute inset-0 bg-[#1e3a5f]/55" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#1e3a5f]/90 via-[#1e3a5f]/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-transparent to-transparent" />
+      <section className="relative w-full overflow-hidden bg-sky-800" style={{ minHeight: '90vh' }}>
+        <HeroVideo />
+        <div className="absolute inset-0 bg-sky-800/55" />
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-900/90 via-sky-800/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
 
         <div className="relative z-10 flex flex-col justify-end h-full px-8 sm:px-14 lg:px-20 pb-20 pt-40">
           <motion.p
@@ -157,7 +154,7 @@ export default function About() {
       <section className="bg-white px-8 sm:px-14 lg:px-20 py-24 border-b border-gray-100">
         <Reveal>
           <blockquote
-            className="font-heading font-black text-[#1e3a5f] leading-tight max-w-5xl"
+            className="font-heading font-black text-sky-900 leading-tight max-w-5xl"
             style={{ fontSize: 'clamp(1.8rem, 4vw, 3.2rem)' }}
           >
             {'"Cold-chain logistics isn\'t just about transportation — it\'s about '}
@@ -177,7 +174,7 @@ export default function About() {
               alt="Dara reefer truck Nigeria"
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-[#1e3a5f]/30" />
+            <div className="absolute inset-0 bg-sky-800/30" />
             <div className="absolute bottom-8 left-8 bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-6 py-4">
               <p className="text-white/50 text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>
               <p className="font-heading font-black text-white text-xl">Yaba, Lagos</p>
@@ -188,7 +185,7 @@ export default function About() {
             <Reveal delay={0.15}>
               <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-5">Who we are</p>
               <h2
-                className="font-heading font-black text-[#1e3a5f] leading-tight mb-6"
+                className="font-heading font-black text-sky-900 leading-tight mb-6"
                 style={{ fontSize: 'clamp(2rem, 3.5vw, 3rem)' }}
               >
                 Technology-driven cold chain for Nigeria
@@ -203,7 +200,7 @@ export default function About() {
               </p>
               <div className="flex flex-wrap gap-3">
                 {['IoT monitored', 'GIT insured', 'GPS tracked', '24/7 support'].map(tag => (
-                  <span key={tag} className="px-3 py-1.5 bg-white rounded-xl text-xs font-bold text-[#1e3a5f] shadow-sm">
+                  <span key={tag} className="px-3 py-1.5 bg-white rounded-xl text-xs font-bold text-sky-900 shadow-sm">
                     {tag}
                   </span>
                 ))}
@@ -221,7 +218,7 @@ export default function About() {
       </section>
 
       {/* ── 5. Timeline ── */}
-      <section ref={timelineRef} className="bg-[#1e3a5f] overflow-hidden px-8 sm:px-14 lg:px-20 py-24">
+      <section ref={timelineRef} className="bg-sky-800 overflow-hidden px-8 sm:px-14 lg:px-20 py-24">
         <Reveal>
           <p className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-4">Our journey</p>
           <h2
@@ -271,7 +268,7 @@ export default function About() {
           >
             <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-5">{label}</p>
             <h3
-              className="font-heading font-black text-[#1e3a5f] leading-tight mb-6"
+              className="font-heading font-black text-sky-900 leading-tight mb-6"
               style={{ fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}
             >
               {heading}
@@ -282,13 +279,9 @@ export default function About() {
       </section>
 
       {/* ── 7. CTA ── */}
-      <section ref={ctaRef} className="bg-[#1e3a5f] relative overflow-hidden">
-        <video
-          src="/herovideo.mp4"
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-[#1e3a5f]/80" />
+      <section ref={ctaRef} className="bg-sky-800 relative overflow-hidden">
+        <HeroVideo className="absolute inset-0 w-full h-full object-cover opacity-20" />
+        <div className="absolute inset-0 bg-sky-800/80" />
         <div className="relative z-10 px-8 sm:px-14 lg:px-20 py-24 flex flex-col lg:flex-row items-center justify-between gap-12">
 
           <motion.div

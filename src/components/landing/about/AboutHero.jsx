@@ -1,11 +1,14 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import HeroVideo from '../../common/HeroVideo'
 import { ArrowRight, Zap } from 'lucide-react'
 
 export default function AboutHero() {
   return (
     <section className="relative min-h-[80vh] flex items-center justify-center overflow-hidden">
-
+      <HeroVideo />
+      <div className="absolute inset-0 bg-sky-800/55" />
+      <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-5xl mx-auto text-center">
@@ -14,7 +17,7 @@ export default function AboutHero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-100 text-primary rounded-full text-sm font-bold mb-8"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-white/15 text-white rounded-full text-sm font-bold mb-8"
           >
             <Zap className="w-4 h-4" />
             Trusted by 1,000+ Nigerian businesses
@@ -25,7 +28,7 @@ export default function AboutHero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-heading text-gray-900 mb-6 leading-tight"
+            className="text-4xl sm:text-5xl lg:text-7xl font-heading text-white mb-6 leading-tight"
           >
             About
             <br />
@@ -37,7 +40,7 @@ export default function AboutHero() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-lg sm:text-xl text-gray-600 leading-relaxed mb-10 max-w-4xl mx-auto"
+            className="text-lg sm:text-xl text-white/70 leading-relaxed mb-10 max-w-4xl mx-auto"
           >
             Since 2020, we've been transforming Nigerian commerce through intelligent logistics solutions.
             Our commitment to innovation, reliability, and customer success has made us a trusted partner
@@ -62,7 +65,7 @@ export default function AboutHero() {
             
             <Link
               to="/services"
-              className="inline-flex items-center gap-2 px-8 py-4 border-2 border-primary text-primary rounded-xl font-semibold hover:bg-blue-50 transition-all"
+              className="inline-flex items-center gap-2 px-8 py-4 border-2 border-white/40 text-white rounded-xl font-semibold hover:bg-white/10 transition-all"
             >
               Our Services
             </Link>

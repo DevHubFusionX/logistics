@@ -169,7 +169,7 @@ export default function ManagerLoginForm() {
                         transition={{ delay: 0.3 }}
                     >
                         <img
-                            src="/assets/img/dara-logo.png"
+                            src="/assets/img/Dara.svg"
                             alt="Dara Express"
                             className="w-28 h-28 xl:w-36 xl:h-36 object-contain filter brightness-0 invert"
                         />
@@ -276,7 +276,7 @@ export default function ManagerLoginForm() {
                         animate={{ opacity: 1, y: 0 }}
                     >
                         <img
-                            src="/assets/img/dara-logo.png"
+                            src="/assets/img/Dara.svg"
                             alt="Dara Express"
                             className="w-24 h-24 object-contain"
                         />

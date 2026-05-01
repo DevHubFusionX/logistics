@@ -43,7 +43,7 @@ export default function Navbar() {
     <>
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         solid
-          ? 'bg-[#1e3a5f]/95 backdrop-blur-md shadow-lg shadow-black/20 border-b border-white/8'
+          ? 'bg-sky-800/95 backdrop-blur-md shadow-lg shadow-black/20 border-b border-white/8'
           : 'bg-transparent'
       }`}>
         <div className="px-8 sm:px-14 lg:px-20">
@@ -136,11 +136,11 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="fixed top-0 right-0 h-full w-72 bg-[#1e3a5f] border-l border-white/10 z-50 md:hidden flex flex-col"
+              className="fixed top-0 right-0 h-full w-72 bg-sky-800 border-l border-white/10 z-50 md:hidden flex flex-col"
             >
               {/* header */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-white/8">
-                <AnimatedLogo className="h-8 brightness-0 invert" />
+                <AnimatedLogo className="h-8" />
                 <button
                   onClick={() => setMenuOpen(false)}
                   className="p-2 rounded-lg text-white/60 hover:text-white hover:bg-white/10 transition-all"

@@ -5,6 +5,7 @@ import { Search, MapPin, Package, Truck, CheckCircle, Clock, AlertCircle, Refres
 import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import toast from 'react-hot-toast'
 import SEO from '../../components/common/SEO'
+import HeroVideo from '../../components/common/HeroVideo'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -41,13 +42,9 @@ export default function Tracking() {
       />
 
       {/* ── Hero ── */}
-      <section className="relative bg-[#1e3a5f] overflow-hidden" style={{ minHeight: '52vh' }}>
-        <video
-          src="/herovideo.mp4"
-          autoPlay muted loop playsInline
-          className="absolute inset-0 w-full h-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#1e3a5f] via-transparent to-transparent" />
+      <section className="relative bg-sky-800 overflow-hidden" style={{ minHeight: '52vh' }}>
+        <HeroVideo className="absolute inset-0 w-full h-full object-cover opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
 
         <div className="relative z-10 flex flex-col items-center justify-center h-full px-8 sm:px-14 lg:px-20 pt-36 pb-20 text-center">
           <motion.p
@@ -131,7 +128,7 @@ export default function Tracking() {
               <div className="w-16 h-16 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-5">
                 <Package className="w-7 h-7 text-blue-400" />
               </div>
-              <p className="font-heading font-black text-[#1e3a5f] text-xl mb-2">No shipment tracked yet</p>
+              <p className="font-heading font-black text-sky-900 text-xl mb-2">No shipment tracked yet</p>
               <p className="text-[#4a6080] text-sm max-w-xs">Enter your booking ID above to see live status, location and temperature data.</p>
             </motion.div>
           )}
@@ -149,7 +146,7 @@ export default function Tracking() {
               <div className="bg-white rounded-2xl shadow-sm px-8 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <p className="text-[#4a6080] text-xs font-bold tracking-widest uppercase mb-1">Tracking ID</p>
-                  <h2 className="font-heading font-black text-[#1e3a5f] text-2xl">{shipment.id}</h2>
+                  <h2 className="font-heading font-black text-sky-900 text-2xl">{shipment.id}</h2>
                   <span className="inline-flex items-center gap-1.5 mt-2 px-3 py-1 bg-blue-50 text-blue-600 text-xs font-black rounded-lg uppercase tracking-wider">
                     {shipment.status?.replace('_', ' ')}
                   </span>
@@ -157,14 +154,14 @@ export default function Tracking() {
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <p className="text-[#4a6080] text-xs font-bold tracking-widest uppercase mb-1">Est. Delivery</p>
-                    <p className="font-heading font-black text-[#1e3a5f] text-lg">{shipment.estimatedDelivery}</p>
+                    <p className="font-heading font-black text-sky-900 text-lg">{shipment.estimatedDelivery}</p>
                   </div>
                   <button
                     onClick={handleRefresh}
                     disabled={loading}
                     className="w-10 h-10 rounded-xl bg-[#e8f0f7] hover:bg-blue-50 flex items-center justify-center transition-colors"
                   >
-                    <RefreshCw className={`w-4 h-4 text-[#1e3a5f] ${loading ? 'animate-spin' : ''}`} />
+                    <RefreshCw className={`w-4 h-4 text-sky-900 ${loading ? 'animate-spin' : ''}`} />
                   </button>
                 </div>
               </div>
@@ -195,7 +192,7 @@ export default function Tracking() {
                           {autoRefresh ? 'On (30s)' : 'Off'}
                         </button>
                       ) : (
-                        <p className="font-bold text-[#1e3a5f] text-sm truncate">{value}</p>
+                        <p className="font-bold text-sky-900 text-sm truncate">{value}</p>
                       )}
                     </div>
                   </div>
@@ -226,7 +223,7 @@ export default function Tracking() {
                           }
                         </div>
                         <div className="flex-1 pb-2">
-                          <p className={`font-bold text-sm ${event.completed ? 'text-[#1e3a5f]' : 'text-gray-400'}`}>
+                          <p className={`font-bold text-sm ${event.completed ? 'text-sky-900' : 'text-gray-400'}`}>
                             {event.status}
                           </p>
                           <p className={`text-xs mt-0.5 ${event.completed ? 'text-[#4a6080]' : 'text-gray-300'}`}>
@@ -240,7 +237,7 @@ export default function Tracking() {
               </div>
 
               {/* Help strip */}
-              <div className="bg-[#1e3a5f] rounded-2xl px-8 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="bg-sky-800 rounded-2xl px-8 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
                   <p className="text-white font-bold text-sm mb-0.5">Need help with this shipment?</p>
                   <p className="text-white/50 text-xs">Our team is available 24/7 to assist you.</p>

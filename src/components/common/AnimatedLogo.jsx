@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 export default function AnimatedLogo({ className = "h-10" }) {
   return (
     <motion.img
-      src="/assets/img/dara-logo.png"
+      src="/assets/img/Dara.svg"
       alt="Dara Logistics"
       className={className}
       initial={{ opacity: 0, scale: 0.8 }}

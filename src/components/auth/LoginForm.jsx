@@ -6,7 +6,7 @@ import { useLoginMutation } from '../../hooks/queries/useAuthQueries'
 import { useAuthStore } from '../../stores/authStore'
 import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
-import AuthTour from './AuthTour'
+
 
 const MAX_ATTEMPTS = 5
 const LOCKOUT_TIME = 60000 // 1 minute
@@ -35,21 +35,7 @@ export default function LoginForm() {
   const [attempts, setAttempts] = useState(0)
   const [lockoutTime, setLockoutTime] = useState(0)
 
-  const tourSteps = [
-    {
-      target: '.email-field',
-      content: 'Enter your registered email address.',
-      disableBeacon: true,
-    },
-    {
-      target: '.password-field',
-      content: 'Enter your password. Click the eye icon to show/hide it.',
-    },
-    {
-      target: '.remember-me',
-      content: 'Check this to stay signed in on this device.',
-    },
-  ]
+
 
   useEffect(() => {
     if (lockoutTime > 0) {
@@ -111,7 +97,7 @@ export default function LoginForm() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
     >
-      <AuthTour steps={tourSteps} />
+
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
         <p className="text-gray-600">Access your logistics command center</p>

@@ -38,17 +38,17 @@ const containerVariants = {
 }
 
 const headerVariants = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(8px)' },
+  hidden: { opacity: 0, y: 40 },
   visible: {
-    opacity: 1, y: 0, filter: 'blur(0px)',
+    opacity: 1, y: 0,
     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
   },
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 60, scale: 0.94, filter: 'blur(4px)' },
+  hidden: { opacity: 0, y: 60, scale: 0.96 },
   visible: {
-    opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+    opacity: 1, y: 0, scale: 1,
     transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
   },
 }
@@ -101,7 +101,7 @@ export default function DaraHowItWorks() {
             >
               How it works
             </motion.p>
-            <h2 className="font-heading font-black text-[#1e3a5f] text-3xl sm:text-4xl lg:text-5xl leading-tight">
+            <h2 className="font-heading font-black text-sky-900 text-3xl sm:text-4xl lg:text-5xl leading-tight">
               Our processes are{' '}
               <motion.span
                 className="text-blue-500 inline-block"
@@ -190,7 +190,7 @@ export default function DaraHowItWorks() {
 
               {/* bottom: title + description */}
               <div className="relative z-10 mt-12">
-                <h3 className="font-heading font-black text-[#1e3a5f] text-xl mb-2 leading-tight">
+                <h3 className="font-heading font-black text-sky-900 text-xl mb-2 leading-tight">
                   {title}
                 </h3>
                 <p className="text-gray-400 text-sm leading-relaxed">{description}</p>

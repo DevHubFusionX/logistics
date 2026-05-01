@@ -44,10 +44,10 @@ export default function DaraCTA() {
             </motion.p>
 
             <motion.h2
-              initial={{ opacity: 0, y: 32, filter: 'blur(6px)' }}
-              animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+              initial={{ opacity: 0, y: 32 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.2, ease }}
-              className="font-heading font-black text-[#1e3a5f] leading-tight tracking-tight"
+              className="font-heading font-black text-sky-900 leading-tight tracking-tight"
               style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}
             >
               Your cold chain,{' '}
@@ -75,7 +75,7 @@ export default function DaraCTA() {
               {trust.map(({ icon: Icon, label }) => (
                 <span
                   key={label}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl text-xs font-bold text-[#1e3a5f] shadow-sm"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl text-xs font-bold text-sky-900 shadow-sm"
                 >
                   <Icon className="w-3.5 h-3.5 text-blue-500" />
                   {label}
@@ -99,7 +99,7 @@ export default function DaraCTA() {
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-gray-50 active:scale-95 text-[#1e3a5f] font-bold rounded-xl text-sm transition-all duration-200 shadow-sm"
+                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-gray-50 active:scale-95 text-sky-900 font-bold rounded-xl text-sm transition-all duration-200 shadow-sm"
               >
                 Talk to us
               </Link>
@@ -126,7 +126,7 @@ export default function DaraCTA() {
                 transition={{ duration: 0.5, delay: 0.45 + i * 0.09, ease }}
                 className="bg-white rounded-2xl px-6 py-5 shadow-sm"
               >
-                <p className="font-heading font-black text-[#1e3a5f] text-2xl leading-none mb-1">
+                <p className="font-heading font-black text-sky-900 text-2xl leading-none mb-1">
                   {value}
                 </p>
                 <p className="text-gray-400 text-xs leading-snug whitespace-pre-line">

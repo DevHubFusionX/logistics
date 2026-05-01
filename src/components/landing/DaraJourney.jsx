@@ -134,17 +134,17 @@ export default function DaraJourney() {
             className="mb-6"
           >
             <svg width="32" height="24" viewBox="0 0 32 24" fill="none">
-              <rect x="0" y="4" width="10" height="16" rx="2" fill="#1e3a5f" />
-              <rect x="13" y="0" width="10" height="24" rx="2" fill="#1e3a5f" />
-              <rect x="26" y="6" width="6" height="12" rx="2" fill="#1e3a5f" />
+              <rect x="0" y="4" width="10" height="16" rx="2" fill="#075985" />
+              <rect x="13" y="0" width="10" height="24" rx="2" fill="#075985" />
+              <rect x="26" y="6" width="6" height="12" rx="2" fill="#075985" />
             </svg>
           </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0, y: 32, filter: 'blur(6px)' }}
-            animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+            initial={{ opacity: 0, y: 32 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.1, ease }}
-            className="font-heading font-black text-[#1e3a5f] leading-tight tracking-tight"
+            className="font-heading font-black text-sky-900 leading-tight tracking-tight"
             style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}
           >
             We get it. Cold chain logistics isn't just a simple delivery
@@ -175,7 +175,7 @@ export default function DaraJourney() {
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5, ease }}
-            className="mt-4 text-[#1e3a5f] text-base font-bold leading-relaxed"
+            className="mt-4 text-sky-900 text-base font-bold leading-relaxed"
           >
             Built for how Nigerian businesses{' '}
             <em className="italic">actually</em> move cargo.
@@ -189,11 +189,11 @@ export default function DaraJourney() {
           >
             <Link
               to="/booking/request"
-              className="inline-flex items-center gap-3 px-7 py-4 bg-[#c8f135] hover:bg-[#b8e020] active:scale-95 text-[#1e3a5f] font-bold rounded-xl text-sm transition-all duration-200"
+              className="inline-flex items-center gap-3 px-7 py-4 bg-[#c8f135] hover:bg-[#b8e020] active:scale-95 text-sky-900 font-bold rounded-xl text-sm transition-all duration-200"
             >
               See how it works
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <polygon points="5,2 13,8 5,14" fill="#1e3a5f" />
+                <polygon points="5,2 13,8 5,14" fill="#075985" />
               </svg>
             </Link>
           </motion.div>
