@@ -16,7 +16,7 @@ export default function DaraCTA() {
   const inView = useInView(ref, { once: true, margin: '-10% 0px' })
 
   return (
-    <section ref={ref} className="bg-white px-8 sm:px-14 lg:px-20 py-24 overflow-hidden">
+    <section ref={ref} className="bg-white px-5 sm:px-14 lg:px-20 py-16 sm:py-24 overflow-hidden">
       <div className="max-w-7xl mx-auto">
 
         {/* ── Main card ── */}
@@ -24,7 +24,7 @@ export default function DaraCTA() {
           initial={{ opacity: 0, y: 48, scale: 0.97 }}
           animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
           transition={{ duration: 0.75, ease }}
-          className="relative bg-[#e8f0f7] rounded-3xl overflow-hidden px-10 sm:px-16 py-16 flex flex-col lg:flex-row items-center justify-between gap-12"
+          className="relative bg-[#e8f0f7] rounded-2xl sm:rounded-3xl overflow-hidden px-6 py-10 sm:px-16 sm:py-16 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12"
         >
 
           {/* decorative blue blob top-right */}
@@ -88,18 +88,18 @@ export default function DaraCTA() {
               initial={{ opacity: 0, y: 16 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.55, delay: 0.54, ease }}
-              className="mt-8 flex flex-wrap items-center gap-4"
+              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
             >
               <Link
                 to="/booking/request"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-blue-500 hover:bg-blue-400 active:scale-95 text-white font-bold rounded-xl text-sm transition-all duration-200 shadow-lg shadow-blue-500/25"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-blue-500 hover:bg-blue-400 active:scale-95 text-white font-bold rounded-xl text-sm transition-all duration-200 shadow-lg shadow-blue-500/25"
               >
                 Get a free quote
                 <ArrowUpRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-white hover:bg-gray-50 active:scale-95 text-sky-900 font-bold rounded-xl text-sm transition-all duration-200 shadow-sm"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-gray-50 active:scale-95 text-sky-900 font-bold rounded-xl text-sm transition-all duration-200 shadow-sm"
               >
                 Talk to us
               </Link>
@@ -111,7 +111,7 @@ export default function DaraCTA() {
             initial={{ opacity: 0, x: 40 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.7, delay: 0.35, ease }}
-            className="relative z-10 flex-shrink-0 grid grid-cols-2 gap-4 w-full lg:w-auto"
+            className="relative z-10 flex-shrink-0 grid grid-cols-2 gap-3 sm:gap-4 w-full lg:w-auto"
           >
             {[
               { value: '69+',    label: 'Reefer trucks\non network' },
@@ -124,9 +124,9 @@ export default function DaraCTA() {
                 initial={{ opacity: 0, y: 24, scale: 0.92 }}
                 animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: 0.45 + i * 0.09, ease }}
-                className="bg-white rounded-2xl px-6 py-5 shadow-sm"
+                className="bg-white rounded-xl sm:rounded-2xl px-4 py-4 sm:px-6 sm:py-5 shadow-sm"
               >
-                <p className="font-heading font-black text-sky-900 text-2xl leading-none mb-1">
+                <p className="font-heading font-black text-sky-900 text-xl sm:text-2xl leading-none mb-1">
                   {value}
                 </p>
                 <p className="text-gray-400 text-xs leading-snug whitespace-pre-line">

@@ -46,14 +46,14 @@ export default function Footer() {
         className="h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent origin-left"
       />
 
-      <div className="px-8 sm:px-14 lg:px-20 pt-16 pb-10">
+      <div className="px-5 sm:px-14 lg:px-20 pt-12 sm:pt-16 pb-8 sm:pb-10">
 
         {/* ── Main grid ── */}
         <motion.div
           variants={container}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 mb-14"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 sm:gap-12 mb-12 sm:mb-14"
         >
 
           {/* Col 1 — Brand */}
@@ -160,13 +160,13 @@ export default function Footer() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.5, ease }}
-          className="border-t border-white/8 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
+          className="border-t border-white/8 pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left"
         >
           <p className="text-white/25 text-xs">
             © {new Date().getFullYear()} Dara Express Logistics. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             {/* online pill */}
             <span className="inline-flex items-center gap-2 text-xs text-white/30 font-semibold">
               <span className="relative flex h-2 w-2">
