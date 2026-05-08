@@ -1,0 +1,23 @@
+c:\Users\fanya\Desktop\logistics\src\components\auth\RegisterForm.jsx
+302 c:\Users\fanya\Desktop\logistics\src\components\booking\BookingDetailsFlow.jsx
+
+278 c:\Users\fanya\Desktop\logistics\src\components\booking\ShipmentDetailsForm.jsx
+
+343 c:\Users\fanya\Desktop\logistics\src\components\common\Navbar.jsx
+323 c:\Users\fanya\Desktop\logistics\src\components\drivers\AddDriverModal.jsx
+351 c:\Users\fanya\Desktop\logistics\src\components\fleet\AddTruckModal.jsx
+289 c:\Users\fanya\Desktop\logistics\src\components\landing\DaraAbout.jsx
+281 c:\Users\fanya\Desktop\logistics\src\components\shipments\CreateShipmentModal.jsx
+274 c:\Users\fanya\Desktop\logistics\src\components\users\UserModal.jsx
+278 c:\Users\fanya\Desktop\logistics\src\constants\mockData.js
+313 c:\Users\fanya\Desktop\logistics\src\constants\navigation.js
+257 c:\Users\fanya\Desktop\logistics\src\hooks\useBookingFlow.js
+270 c:\Users\fanya\Desktop\logistics\src\pages\AddressBook.jsx
+296 c:\Users\fanya\Desktop\logistics\src\pages\Blog.jsx
+266 c:\Users\fanya\Desktop\logistics\src\pages\DriverApp.jsx
+310 c:\Users\fanya\Desktop\logistics\src\pages\ManageProfile.jsx
+306 c:\Users\fanya\Desktop\logistics\src\pages\Services.jsx
+283 c:\Users\fanya\Desktop\logistics\src\pages\Support.jsx
+303 c:\Users\fanya\Desktop\logistics\src\pages\booking\Payment.jsx
+343 c:\Users\fanya\Desktop\logistics\src\pages\onboarding\ProfileSetup.jsx
+285 c:\Users\fanya\Desktop\logistics\src\pages\shipments\Shipments.jsx

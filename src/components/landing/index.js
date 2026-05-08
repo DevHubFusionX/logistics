@@ -1,0 +1,6 @@
+export { default as DaraHero } from './DaraHero'
+export { default as DaraHowItWorks } from './DaraHowItWorks'
+export { default as DaraTrustedBy } from './DaraTrustedBy'
+export { default as DaraJourney } from './DaraJourney'
+export { default as DaraServices } from './DaraServices'
+export { default as DaraCTA } from './DaraCTA'

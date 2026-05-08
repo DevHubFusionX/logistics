@@ -1,0 +1,58 @@
+# Authentication Security & UX Improvements
+
+Improve the authentication flow by fixing security leaks, consolidating logic, and enhancing the user experience.
+
+## User Review Required
+
+> [!IMPORTANT]
+> I will be removing several `console.log` statements in [httpClient.js](file:///c:/Users/fanya/Desktop/DARA/logistics/src/services/httpClient.js) and [authService.js](file:///c:/Users/fanya/Desktop/DARA/logistics/src/services/authService.js) that currently expose sensitive data (passwords, tokens) in the browser console.
+
+> [!NOTE]
+> Currently, tokens are stored in `localStorage`. For production environments, it is recommended to use `HttpOnly` cookies to mitigate XSS risks, but this requires backend support. I will focus on improving the current frontend implementation for now.
+
+## Proposed Changes
+
+### Core Logic & Security
+
+#### [MODIFY] [httpClient.js](file:///c:/Users/fanya/Desktop/DARA/logistics/src/services/httpClient.js)
+- Remove `console.log` of request body and response data to prevent sensitive data leakage.
+- Keep basic request logging (method and URL) but ensure no sensitive info is included.
+
+#### [MODIFY] [authService.js](file:///c:/Users/fanya/Desktop/DARA/logistics/src/services/authService.js)
+- Remove `console.log` of response data.
+- Remove redundant `localStorage` management (token/user setting). This should be handled exclusively by the [useAuth](file:///c:/Users/fanya/Desktop/DARA/logistics/src/hooks/useAuth.jsx#51-57) hook to maintain a single source of truth.
+
+#### [MODIFY] [useAuth.jsx](file:///c:/Users/fanya/Desktop/DARA/logistics/src/hooks/useAuth.jsx)
+- Ensure `localStorage` is updated correctly when [setUser](file:///c:/Users/fanya/Desktop/DARA/logistics/src/hooks/useAuth.jsx#45-46) is called.
+- Improve [initAuth](file:///c:/Users/fanya/Desktop/DARA/logistics/src/hooks/useAuth.jsx#83-116) to properly clear state on unauthorized (401) errors.
+- Consolidate token management logic.
+
+### User Experience (UX)
+
+#### [MODIFY] [ProtectedRoute.jsx](file:///c:/Users/fanya/Desktop/DARA/logistics/src/components/common/ProtectedRoute.jsx)
+- Update redirection logic to include the current `pathname` in the router state. This allows [LoginForm](file:///c:/Users/fanya/Desktop/DARA/logistics/src/components/auth/LoginForm.jsx#10-239) to redirect users back to where they were trying to go.
+
+#### [MODIFY] [LoginForm.jsx](file:///c:/Users/fanya/Desktop/DARA/logistics/src/components/auth/LoginForm.jsx)
+- Update [handleSubmit](file:///c:/Users/fanya/Desktop/DARA/logistics/src/components/auth/LoginForm.jsx#24-88) to check for a `from` location in the router state and redirect there after successful login.
+- Remove `console.log` of the login response.
+
+---
+
+## Verification Plan
+
+### Manual Verification
+1. **Security Check:**
+   - Open browser developer tools (Console tab).
+   - Perform a login.
+   - Verify that NO passwords or tokens are visible in the console logs.
+2. **Redirect Flow Check:**
+   - Attempt to access a protected route (e.g., `/dashboard`) while logged out.
+   - Verify redirect to login page.
+   - Log in.
+   - Verify automatic redirect back to the intended route (`/dashboard`).
+3. **Session Persistence:**
+   - Log in, then refresh the page.
+   - Verify that the user remains logged in.
+4. **Logout Check:**
+   - Click logout.
+   - Verify `localStorage` is cleared and user is redirected to the login page.

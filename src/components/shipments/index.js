@@ -1,0 +1,5 @@
+export { default as CreateShipmentModal } from './CreateShipmentModal'
+export { default as ShipmentFilters } from './components/ShipmentFilters'
+export { default as ShipmentSidebar } from './components/ShipmentSidebar'
+export { default as KanbanBoard } from './views/KanbanBoard'
+export { default as ShipmentTable } from './views/ShipmentTable'
