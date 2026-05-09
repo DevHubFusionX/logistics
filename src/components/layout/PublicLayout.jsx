@@ -1,6 +1,7 @@
 import { Outlet } from 'react-router-dom'
 import { Navbar } from '../common'
 import Footer from '../common/Footer'
+import StickyChat from '../chat/StickyChat'
 
 export default function PublicLayout() {
     return (
@@ -10,6 +11,7 @@ export default function PublicLayout() {
                 <Outlet />
             </main>
             <Footer />
+            <StickyChat />
         </div>
     )
 }
