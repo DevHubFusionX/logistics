@@ -149,6 +149,15 @@
           bottom: 16px !important;
           right: 12px !important;
         }
+        /* Backdrop — light blur instead of solid dark overlay */
+        #chatbase-bubble-window::before,
+        [id*="chatbase"] ~ div[style*="position: fixed"],
+        div[class*="chatbase"][style*="position: fixed"],
+        div[style*="z-index: 999"][style*="position: fixed"][style*="background"] {
+          background: rgba(255, 255, 255, 0.15) !important;
+          backdrop-filter: blur(6px) !important;
+          -webkit-backdrop-filter: blur(6px) !important;
+        }
       }
     </style>
 
