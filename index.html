@@ -129,9 +129,36 @@
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 
-    <!-- Hide Chatbase default FAB — controlled by StickyChat.jsx -->
+    <!-- Chatbase mobile size override -->
     <style>
-      #chatbase-bubble-button { display: none !important; }
+      /* Constrain chatbase widget on mobile to ~70% height, not full screen */
+      @media (max-width: 768px) {
+        #chatbase-bubble-window {
+          width: 92vw !important;
+          height: 65vh !important;
+          max-height: 520px !important;
+          bottom: 80px !important;
+          right: 12px !important;
+          left: auto !important;
+          border-radius: 16px !important;
+          overflow: hidden !important;
+        }
+        #chatbase-bubble-button {
+          width: 52px !important;
+          height: 52px !important;
+          bottom: 16px !important;
+          right: 12px !important;
+        }
+        /* Backdrop — light blur instead of solid dark overlay */
+        #chatbase-bubble-window::before,
+        [id*="chatbase"] ~ div[style*="position: fixed"],
+        div[class*="chatbase"][style*="position: fixed"],
+        div[style*="z-index: 999"][style*="position: fixed"][style*="background"] {
+          background: rgba(255, 255, 255, 0.15) !important;
+          backdrop-filter: blur(6px) !important;
+          -webkit-backdrop-filter: blur(6px) !important;
+        }
+      }
     </style>
 
     <!-- Chatbase widget — deferred via requestIdleCallback so it never blocks page load -->
