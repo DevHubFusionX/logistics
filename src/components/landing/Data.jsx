@@ -170,6 +170,22 @@ export const servicesData = [
         pricing: "Custom Quote",
         deliveryTime: "Daily Departures",
         coverage: "Regional Hubs"
+    },
+    {
+        icon: 'Shield',
+        image: "/assets/img/service-1.jpg",
+        title: "Last-Mile Delivery Nigeria",
+        subtitle: "Door-to-door cold chain delivery",
+        description: "Reliable last-mile cold chain delivery across Lagos, Abuja and Port Harcourt. Temperature-maintained from our hub directly to your customer's door.",
+        features: [
+            "Door-to-door refrigerated delivery Nigeria",
+            "Real-time SMS & app tracking updates",
+            "Proof of delivery with digital sign-off",
+            "Same-day slots available in major cities"
+        ],
+        pricing: "Custom Quote",
+        deliveryTime: "Same-day / Next-day",
+        coverage: "Lagos, Abuja, PH"
     }
 ]
 

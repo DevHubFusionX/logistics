@@ -8,6 +8,7 @@ import PharmaImg from '../../assets/climateImage/Pharma.jpg'
 import FrozenImg from '../../assets/climateImage/frozen-foods.jpg'
 import FreshImg from '../../assets/climateImage/fresh-produce.jpg'
 import HaulageImg from '../../assets/climateImage/enterprise-Haulage.png'
+import LastMileImg from '../../assets/climateImage/1.jpg'
 
 const ease = [0.22, 1, 0.36, 1]
 
@@ -16,6 +17,7 @@ const images = [
   FrozenImg,
   FreshImg,
   HaulageImg,
+  LastMileImg,
 ]
 
 const container = {
@@ -81,7 +83,7 @@ export default function DaraServices() {
           </Motion.div>
         </Motion.div>
 
-        {/* ── Grid: 1 featured + 3 cards ── */}
+        {/* ── Grid: 1 featured + 4 cards ── */}
         <Motion.div
           variants={container}
           initial="hidden"
@@ -184,7 +186,7 @@ export default function DaraServices() {
                 className="absolute bottom-1 right-3 font-black leading-none text-blue-50 select-none pointer-events-none"
                 style={{ fontSize: '5rem' }}
               >
-                0{i + 2}
+                {String(i + 2).padStart(2, '0')}
               </span>
 
               <div className="relative z-10 p-6 flex flex-col flex-1">
