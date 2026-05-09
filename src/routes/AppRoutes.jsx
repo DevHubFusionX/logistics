@@ -7,22 +7,25 @@ import DashboardLayout from '../components/layout/DashboardLayout'
 import ScrollToTop from '../components/common/ScrollToTop'
 
 // Loading Component
-const LoadingSpinner = () => (
-  <div className="min-h-screen flex items-center justify-center">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+const PageLoader = () => (
+  <div className="min-h-[60vh] flex items-center justify-center">
+    <div className="flex flex-col items-center gap-3">
+      <div className="w-10 h-10 rounded-full border-2 border-sky-100 border-t-sky-600 animate-spin" />
+      <span className="text-xs text-sky-700 font-semibold tracking-wide">Loading…</span>
+    </div>
   </div>
 )
 
-// Public Pages (Eager load for SEO)
-import Home from '../pages/public/Home'
-import Services from '../pages/public/Services'
-import About from '../pages/public/About'
-import NotFound from '../pages/public/NotFound'
-import Tracking from '../pages/public/Tracking'
+// Public Pages — lazy loaded, SEO handled by react-helmet in each page
+const Home = lazy(() => import('../pages/public/Home'))
+const Services = lazy(() => import('../pages/public/Services'))
+const About = lazy(() => import('../pages/public/About'))
+const NotFound = lazy(() => import('../pages/public/NotFound'))
+const Tracking = lazy(() => import('../pages/public/Tracking'))
 
-// Auth Pages (Eager load)
-import SignUp from '../pages/auth/SignUp'
-import Login from '../pages/auth/Login'
+// Auth Pages
+const SignUp = lazy(() => import('../pages/auth/SignUp'))
+const Login = lazy(() => import('../pages/auth/Login'))
 
 // Lazy Load Dashboard Pages
 const Dashboard = lazy(() => import('../pages/dashboard/Dashboard'))
@@ -84,58 +87,53 @@ const ManagerLogin = lazy(() => import('../pages/auth/ManagerLogin'))
 
 export default function AppRoutes() {
   return (
-    <Suspense fallback={<LoadingSpinner />}>
+    <>
       <ScrollToTop />
       <Routes>
-        {/* Public Routes with Navbar/Footer */}
+        {/* Public Routes */}
         <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/portfolio" element={<Portfolio />} />
-          <Route path="/team" element={<Team />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/tracking" element={<Tracking />} />
-          <Route path="/booking-calculator" element={<BookingCalculatorPage />} />
+          <Route path="/" element={<Suspense fallback={<PageLoader />}><Home /></Suspense>} />
+          <Route path="/services" element={<Suspense fallback={<PageLoader />}><Services /></Suspense>} />
+          <Route path="/about" element={<Suspense fallback={<PageLoader />}><About /></Suspense>} />
+          <Route path="/portfolio" element={<Suspense fallback={<PageLoader />}><Portfolio /></Suspense>} />
+          <Route path="/team" element={<Suspense fallback={<PageLoader />}><Team /></Suspense>} />
+          <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
+          <Route path="/contact" element={<Suspense fallback={<PageLoader />}><Contact /></Suspense>} />
+          <Route path="/tracking" element={<Suspense fallback={<PageLoader />}><Tracking /></Suspense>} />
+          <Route path="/booking-calculator" element={<Suspense fallback={<PageLoader />}><BookingCalculatorPage /></Suspense>} />
         </Route>
 
-        {/* Auth Routes - No Navbar/Footer, specialized layout */}
+        {/* Auth Routes */}
         <Route element={<AuthLayout />}>
-          <Route path="/auth/signup" element={<SignUp />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/admin/login" element={<AdminLogin />} />
-          <Route path="/auth/admin/managers/login" element={<ManagerLogin />} />
-          <Route path="/auth/forgot-password" element={<ForgotPassword />} />
-          <Route path="/auth/reset-password" element={<ResetPassword />} />
-          <Route path="/auth/verify-otp" element={<VerifyOTP />} />
+          <Route path="/auth/signup" element={<Suspense fallback={<PageLoader />}><SignUp /></Suspense>} />
+          <Route path="/auth/login" element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
+          <Route path="/auth/admin/login" element={<Suspense fallback={<PageLoader />}><AdminLogin /></Suspense>} />
+          <Route path="/auth/admin/managers/login" element={<Suspense fallback={<PageLoader />}><ManagerLogin /></Suspense>} />
+          <Route path="/auth/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPassword /></Suspense>} />
+          <Route path="/auth/reset-password" element={<Suspense fallback={<PageLoader />}><ResetPassword /></Suspense>} />
+          <Route path="/auth/verify-otp" element={<Suspense fallback={<PageLoader />}><VerifyOTP /></Suspense>} />
         </Route>
 
-        {/* Dashboard & Protected Routes - User/Customer Zone */}
+        {/* Dashboard & Protected Routes */}
         <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-          {/* Booking Routes */}
-          <Route path="/booking/request" element={<BookingRequest />} />
-          <Route path="/booking/quotation" element={<Quotation />} />
-          <Route path="/booking/payment" element={<Payment />} />
-          <Route path="/booking/confirmation" element={<Confirmation />} />
-
-          {/* Tracking Routes */}
-          <Route path="/tracking/track" element={<TrackShipment />} />
-          <Route path="/tracking/:id" element={<ShipmentTracking />} />
-          <Route path="/driver-app" element={<DriverApp />} />
-          <Route path="/tracking/invoice" element={<Invoice />} />
-          <Route path="/tracking/invoice/:id" element={<Invoice />} />
-
-          {/* User Specific Routes */}
-          <Route path="/profile" element={<ManageProfile />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-          <Route path="/payment-history" element={<PaymentHistory />} />
-          <Route path="/my-temperature" element={<MyTemperature />} />
-          <Route path="/my-analytics" element={<MyAnalytics />} />
-          <Route path="/support" element={<Support />} />
-          <Route path="/support/:ticketId" element={<TicketDetail />} />
-          <Route path="/booking-status-guide" element={<BookingStatusGuide />} />
-          <Route path="/address-book" element={<AddressBook />} />
+          <Route path="/booking/request" element={<Suspense fallback={<PageLoader />}><BookingRequest /></Suspense>} />
+          <Route path="/booking/quotation" element={<Suspense fallback={<PageLoader />}><Quotation /></Suspense>} />
+          <Route path="/booking/payment" element={<Suspense fallback={<PageLoader />}><Payment /></Suspense>} />
+          <Route path="/booking/confirmation" element={<Suspense fallback={<PageLoader />}><Confirmation /></Suspense>} />
+          <Route path="/tracking/track" element={<Suspense fallback={<PageLoader />}><TrackShipment /></Suspense>} />
+          <Route path="/tracking/:id" element={<Suspense fallback={<PageLoader />}><ShipmentTracking /></Suspense>} />
+          <Route path="/driver-app" element={<Suspense fallback={<PageLoader />}><DriverApp /></Suspense>} />
+          <Route path="/tracking/invoice" element={<Suspense fallback={<PageLoader />}><Invoice /></Suspense>} />
+          <Route path="/tracking/invoice/:id" element={<Suspense fallback={<PageLoader />}><Invoice /></Suspense>} />
+          <Route path="/profile" element={<Suspense fallback={<PageLoader />}><ManageProfile /></Suspense>} />
+          <Route path="/my-bookings" element={<Suspense fallback={<PageLoader />}><MyBookings /></Suspense>} />
+          <Route path="/payment-history" element={<Suspense fallback={<PageLoader />}><PaymentHistory /></Suspense>} />
+          <Route path="/my-temperature" element={<Suspense fallback={<PageLoader />}><MyTemperature /></Suspense>} />
+          <Route path="/my-analytics" element={<Suspense fallback={<PageLoader />}><MyAnalytics /></Suspense>} />
+          <Route path="/support" element={<Suspense fallback={<PageLoader />}><Support /></Suspense>} />
+          <Route path="/support/:ticketId" element={<Suspense fallback={<PageLoader />}><TicketDetail /></Suspense>} />
+          <Route path="/booking-status-guide" element={<Suspense fallback={<PageLoader />}><BookingStatusGuide /></Suspense>} />
+          <Route path="/address-book" element={<Suspense fallback={<PageLoader />}><AddressBook /></Suspense>} />
         </Route>
 
         {/* Admin Dashboard Protected Routes */}
@@ -144,55 +142,49 @@ export default function AppRoutes() {
             <DashboardLayout />
           </ProtectedRoute>
         }>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/overview" element={<Dashboard />} />
-          
-          {/* Admin Managed/Shared Routes - Allowed for Admin Managers */}
-          <Route path="/admin/orders-list" element={<OrdersTable />} />
-          <Route path="/temperature" element={<Temperature />} />
-          <Route path="/pricing-management" element={<PricingManagement />} />
-          <Route path="/user" element={<User />} />
+          <Route path="/dashboard" element={<Suspense fallback={<PageLoader />}><Dashboard /></Suspense>} />
+          <Route path="/dashboard/overview" element={<Suspense fallback={<PageLoader />}><Dashboard /></Suspense>} />
+          <Route path="/admin/orders-list" element={<Suspense fallback={<PageLoader />}><OrdersTable /></Suspense>} />
+          <Route path="/temperature" element={<Suspense fallback={<PageLoader />}><Temperature /></Suspense>} />
+          <Route path="/pricing-management" element={<Suspense fallback={<PageLoader />}><PricingManagement /></Suspense>} />
+          <Route path="/user" element={<Suspense fallback={<PageLoader />}><User /></Suspense>} />
 
-          {/* Super Admin & Dispatcher ONLY Routes - Restricted for Manager */}
           <Route element={<ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']} />}>
-            <Route path="/fleet" element={<Fleet />} />
-            <Route path="/shipments" element={<Shipments />} />
-            <Route path="/shipments/*" element={<Shipments />} />
-            <Route path="/routes" element={<RoutesPage />} />
-            <Route path="/warehouses" element={<Warehouses />} />
-            <Route path="/warehouses/*" element={<Warehouses />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/trips" element={<Trips />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/tasks" element={<Tasks />} />
-            <Route path="/payments" element={<Payments />} />
-            <Route path="/payments/reconciliation" element={<Reconciliation />} />
-            <Route path="/bookings-management" element={<BookingsManagement />} />
-            <Route path="/admin/customers/:id/bookings" element={<AdminUserBookings />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/settings/*" element={<Settings />} />
+            <Route path="/fleet" element={<Suspense fallback={<PageLoader />}><Fleet /></Suspense>} />
+            <Route path="/shipments" element={<Suspense fallback={<PageLoader />}><Shipments /></Suspense>} />
+            <Route path="/shipments/*" element={<Suspense fallback={<PageLoader />}><Shipments /></Suspense>} />
+            <Route path="/routes" element={<Suspense fallback={<PageLoader />}><RoutesPage /></Suspense>} />
+            <Route path="/warehouses" element={<Suspense fallback={<PageLoader />}><Warehouses /></Suspense>} />
+            <Route path="/warehouses/*" element={<Suspense fallback={<PageLoader />}><Warehouses /></Suspense>} />
+            <Route path="/orders" element={<Suspense fallback={<PageLoader />}><Orders /></Suspense>} />
+            <Route path="/customers" element={<Suspense fallback={<PageLoader />}><Customers /></Suspense>} />
+            <Route path="/trips" element={<Suspense fallback={<PageLoader />}><Trips /></Suspense>} />
+            <Route path="/reports" element={<Suspense fallback={<PageLoader />}><Reports /></Suspense>} />
+            <Route path="/alerts" element={<Suspense fallback={<PageLoader />}><Alerts /></Suspense>} />
+            <Route path="/tasks" element={<Suspense fallback={<PageLoader />}><Tasks /></Suspense>} />
+            <Route path="/payments" element={<Suspense fallback={<PageLoader />}><Payments /></Suspense>} />
+            <Route path="/payments/reconciliation" element={<Suspense fallback={<PageLoader />}><Reconciliation /></Suspense>} />
+            <Route path="/bookings-management" element={<Suspense fallback={<PageLoader />}><BookingsManagement /></Suspense>} />
+            <Route path="/admin/customers/:id/bookings" element={<Suspense fallback={<PageLoader />}><AdminUserBookings /></Suspense>} />
+            <Route path="/settings" element={<Suspense fallback={<PageLoader />}><Settings /></Suspense>} />
+            <Route path="/settings/*" element={<Suspense fallback={<PageLoader />}><Settings /></Suspense>} />
           </Route>
 
-          {/* Super Admin ONLY Routes */}
           <Route path="/settings/roles" element={
             <ProtectedRoute allowedRoles={['Super Admin', 'admin']}>
-              <UserRoles />
+              <Suspense fallback={<PageLoader />}><UserRoles /></Suspense>
             </ProtectedRoute>
           } />
-          
-          {/* Special Driver restriction already exists */}
+
           <Route path="/drivers" element={
             <ProtectedRoute allowedRoles={['Super Admin', 'admin', 'Dispatcher']}>
-              <Drivers />
+              <Suspense fallback={<PageLoader />}><Drivers /></Suspense>
             </ProtectedRoute>
           } />
         </Route>
 
-        {/* 404 Not Found - Catch all */}
-        <Route path="*" element={<PublicLayout><NotFound /></PublicLayout>} />
+        <Route path="*" element={<PublicLayout><Suspense fallback={<PageLoader />}><NotFound /></Suspense></PublicLayout>} />
       </Routes>
-    </Suspense>
+    </>
   )
 }

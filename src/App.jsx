@@ -21,7 +21,7 @@ function AppContent() {
       const timer = setTimeout(() => {
         setIsLoading(false)
         sessionStorage.setItem('hasVisited', 'true')
-      }, 3500)
+      }, 1500)
       return () => clearTimeout(timer)
     }
   }, [isLoading])
