@@ -87,7 +87,7 @@ export default function DaraTrustedBy() {
                   className="w-[82%] h-[90%] rounded-2xl overflow-hidden shadow-2xl bg-[#e8f0f7] flex flex-col items-center justify-center p-8 gap-6"
                 >
                   {/* Route line SVG */}
-                  <svg viewBox="0 0 200 120" className="w-full max-w-[220px]" fill="none">
+                  <svg viewBox="0 0 200 120+" className="w-full max-w-[220px]" fill="none">
                     {/* road */}
                     <path d="M10,100 Q60,40 100,60 Q140,80 190,20" stroke="#075985" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 4" opacity="0.2"/>
                     <path d="M10,100 Q60,40 100,60 Q140,80 190,20" stroke="#3b82f6" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="6 4"/>

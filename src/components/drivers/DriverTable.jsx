@@ -59,7 +59,7 @@ export default function DriverTable({ drivers, onView, onEdit, onDelete, onExpor
     {
       key: 'joinDate',
       label: 'Joined',
-      width: '120px',
+      width: '120+px',
       render: (value) => (
         <span className="text-sm text-gray-600">{value || 'N/A'}</span>
       )
@@ -67,7 +67,7 @@ export default function DriverTable({ drivers, onView, onEdit, onDelete, onExpor
     {
       key: 'status',
       label: 'Status',
-      width: '120px',
+      width: '120+px',
       render: (value) => (
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(value)}`}>
           {value === 'active' ? 'Active' : 'Inactive'}

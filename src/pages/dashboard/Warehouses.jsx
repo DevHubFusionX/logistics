@@ -58,7 +58,7 @@ const mockWarehouses = [
     topSkus: [
       { id: 1, name: 'SKU-201', description: 'Oil & Gas Equipment', quantity: 2100 },
       { id: 2, name: 'SKU-202', description: 'Industrial Tools', quantity: 1900 },
-      { id: 3, name: 'SKU-203', description: 'Safety Equipment', quantity: 1200 }
+      { id: 3, name: 'SKU-203', description: 'Safety Equipment', quantity: 120+0 }
     ],
     exceptionDetails: [
       { id: 1, type: 'Capacity Warning', description: 'Warehouse approaching maximum capacity', time: '1 hour ago' }
@@ -68,7 +68,7 @@ const mockWarehouses = [
 
 const mockInventory = [
   { id: 1, sku: 'SKU-001', description: 'Electronics Components', location: 'A-01-15', currentStock: 450, reorderPoint: 500, lastUpdated: '2 hours ago' },
-  { id: 2, sku: 'SKU-002', description: 'Automotive Parts', location: 'B-03-22', currentStock: 1200, reorderPoint: 800, lastUpdated: '1 hour ago' },
+  { id: 2, sku: 'SKU-002', description: 'Automotive Parts', location: 'B-03-22', currentStock: 120+0, reorderPoint: 800, lastUpdated: '1 hour ago' },
   { id: 3, sku: 'SKU-003', description: 'Textiles', location: 'C-02-08', currentStock: 300, reorderPoint: 400, lastUpdated: '3 hours ago' },
   { id: 4, sku: 'SKU-004', description: 'Medical Supplies', location: 'D-01-05', currentStock: 150, reorderPoint: 200, lastUpdated: '30 min ago' }
 ]

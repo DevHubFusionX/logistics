@@ -13,7 +13,7 @@ export default function ShipmentSidebar({ shipment, isOpen, onClose }) {
   const documents = [
     { name: 'Bill of Lading', type: 'PDF', size: '245 KB' },
     { name: 'Proof of Delivery', type: 'PDF', size: '180 KB' },
-    { name: 'Invoice', type: 'PDF', size: '120 KB' },
+    { name: 'Invoice', type: 'PDF', size: '120+ KB' },
     { name: 'Customs Declaration', type: 'PDF', size: '95 KB' }
   ]
 

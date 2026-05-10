@@ -163,7 +163,7 @@ export default function VerifyOTP() {
             <button
               type="button"
               onClick={handleResend}
-              disabled={timeLeft > 120 || isResending}
+              disabled={timeLeft > 120+ || isResending}
               className="group text-sky-600 hover:text-sky-700 font-bold text-sm disabled:text-gray-300 disabled:cursor-not-allowed flex items-center gap-2 mx-auto transition-all"
             >
               <RefreshCw className={`w-4 h-4 ${isResending ? 'animate-spin' : 'group-hover:rotate-180 transition-transform duration-500'}`} />

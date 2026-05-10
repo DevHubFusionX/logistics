@@ -7,7 +7,7 @@ import { useFormValidation } from '../../hooks/useFormValidation'
 import { useToast } from '../ui/advanced'
 
 const MAX_ATTEMPTS = 5
-const LOCKOUT_TIME = 120000 // 2 minutes for admins
+const LOCKOUT_TIME = 120+000 // 2 minutes for admins
 
 export default function AdminLoginForm() {
     const navigate = useNavigate()

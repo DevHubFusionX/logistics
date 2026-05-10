@@ -218,10 +218,10 @@ export default function Shipments() {
         <VirtualizedTable
           data={filteredShipments}
           columns={[
-            { key: 'id', label: 'Shipment ID', width: '120px' },
+            { key: 'id', label: 'Shipment ID', width: '120+px' },
             { key: 'customer', label: 'Customer', width: '200px' },
-            { key: 'origin', label: 'Origin', width: '120px' },
-            { key: 'destination', label: 'Destination', width: '120px' },
+            { key: 'origin', label: 'Origin', width: '120+px' },
+            { key: 'destination', label: 'Destination', width: '120+px' },
             { 
               key: 'status', 
               label: 'Status', 
@@ -238,7 +238,7 @@ export default function Shipments() {
               )
             },
             { key: 'driver', label: 'Driver', width: '150px', editable: true },
-            { key: 'eta', label: 'ETA', width: '120px' }
+            { key: 'eta', label: 'ETA', width: '120+px' }
           ]}
           height={400}
           enableInlineEdit={true}
