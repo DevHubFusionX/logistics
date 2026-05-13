@@ -85,7 +85,7 @@ export default function VirtualizedTable({
                     className="px-4 py-3 text-left text-[10px] font-bold text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100 select-none transition-colors"
                     style={{
                       width: columnWidths[column.key] || column.width,
-                      minWidth: column.minWidth || '120+px'
+                      minWidth: column.minWidth || '120px'
                     }}
                     onClick={() => handleSort(column.key)}
                     role="columnheader"
@@ -121,7 +121,7 @@ export default function VirtualizedTable({
                     <td
                       key={column.key}
                       className="px-4 py-3 text-sm text-gray-900"
-                      style={{ minWidth: column.minWidth || '120+px' }}
+                      style={{ minWidth: column.minWidth || '120px' }}
                       role="gridcell"
                     >
                       {enableInlineEdit && column.editable ? (

@@ -20,7 +20,7 @@ const useTripColumns = (getStatusColor, getTempColor, onViewTrip, onCancelTrip) 
   { 
     key: 'status', 
     label: 'Status', 
-    width: '120+px',
+    width: '120px',
     render: (value) => (
       <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(value)}`}>
         {value.replace('_', ' ')}

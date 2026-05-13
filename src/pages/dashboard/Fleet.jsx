@@ -136,7 +136,7 @@ function Fleet() {
               {
                 key: 'plateNumber',
                 label: 'Plate Number',
-                width: '120+px',
+                width: '120px',
                 render: (value) => (
                   <span className="font-semibold text-gray-900">{value || 'N/A'}</span>
                 )

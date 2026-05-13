@@ -77,6 +77,7 @@ const BookingCalculatorPage = lazy(() => import('../pages/public/BookingCalculat
 const Portfolio = lazy(() => import('../pages/public/Portfolio'))
 const Team = lazy(() => import('../pages/public/Team'))
 const Blog = lazy(() => import('../pages/public/Blog'))
+const BlogPost = lazy(() => import('../pages/public/BlogPost'))
 const Contact = lazy(() => import('../pages/public/Contact'))
 const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'))
 const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
@@ -98,6 +99,7 @@ export default function AppRoutes() {
           <Route path="/portfolio" element={<Suspense fallback={<PageLoader />}><Portfolio /></Suspense>} />
           <Route path="/team" element={<Suspense fallback={<PageLoader />}><Team /></Suspense>} />
           <Route path="/blog" element={<Suspense fallback={<PageLoader />}><Blog /></Suspense>} />
+          <Route path="/blog/:slug" element={<Suspense fallback={<PageLoader />}><BlogPost /></Suspense>} />
           <Route path="/contact" element={<Suspense fallback={<PageLoader />}><Contact /></Suspense>} />
           <Route path="/tracking" element={<Suspense fallback={<PageLoader />}><Tracking /></Suspense>} />
           <Route path="/booking-calculator" element={<Suspense fallback={<PageLoader />}><BookingCalculatorPage /></Suspense>} />

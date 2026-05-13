@@ -211,11 +211,11 @@ export default function ClientDetail({ client, onClose }) {
                   <p className="text-indigo-600/70 text-sm max-w-md font-medium">Configure individual rate overrides and discounts for this specific enterprise relationship.</p>
                 </div>
                 <div className="flex gap-4">
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 text-center min-w-[120+px]">
+                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 text-center min-w-[120px]">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Base Rate</p>
                     <p className="text-xl font-black text-gray-900">₦{(client.customPricing?.baseRate || 2500).toLocaleString()}</p>
                   </div>
-                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 text-center min-w-[120+px]">
+                  <div className="bg-white p-4 rounded-2xl shadow-sm border border-indigo-100 text-center min-w-[120px]">
                     <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Discount</p>
                     <p className="text-xl font-black text-emerald-600">{client.customPricing?.discount || 0}%</p>
                   </div>

@@ -8,7 +8,7 @@ import HeroVideo from '../../components/common/HeroVideo'
 const ease = [0.22, 1, 0.36, 1]
 
 const stats = [
-  { value: '120+',  label: 'Reefer trucks on network' },
+  { value: '120',  label: 'Reefer trucks on network' },
   { value: '200+', label: 'Cold chain trips completed' },
   { value: '36',   label: 'States covered' },
   { value: '2025', label: 'Year founded' },
@@ -170,7 +170,7 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[560px]">
           <div className="relative overflow-hidden" style={{ minHeight: 400 }}>
             <img
-              src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=120+0&q=85"
+              src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1200&q=85"
               alt="Dara reefer truck Nigeria"
               className="absolute inset-0 w-full h-full object-cover"
             />

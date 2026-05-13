@@ -5,7 +5,7 @@ import { Thermometer, Shield, MapPin, Clock, Truck, Star } from 'lucide-react'
 const items = [
   { icon: Thermometer, text: '±0.1°C Precision' },
   { icon: Shield,      text: 'GIT Insured' },
-  { icon: Truck,       text: '120+ Reefer Trucks' },
+  { icon: Truck,       text: '120 Reefer Trucks' },
   { icon: MapPin,      text: 'All 36 States' },
   { icon: Clock,       text: 'Same-Day Available' },
   { icon: Star,        text: '200+ Trips Completed' },

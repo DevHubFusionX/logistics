@@ -330,7 +330,7 @@ export default function Services() {
             className="grid grid-cols-2 gap-4 flex-shrink-0"
           >
             {[
-              { value: '120+',    label: 'Reefer trucks\non network' },
+              { value: '120',    label: 'Reefer trucks\non network' },
               { value: '200+',   label: 'Cold chain\ntrips completed' },
               { value: '36',     label: 'States\ncovered' },
               { value: '±0.1°C', label: 'Temperature\nprecision' },

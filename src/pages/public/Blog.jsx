@@ -1,84 +1,130 @@
 import { motion } from 'framer-motion'
-import { Calendar, User, ArrowRight, Clock } from 'lucide-react'
-import { useState } from 'react'
+import { Calendar, User, ArrowRight, Clock, Search, Loader2 } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { wordpressApi, stripHtml, formatDate, calculateReadTime } from '../../services/wordpressService'
 
-const posts = [
+// Fallback data for when WordPress API is unavailable
+const fallbackPosts = [
   {
     id: 1,
     title: 'Best Practices for Pharmaceutical Cold Chain Management',
     excerpt: 'Learn essential strategies for maintaining temperature integrity throughout the pharmaceutical supply chain.',
-    image: '/src/assets/img/blog/ca-blog-1.1.png',
-    author: 'Dr. Adebayo Okonkwo',
-    authorImage: '/src/assets/img/blog/ca-author-1.1.png',
-    date: 'Jan 15, 2024',
-    readTime: '5 min read',
-    category: 'Best Practices'
+    featured_image: '/assets/img/service-1.jpg',
+    author: { name: 'Dr. Adebayo Okonkwo', avatar: '' },
+    date: '2024-01-15T10:00:00',
+    content: 'Learn essential strategies for maintaining temperature integrity throughout the pharmaceutical supply chain in Nigeria.',
+    slug: 'pharmaceutical-cold-chain',
+    categories: ['Best Practices'],
   },
   {
     id: 2,
     title: 'Understanding WHO Guidelines for Cold Chain Logistics',
     excerpt: 'A comprehensive guide to World Health Organization standards for temperature-controlled distribution.',
-    image: '/src/assets/img/blog/ca-blog-1.2.png',
-    author: 'Chioma Nwosu',
-    authorImage: '/src/assets/img/blog/ca-author-1.2.png',
-    date: 'Jan 12, 2024',
-    readTime: '7 min read',
-    category: 'Compliance'
+    featured_image: '/assets/img/pharmaceutical.jpg',
+    author: { name: 'Chioma Nwosu', avatar: '' },
+    date: '2024-01-12T14:30:00',
+    content: 'A comprehensive guide to World Health Organization standards for temperature-controlled distribution.',
+    slug: 'who-guidelines-cold-chain',
+    categories: ['Compliance'],
   },
   {
     id: 3,
     title: 'The Future of Cold Chain Technology in Nigeria',
     excerpt: 'Exploring emerging technologies transforming pharmaceutical logistics across Africa.',
-    image: '/src/assets/img/blog/ca-blog-1.3.png',
-    author: 'Ibrahim Yusuf',
-    authorImage: '/src/assets/img/blog/ca-author-1.3.png',
-    date: 'Jan 10, 2024',
-    readTime: '6 min read',
-    category: 'Technology'
+    featured_image: '/assets/img/enterprise.jpg',
+    author: { name: 'Ibrahim Yusuf', avatar: '' },
+    date: '2024-01-10T09:15:00',
+    content: 'Exploring emerging technologies transforming pharmaceutical logistics across Africa.',
+    slug: 'cold-chain-technology-nigeria',
+    categories: ['Technology'],
   },
-  {
-    id: 4,
-    title: 'Temperature Monitoring: Real-Time Solutions',
-    excerpt: 'How IoT and real-time monitoring systems ensure product integrity during transportation.',
-    image: '/src/assets/img/blog/ca-blog-1.4.png',
-    author: 'Ngozi Eze',
-    authorImage: '/src/assets/img/blog/ca-author-1.4.png',
-    date: 'Jan 8, 2024',
-    readTime: '4 min read',
-    category: 'Technology'
-  },
-  {
-    id: 5,
-    title: 'Vaccine Distribution Challenges in Nigeria',
-    excerpt: 'Addressing infrastructure and logistics challenges in nationwide vaccine campaigns.',
-    image: '/src/assets/img/blog/ca-blog-1.5.png',
-    author: 'Dr. Adebayo Okonkwo',
-    authorImage: '/src/assets/img/blog/ca-author-1.1.png',
-    date: 'Jan 5, 2024',
-    readTime: '8 min read',
-    category: 'Case Study'
-  },
-  {
-    id: 6,
-    title: 'Cold Chain Packaging: Materials and Methods',
-    excerpt: 'Selecting the right packaging solutions for different pharmaceutical products.',
-    image: '/src/assets/img/blog/ca-blog-1.6.png',
-    author: 'Chioma Nwosu',
-    authorImage: '/src/assets/img/blog/ca-author-1.2.png',
-    date: 'Jan 3, 2024',
-    readTime: '5 min read',
-    category: 'Best Practices'
-  }
 ]
 
-const categories = ['All', 'Best Practices', 'Compliance', 'Technology', 'Case Study']
-
 export default function Blog() {
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
   const [selectedCategory, setSelectedCategory] = useState('All')
+  const [categories, setCategories] = useState(['All'])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [hasMore, setHasMore] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
 
-  const filteredPosts = selectedCategory === 'All' 
-    ? posts 
-    : posts.filter(p => p.category === selectedCategory)
+  // Fetch categories on mount
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const cats = await wordpressApi.getCategories()
+        const catNames = cats
+          .filter(c => c.postCount > 0)
+          .map(c => c.name)
+        setCategories(['All', ...catNames])
+      } catch {
+        // Silently fail — categories from posts will be used
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  // Fetch posts
+  useEffect(() => {
+    async function fetchPosts() {
+      setLoading(true)
+      setError(null)
+      try {
+        const params = { number: 9, page: 1 }
+        if (selectedCategory !== 'All') {
+          params.category = selectedCategory
+        }
+        if (searchTerm.trim()) {
+          params.search = searchTerm.trim()
+        }
+
+        const { posts: wpPosts, hasMore: more } = await wordpressApi.getPosts(params)
+        
+        if (wpPosts.length > 0) {
+          setPosts(wpPosts)
+          setHasMore(more)
+        } else if (!searchTerm.trim() && selectedCategory === 'All') {
+          // No posts at all — use fallback
+          setPosts(fallbackPosts)
+          setError('demo')
+        } else {
+          setPosts([])
+        }
+        setPage(1)
+      } catch (err) {
+        console.warn('WordPress API failed:', err.message)
+        setPosts(fallbackPosts)
+        setError('demo')
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchPosts()
+  }, [selectedCategory, searchTerm])
+
+  // Load more posts
+  async function loadMore() {
+    setLoadingMore(true)
+    try {
+      const nextPage = page + 1
+      const params = { number: 9, page: nextPage }
+      if (selectedCategory !== 'All') params.category = selectedCategory
+      if (searchTerm.trim()) params.search = searchTerm.trim()
+
+      const { posts: morePosts, hasMore: more } = await wordpressApi.getPosts(params)
+      setPosts(prev => [...prev, ...morePosts])
+      setHasMore(more)
+      setPage(nextPage)
+    } catch (err) {
+      console.warn('Failed to load more:', err.message)
+    } finally {
+      setLoadingMore(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
@@ -114,6 +160,25 @@ export default function Blog() {
             Expert insights, industry trends, and best practices in pharmaceutical 
             cold chain logistics from our team of specialists.
           </motion.p>
+
+          {/* Search bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            className="mt-8 max-w-lg mx-auto"
+          >
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search articles..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-12 pr-6 py-4 bg-white rounded-full text-slate-900 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 shadow-sm transition-all"
+              />
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -123,7 +188,7 @@ export default function Blog() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 0.35 }}
             className="flex flex-wrap justify-center gap-3"
           >
             {categories.map((cat) => (
@@ -143,8 +208,59 @@ export default function Blog() {
         </div>
       </section>
 
+      {/* Loading State */}
+      {loading && (
+        <section className="pb-20 px-6">
+          <div className="container mx-auto max-w-6xl">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} className="bg-white rounded-2xl overflow-hidden animate-pulse shadow-lg">
+                  <div className="h-56 bg-slate-200" />
+                  <div className="p-6 space-y-3">
+                    <div className="h-5 bg-slate-200 rounded w-3/4" />
+                    <div className="h-4 bg-slate-200 rounded w-full" />
+                    <div className="h-4 bg-slate-200 rounded w-2/3" />
+                    <div className="flex items-center gap-3 mt-4">
+                      <div className="w-10 h-10 bg-slate-200 rounded-full" />
+                      <div className="space-y-1.5 flex-1">
+                        <div className="h-3 bg-slate-200 rounded w-24" />
+                        <div className="h-3 bg-slate-200 rounded w-32" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* No results */}
+      {!loading && posts.length === 0 && (
+        <section className="pb-20 px-6">
+          <div className="container mx-auto max-w-6xl text-center py-20">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+            >
+              <div className="text-6xl mb-4">📝</div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-2">No articles found</h3>
+              <p className="text-slate-600">
+                {searchTerm ? `No results for "${searchTerm}"` : 'No posts in this category yet.'}
+              </p>
+              <button
+                onClick={() => { setSearchTerm(''); setSelectedCategory('All') }}
+                className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors"
+              >
+                View all articles
+              </button>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
       {/* Featured Post */}
-      {filteredPosts.length > 0 && (
+      {!loading && posts.length > 0 && (
         <section className="pb-12 px-6">
           <div className="container mx-auto max-w-6xl">
             <motion.div
@@ -154,50 +270,70 @@ export default function Blog() {
             >
               <div className="grid lg:grid-cols-2 gap-0">
                 <div className="relative h-96 lg:h-auto">
-                  <img
-                    src={filteredPosts[0].image}
-                    alt={filteredPosts[0].title}
-                    className="w-full h-full object-cover"
-                  />
+                  {posts[0].featured_image ? (
+                    <img
+                      src={posts[0].featured_image}
+                      alt={stripHtml(posts[0].title)}
+                      className="w-full h-full object-cover"
+                      onError={(e) => { e.target.src = '/assets/img/service-1.jpg' }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-blue-500 to-sky-700 flex items-center justify-center min-h-[300px]">
+                      <span className="text-white/30 text-[120px] font-black leading-none">
+                        {stripHtml(posts[0].title).charAt(0)}
+                      </span>
+                    </div>
+                  )}
                   <div className="absolute top-6 left-6 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full">
                     Featured
                   </div>
                 </div>
                 <div className="p-12 flex flex-col justify-center">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold mb-4 w-fit">
-                    {filteredPosts[0].category}
-                  </div>
+                  {posts[0].categories[0] && posts[0].categories[0] !== 'Uncategorized' && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold mb-4 w-fit">
+                      {posts[0].categories[0]}
+                    </div>
+                  )}
                   <h2 className="text-4xl font-bold text-slate-900 mb-4">
-                    {filteredPosts[0].title}
+                    {stripHtml(posts[0].title)}
                   </h2>
                   <p className="text-lg text-slate-600 mb-6">
-                    {filteredPosts[0].excerpt}
+                    {stripHtml(posts[0].excerpt).substring(0, 200) || 'Read the full article...'}
                   </p>
                   <div className="flex items-center gap-4 mb-6">
-                    <img
-                      src={filteredPosts[0].authorImage}
-                      alt={filteredPosts[0].author}
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
+                    {posts[0].author.avatar ? (
+                      <img
+                        src={posts[0].author.avatar}
+                        alt={posts[0].author.name}
+                        className="w-12 h-12 rounded-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                        <User className="w-6 h-6 text-blue-600" />
+                      </div>
+                    )}
                     <div>
-                      <div className="font-semibold text-slate-900">{filteredPosts[0].author}</div>
+                      <div className="font-semibold text-slate-900">{posts[0].author.name}</div>
                       <div className="flex items-center gap-3 text-sm text-slate-500">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          {filteredPosts[0].date}
+                          {formatDate(posts[0].date)}
                         </span>
                         <span>•</span>
                         <span className="flex items-center gap-1">
                           <Clock className="w-4 h-4" />
-                          {filteredPosts[0].readTime}
+                          {calculateReadTime(posts[0].content || posts[0].excerpt)} min read
                         </span>
                       </div>
                     </div>
                   </div>
-                  <button className="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all">
+                  <Link
+                    to={`/blog/${posts[0].slug}`}
+                    className="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all w-fit"
+                  >
                     Read Full Article
                     <ArrowRight className="w-5 h-5" />
-                  </button>
+                  </Link>
                 </div>
               </div>
             </motion.div>
@@ -206,64 +342,115 @@ export default function Blog() {
       )}
 
       {/* Blog Grid */}
-      <section className="pb-20 px-6">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredPosts.slice(1).map((post, index) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -8 }}
-                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
-              >
-                <div className="relative overflow-hidden h-56">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold rounded-full">
-                    {post.category}
+      {!loading && posts.length > 1 && (
+        <section className="pb-20 px-6">
+          <div className="container mx-auto max-w-6xl">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts.slice(1).map((post, index) => (
+                <motion.article
+                  key={post.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -8 }}
+                  className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all"
+                >
+                  <div className="relative overflow-hidden h-56">
+                    {post.featured_image ? (
+                      <img
+                        src={post.featured_image}
+                        alt={stripHtml(post.title)}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => { e.target.src = '/assets/img/service-1.jpg' }}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-blue-400 to-sky-600 flex items-center justify-center">
+                        <span className="text-white/30 text-[80px] font-black leading-none">
+                          {stripHtml(post.title).charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                    {post.categories[0] && post.categories[0] !== 'Uncategorized' && (
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold rounded-full">
+                        {post.categories[0]}
+                      </div>
+                    )}
                   </div>
-                </div>
 
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                    {post.title}
-                  </h3>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                      {stripHtml(post.title)}
+                    </h3>
 
-                  <p className="text-slate-600 text-sm mb-4 line-clamp-2">
-                    {post.excerpt}
-                  </p>
+                    <p className="text-slate-600 text-sm mb-4 line-clamp-2">
+                      {stripHtml(post.excerpt).substring(0, 150) || 'Read the full article...'}
+                    </p>
 
-                  <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
-                    <img
-                      src={post.authorImage}
-                      alt={post.author}
-                      className="w-10 h-10 rounded-full object-cover"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="font-semibold text-sm text-slate-900 truncate">{post.author}</div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500">
-                        <span>{post.date}</span>
-                        <span>•</span>
-                        <span>{post.readTime}</span>
+                    <div className="flex items-center gap-3 mb-4 pb-4 border-b border-slate-100">
+                      {post.author.avatar ? (
+                        <img
+                          src={post.author.avatar}
+                          alt={post.author.name}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <User className="w-5 h-5 text-blue-600" />
+                        </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-sm text-slate-900 truncate">{post.author.name}</div>
+                        <div className="flex items-center gap-2 text-xs text-slate-500">
+                          <span>{formatDate(post.date)}</span>
+                          <span>•</span>
+                          <span>{calculateReadTime(post.content || post.excerpt)} min read</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <button className="flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-3 transition-all">
-                    Read More
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </motion.article>
-            ))}
+                    <Link
+                      to={`/blog/${post.slug}`}
+                      className="flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-3 transition-all"
+                    >
+                      Read More
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </motion.article>
+              ))}
+            </div>
+
+            {/* Load More */}
+            {hasMore && (
+              <div className="text-center mt-12">
+                <button
+                  onClick={loadMore}
+                  disabled={loadingMore}
+                  className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-2"
+                >
+                  {loadingMore ? (
+                    <>
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Loading...
+                    </>
+                  ) : (
+                    'Load More Articles'
+                  )}
+                </button>
+              </div>
+            )}
           </div>
+        </section>
+      )}
+
+      {/* Demo notice */}
+      {error === 'demo' && (
+        <div className="text-center pb-8">
+          <p className="text-xs text-slate-400 bg-slate-100 px-4 py-2 rounded-lg inline-block">
+            Showing demo content • Publish posts on your WordPress blog to see them here
+          </p>
         </div>
-      </section>
+      )}
 
       {/* Newsletter CTA */}
       <section className="py-20 px-6">

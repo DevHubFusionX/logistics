@@ -11,7 +11,7 @@ export default function Pricing() {
     {
       name: "Starter",
       monthlyPrice: 15000,
-      annualPrice: 120+00,
+      annualPrice: 12000,
       description: "Perfect for small Nigerian businesses starting their logistics journey",
       features: [
         "Up to 100 shipments/month",
