@@ -25,9 +25,9 @@ const contactDetails = [
   {
     icon: MapPin,
     label: 'Visit us',
-    lines: ['10, Hughes Avenue,', 'Yaba, Lagos State'],
+    lines: ['MJS House, 366 Murtala', 'Muhammed Road, Yaba, Lagos'],
     sub: 'Mon – Sat, 8am – 6pm',
-    href: 'https://maps.google.com/?q=Hughes+Avenue+Yaba+Lagos',
+    href: 'https://maps.google.com/?q=MJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos+Nigeria',
   },
 ]
 
@@ -330,7 +330,7 @@ export default function Contact() {
       <section className="h-[360px] sm:h-[440px] relative overflow-hidden">
         <iframe
           title="Dara Express Location"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7!2d3.3792!3d6.5095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8c5!2sHughes+Avenue+Yaba+Lagos!5e0!3m2!1sen!2sng!4v1"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7!2d3.3792!3d6.5095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8c5!2sMJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos!5e0!3m2!1sen!2sng!4v1"
           className="absolute inset-0 w-full h-full border-0 grayscale"
           allowFullScreen
           loading="lazy"
@@ -339,9 +339,9 @@ export default function Contact() {
         {/* overlay card */}
         <div className="absolute bottom-6 left-6 right-6 sm:left-14 sm:right-auto bg-sky-800 rounded-2xl px-6 py-4 shadow-2xl">
           <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>
-          <p className="text-white font-bold text-sm">10, Hughes Avenue, Yaba, Lagos</p>
+          <p className="text-white font-bold text-sm">MJS House, 366 Murtala Muhammed Road, Yaba, Lagos</p>
           <a
-            href="https://maps.google.com/?q=Hughes+Avenue+Yaba+Lagos"
+            href="https://maps.google.com/?q=MJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos+Nigeria"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-blue-400 text-xs font-semibold mt-1 hover:text-blue-300 transition-colors"

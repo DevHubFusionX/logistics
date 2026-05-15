@@ -137,7 +137,7 @@ export default function Footer() {
               {[
                 { icon: Phone,  lines: ['+234 811 577 9007', '+234 912 116 8485'] },
                 { icon: Mail,   lines: ['hello@daraexpress.com'] },
-                { icon: MapPin, lines: ['10, Hughes Avenue,', 'Yaba, Lagos State'] },
+                { icon: MapPin, lines: ['MJS House, 366 Murtala', 'Muhammed Road, Yaba, Lagos'] },
               ].map(({ icon: Icon, lines }) => (
                 <li key={lines[0]} className="flex items-start gap-3">
                   <span className="mt-0.5 w-7 h-7 rounded-lg bg-white/6 flex items-center justify-center flex-shrink-0">

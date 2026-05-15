@@ -4,7 +4,7 @@ import { MapPin } from 'lucide-react'
 const offices = [
   {
     city: 'Lagos - Yaba',
-    address: '10, Hughes Avenue, Yaba, Lagos State',
+    address: 'MJS House, 366 Murtala Muhammed Road, Yaba, Lagos, Nigeria',
     phone: '+234 912 116 8485',
     type: 'Head Office'
   }

@@ -370,7 +370,7 @@ export const contactData = {
         {
             icon: MapPin,
             title: "Visit Us",
-            content: "10, Hughes Avenue, Yaba, Lagos State",
+            content: "MJS House, 366 Murtala Muhammed Road, Yaba, Lagos, Nigeria",
             color: "bg-blue-600"
         }
     ]
