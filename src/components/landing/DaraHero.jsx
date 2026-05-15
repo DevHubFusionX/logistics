@@ -157,7 +157,7 @@ export default function DaraHero() {
             </div>
             <div className="hidden sm:block flex-shrink-0 text-right">
               <p className="text-white/20 text-[10px] font-bold tracking-[0.2em] uppercase mb-1">Headquarters</p>
-              <p className="text-white/50 text-sm font-semibold">Yaba, Lagos</p>
+              <p className="text-white/50 text-sm font-semibold">Lagos, Nigeria</p>
             </div>
           </div>
         </motion.div>
