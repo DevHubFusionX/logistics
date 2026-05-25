@@ -129,7 +129,7 @@ export default function Confirmation() {
             `Confirmation email sent to ${bookingData.customerEmail}`,
             'A driver will be assigned within 24 hours',
             'Track your shipment in real-time using your Booking ID',
-            'You'll receive SMS updates at key milestones'
+            "You'll receive SMS updates at key milestones"
           ].map(text => (
             <li key={text} className="flex items-start gap-2.5 text-sm text-gray-600">
               <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0 mt-0.5" />
