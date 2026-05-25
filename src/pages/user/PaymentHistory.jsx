@@ -1,6 +1,6 @@
 
 import { useState, useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { CreditCard, CheckCircle, Clock, Download, RefreshCw, AlertCircle, TrendingUp, Search, Calendar } from 'lucide-react'
 import { usePaymentHistoryQuery } from '../../hooks/queries/usePaymentQueries'
 import { TableSkeleton, StatCardSkeleton } from '../../components/common/SkeletonLoaders'

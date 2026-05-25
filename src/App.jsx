@@ -34,6 +34,7 @@ function AppContent() {
     <div className="min-h-screen flex flex-col">
       <Toaster position="top-right" />
       <AppRoutes />
+
     </div>
   )
 }

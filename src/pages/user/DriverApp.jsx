@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { Package, MapPin, Camera, CheckCircle, Navigation, Phone, Clock } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
 

@@ -1,13 +1,16 @@
 import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { Package, Search, ChevronLeft, RefreshCcw, AlertCircle } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
-import BookingCard from '../../components/bookings/BookingCard'
-import BookingDetailsModal from '../../components/bookings/BookingDetailsModal'
-import { getStatusBadge, getStatusText } from '../../utils/bookingUtils'
-import { useAdminUserBookingsQuery } from '../../hooks/queries/useBookingQueries'
-import AssignDriverModal from '../../components/bookings/AssignDriverModal'
+import { 
+  BookingCard, 
+  BookingDetailsModal, 
+  getStatusBadge, 
+  getStatusText, 
+  useAdminUserBookingsQuery, 
+  AssignDriverModal 
+} from '@/features/booking'
 
 
 export default function AdminUserBookings() {

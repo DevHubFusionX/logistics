@@ -1,4 +1,4 @@
-import ManagerLoginForm from '../../components/auth/ManagerLoginForm'
+import { ManagerLoginForm } from '@/features/auth'
 
 export default function ManagerLogin() {
     return <ManagerLoginForm />

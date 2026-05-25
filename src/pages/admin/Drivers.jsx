@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { useToast } from '../../components/ui/advanced'
 import { useLogisticsShortcuts } from '../../hooks'
 import { sanitizeInput } from '../../utils'

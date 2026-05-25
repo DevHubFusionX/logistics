@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import ShipmentFilters from '../../components/shipments/components/ShipmentFilters'
 import ShipmentTable from '../../components/shipments/views/ShipmentTable'
 import KanbanBoard from '../../components/shipments/views/KanbanBoard'

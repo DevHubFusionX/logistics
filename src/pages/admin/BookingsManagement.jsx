@@ -1,12 +1,15 @@
 import { useState, useEffect, useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { Package, Search, UserCheck, Truck, Clock, CheckCircle, RefreshCcw, AlertCircle } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
-import BookingCard from '../../components/bookings/BookingCard'
-import AssignDriverModal from '../../components/bookings/AssignDriverModal'
-import BookingDetailsModal from '../../components/bookings/BookingDetailsModal'
-import { getStatusBadge, getStatusText } from '../../utils/bookingUtils'
-import { useAllBookingsQuery } from '../../hooks/queries/useBookingQueries'
+import { 
+  BookingCard, 
+  AssignDriverModal, 
+  BookingDetailsModal, 
+  getStatusBadge, 
+  getStatusText, 
+  useAllBookingsQuery 
+} from '@/features/booking'
 
 export default function BookingsManagement() {
   const [searchTerm, setSearchTerm] = useState('')

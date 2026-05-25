@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { useToast } from '../../components/ui/advanced'
 import SystemSettings from '../../components/settings/SystemSettings'
 import TemperatureThresholds from '../../components/settings/TemperatureThresholds'

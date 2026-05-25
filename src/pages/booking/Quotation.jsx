@@ -1,8 +1,8 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, CheckCircle, Package, MapPin, DollarSign, Tag } from 'lucide-react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { calculateQuote } from '../../utils/pricingEngine'
-import { useBookingStore } from '../../stores/bookingStore'
+import { useBookingStore } from '@/features/booking'
 
 export default function Quotation() {
   const location = useLocation()

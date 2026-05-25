@@ -6,7 +6,7 @@ import TelemetryPopup from '../../components/fleet/TelemetryPopup'
 import MaintenanceCalendar from '../../components/fleet/MaintenanceCalendar'
 import FuelTrends from '../../components/fleet/FuelTrends'
 import BulkOperations from '../../components/fleet/BulkOperations'
-import StatsCard from '../../components/dashboard/widgets/StatsCard'
+import { StatsCard } from '@/features/dashboard'
 
 import { useTrucksQuery } from '../../hooks/queries/useFleetQueries'
 import { Loader2 } from 'lucide-react'

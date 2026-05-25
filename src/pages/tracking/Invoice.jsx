@@ -1,7 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { Download, Printer, ArrowLeft, CheckCircle } from 'lucide-react'
-import { useBookingQuery } from '../../hooks/queries/useBookingQueries'
-import { calculateBookingPrice } from '../../utils/bookingUtils'
+import { useBookingQuery, calculateBookingPrice } from '@/features/booking'
 
 export default function Invoice() {
   const { id } = useParams()

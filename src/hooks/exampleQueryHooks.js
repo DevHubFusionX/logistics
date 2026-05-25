@@ -7,8 +7,8 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '../lib/queryClient'
-import bookingService from '../services/bookingService'
-import authService from '../services/authService'
+import { bookingService } from '@/features/booking'
+import authService from '@/features/auth/services/authService'
 
 // ==================== QUERIES (GET requests) ====================
 

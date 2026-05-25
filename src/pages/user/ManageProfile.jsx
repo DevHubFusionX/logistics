@@ -1,8 +1,25 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { User, Building, Save, ArrowLeft, Edit, Shield, Calendar, Award, RefreshCw, AlertCircle } from 'lucide-react'
-import { Link } from 'react-router-dom'
-import { useProfileQuery, useUpdateProfileMutation } from '../../hooks/queries/useAuthQueries'
+import { User, Building2, Mail, Phone, Shield, Calendar, Edit2, Save, X, RefreshCw, AlertCircle } from 'lucide-react'
+import { useProfileQuery, useUpdateProfileMutation } from '@/features/auth'
+
+function Field({ label, value, name, type = 'text', disabled, editing, onChange }) {
+  return (
+    <div className="space-y-1.5">
+      <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">{label}</label>
+      <input
+        type={type}
+        value={value || ''}
+        disabled={disabled || !editing}
+        onChange={e => onChange?.(name, e.target.value)}
+        className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-all outline-none
+          ${editing && !disabled
+            ? 'bg-white border border-gray-200 text-gray-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-100'
+            : 'bg-gray-50 border border-transparent text-gray-600 cursor-default'
+          }`}
+      />
+    </div>
+  )
+}
 
 export default function ManageProfile() {
   const [isEditing, setIsEditing] = useState(false)
@@ -14,6 +31,11 @@ export default function ManageProfile() {
   const handleEdit = () => {
     setEditedData({ ...profileData })
     setIsEditing(true)
+  }
+
+  const handleCancel = () => {
+    setIsEditing(false)
+    setEditedData(null)
   }
 
   const handleSave = () => {
@@ -31,248 +53,151 @@ export default function ManageProfile() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col items-center justify-center">
-        <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-blue-600 mb-4"></div>
-        <p className="text-gray-600 font-bold animate-pulse">Accessing Secure Profile...</p>
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-10 h-10 rounded-full border-2 border-sky-100 border-t-sky-600 animate-spin" />
+          <span className="text-xs text-gray-400 font-semibold tracking-wide uppercase">Loading profile…</span>
+        </div>
       </div>
     )
   }
 
   if (isError) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 flex flex-col items-center justify-center p-4 text-center">
-        <div className="bg-white p-8 rounded-3xl shadow-xl max-w-sm w-full border border-red-50">
-          <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-          <h3 className="text-2xl font-black text-gray-900 mb-2">Sync Failed</h3>
-          <p className="text-gray-500 mb-6 font-medium">We couldn't synchronize your profile data. Please try again.</p>
+      <div className="flex items-center justify-center min-h-[60vh] px-4">
+        <div className="text-center max-w-xs">
+          <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
+          <p className="text-gray-600 font-medium mb-4">Couldn't load your profile.</p>
           <button
             onClick={() => refetch()}
-            className="w-full flex items-center justify-center gap-2 py-4 bg-blue-600 text-white rounded-2xl font-black hover:bg-blue-700 transition-all shadow-xl shadow-blue-100"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-sky-700 text-white text-sm font-semibold rounded-xl hover:bg-sky-600 transition-colors"
           >
-            <RefreshCw className="w-5 h-5" /> Reconnect Now
+            <RefreshCw className="w-4 h-4" /> Try again
           </button>
         </div>
       </div>
     )
   }
 
-  const displayData = isEditing ? editedData : profileData
+  const data = isEditing ? editedData : profileData
+  const initials = `${profileData.firstName?.[0] || ''}${profileData.lastName?.[0] || ''}`.toUpperCase()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-100/50 pb-12">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <div className="flex flex-col gap-4">
-            <Link to="/my-bookings">
-              <button className="flex items-center gap-2 text-gray-400 hover:text-blue-600 transition-all font-bold text-xs uppercase tracking-widest">
-                <ArrowLeft className="w-4 h-4" />
-                Back to Dashboard
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+
+      {/* Page title */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="font-heading font-bold text-xl text-gray-900">My Profile</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Manage your personal and business information</p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleCancel}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-gray-500 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+              >
+                <X className="w-4 h-4" /> Cancel
               </button>
-            </Link>
+              <button
+                onClick={handleSave}
+                disabled={updateMutation.isPending}
+                className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-sky-700 rounded-xl hover:bg-sky-600 transition-colors disabled:opacity-60"
+              >
+                {updateMutation.isPending
+                  ? <RefreshCw className="w-4 h-4 animate-spin" />
+                  : <Save className="w-4 h-4" />}
+                {updateMutation.isPending ? 'Saving…' : 'Save changes'}
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleEdit}
+              className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold text-sky-700 bg-sky-50 rounded-xl hover:bg-sky-100 transition-colors"
+            >
+              <Edit2 className="w-4 h-4" /> Edit profile
+            </button>
+          )}
+        </div>
+      </div>
 
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-100">
-                  <User className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <h1 className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">Profile & Identity</h1>
-                  <p className="text-sm font-bold text-gray-400 uppercase tracking-tighter">Account Management</p>
-                </div>
-              </div>
+      {/* Avatar + identity card */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6 flex items-center gap-5">
+        <div className="w-16 h-16 rounded-2xl bg-sky-700 flex items-center justify-center flex-shrink-0">
+          <span className="text-white font-heading font-bold text-xl">{initials}</span>
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="font-heading font-bold text-gray-900 text-lg leading-tight">
+            {profileData.firstName} {profileData.lastName}
+          </p>
+          <p className="text-sm text-gray-400 mt-0.5 truncate">{profileData.email}</p>
+          <div className="flex items-center gap-2 mt-2">
+            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold
+              ${profileData.verified ? 'bg-green-50 text-green-700' : 'bg-yellow-50 text-yellow-700'}`}>
+              <Shield className="w-3 h-3" />
+              {profileData.verified ? 'Verified' : 'Pending verification'}
+            </span>
+            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-50 text-sky-700">
+              {profileData.clientCategory || 'Customer'}
+            </span>
+          </div>
+        </div>
+        <div className="hidden sm:flex items-center gap-1.5 text-xs text-gray-400 flex-shrink-0">
+          <Calendar className="w-3.5 h-3.5" />
+          Member since {new Date(profileData.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}
+        </div>
+      </div>
 
-              <div className="flex gap-3 w-full sm:w-auto">
-                {isEditing ? (
-                  <>
-                    <button
-                      onClick={() => {
-                        setIsEditing(false)
-                        setEditedData(null)
-                      }}
-                      className="flex-1 sm:flex-none px-6 py-3 border-2 border-gray-100 text-gray-500 rounded-2xl hover:bg-gray-50 transition-all font-bold"
-                    >
-                      Discard
-                    </button>
-                    <button
-                      onClick={handleSave}
-                      disabled={updateMutation.isPending}
-                      className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-2xl hover:bg-blue-700 shadow-xl shadow-blue-100 transition-all font-bold disabled:opacity-50"
-                    >
-                      {updateMutation.isPending ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
-                      {updateMutation.isPending ? 'Saving...' : 'Commit Changes'}
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={handleEdit}
-                    className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-8 py-3 bg-gray-900 text-white rounded-2xl hover:bg-blue-600 shadow-xl shadow-gray-100 transition-all font-bold"
-                  >
-                    <Edit className="w-5 h-5" />
-                    Modify Profile
-                  </button>
-                )}
-              </div>
-            </div>
+      {/* Personal info */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <User className="w-4 h-4 text-sky-700" />
+          <h2 className="font-heading font-semibold text-gray-900 text-sm">Personal information</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field label="First name" name="firstName" value={data.firstName} editing={isEditing} onChange={handleChange} />
+          <Field label="Last name" name="lastName" value={data.lastName} editing={isEditing} onChange={handleChange} />
+          <Field label="Email address" name="email" type="email" value={data.email} editing={isEditing} disabled onChange={handleChange} />
+          <Field label="Phone number" name="phoneNumber" type="tel" value={data.phoneNumber} editing={isEditing} onChange={handleChange} />
+        </div>
+        {isEditing && (
+          <p className="mt-3 text-xs text-gray-400 flex items-center gap-1">
+            <Mail className="w-3 h-3" /> Email changes require a support request.
+          </p>
+        )}
+      </div>
+
+      {/* Business info */}
+      <div className="bg-white rounded-2xl border border-gray-100 p-6">
+        <div className="flex items-center gap-2 mb-5">
+          <Building2 className="w-4 h-4 text-sky-700" />
+          <h2 className="font-heading font-semibold text-gray-900 text-sm">Business information</h2>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <Field label="Company name" name="companyName" value={data.companyName} editing={isEditing} onChange={handleChange} />
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Client category</label>
+            <select
+              value={data.clientCategory || ''}
+              disabled={!isEditing}
+              onChange={e => handleChange('clientCategory', e.target.value)}
+              className={`w-full px-4 py-3 rounded-xl text-sm font-medium transition-all outline-none
+                ${isEditing
+                  ? 'bg-white border border-gray-200 text-gray-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-100'
+                  : 'bg-gray-50 border border-transparent text-gray-600 cursor-default'
+                }`}
+            >
+              <option value="Enterprise">Enterprise</option>
+              <option value="SME">SME</option>
+              <option value="Startup">Startup</option>
+              <option value="Individual">Individual</option>
+            </select>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 md:py-12">
-        <div className="grid lg:grid-cols-4 gap-8">
-          {/* Profile Summary Side */}
-          <motion.div
-            className="lg:col-span-1 space-y-6"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-          >
-            <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-50 text-center overflow-hidden relative">
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 to-indigo-700"></div>
-              <div className="w-24 h-24 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-blue-100">
-                <span className="text-blue-600 font-black text-4xl">
-                  {profileData.firstName?.charAt(0)}{profileData.lastName?.charAt(0)}
-                </span>
-              </div>
-              <h2 className="text-2xl font-black text-gray-900 mb-1 leading-tight">{profileData.firstName} {profileData.lastName}</h2>
-              <p className="text-xs font-black text-blue-600/60 uppercase tracking-widest mb-6">{profileData.clientCategory || 'Global Member'}</p>
-
-              <div className="space-y-3 text-left">
-                <div className={`p-4 rounded-2xl border-2 transition-all ${profileData.verified ? 'bg-green-50 border-green-100' : 'bg-yellow-50 border-yellow-100'}`}>
-                  <div className="flex items-center gap-3 mb-1">
-                    <Shield className={`w-5 h-5 ${profileData.verified ? 'text-green-600' : 'text-yellow-600'}`} />
-                    <span className={`font-black text-[10px] uppercase tracking-widest ${profileData.verified ? 'text-green-700' : 'text-yellow-700'}`}>
-                      {profileData.verified ? 'Verified Identity' : 'Under Review'}
-                    </span>
-                  </div>
-                  <p className="text-[10px] font-bold text-gray-400">Compliance check completed via KYC</p>
-                </div>
-
-                <div className="p-4 bg-gray-50 rounded-2xl border-2 border-transparent">
-                  <div className="flex items-center gap-3 mb-1">
-                    <Calendar className="w-5 h-5 text-gray-400" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Partner Since</span>
-                  </div>
-                  <p className="text-sm font-black text-gray-800">{new Date(profileData.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gradient-to-br from-gray-900 to-blue-900 rounded-3xl p-6 text-white shadow-2xl overflow-hidden relative group">
-              <Award className="absolute -right-4 -bottom-4 w-32 h-32 opacity-10 group-hover:scale-110 transition-transform" />
-              <h4 className="font-black text-lg mb-1 tracking-tight">Logistics Alpha</h4>
-              <p className="text-blue-200 text-[10px] font-bold uppercase tracking-widest mb-4">Elite Tier Status</p>
-              <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden mb-2">
-                <div className="h-full w-3/4 bg-blue-500"></div>
-              </div>
-              <p className="text-[10px] font-medium text-white/60 text-center">25 points until Diamond Tier</p>
-            </div>
-          </motion.div>
-
-          {/* Detailed Info Side */}
-          <motion.div
-            className="lg:col-span-3 space-y-8"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-50">
-              <div className="grid md:grid-cols-2 gap-x-12 gap-y-10">
-                {/* Personal Section */}
-                <div className="md:col-span-2 flex items-center gap-3 border-b-2 border-gray-50 pb-6 mb-2">
-                  <div className="p-3 bg-blue-50 rounded-2xl">
-                    <User className="w-6 h-6 text-blue-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black text-gray-900 tracking-tight">Account Credentials</h3>
-                    <p className="text-sm font-bold text-gray-400">Personnel contact and identification data</p>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Legal First Name</label>
-                  <input
-                    type="text"
-                    value={displayData.firstName}
-                    onChange={(e) => handleChange('firstName', e.target.value)}
-                    className={`w-full px-5 py-4 border-2 rounded-2xl transition-all font-bold text-gray-900 focus:ring-4 focus:ring-blue-50 ${isEditing ? 'border-gray-100 bg-white focus:border-blue-600' : 'border-transparent bg-gray-50/50 cursor-not-allowed text-gray-500'}`}
-                    disabled={!isEditing}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Legal Last Name</label>
-                  <input
-                    type="text"
-                    value={displayData.lastName}
-                    onChange={(e) => handleChange('lastName', e.target.value)}
-                    className={`w-full px-5 py-4 border-2 rounded-2xl transition-all font-bold text-gray-900 focus:ring-4 focus:ring-blue-50 ${isEditing ? 'border-gray-100 bg-white focus:border-blue-600' : 'border-transparent bg-gray-50/50 cursor-not-allowed text-gray-500'}`}
-                    disabled={!isEditing}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Contact Email</label>
-                  <input
-                    type="email"
-                    value={displayData.email}
-                    className={`w-full px-5 py-4 border-2 rounded-2xl transition-all font-bold text-gray-900 border-transparent bg-gray-50/50 cursor-not-allowed text-gray-400`}
-                    disabled={true}
-                  />
-                  <p className="text-[10px] font-bold text-gray-300 ml-1">* Email changes require support ticket</p>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Mobile Line</label>
-                  <input
-                    type="tel"
-                    value={displayData.phoneNumber}
-                    onChange={(e) => handleChange('phoneNumber', e.target.value)}
-                    className={`w-full px-5 py-4 border-2 rounded-2xl transition-all font-bold text-gray-900 focus:ring-4 focus:ring-blue-50 ${isEditing ? 'border-gray-100 bg-white focus:border-blue-600' : 'border-transparent bg-gray-50/50 cursor-not-allowed text-gray-500'}`}
-                    disabled={!isEditing}
-                  />
-                </div>
-
-                {/* Company Section */}
-                <div className="md:col-span-2 flex items-center gap-3 border-b-2 border-gray-50 pb-6 mt-6 mb-2">
-                  <div className="p-3 bg-indigo-50 rounded-2xl">
-                    <Building className="w-6 h-6 text-indigo-600" />
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-black text-gray-900 tracking-tight">Organization Profile</h3>
-                    <p className="text-sm font-bold text-gray-400">Logistics entity and business categorization</p>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Business Name</label>
-                  <input
-                    type="text"
-                    value={displayData.companyName}
-                    onChange={(e) => handleChange('companyName', e.target.value)}
-                    className={`w-full px-5 py-4 border-2 rounded-2xl transition-all font-bold text-gray-900 focus:ring-4 focus:ring-blue-50 ${isEditing ? 'border-gray-100 bg-white focus:border-blue-600' : 'border-transparent bg-gray-50/50 cursor-not-allowed text-gray-500'}`}
-                    disabled={!isEditing}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Client Tier</label>
-                  <select
-                    value={displayData.clientCategory}
-                    onChange={(e) => handleChange('clientCategory', e.target.value)}
-                    className={`w-full px-5 py-4 border-2 rounded-2xl transition-all font-bold text-gray-900 focus:ring-4 focus:ring-blue-50 ${isEditing ? 'border-gray-100 bg-white focus:border-blue-600' : 'border-transparent bg-gray-50/50 cursor-not-allowed text-gray-500'}`}
-                    disabled={!isEditing}
-                  >
-                    <option value="Enterprise">Enterprise Elite</option>
-                    <option value="SME">Market SME</option>
-                    <option value="Startup">Early Startup</option>
-                    <option value="Individual">Personal Shipper</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
     </div>
   )
 }

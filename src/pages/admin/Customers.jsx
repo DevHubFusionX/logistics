@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard/index'
+import { PageHeader } from '@/features/dashboard'
 import {
   Users, Search, ShoppingCart, TrendingUp, UserCheck,
   AlertCircle, RefreshCw, Grid, List, Filter, Download
@@ -86,120 +86,81 @@ export default function Customers() {
   }
 
   return (
-    <div className="space-y-8 pb-10">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-        <PageHeader
-          title="Global Client Network"
-          subtitle="Enterprise directory and relationship management portal"
-        />
-        <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
-            <Download className="w-4 h-4" /> Export Data
+    <div className="space-y-5 pb-10">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="font-heading font-bold text-xl text-gray-900">Customers</h1>
+          <p className="text-xs text-gray-400 mt-0.5">Manage your client directory</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors">
+            <Download className="w-4 h-4" /> Export
           </button>
           <button
             onClick={() => setShowOrderModal(true)}
-            className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl hover:shadow-lg hover:shadow-blue-200 transition-all font-bold"
+            className="flex items-center gap-2 px-4 py-2.5 bg-sky-700 hover:bg-sky-600 text-white rounded-xl text-sm font-semibold transition-colors"
           >
             <ShoppingCart className="w-4 h-4" /> New Order
           </button>
         </div>
       </div>
 
-      {/* Modern KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard
-          title="Global Clients"
-          value={clients.length}
-          icon={Users}
-          color="blue"
-          sparklineData={[3, 4, 4, 4, 4, 4, 4]}
-        />
-        <MetricCard
-          title="Portfolio Revenue"
-          value={(stats.totalRevenue / 1000000).toFixed(1)}
-          unit="M"
-          icon={TrendingUp}
-          color="green"
-          sparklineData={[6.2, 6.8, 7.2, 7.8, 8.1, 8.3, 8.3]}
-        />
-        <MetricCard
-          title="In Good Standing"
-          value={stats.activeClients}
-          icon={UserCheck}
-          color="indigo"
-          sparklineData={[2, 2, 3, 3, 3, 3, 3]}
-        />
-        <MetricCard
-          title="Payment Risk"
-          value={stats.overduePayments}
-          icon={AlertCircle}
-          color="red"
-          sparklineData={[2, 1, 1, 2, 1, 1, 1]}
-        />
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <MetricCard title="Total Clients"     value={clients.length}                          icon={Users}       color="blue"   sparklineData={[3,4,4,4,4,4,4]} />
+        <MetricCard title="Revenue"           value={(stats.totalRevenue/1000000).toFixed(1)} unit="M" icon={TrendingUp} color="green"  sparklineData={[6.2,6.8,7.2,7.8,8.1,8.3,8.3]} />
+        <MetricCard title="In Good Standing"  value={stats.activeClients}                     icon={UserCheck}   color="indigo" sparklineData={[2,2,3,3,3,3,3]} />
+        <MetricCard title="Payment Risk"      value={stats.overduePayments}                   icon={AlertCircle} color="red"    sparklineData={[2,1,1,2,1,1,1]} />
       </div>
 
       {/* Control Bar */}
-      <div className="bg-white/70 backdrop-blur-md rounded-2xl border border-gray-100 p-4 shadow-sm sticky top-20 z-20 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex flex-1 items-center gap-3">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-gray-400" />
-            <input
-              type="search"
-              placeholder="Filter clients by name, email, or id..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500/20 font-medium placeholder:text-gray-400"
-            />
-          </div>
-          <button className="hidden md:flex items-center gap-2 px-4 py-3 bg-gray-50 text-gray-600 rounded-2xl hover:bg-gray-100 transition-all font-bold text-sm border border-transparent hover:border-gray-200">
-            <Filter className="w-4 h-4" /> Advanced Filters
-          </button>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="relative flex-1 max-w-md">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+          <input
+            type="search"
+            placeholder="Search by name or email…"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition-all"
+          />
         </div>
-
-        <div className="flex items-center gap-4 bg-gray-50 p-1.5 rounded-2xl border border-gray-100">
+        <div className="flex items-center gap-1.5 bg-gray-100 p-1 rounded-xl">
           <button
             onClick={() => setViewMode('grid')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-[14px] transition-all font-bold text-sm ${viewMode === 'grid'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-400 hover:text-gray-600'
-              }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              viewMode === 'grid' ? 'bg-white text-sky-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            }`}
           >
-            <Grid className="w-4 h-4" /> Grid
+            <Grid className="w-3.5 h-3.5" /> Grid
           </button>
           <button
             onClick={() => setViewMode('table')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-[14px] transition-all font-bold text-sm ${viewMode === 'table'
-                ? 'bg-white text-blue-600 shadow-sm'
-                : 'text-gray-400 hover:text-gray-600'
-              }`}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              viewMode === 'table' ? 'bg-white text-sky-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            }`}
           >
-            <List className="w-4 h-4" /> Table
+            <List className="w-3.5 h-3.5" /> Table
           </button>
         </div>
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="min-h-[400px]">
         {filteredClients.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-4">
-              <Search className="w-8 h-8 text-gray-300" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900">No matches found</h3>
-            <p className="text-gray-500 mt-1 max-w-xs mx-auto">Try adjusting your search criteria or broadening your filters.</p>
+          <div className="bg-white rounded-2xl border border-gray-100 py-16 text-center">
+            <Search className="w-8 h-8 text-gray-300 mx-auto mb-3" />
+            <p className="font-semibold text-gray-700">No clients found</p>
+            <p className="text-sm text-gray-400 mt-1">Try adjusting your search term.</p>
           </div>
         ) : viewMode === 'table' ? (
-          <div className="bg-white rounded-3xl border border-gray-100 overflow-hidden shadow-sm">
+          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
             <ClientsTable data={filteredClients} onViewClient={setSelectedClient} />
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filteredClients.map(client => (
-              <ClientCard
-                key={client.id}
-                client={client}
-                onViewClient={setSelectedClient}
-              />
+              <ClientCard key={client.id} client={client} onViewClient={setSelectedClient} />
             ))}
           </div>
         )}

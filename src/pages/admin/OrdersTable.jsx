@@ -7,7 +7,7 @@ import {
 import { useToast } from '../../components/ui/advanced'
 import { useOrdersTableQuery, useOrderMutations } from '../../hooks/queries/useOrderQueries'
 import adminOrderService from '../../services/adminOrderService'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '@/features/auth'
 import OrderDetailsModal from '../../components/admin/OrderDetailsModal'
 import OrderFormModal from '../../components/admin/OrderFormModal'
 import OrdersTableControls from '../../components/admin/orders/OrdersTableControls'

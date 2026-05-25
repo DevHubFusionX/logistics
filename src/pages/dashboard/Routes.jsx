@@ -1,4 +1,4 @@
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { Map, Navigation } from 'lucide-react'
 
 export default function Routes() {

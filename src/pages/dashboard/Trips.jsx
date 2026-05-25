@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { MetricCard, useToast } from '../../components/ui/advanced'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { Truck, AlertTriangle, CheckCircle, Clock, MapPin } from 'lucide-react'

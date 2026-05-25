@@ -11,9 +11,7 @@ export const handleApiError = (error) => {
   if (error?.response?.status === 401 || error?.status === 401) {
     if (typeof window !== "undefined") {
       const path = window.location.pathname;
-      const isAuthPath = path.includes('/auth/login') ||
-        path.includes('/auth/admin/login') ||
-        path.includes('/auth/signup');
+      const isAuthPath = path.includes('/auth/');
 
       // Don't redirect if we're already on an auth page or if the error is from a login attempt
       if (!isAuthPath) {

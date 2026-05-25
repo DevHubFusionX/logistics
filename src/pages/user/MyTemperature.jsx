@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import {
   ThermometerSnowflake, Truck, AlertTriangle, CheckCircle,
   RefreshCw, AlertCircle, Package

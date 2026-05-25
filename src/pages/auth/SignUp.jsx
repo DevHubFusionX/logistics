@@ -1,5 +1,4 @@
-import AuthLayout from '../../components/auth/AuthLayout'
-import RegisterForm from '../../components/auth/RegisterForm'
+import { AuthLayout, RegisterForm } from '@/features/auth'
 
 export default function SignUp() {
   return (

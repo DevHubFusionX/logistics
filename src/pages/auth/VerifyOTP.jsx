@@ -2,8 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Shield, RefreshCw, Mail } from 'lucide-react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import authService from '../../services/authService'
-import { useToast } from '../../components/ui/advanced'
+import authService from '@/features/auth/services/authService'
+import { useToast } from '@/components/ui/advanced'
 
 export default function VerifyOTP() {
   const navigate = useNavigate()

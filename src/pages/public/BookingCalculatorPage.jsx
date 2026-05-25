@@ -1,4 +1,4 @@
-import PriceCalculator from '../../components/bookings/PriceCalculator'
+import { PriceCalculator } from '@/features/booking'
 import { Navbar, Footer } from '../../components/common'
 
 export default function BookingCalculatorPage() {

@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { ArrowLeft, Send, Clock, CheckCircle, AlertCircle, RefreshCw, MessageCircle, Tag, Info } from 'lucide-react'
 import { useTicketQuery, useAddTicketMessageMutation, useResolveTicketMutation } from '../../hooks/queries/useSupportQueries'
-import { useAuthState } from '../../hooks/useAuth'
+import { useAuthState } from '@/features/auth'
 
 const statusStyles = {
     open: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Open' },

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { User, Building, Mail, Phone, Save, Camera, RefreshCw, AlertCircle, Lock } from 'lucide-react'
-import { useProfileQuery, useUpdateProfileMutation } from '../../hooks/queries/useAuthQueries'
+import { useProfileQuery, useUpdateProfileMutation } from '@/features/auth'
 
 export default function ProfileSection() {
   const [isEditing, setIsEditing] = useState(false)

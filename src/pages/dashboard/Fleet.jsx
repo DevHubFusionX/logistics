@@ -1,6 +1,6 @@
 import { useState, useMemo, memo } from 'react'
 import { useAuthStore } from '../../stores/authStore'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { VirtualizedTable, useToast } from '../../components/ui/advanced'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { Thermometer, RefreshCw, AlertCircle, Truck, Shield, CheckCircle, XCircle } from 'lucide-react'

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard/index'
+import { PageHeader } from '@/features/dashboard'
 import { Kanban, Calendar, Smartphone } from 'lucide-react'
 import KanbanBoard from '../../components/tasks/KanbanBoard'
 import DriverSchedule from '../../components/tasks/DriverSchedule'

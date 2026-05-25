@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { MapPin, Plus, Edit, Trash2, Star, RefreshCw, AlertCircle, Phone, Navigation, Search, Package } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import {

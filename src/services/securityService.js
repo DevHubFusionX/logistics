@@ -1,4 +1,3 @@
-import api from './api'
 
 // Rate limiting tracker
 const rateLimits = new Map()

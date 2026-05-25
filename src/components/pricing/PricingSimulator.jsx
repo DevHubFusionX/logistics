@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Calculator, TrendingUp, RefreshCw, AlertCircle, MapPin, Package, Truck } from 'lucide-react'
 import pricingService from '../../services/pricingService'
-import { useAuth } from '../../hooks/useAuth'
+import { useAuth } from '@/features/auth'
 import toast from 'react-hot-toast'
 
 const NIGERIAN_CITIES = [

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PageHeader } from '../../components/dashboard/index'
+import { PageHeader } from '@/features/dashboard'
 import { AlertTriangle, Settings, Bell } from 'lucide-react'
 import AlertsDashboard from '../../components/alerts/AlertsDashboard'
 import AlertRulesForm from '../../components/alerts/AlertRulesForm'

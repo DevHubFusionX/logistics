@@ -4,7 +4,7 @@ import ProfileSection from '../../components/user/ProfileSection'
 import SecuritySection from '../../components/user/SecuritySection'
 import NotificationSettings from '../../components/user/NotificationSettings'
 import BillingSection from '../../components/user/BillingSection'
-import { PageHeader } from '../../components/dashboard/index'
+import { PageHeader } from '@/features/dashboard'
 
 const tabs = [
   { id: 'profile', label: 'Identity & Profile', icon: UserIcon, description: 'Manage your personal and business data' },

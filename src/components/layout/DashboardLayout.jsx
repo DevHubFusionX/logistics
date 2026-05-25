@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom'
-import AppLayout from '../dashboard/layout/AppLayout'
+import { AppLayout } from '@/features/dashboard'
 
 export default function DashboardLayout() {
     return (

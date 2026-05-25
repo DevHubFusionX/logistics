@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import {
   Plus, MessageSquare, Clock, CheckCircle, AlertCircle, Search,
   RefreshCw, Send, Filter, ChevronRight

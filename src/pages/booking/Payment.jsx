@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { CreditCard, CheckCircle, XCircle, ArrowLeft, Loader, DollarSign, Shield } from 'lucide-react'
-import { PageHeader } from '../../components/dashboard'
+import { CreditCard, CheckCircle, XCircle, ArrowLeft, Loader, Shield } from 'lucide-react'
 import toast from 'react-hot-toast'
-import PaystackPayment from '../../components/payments/PaystackPayment'
 import { useInitializePaymentMutation, useVerifyPaymentMutation } from '../../hooks/queries/usePaymentQueries'
 
 export default function Payment() {
@@ -12,23 +10,16 @@ export default function Payment() {
   const [processing, setProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState(null)
 
-  // TanStack Query mutations
   const initializePayment = useInitializePaymentMutation()
   const verifyPayment = useVerifyPaymentMutation()
 
-  // Handle URL params for verification
   const queryParams = new URLSearchParams(location.search)
   const reference = queryParams.get('reference') || queryParams.get('trxref')
-
   const { bookingData, quote, bookingId: stateBookingId, amount, email } = location.state || {}
-
-  // Fallback to localStorage if state is lost after redirect
   const bookingId = stateBookingId || localStorage.getItem('currentBookingId')
 
   useEffect(() => {
-    if (reference && bookingId && !paymentStatus) {
-      verifyPaymentOnReturn()
-    }
+    if (reference && bookingId && !paymentStatus) verifyPaymentOnReturn()
   }, [reference, bookingId])
 
   const verifyPaymentOnReturn = async () => {
@@ -36,16 +27,9 @@ export default function Payment() {
     try {
       await verifyPayment.mutateAsync(bookingId)
       setPaymentStatus('success')
-      // Clear storage
       localStorage.removeItem('currentBookingId')
-
-      setTimeout(() => {
-        navigate('/booking/confirmation', {
-          state: { bookingId, paymentId: reference }
-        })
-      }, 2000)
-    } catch (error) {
-      console.error(error)
+      setTimeout(() => navigate('/booking/confirmation', { state: { bookingId, paymentId: reference } }), 2000)
+    } catch {
       setPaymentStatus('failed')
     } finally {
       setProcessing(false)
@@ -56,247 +40,187 @@ export default function Payment() {
   const paymentAmount = isExistingBooking ? amount : quote?.total
   const userEmail = email || bookingData?.email || localStorage.getItem('userEmail') || 'user@example.com'
 
-  // Allow access if processing a return from payment gateway
   if (!reference && !isExistingBooking && (!bookingData || !quote)) {
     navigate('/booking/request')
     return null
   }
 
-  const handlePaymentSuccess = async (reference) => {
+  const handlePay = async () => {
+    if (processing) return
+    setProcessing(true)
+    try {
+      if (bookingId) localStorage.setItem('currentBookingId', bookingId)
+      const response = await initializePayment.mutateAsync(bookingId)
+      const paymentData = response.data?.data
+      if (!response.data?.error && paymentData?.authorization_url) {
+        window.location.href = paymentData.authorization_url
+      } else {
+        throw new Error(response.data?.message || 'Failed to initialize payment')
+      }
+    } catch (error) {
+      if (error.message === 'Payment already processing') {
+        toast.error('Payment session active. Wait 15–30 min or contact support.', { duration: 8000 })
+        setTimeout(() => {
+          if (window.confirm('Payment is locked.\n\nGo back to My Bookings?')) navigate('/my-bookings')
+        }, 1000)
+      }
+      setProcessing(false)
+    }
+  }
+
+  const handlePaymentSuccess = async (ref) => {
     setProcessing(true)
     try {
       await verifyPayment.mutateAsync(bookingId)
       setPaymentStatus('success')
       setTimeout(() => {
-        if (isExistingBooking) {
-          navigate('/my-bookings', { state: { paymentSuccess: true } })
-        } else {
-          navigate('/booking/confirmation', {
-            state: { bookingData, quote, bookingId, paymentId: reference.reference }
-          })
-        }
+        if (isExistingBooking) navigate('/my-bookings', { state: { paymentSuccess: true } })
+        else navigate('/booking/confirmation', { state: { bookingData, quote, bookingId, paymentId: ref.reference } })
       }, 2000)
-    } catch (error) {
+    } catch {
       setPaymentStatus('failed')
     } finally {
       setProcessing(false)
     }
   }
 
-  const handlePaymentClose = () => {
-    toast.error('Payment cancelled')
-  }
-
   return (
-    <div className="space-y-6 pb-6">
-      <PageHeader
-        title="Secure Payment"
-        subtitle="Complete your booking with secure payment processing"
-      />
-
-      {!isExistingBooking && (
-        <button onClick={() => navigate('/booking/quotation', { state: { bookingData, bookingId } })} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-          <ArrowLeft className="w-5 h-5" /> Back to Quote
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 space-y-4">
+      {/* Page title */}
+      <div className="flex items-center gap-3">
+        <button
+          onClick={() => isExistingBooking ? navigate('/my-bookings') : navigate('/booking/quotation', { state: { bookingData, bookingId } })}
+          className="p-2 rounded-xl hover:bg-gray-100 transition-colors text-gray-500"
+        >
+          <ArrowLeft className="w-4 h-4" />
         </button>
-      )}
-      {isExistingBooking && (
-        <button onClick={() => navigate('/my-bookings')} className="flex items-center gap-2 text-gray-600 hover:text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-          <ArrowLeft className="w-5 h-5" /> Back to My Bookings
-        </button>
-      )}
+        <div>
+          <h1 className="font-heading font-bold text-xl text-gray-900">Secure payment</h1>
+          <p className="text-sm text-gray-400 mt-0.5">Complete your booking</p>
+        </div>
+      </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-            {paymentStatus === 'success' ? (
-              <div className="p-8">
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <CheckCircle className="w-10 h-10 text-green-600" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h2>
-                  <p className="text-gray-600">Redirecting to confirmation...</p>
-                </div>
+      <div className="grid sm:grid-cols-5 gap-4">
+        {/* Payment panel */}
+        <div className="sm:col-span-3 bg-white rounded-2xl border border-gray-100 overflow-hidden">
+          {paymentStatus === 'success' ? (
+            <div className="p-8 text-center space-y-3">
+              <div className="w-12 h-12 bg-green-50 rounded-2xl flex items-center justify-center mx-auto">
+                <CheckCircle className="w-6 h-6 text-green-600" />
               </div>
-            ) : paymentStatus === 'failed' ? (
-              <div className="p-8">
-                <div className="text-center py-8">
-                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <XCircle className="w-10 h-10 text-red-600" />
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Payment Failed</h2>
-                  <p className="text-gray-600 mb-6">There was an issue processing your payment</p>
-                  <button onClick={() => setPaymentStatus(null)} className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold">
-                    Retry Payment
-                  </button>
-                </div>
-              </div>
-            ) : processing ? (
-              <div className="p-8">
-                <div className="text-center py-8">
-                  <Loader className="w-10 h-10 text-blue-600 mx-auto mb-6 animate-spin" />
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Processing Payment</h2>
-                  <p className="text-gray-600">Please wait while we securely process your payment...</p>
-                </div>
-              </div>
-            ) : (
-              <div className="p-6">
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <CreditCard className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <h2 className="text-xl font-bold text-gray-900">Secure Payment with Paystack</h2>
-                </div>
-                <div className="space-y-6">
-                  {/* Payment Method Selection */}
-                  <div className="border border-blue-200 bg-blue-50 rounded-xl p-4 flex items-center justify-between cursor-pointer ring-2 ring-blue-500 transition-all">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center border border-blue-100 shadow-sm">
-                        <CreditCard className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900">Pay with Card / Bank</h3>
-                        <p className="text-sm text-gray-600">Secured by Paystack</p>
-                      </div>
-                    </div>
-                    <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
-                      <div className="w-2.5 h-2.5 rounded-full bg-white" />
-                    </div>
-                  </div>
-
-                  <div className="bg-white rounded-xl border border-gray-100 p-4 space-y-3">
-                    <div className="flex items-start gap-3">
-                      <Shield className="w-5 h-5 text-gray-400 mt-0.5" />
-                      <div className="text-sm text-gray-500">
-                        Your transaction is secured with end-to-end encryption. You will be redirected to Paystack to complete the payment.
-                      </div>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={async () => {
-                      if (processing) return
-                      setProcessing(true)
-                      try {
-                        // Persist bookingId for return
-                        if (bookingId) localStorage.setItem('currentBookingId', bookingId)
-
-                        const response = await initializePayment.mutateAsync(bookingId)
-                        // response is { data: { error, message, data: { ... } }, status }
-                        const apiBody = response.data
-                        const paymentData = apiBody?.data
-
-                        if (!apiBody.error && paymentData?.authorization_url) {
-                          window.location.href = paymentData.authorization_url
-                        } else {
-                          throw new Error(apiBody.message || 'Failed to initialize payment')
-                        }
-                      } catch (error) {
-                        console.error('Payment init error:', error)
-                        if (error.message === 'Payment already processing') {
-                          toast.error('Payment session active. This expires in 15-30 minutes. Wait or contact support to reset.', { duration: 8000 })
-                          setTimeout(() => {
-                            if (window.confirm('Payment is locked. Options:\n\n1. Wait 15-30 minutes\n2. Contact support\n3. Create new booking\n\nGo back to My Bookings?')) {
-                              navigate('/my-bookings')
-                            }
-                          }, 1000)
-                        }
-                        setProcessing(false)
-                      }
-                    }}
-                    disabled={processing}
-                    className="w-full py-4 px-6 bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold rounded-xl shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 transform active:scale-[0.99]"
-                  >
-                    {processing ? (
-                      <>
-                        <Loader className="w-6 h-6 animate-spin" />
-                        Processing Secure Payment...
-                      </>
-                    ) : (
-                      <>
-                        Pay ₦{paymentAmount?.toLocaleString()} Securely
-                        <ArrowLeft className="w-5 h-5 rotate-180" />
-                      </>
-                    )}
-                  </button>
-
-                  <div className="flex justify-center items-center gap-4 opacity-50 grayscale hover:grayscale-0 transition-all duration-300">
-                    {/* Placeholder for card logos if needed, for now just text/icons */}
-                    <div className="flex gap-2">
-                      <div className="h-6 w-10 bg-gray-200 rounded"></div>
-                      <div className="h-6 w-10 bg-gray-200 rounded"></div>
-                      <div className="h-6 w-10 bg-gray-200 rounded"></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-200 p-4">
-            <div className="flex items-center gap-2 mb-3">
-              <Shield className="w-5 h-5 text-blue-600" />
-              <span className="text-sm font-semibold text-gray-900">Secure Payment</span>
+              <p className="font-heading font-bold text-gray-900">Payment successful!</p>
+              <p className="text-sm text-gray-400">Redirecting to confirmation…</p>
             </div>
-            <p className="text-xs text-gray-600">
-              Your payment information is encrypted and secure. We never store your card details.
-            </p>
-          </div>
+          ) : paymentStatus === 'failed' ? (
+            <div className="p-8 text-center space-y-4">
+              <div className="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center mx-auto">
+                <XCircle className="w-6 h-6 text-red-500" />
+              </div>
+              <p className="font-heading font-bold text-gray-900">Payment failed</p>
+              <p className="text-sm text-gray-400">There was an issue processing your payment.</p>
+              <button
+                onClick={() => setPaymentStatus(null)}
+                className="px-5 py-2.5 bg-sky-700 text-white text-sm font-semibold rounded-xl hover:bg-sky-600 transition-colors"
+              >
+                Try again
+              </button>
+            </div>
+          ) : processing ? (
+            <div className="p-8 text-center space-y-3">
+              <Loader className="w-8 h-8 text-sky-700 mx-auto animate-spin" />
+              <p className="font-heading font-bold text-gray-900">Processing payment</p>
+              <p className="text-sm text-gray-400">Please wait…</p>
+            </div>
+          ) : (
+            <div className="p-6 space-y-5">
+              <div className="flex items-center gap-2">
+                <CreditCard className="w-4 h-4 text-sky-700" />
+                <h2 className="font-heading font-semibold text-gray-900 text-sm">Pay with Paystack</h2>
+              </div>
+
+              {/* Method tile */}
+              <div className="flex items-center gap-4 p-4 rounded-xl border-2 border-sky-700 bg-sky-50">
+                <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center border border-sky-100 flex-shrink-0">
+                  <CreditCard className="w-5 h-5 text-sky-700" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-gray-900">Card / Bank transfer</p>
+                  <p className="text-xs text-gray-400">Secured by Paystack</p>
+                </div>
+                <div className="w-5 h-5 rounded-full bg-sky-700 flex items-center justify-center flex-shrink-0">
+                  <div className="w-2 h-2 rounded-full bg-white" />
+                </div>
+              </div>
+
+              {/* Security note */}
+              <div className="flex items-start gap-2.5 text-xs text-gray-400">
+                <Shield className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                <span>Your transaction is secured with end-to-end encryption. You'll be redirected to Paystack to complete payment.</span>
+              </div>
+
+              <button
+                onClick={handlePay}
+                disabled={processing}
+                className="w-full py-3.5 bg-sky-700 hover:bg-sky-600 text-white text-sm font-bold rounded-xl transition-colors disabled:opacity-60 flex items-center justify-center gap-2"
+              >
+                {processing ? (
+                  <><Loader className="w-4 h-4 animate-spin" /> Processing…</>
+                ) : (
+                  `Pay ₦${paymentAmount?.toLocaleString()} securely`
+                )}
+              </button>
+            </div>
+          )}
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-          <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-t-xl border-b">
-            <div className="flex items-center gap-2">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <DollarSign className="w-5 h-5 text-green-600" />
-              </div>
-              <h2 className="text-xl font-bold text-gray-900">Order Summary</h2>
+        {/* Order summary */}
+        <div className="sm:col-span-2 bg-white rounded-2xl border border-gray-100 p-5 space-y-4 h-fit">
+          <h2 className="font-heading font-semibold text-gray-900 text-sm">Order summary</h2>
+
+          <div className="space-y-2 text-sm">
+            <div className="flex justify-between">
+              <span className="text-gray-400">Booking ID</span>
+              <span className="font-mono font-semibold text-gray-800 text-xs">{bookingId}</span>
             </div>
+            {!isExistingBooking && (
+              <>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Service</span>
+                  <span className="font-semibold capitalize text-gray-800">{bookingData.serviceType}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Weight</span>
+                  <span className="font-semibold text-gray-800">{bookingData.weight} kg</span>
+                </div>
+              </>
+            )}
           </div>
-          <div className="p-6">
-            <div className="space-y-3 mb-6">
+
+          {!isExistingBooking && quote && (
+            <div className="border-t border-gray-100 pt-3 space-y-2 text-sm">
+              <div className="flex justify-between">
+                <span className="text-gray-400">Subtotal</span>
+                <span className="font-semibold text-gray-800">₦{quote.subtotal?.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Tax (8%)</span>
+                <span className="font-semibold text-gray-800">₦{quote.tax?.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between border-t border-gray-100 pt-2 mt-1">
+                <span className="font-bold text-gray-900">Total</span>
+                <span className="font-bold text-sky-700">₦{quote.total?.toLocaleString()}</span>
+              </div>
+            </div>
+          )}
+
+          {isExistingBooking && (
+            <div className="border-t border-gray-100 pt-3">
               <div className="flex justify-between text-sm">
-                <span className="text-gray-600">Booking ID</span>
-                <span className="font-mono text-sm font-semibold">{bookingId}</span>
+                <span className="font-bold text-gray-900">Total</span>
+                <span className="font-bold text-sky-700">₦{amount?.toLocaleString()}</span>
               </div>
-              {!isExistingBooking && (
-                <>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Service</span>
-                    <span className="font-semibold capitalize">{bookingData.serviceType}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Weight</span>
-                    <span className="font-semibold">{bookingData.weight} kg</span>
-                  </div>
-                </>
-              )}
             </div>
-            {!isExistingBooking && quote && (
-              <div className="border-t pt-4 space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Subtotal</span>
-                  <span className="font-semibold">₦{quote.subtotal}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax (8%)</span>
-                  <span className="font-semibold">₦{quote.tax}</span>
-                </div>
-                <div className="flex justify-between text-lg font-bold border-t pt-3 mt-3">
-                  <span>Total Amount</span>
-                  <span className="text-blue-600">₦{quote.total}</span>
-                </div>
-              </div>
-            )}
-            {isExistingBooking && (
-              <div className="border-t pt-4">
-                <div className="flex justify-between text-lg font-bold">
-                  <span>Total Amount</span>
-                  <span className="text-blue-600">₦{amount?.toFixed(2)}</span>
-                </div>
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>

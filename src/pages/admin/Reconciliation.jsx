@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { CheckCircle, XCircle, AlertTriangle, Download, RefreshCw, Search, AlertCircle } from 'lucide-react'
 import { useToast } from '../../components/ui/advanced'
 import { useReportsQuery } from '../../hooks/queries/useAdminQueries'

@@ -1,6 +1,6 @@
 import { MapPin, Clock, ArrowRight, Package, Calendar } from 'lucide-react'
 import { useDriverTripsQuery } from '../../../hooks/queries/useAdminQueries'
-import { getStatusBadge, getStatusText } from '../../../utils/bookingUtils'
+import { getStatusBadge, getStatusText } from '@/features/booking'
 
 export default function DriverTrips({ driver }) {
   const { data: tripData, isLoading, isError } = useDriverTripsQuery(driver.id, { 

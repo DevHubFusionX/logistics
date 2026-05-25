@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { PageHeader } from '../../components/dashboard'
+import { PageHeader } from '@/features/dashboard'
 import { MapPin, Package, CheckCircle, Clock, Truck, User, Phone, Camera, FileText, Star } from 'lucide-react'
 import TrackingMap from '../../components/tracking/TrackingMap'
 import StatusTimeline from '../../components/tracking/StatusTimeline'

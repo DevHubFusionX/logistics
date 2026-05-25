@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Mail, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import AuthLayout from '../../components/auth/AuthLayout'
-import { useToast } from '../../components/ui/advanced'
-import authService from '../../services/authService'
+import { AuthLayout } from '@/features/auth'
+import { useToast } from '@/components/ui/advanced'
+import authService from '@/features/auth/services/authService'
 
 function ForgotPasswordForm() {
   const { showToast, ToastContainer } = useToast()
