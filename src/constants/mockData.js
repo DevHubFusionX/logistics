@@ -24,7 +24,7 @@ export const KPI_DATA = [
   {
     id: 'revenue_this_month',
     title: 'Net Revenue (MTD)',
-    value: '₦0',
+    value: '₦50,000,000',
     change: 0,
     period: 'Month-to-Date fulfilled revenue.',
     sparklineData: [],
@@ -33,7 +33,7 @@ export const KPI_DATA = [
   {
     id: 'revenue_this_year',
     title: 'Net Revenue (YTD)',
-    value: '₦0',
+    value: '₦202,350,000',
     change: 0,
     period: 'Year-to-Date fulfilled revenue.',
     sparklineData: [],
@@ -42,7 +42,7 @@ export const KPI_DATA = [
   {
     id: 'total_gmv',
     title: 'Total GMV',
-    value: '₦0',
+    value: '₦630,000,000',
     change: 0,
     period: 'Gross Merchandise Value.',
     sparklineData: [],
@@ -52,7 +52,7 @@ export const KPI_DATA = [
   {
     id: 'completed_trips',
     title: 'Cold-Chain Trips Completed',
-    value: '92',
+    value: '212',
     change: 0,
     period: 'Total completed to date.',
     sparklineData: [],
@@ -61,7 +61,7 @@ export const KPI_DATA = [
   {
     id: 'pending_trips',
     title: 'Trips Pending/In Progress',
-    value: '0',
+    value: '12',
     change: 0,
     period: 'Currently active.',
     sparklineData: [],
