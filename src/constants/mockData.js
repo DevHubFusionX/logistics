@@ -79,7 +79,7 @@ export const KPI_DATA = [
   {
     id: 'fleet_map',
     title: 'Live Fleet Map',
-    value: '0 Trucks',
+    value: '63 Trucks',
     change: 0,
     period: 'Active vehicles.',
     sparklineData: [],
@@ -88,7 +88,7 @@ export const KPI_DATA = [
   {
     id: 'active_drivers',
     title: 'Active Drivers',
-    value: '0',
+    value: '42',
     change: 0,
     period: 'Currently on duty.',
     sparklineData: [],
@@ -106,7 +106,7 @@ export const KPI_DATA = [
   {
     id: 'ontime_rate',
     title: 'On-time Rate',
-    value: '0%',
+    value: '90%',
     change: 0,
     period: 'Performance vs target.',
     sparklineData: [],
@@ -115,7 +115,7 @@ export const KPI_DATA = [
   {
     id: 'booking_mtd',
     title: 'Bookings (MTD)',
-    value: '0',
+    value: '35',
     change: 0,
     period: 'Volume for current month.',
     sparklineData: [],
@@ -124,7 +124,7 @@ export const KPI_DATA = [
   {
     id: 'booking_ytd',
     title: 'Bookings (YTD)',
-    value: '0',
+    value: '202',
     change: 0,
     period: 'Volume for current year.',
     sparklineData: [],
@@ -133,7 +133,7 @@ export const KPI_DATA = [
   {
     id: 'total_bookings',
     title: 'Total Bookings',
-    value: '0',
+    value: '202',
     change: 0,
     period: 'All-time system volume.',
     sparklineData: [],
