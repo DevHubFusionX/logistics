@@ -1,185 +1,86 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Welcome to Darafort Global</title>
-    <style>
-        html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f4f6f8; }
-        * { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
-        table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
-        table { border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important; }
-        img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
-        a { text-decoration: none; }
-        body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #3c4043; font-size: 15px; line-height: 1.7; }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Welcome to Dara Express</title>
+  <style>
+    html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f4f6f8; }
+    * { -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt !important; mso-table-rspace: 0pt !important; }
+    table { border-spacing: 0 !important; border-collapse: collapse !important; table-layout: fixed !important; margin: 0 auto !important; }
+    img { border: 0; outline: none; text-decoration: none; -ms-interpolation-mode: bicubic; }
+    a { text-decoration: none; }
+    body { font-family: 'Helvetica Neue', Arial, sans-serif; color: #374151; font-size: 15px; line-height: 1.7; }
 
-        .wrapper { width: 100%; background-color: #f4f6f8; padding: 40px 0; }
-        .card { max-width: 580px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; }
+    .wrapper  { width: 100%; background-color: #f4f6f8; padding: 40px 20px; }
+    .card     { max-width: 560px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; }
+    .top-bar  { height: 4px; background: linear-gradient(90deg, #0369a1 0%, #0ea5e9 100%); }
 
-        /* Top bar */
-        .top-bar { height: 4px; background: linear-gradient(90deg, #215C9C 0%, #3AA048 100%); }
+    .body     { padding: 40px; text-align: center; }
+    .body p   { color: #374151; font-size: 15px; margin: 0 0 16px; }
 
-        /* Hero */
-        .hero { position: relative; line-height: 0; }
-        .hero img { width: 100%; height: 200px; object-fit: cover; display: block; }
-        .hero-overlay {
-            position: absolute; inset: 0;
-            background: linear-gradient(to right, rgba(10,22,50,0.88) 0%, rgba(10,22,50,0.5) 100%);
-            display: flex; align-items: center;
-            padding: 0 40px;
-        }
-        .hero-text { color: #ffffff; }
-        .hero-text p { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #3AA048; margin: 0 0 8px; }
-        .hero-text h1 { font-size: 28px; font-weight: 700; color: #ffffff; margin: 0; line-height: 1.2; letter-spacing: -0.3px; }
-        .hero-text h1 span { color: #3AA048; }
+    .label    { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #0369a1; margin: 0 0 8px; }
+    .heading  { font-size: 22px; font-weight: 700; color: #111827; margin: 0 0 24px; line-height: 1.3; }
 
-        /* Logo bar */
-        .logo-bar { padding: 20px 40px; border-bottom: 1px solid #f1f3f4; }
+    .cta      { display: inline-block; background-color: #0369a1; color: #ffffff !important; padding: 13px 28px; border-radius: 6px; font-size: 15px; font-weight: 600; margin: 8px 0 28px; }
 
-        /* Body */
-        .body { padding: 36px 40px 32px; }
-        .body p { color: #3c4043; font-size: 15px; margin: 0 0 18px; }
+    .divider  { border: none; border-top: 1px solid #f3f4f6; margin: 0; }
 
-        /* Feature row */
-        .features { margin: 32px 0; border-top: 1px solid #f1f3f4; border-bottom: 1px solid #f1f3f4; padding: 28px 0; }
-        .feat-cell { width: 33.33%; padding: 0 16px; vertical-align: top; text-align: left; }
-        .feat-cell + .feat-cell { border-left: 1px solid #f1f3f4; }
-        .feat-icon { font-size: 22px; margin: 0 0 8px; }
-        .feat-title { font-size: 13px; font-weight: 700; color: #202124; margin: 0 0 4px; }
-        .feat-desc { font-size: 12px; color: #80868b; margin: 0; line-height: 1.5; }
+    .footer   { padding: 24px 40px; background-color: #f9fafb; text-align: center; }
+    .footer p { font-size: 12px; color: #9ca3af; margin: 0 0 6px; }
+    .footer a { color: #9ca3af; font-size: 12px; margin-right: 12px; }
 
-        /* CTA */
-        .cta-wrap { margin: 28px 0 32px; }
-        .cta {
-            display: inline-block;
-            background-color: #215C9C;
-            color: #ffffff !important;
-            padding: 14px 32px;
-            border-radius: 6px;
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .signature { font-size: 15px; color: #3c4043; margin: 0; }
-        .signature span { color: #215C9C; font-weight: 600; }
-
-        /* Footer */
-        .footer { padding: 20px 40px; border-top: 1px solid #f1f3f4; }
-        .footer p { font-size: 12px; color: #9aa0a6; margin: 0 0 6px; }
-        .footer a { color: #9aa0a6; text-decoration: none; margin-right: 14px; font-size: 12px; }
-
-        @media only screen and (max-width: 600px) {
-            .logo-bar, .body, .footer { padding-left: 24px !important; padding-right: 24px !important; }
-            .hero-overlay { padding: 0 24px !important; }
-            .hero-text h1 { font-size: 22px !important; }
-            .feat-cell { display: block !important; width: 100% !important; padding: 16px 0 !important; border-left: none !important; border-top: 1px solid #f1f3f4; }
-            .feat-cell:first-child { border-top: none; }
-            .card { border-radius: 0 !important; border-left: none !important; border-right: none !important; }
-        }
-    </style>
+    @media only screen and (max-width: 600px) {
+      .body, .footer { padding-left: 24px !important; padding-right: 24px !important; }
+      .card { border-radius: 0 !important; border-left: none !important; border-right: none !important; }
+    }
+  </style>
 </head>
 <body>
-<table class="wrapper" role="presentation" border="0" cellpadding="0" cellspacing="0">
-<tr><td align="center">
-<table class="card" role="presentation" border="0" cellpadding="0" cellspacing="0" width="580">
+<table class="wrapper" role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+<tr><td align="center" style="padding: 40px 20px;">
+<table class="card" role="presentation" border="0" cellpadding="0" cellspacing="0" width="560" style="margin: 0 auto;">
 
-    <!-- Top bar -->
-    <tr><td class="top-bar"></td></tr>
+  <!-- Top accent bar -->
+  <tr><td class="top-bar"></td></tr>
 
-    <!-- Hero: truck image + overlay -->
-    <tr>
-        <td class="hero">
-            <!--[if mso]><table role="presentation" width="100%"><tr><td style="background:#0a1632; padding:48px 40px;"><![endif]-->
-            <div style="position:relative; line-height:0;">
-                <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?w=1160&q=80&auto=format&fit=crop" alt="Darafort Global fleet" width="580" height="200" style="width:100%; height:200px; object-fit:cover; display:block;">
-                <div class="hero-overlay">
-                    <div class="hero-text">
-                        <p>Welcome aboard</p>
-                        <h1>Your logistics,<br><span>delivered right.</span></h1>
-                    </div>
-                </div>
-            </div>
-            <!--[if mso]></td></tr></table><![endif]-->
-        </td>
-    </tr>
+  <!-- Body -->
+  <tr>
+    <td class="body">
 
-    <!-- Logo bar -->
-    <tr>
-        <td class="logo-bar">
-            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                <tr>
-                    <td valign="middle">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 1024 1024" style="display:block; border-radius:6px;">
-                            <rect width="1024" height="1024" rx="512" ry="512" fill="#f1f5fb"/>
-                            <g transform="translate(512,512) scale(1.0) translate(-650,-374)">
-                                <path fill="#215C9C" d="M381.329 55.8252L657.57 55.8117L745.139 55.817C790.589 55.8264 817.176 53.9918 861.869 65.0315C940.847 85.3162 1008.65 135.928 1050.56 205.888C1094.8 281.067 1107.62 370.659 1086.25 455.233C1065.94 536.001 1014.76 605.577 943.718 649.012C903.421 673.31 858.045 687.939 811.148 691.753C794.425 692.966 774.179 692.422 757.192 692.408L685.702 692.421L637.53 692.446C633.745 692.45 618.254 692.717 615.516 692.033C579.036 654.651 542.196 617.623 505.001 580.953C569.485 580.057 636.392 580.964 701.05 580.985L756.489 581.003C786.198 581.002 804.124 582.112 833.681 574.763C868.463 566.034 900.246 548.079 925.679 522.791C965.348 483.255 987.63 429.535 987.593 373.521C987.973 318.223 966.19 265.078 927.113 225.96C899.905 198.625 865.483 179.596 827.867 171.096C801.657 165.208 775.432 166.688 748.646 166.697L670.248 166.741L381.44 166.723C381.79 130.037 381.488 92.5492 381.329 55.8252Z"/>
-                                <path fill="#215C9C" d="M381.406 226.389L674.477 226.369L751.576 226.354C770.204 226.354 794.367 225.336 812.128 228.927C839.804 234.501 865.222 248.115 885.202 268.064C913.381 296.14 929.088 334.372 928.785 374.154C929.13 413.67 913.431 451.634 885.282 479.362C866.512 497.948 843.048 511.087 817.395 517.375C794.735 522.852 754.387 521.058 729.708 521.048L610.715 521.036L504.213 521.114C515.577 508.299 535.027 490.075 547.524 477.66L615.507 409.446C656.63 408.411 699.876 410.213 741.193 409.426C758.602 408.679 777.768 411.088 794.948 408.523C811.197 406.098 821.983 389.267 822.143 373.786C822.238 363.653 818.312 353.895 811.225 346.653C803.966 339.29 795.435 336.333 785.248 336.165C772.833 335.961 760.409 336.067 747.991 336.075L663.035 336.133L381.442 336.076L381.406 226.389Z"/>
-                                <path fill="#3AA048" d="M383.296 409.116C434.212 409.361 485.129 409.334 536.045 409.034C522.297 424.489 501.388 444.164 486.335 459.284L396.052 549.637C440.921 593.652 483.949 640.307 528.907 684.339C531.087 686.473 534.496 689.739 535.901 692.374L383.936 692.51L242.746 549.724C290 503.451 336.109 455.429 383.296 409.116Z"/>
-                            </g>
-                        </svg>
-                    </td>
-                    <td valign="middle" align="right" style="font-size:16px; font-weight:600; color:#202124;">
-                        Darafort <span style="color:#3AA048;">Global</span>
-                    </td>
-                </tr>
-            </table>
-        </td>
-    </tr>
+      <p class="label">Welcome aboard</p>
+      <h1 class="heading">Your account is ready, {{firstName}}.</h1>
 
-    <!-- Body -->
-    <tr>
-        <td class="body">
-            <p style="font-size:21px; font-weight:700; color:#202124; margin:0 0 20px; line-height:1.3;">Welcome, and thank you<br>for choosing us.</p>
-            <p>Your account is ready. Darafort Global gives you real-time visibility, seamless booking, and a team that's always in your corner — so you can focus on what matters most.</p>
-            <p>Here's what you can do from day one:</p>
+      <p>Thanks for joining Dara Express. You now have access to real-time shipment tracking, instant booking, and everything you need to manage your logistics in one place.</p>
 
-            <!-- 3-feature row -->
-            <div class="features">
-                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                    <tr>
-                        <td class="feat-cell">
-                            <p class="feat-icon">📦</p>
-                            <p class="feat-title">Book a Shipment</p>
-                            <p class="feat-desc">Schedule pickups and deliveries in minutes.</p>
-                        </td>
-                        <td class="feat-cell">
-                            <p class="feat-icon">📍</p>
-                            <p class="feat-title">Track in Real Time</p>
-                            <p class="feat-desc">Know exactly where your cargo is, always.</p>
-                        </td>
-                        <td class="feat-cell">
-                            <p class="feat-icon">📊</p>
-                            <p class="feat-title">View Analytics</p>
-                            <p class="feat-desc">Insights to help you run smarter operations.</p>
-                        </td>
-                    </tr>
-                </table>
-            </div>
+      <p>To get started, head to your dashboard and create your first booking.</p>
 
-            <!-- CTA -->
-            <div class="cta-wrap">
-                <a href="https://daraexpress.com/dashboard" class="cta">Go to Dashboard</a>
-            </div>
+      <a href="https://daraexpress.com/my-bookings" class="cta">Get started</a>
 
-            <p class="signature">
-                Best regards,<br>
-                <span>The Darafort Global Team</span>
-            </p>
-        </td>
-    </tr>
+      <p>If you have any questions, just reply to this email — we're always happy to help.</p>
 
-    <!-- Footer -->
-    <tr>
-        <td class="footer">
-            <p>&copy; 2026 Darafort Global &nbsp;·&nbsp; MJS House, 366 Murtala Muhammed Road, Yaba, Lagos</p>
-            <p>
-                <a href="https://daraexpress.com/help">Help Center</a>
-                <a href="https://daraexpress.com/privacy">Privacy Policy</a>
-                <a href="https://daraexpress.com/terms">Terms of Service</a>
-            </p>
-        </td>
-    </tr>
+      <p style="margin: 0; color: #111827; font-weight: 600;">
+        The Dara Express Team
+      </p>
+
+    </td>
+  </tr>
+
+  <tr><td><hr class="divider"></td></tr>
+
+  <!-- Footer -->
+  <tr>
+    <td class="footer">
+      <p>&copy; 2026 Dara Express &nbsp;·&nbsp; Lagos, Nigeria</p>
+      <p>
+        <a href="https://daraexpress.com/support">Help Center</a>
+        <a href="https://daraexpress.com/privacy">Privacy Policy</a>
+        <a href="https://daraexpress.com/terms">Terms of Service</a>
+      </p>
+    </td>
+  </tr>
 
 </table>
 </td></tr>
