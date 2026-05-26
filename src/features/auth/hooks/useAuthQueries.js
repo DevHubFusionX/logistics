@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import authService from '../services/authService'
 import { useAuthStore } from '../../../stores/authStore'
+import { queryClient } from '../../../lib/queryClient'
 import toast from 'react-hot-toast'
 
 export const authKeys = {
@@ -21,36 +22,28 @@ export function useProfileQuery() {
                 const response = isAdmin
                     ? await authService.getAdminProfile()
                     : await authService.getProfile()
-
-                // API returns { data: { error, message, data: { user fields... } } }
                 return response.data?.data || response.data || response
             } catch (error) {
-                if (error.status === 401) {
-                    logout()
-                }
+                if (error.status === 401) logout()
                 throw error
             }
         },
-        staleTime: 10 * 60 * 1000, // 10 minutes
+        staleTime: 0,           // always fetch fresh profile on mount
+        gcTime: 0,              // don't keep in cache after unmount
         enabled: !!user
     })
 }
 
 /**
  * Hook for user login mutation
+ * All post-login logic (verified check, toast, redirect) is handled in the component.
  */
 export function useLoginMutation() {
-    const { setAuth } = useAuthStore()
-
     return useMutation({
         mutationFn: (credentials) => authService.login(credentials),
-        onSuccess: (response) => {
-            const payload = response.data?.data
-            if (payload?.token) {
-                const user = payload.user || payload.admin
-                setAuth(user, payload.token)
-                toast.success('Login successful!')
-            }
+        onSuccess: () => {
+            // Clear any cached data from a previous session before setting new auth
+            queryClient.clear()
         }
     })
 }
@@ -64,6 +57,7 @@ export function useAdminLoginMutation() {
     return useMutation({
         mutationFn: (credentials) => authService.adminLogin(credentials),
         onSuccess: (response) => {
+            queryClient.clear()
             const payload = response.data?.data
             if (payload?.token) {
                 const user = payload.user || payload.admin
@@ -83,12 +77,11 @@ export function useManagerLoginMutation() {
     return useMutation({
         mutationFn: (credentials) => authService.managerLogin(credentials),
         onSuccess: (response) => {
+            queryClient.clear()
             const payload = response.data?.data
             if (payload?.token) {
-                // Determine user object (backend may return user, admin, manager or flat fields)
                 const user = payload.user || payload.admin || payload.manager || { ...payload }
-                if (user.token) delete user.token // Clean up if flat
-                
+                if (user.token) delete user.token
                 setAuth(user, payload.token)
                 toast.success('Manager access granted!')
             }
@@ -97,21 +90,18 @@ export function useManagerLoginMutation() {
 }
 
 /**
- * Hook for registration mutation
+ * Hook for registration mutation.
+ * Sign-up returns a token but verified=false.
+ * We do NOT call setAuth — instead redirect to verify-email.
+ * The user must verify their email before they can log in.
  */
 export function useRegisterMutation() {
-    const { setAuth } = useAuthStore()
-
-    return useMutation({
-        mutationFn: (userData) => authService.register(userData),
-        onSuccess: (response) => {
-            const payload = response.data?.data
-            if (payload?.token) {
-                setAuth(payload.user, payload.token)
-                toast.success('Account created successfully!')
-            }
-        }
-    })
+  return useMutation({
+    mutationFn: (userData) => authService.register(userData),
+    onSuccess: () => {
+      queryClient.clear()
+    }
+  })
 }
 
 /**

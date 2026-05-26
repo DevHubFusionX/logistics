@@ -83,6 +83,7 @@ const ForgotPassword = lazy(() => import('../pages/auth/ForgotPassword'))
 const ResetPassword = lazy(() => import('../pages/auth/ResetPassword'))
 const VerifyOTP = lazy(() => import('../pages/auth/VerifyOTP'))
 
+const VerifyEmail = lazy(() => import('../pages/auth/VerifyEmail'))
 const AdminLogin = lazy(() => import('../pages/auth/AdminLogin'))
 const ManagerLogin = lazy(() => import('../pages/auth/ManagerLogin'))
 
@@ -113,6 +114,7 @@ export default function AppRoutes() {
           <Route path="/auth/admin/managers/login" element={<Suspense fallback={<PageLoader />}><ManagerLogin /></Suspense>} />
           <Route path="/auth/forgot-password" element={<Suspense fallback={<PageLoader />}><ForgotPassword /></Suspense>} />
           <Route path="/auth/reset-password" element={<Suspense fallback={<PageLoader />}><ResetPassword /></Suspense>} />
+          <Route path="/auth/verify-email" element={<Suspense fallback={<PageLoader />}><VerifyEmail /></Suspense>} />
           <Route path="/auth/verify-otp" element={<Suspense fallback={<PageLoader />}><VerifyOTP /></Suspense>} />
         </Route>
 

@@ -27,17 +27,22 @@ export default function ProtectedRoute({ children, allowedRoles = [] }) {
   }
 
   if (!isAuthenticated || !user) {
-    // Determine where to redirect based on the intended path
     const path = location.pathname
     const adminPathPrefixes = [
-      '/dashboard', '/shipments', '/admin', '/fleet', '/routes', 
+      '/dashboard', '/shipments', '/admin', '/fleet', '/routes',
       '/warehouses', '/orders', '/customers', '/drivers', '/trips',
       '/reports', '/alerts', '/tasks', '/temperature', '/payments',
       '/pricing-management', '/bookings-management', '/settings', '/user'
     ]
     const isAdminPath = adminPathPrefixes.some(prefix => path.startsWith(prefix))
+    return <Navigate to={isAdminPath ? '/auth/admin/login' : '/auth/login'} state={{ from: location }} replace />
+  }
 
-    return <Navigate to={isAdminPath ? "/auth/admin/login" : "/auth/login"} state={{ from: location }} replace />
+  // Block unverified users — admins/staff are always considered verified
+  const isStaff = ['Super Admin', 'Admin Manager', 'Dispatcher', 'Driver'].includes(user.role)
+  if (!isStaff && user.verified === false) {
+    sessionStorage.setItem('pending_verification_email', user.email || '')
+    return <Navigate to="/auth/verify-email" replace />
   }
 
   // Role-based authorization

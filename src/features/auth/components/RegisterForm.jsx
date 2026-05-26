@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { Mail, Lock, User, Phone, MapPin, Building, Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useRegisterMutation } from '../hooks/useAuthQueries'
+import authService from '../services/authService'
 import { useFormValidation } from '../../../hooks/useFormValidation'
 import { useToast } from '../../../components/ui/advanced'
 
@@ -89,12 +90,25 @@ export default function RegisterForm() {
     delete submissionData.confirmPassword
 
     register(submissionData, {
-      onSuccess: () => {
-        showToast.success('Account created', 'Welcome to Dara Logistics!')
-        setTimeout(() => navigate('/my-bookings'), 1500)
+      onSuccess: async (response) => {
+        const payload = response?.data?.data
+        const registeredUser = payload?.user
+
+        // Store email for the verify-email page
+        const emailToVerify = registeredUser?.email || formData.email
+        sessionStorage.setItem('pending_verification_email', emailToVerify)
+
+        // Automatically trigger the verification email from the backend
+        try {
+          await authService.resendVerificationLink(emailToVerify)
+        } catch {
+          // Non-fatal — the page still shows with a manual resend option
+        }
+
+        navigate('/auth/verify-email')
       },
       onError: (err) => {
-        if (err.message?.includes('email')) {
+        if (err.message?.toLowerCase().includes('email')) {
           setFieldError('email', 'This email is already registered')
         } else {
           showToast.error('Registration failed', err.message || 'Please try again')

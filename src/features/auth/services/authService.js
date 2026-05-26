@@ -44,6 +44,11 @@ export default {
     body: JSON.stringify({ token_hash, password })
   }),
 
+  resendVerificationLink: (email) => httpClient.request('/auth/send-verification-email', {
+    method: 'POST',
+    body: JSON.stringify({ email })
+  }),
+
   verifyOTP: (otp) => httpClient.request('/auth/verify-otp', {
     method: 'POST',
     body: JSON.stringify({ otp })

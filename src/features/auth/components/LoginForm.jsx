@@ -4,6 +4,7 @@ import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useLoginMutation } from '../hooks/useAuthQueries'
 import { useAuthStore } from '../../../stores/authStore'
+import authService from '../services/authService'
 import { useFormValidation } from '../../../hooks/useFormValidation'
 import { useToast } from '../../../components/ui/advanced'
 import { useSecurityLockout } from '../hooks/useSecurityLockout'
@@ -12,6 +13,7 @@ export default function LoginForm() {
   const navigate = useNavigate()
   const { showToast, ToastContainer } = useToast()
   const { mutate: login, isPending: isLoggingIn, reset: resetMutation } = useLoginMutation()
+  const { setAuth } = useAuthStore()
 
   const {
     fieldErrors,
@@ -52,20 +54,45 @@ export default function LoginForm() {
     }
 
     login(formData, {
-      onSuccess: () => {
+      onSuccess: (response) => {
         resetAttempts()
-        const { getIsAdmin } = useAuthStore.getState()
-        const isAdmin = getIsAdmin()
+        const payload = response?.data?.data
+        const loggedInUser = payload?.user || payload?.admin
 
+        // Block unverified users — backend returns verified: false
+        if (loggedInUser?.verified === false) {
+          sessionStorage.setItem('pending_verification_email', formData.email)
+          // Trigger a fresh verification email
+          authService.resendVerificationLink(formData.email).catch(() => {})
+          navigate('/auth/verify-email')
+          return
+        }
+
+        // Verified — set session and redirect
+        if (payload?.token && loggedInUser) {
+          setAuth(loggedInUser, payload.token, rememberMe)
+        }
+
+        const { getIsAdmin } = useAuthStore.getState()
         showToast.success('Welcome back!', 'Redirecting to your dashboard...')
         setTimeout(() => {
-          navigate(isAdmin ? '/dashboard' : '/my-bookings')
+          navigate(getIsAdmin() ? '/dashboard' : '/my-bookings')
         }, 800)
       },
       onError: (err) => {
+        const msg = err.message?.toLowerCase() || ''
         const lockoutTriggered = registerFailure()
         if (lockoutTriggered) {
           showToast.error('Security Alert', 'Too many failed attempts. Account locked for 60 seconds.')
+        } else if (
+          msg.includes('not verified') ||
+          msg.includes('verify your email') ||
+          msg.includes('email not verified') ||
+          msg.includes('account not verified')
+        ) {
+          sessionStorage.setItem('pending_verification_email', formData.email)
+          authService.resendVerificationLink(formData.email).catch(() => {})
+          navigate('/auth/verify-email')
         } else {
           showToast.error('Login Failed', err.message || 'Invalid credentials')
         }

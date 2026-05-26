@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
+import { queryClient } from '../lib/queryClient'
 
 const roleMap = {
   'user': 'Customer',
@@ -78,6 +79,7 @@ export const useAuthStore = create(
 
       logout: () => {
         tokenStorage.clear()
+        queryClient.clear() // wipe all cached data from previous session
         set({
           user: null,
           isAuthenticated: false,
