@@ -22,7 +22,7 @@ function AdminOverview() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
             {dynamicKPIs.filter(kpi =>
               (kpi.id.includes('revenue') || kpi.id.includes('gmv')) &&
-              !['revenue_last_month', 'revenue_last_week'].includes(kpi.id)
+              !['revenue_last_month', 'revenue_last_week', 'total_gmv'].includes(kpi.id)
             ).map((kpi) => (
               <KPICard key={kpi.id} {...kpi} />
             ))}

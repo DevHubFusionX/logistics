@@ -39,15 +39,7 @@ export const KPI_DATA = [
     sparklineData: [],
     color: 'green'
   },
-  {
-    id: 'total_gmv',
-    title: 'Total GMV',
-    value: '₦630,000,000',
-    change: 0,
-    period: 'Gross Merchandise Value.',
-    sparklineData: [],
-    color: 'green'
-  },
+  
   // Trips & Fulfillment
   {
     id: 'completed_trips',
