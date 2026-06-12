@@ -1,13 +1,13 @@
 import { useState, useMemo, memo } from 'react'
 import { useAuthStore } from '../../stores/authStore'
 import { PageHeader } from '@/features/dashboard'
-import { VirtualizedTable, useToast } from '../../components/ui/advanced'
+import { VirtualizedTable, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { Thermometer, RefreshCw, AlertCircle, Truck, Shield, CheckCircle, XCircle } from 'lucide-react'
-import AddTruckModal from '../../components/fleet/AddTruckModal'
-import FleetFilters from '../../components/fleet/FleetFilters'
-import FleetMetrics from '../../components/fleet/FleetMetrics'
-import TruckDetailModal from '../../components/fleet/TruckDetailModal'
+import AddTruckModal from '../../features/fleet/components/fleet/AddTruckModal'
+import FleetFilters from '../../features/fleet/components/fleet/FleetFilters'
+import FleetMetrics from '../../features/fleet/components/fleet/FleetMetrics'
+import TruckDetailModal from '../../features/fleet/components/fleet/TruckDetailModal'
 import { useFleetQuery, useDriversQuery } from '../../hooks/queries/useAdminQueries'
 
 function Fleet() {

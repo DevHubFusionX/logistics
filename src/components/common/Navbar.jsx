@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Menu, X, LogOut, LayoutDashboard, User } from 'lucide-react'
 import { useAuth } from '../../hooks'
-import { AnimatedLogo } from '.'
+import { AnimatedLogo } from './'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navLinks = [

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/features/dashboard'
 import { Package, Search, ChevronLeft, RefreshCcw, AlertCircle } from 'lucide-react'
-import { useToast } from '../../components/ui/advanced'
+import { useToast } from '../../components/ui'
 import { 
   BookingCard, 
   BookingDetailsModal, 

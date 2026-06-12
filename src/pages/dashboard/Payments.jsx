@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
-import { MetricCard, useToast } from '../../components/ui/advanced'
+import { MetricCard, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { CreditCard, DollarSign, AlertCircle, TrendingUp, Download, Search, FileText } from 'lucide-react'
-import PaymentsTable from '../../components/payments/PaymentsTable'
-import RevenueChart from '../../components/payments/RevenueChart'
-import OutstandingPayments from '../../components/payments/OutstandingPayments'
-import { paymentsData, revenueData } from '../../components/payments/paymentsData'
+import PaymentsTable from '../../features/billing/components/payments/PaymentsTable'
+import RevenueChart from '../../features/billing/components/payments/RevenueChart'
+import OutstandingPayments from '../../features/billing/components/payments/OutstandingPayments'
+import { paymentsData, revenueData } from '../../features/billing/components/payments/paymentsData'
 
 export default function Payments() {
   const [searchTerm, setSearchTerm] = useState('')

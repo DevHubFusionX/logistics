@@ -1,7 +1,7 @@
 
 import { useState, useMemo, memo } from 'react'
 import { PageHeader } from '@/features/dashboard'
-import { MetricCard } from '../../components/ui/advanced'
+import { MetricCard } from '../../components/ui'
 import {
     TrendingUp,
     DollarSign,

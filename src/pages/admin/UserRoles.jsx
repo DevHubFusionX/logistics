@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
-import { MetricCard, useToast } from '../../components/ui/advanced'
+import { MetricCard, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { Users, Shield, Activity, Plus, Search } from 'lucide-react'
-import UsersTable from '../../components/users/UsersTable'
-import UserModal from '../../components/users/UserModal'
-import RolesCard from '../../components/users/RolesCard'
-import ActivityLogs from '../../components/users/ActivityLogs'
-import { usersData, roles, activityLogs } from '../../components/users/usersData'
+import UsersTable from '../../features/admin/components/users/UsersTable'
+import UserModal from '../../features/admin/components/users/UserModal'
+import RolesCard from '../../features/admin/components/users/RolesCard'
+import ActivityLogs from '../../features/admin/components/users/ActivityLogs'
+import { usersData, roles, activityLogs } from '../../features/admin/components/users/usersData'
 
 export default function UserRoles() {
   const [searchTerm, setSearchTerm] = useState('')

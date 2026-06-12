@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useRegisterMutation } from '../hooks/useAuthQueries'
 import authService from '../services/authService'
 import { useFormValidation } from '../../../hooks/useFormValidation'
-import { useToast } from '../../../components/ui/advanced'
+import { useToast } from '../../../components/ui'
 
 export default function RegisterForm() {
   const navigate = useNavigate()

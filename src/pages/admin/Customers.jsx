@@ -4,12 +4,12 @@ import {
   Users, Search, ShoppingCart, TrendingUp, UserCheck,
   AlertCircle, RefreshCw, Grid, List, Filter, Download
 } from 'lucide-react'
-import { MetricCard, useToast } from '../../components/ui/advanced'
+import { MetricCard, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
-import ClientsTable from '../../components/clients/ClientsTable'
-import ClientCard from '../../components/clients/ClientCard'
-import ClientDetail from '../../components/clients/ClientDetail'
-import CreateOrderModal from '../../components/clients/CreateOrderModal'
+import ClientsTable from '../../features/booking/components/clients/ClientsTable'
+import ClientCard from '../../features/booking/components/clients/ClientCard'
+import ClientDetail from '../../features/booking/components/clients/ClientDetail'
+import CreateOrderModal from '../../features/booking/components/clients/CreateOrderModal'
 import { useCustomersQuery } from '../../hooks/queries/useAdminQueries'
 
 export default function Customers() {

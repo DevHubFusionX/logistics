@@ -4,7 +4,7 @@ import { Mail, Lock, Eye, EyeOff, ShieldCheck, AlertTriangle } from 'lucide-reac
 import { useNavigate, Link } from 'react-router-dom'
 import { useAdminLoginMutation } from '../hooks/useAuthQueries'
 import { useFormValidation } from '../../../hooks/useFormValidation'
-import { useToast } from '../../../components/ui/advanced'
+import { useToast } from '../../../components/ui'
 import { useSecurityLockout } from '../hooks/useSecurityLockout'
 
 export default function AdminLoginForm() {

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
-import { MetricCard, useToast } from '../../components/ui/advanced'
+import { MetricCard, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { Download, Calendar, Filter, TrendingUp, Truck, Thermometer, Wrench, FileSpreadsheet, FileText } from 'lucide-react'
-import RevenueTrendChart from '../../components/reports/RevenueTrendChart'
-import FleetUsageChart from '../../components/reports/FleetUsageChart'
-import TripCountsChart from '../../components/reports/TripCountsChart'
-import RevenueByClientChart from '../../components/reports/RevenueByClientChart'
-import GeographicHeatmap from '../../components/reports/GeographicHeatmap'
-import { reportsData } from '../../components/reports/reportsData'
+import RevenueTrendChart from '../../features/dashboard/components/reports/RevenueTrendChart'
+import FleetUsageChart from '../../features/dashboard/components/reports/FleetUsageChart'
+import TripCountsChart from '../../features/dashboard/components/reports/TripCountsChart'
+import RevenueByClientChart from '../../features/dashboard/components/reports/RevenueByClientChart'
+import GeographicHeatmap from '../../features/dashboard/components/reports/GeographicHeatmap'
+import { reportsData } from '../../features/dashboard/components/reports/reportsData'
 
 export default function Reports() {
   const [dateRange, setDateRange] = useState('month')

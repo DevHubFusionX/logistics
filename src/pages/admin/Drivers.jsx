@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import { PageHeader } from '@/features/dashboard'
-import { useToast } from '../../components/ui/advanced'
+import { useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks'
 import { sanitizeInput } from '../../utils'
 import { AlertCircle, RefreshCw } from 'lucide-react'
@@ -10,7 +10,7 @@ import {
   DriverTable,
   DriverModal,
   AddDriverModal
-} from '../../components/drivers'
+} from '../../features/fleet/components/drivers'
 import { useDriversQuery, useFleetQuery } from '../../hooks/queries/useAdminQueries'
 
 export default function Drivers() {

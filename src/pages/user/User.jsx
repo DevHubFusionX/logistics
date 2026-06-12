@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { User as UserIcon, Bell, Lock, CreditCard, ChevronRight, Settings } from 'lucide-react'
-import ProfileSection from '../../components/user/ProfileSection'
-import SecuritySection from '../../components/user/SecuritySection'
-import NotificationSettings from '../../components/user/NotificationSettings'
-import BillingSection from '../../components/user/BillingSection'
+import ProfileSection from '../../features/user/components/user/ProfileSection'
+import SecuritySection from '../../features/user/components/user/SecuritySection'
+import NotificationSettings from '../../features/user/components/user/NotificationSettings'
+import BillingSection from '../../features/user/components/user/BillingSection'
 import { PageHeader } from '@/features/dashboard'
 
 const tabs = [

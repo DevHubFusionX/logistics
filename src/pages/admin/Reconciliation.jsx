@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react'
 import { PageHeader } from '@/features/dashboard'
 import { CheckCircle, XCircle, AlertTriangle, Download, RefreshCw, Search, AlertCircle } from 'lucide-react'
-import { useToast } from '../../components/ui/advanced'
+import { useToast } from '../../components/ui'
 import { useReportsQuery } from '../../hooks/queries/useAdminQueries'
 
 export default function Reconciliation() {

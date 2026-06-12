@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { PageHeader } from '@/features/dashboard'
 import { Package, Search, UserCheck, Truck, Clock, CheckCircle, RefreshCcw, AlertCircle } from 'lucide-react'
-import { useToast } from '../../components/ui/advanced'
+import { useToast } from '../../components/ui'
 import { 
   BookingCard, 
   AssignDriverModal, 

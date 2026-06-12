@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Plus, Search, AlertTriangle, Loader2 } from 'lucide-react'
-import OrderCard from '../../components/orders/OrderCard'
-import OrderPipeline from '../../components/orders/OrderPipeline'
-import ExportModal from '../../components/orders/ExportModal'
+import OrderCard from '../../features/shipments/components/orders/OrderCard'
+import OrderPipeline from '../../features/shipments/components/orders/OrderPipeline'
+import ExportModal from '../../features/shipments/components/orders/ExportModal'
 import { useAdminBookingsQuery } from '@/features/booking'
 
 export default function Orders() {

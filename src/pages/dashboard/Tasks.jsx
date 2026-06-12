@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
 import { Kanban, Calendar, Smartphone } from 'lucide-react'
-import KanbanBoard from '../../components/tasks/KanbanBoard'
-import DriverSchedule from '../../components/tasks/DriverSchedule'
-import MobileIntegration from '../../components/tasks/MobileIntegration'
-import { MetricCard, useToast } from '../../components/ui/advanced'
+import KanbanBoard from '../../features/dashboard/components/tasks/KanbanBoard'
+import DriverSchedule from '../../features/dashboard/components/tasks/DriverSchedule'
+import MobileIntegration from '../../features/dashboard/components/tasks/MobileIntegration'
+import { MetricCard, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 
 export default function Tasks() {

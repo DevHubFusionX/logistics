@@ -4,13 +4,13 @@ import {
   Download, Truck, Plus, Search, X,
   CheckCircle, AlertCircle, Package, DollarSign
 } from 'lucide-react'
-import { useToast } from '../../components/ui/advanced'
+import { useToast } from '../../components/ui'
 import { useOrdersTableQuery, useOrderMutations } from '../../hooks/queries/useOrderQueries'
 import adminOrderService from '../../services/adminOrderService'
 import { useAuth } from '@/features/auth'
-import OrderDetailsModal from '../../components/admin/OrderDetailsModal'
-import OrderFormModal from '../../components/admin/OrderFormModal'
-import OrdersTableRow from '../../components/admin/orders/OrdersTableRow'
+import OrderDetailsModal from '../../features/admin/components/admin/OrderDetailsModal'
+import OrderFormModal from '../../features/admin/components/admin/OrderFormModal'
+import OrdersTableRow from '../../features/admin/components/admin/orders/OrdersTableRow'
 
 function StatCard({ icon: Icon, label, value, color }) {
   const cfg = {

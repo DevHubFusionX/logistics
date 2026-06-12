@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Plus, Search } from 'lucide-react'
-import WarehouseCard from '../../components/warehouses/WarehouseCard'
-import WarehouseDashboard from '../../components/warehouses/WarehouseDashboard'
-import InventoryTable from '../../components/warehouses/InventoryTable'
-import DockScheduling from '../../components/warehouses/DockScheduling'
+import WarehouseCard from '../../features/shipments/components/warehouses/WarehouseCard'
+import WarehouseDashboard from '../../features/shipments/components/warehouses/WarehouseDashboard'
+import InventoryTable from '../../features/shipments/components/warehouses/InventoryTable'
+import DockScheduling from '../../features/shipments/components/warehouses/DockScheduling'
 
 const mockWarehouses = [
   {

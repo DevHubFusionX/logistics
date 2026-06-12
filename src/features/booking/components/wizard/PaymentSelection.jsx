@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { PaymentRecovery } from '@/components/payments'
+import { PaymentRecovery } from '@/features/billing/components/payments'
 import { PaymentSummary, PaymentMethodGrid, PaymentMethodContent } from './payment'
 import { validatePaymentMethod } from '@/utils/paymentValidation'
 import { usePaymentStatus } from '@/hooks/usePaymentStatus'

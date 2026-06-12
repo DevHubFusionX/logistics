@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
 import { DollarSign, Save, History, Users, Calculator, AlertCircle, RefreshCw } from 'lucide-react'
-import { useToast } from '../../components/ui/advanced'
+import { useToast } from '../../components/ui'
 import { useAuth } from '@/features/auth'
-import PricingRulesEditor from '../../components/pricing/PricingRulesEditor'
-import ClientPricingOverrides from '../../components/pricing/ClientPricingOverrides'
-import PricingSimulator from '../../components/pricing/PricingSimulator'
-import AuditLog from '../../components/pricing/AuditLog'
+import PricingRulesEditor from '../../features/billing/components/pricing/PricingRulesEditor'
+import ClientPricingOverrides from '../../features/billing/components/pricing/ClientPricingOverrides'
+import PricingSimulator from '../../features/billing/components/pricing/PricingSimulator'
+import AuditLog from '../../features/billing/components/pricing/AuditLog'
 import { usePricingRulesQuery, useClientOverridesQuery } from '../../hooks/queries/useAdminQueries'
 
 export default function PricingManagement() {

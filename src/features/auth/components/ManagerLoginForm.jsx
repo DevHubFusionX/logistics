@@ -4,7 +4,7 @@ import { Mail, Lock, Eye, EyeOff, ShieldCheck, AlertTriangle, Fingerprint, KeyRo
 import { useNavigate, Link } from 'react-router-dom'
 import { useManagerLoginMutation } from '../hooks/useAuthQueries'
 import { useFormValidation } from '../../../hooks/useFormValidation'
-import { useToast } from '../../../components/ui/advanced'
+import { useToast } from '../../../components/ui'
 import { useSecurityLockout } from '../hooks/useSecurityLockout'
 
 export default function ManagerLoginForm() {

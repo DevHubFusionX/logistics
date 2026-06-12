@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
-import { MetricCard, useToast } from '../../components/ui/advanced'
+import { MetricCard, useToast } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 import { Thermometer, AlertTriangle, TrendingUp, CheckCircle, WifiOff } from 'lucide-react'
-import TemperatureTable from '../../components/temperature/TemperatureTable'
-import TemperatureGraph from '../../components/temperature/TemperatureGraph'
-import AlertCenter from '../../components/temperature/AlertCenter'
-import ComplianceReport from '../../components/temperature/ComplianceReport'
-import { temperatureData, alerts, complianceReports } from '../../components/temperature/temperatureData'
+import TemperatureTable from '../../features/shipments/components/temperature/TemperatureTable'
+import TemperatureGraph from '../../features/shipments/components/temperature/TemperatureGraph'
+import AlertCenter from '../../features/shipments/components/temperature/AlertCenter'
+import ComplianceReport from '../../features/shipments/components/temperature/ComplianceReport'
+import { temperatureData, alerts, complianceReports } from '../../features/shipments/components/temperature/temperatureData'
 
 export default function Temperature() {
   const [activeTab, setActiveTab] = useState('monitoring')

@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { PageHeader } from '@/features/dashboard'
 import { AlertTriangle, Settings, Bell } from 'lucide-react'
-import AlertsDashboard from '../../components/alerts/AlertsDashboard'
-import AlertRulesForm from '../../components/alerts/AlertRulesForm'
-import NotificationTemplates from '../../components/alerts/NotificationTemplates'
-import { useToast, MetricCard } from '../../components/ui/advanced'
+import AlertsDashboard from '../../features/dashboard/components/alerts/AlertsDashboard'
+import AlertRulesForm from '../../features/dashboard/components/alerts/AlertRulesForm'
+import NotificationTemplates from '../../features/dashboard/components/alerts/NotificationTemplates'
+import { useToast, MetricCard } from '../../components/ui'
 import { useLogisticsShortcuts } from '../../hooks/useKeyboardShortcuts'
 
 export default function Alerts() {

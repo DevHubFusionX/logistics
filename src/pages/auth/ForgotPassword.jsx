@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Mail, ArrowLeft } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { AuthLayout } from '@/features/auth'
-import { useToast } from '@/components/ui/advanced'
+import { useToast } from '@/components/ui'
 import authService from '@/features/auth/services/authService'
 
 function ForgotPasswordForm() {

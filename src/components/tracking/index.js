@@ -1,5 +1,0 @@
-export { default as DriverInfo } from './DriverInfo'
-export { default as ProofOfDelivery } from './ProofOfDelivery'
-export { default as RatingModal } from './RatingModal'
-export { default as StatusTimeline } from './StatusTimeline'
-export { default as TrackingMap } from './TrackingMap'

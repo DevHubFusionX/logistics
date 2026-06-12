@@ -1,5 +1,0 @@
-export { default as AuditLogs } from './AuditLogs'
-export { default as IntegrationsSettings } from './IntegrationsSettings'
-export { default as NotificationsSettings } from './NotificationsSettings'
-export { default as SystemSettings } from './SystemSettings'
-export { default as TemperatureThresholds } from './TemperatureThresholds'

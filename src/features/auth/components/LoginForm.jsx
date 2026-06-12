@@ -6,7 +6,7 @@ import { useLoginMutation } from '../hooks/useAuthQueries'
 import { useAuthStore } from '../../../stores/authStore'
 import authService from '../services/authService'
 import { useFormValidation } from '../../../hooks/useFormValidation'
-import { useToast } from '../../../components/ui/advanced'
+import { useToast } from '../../../components/ui'
 import { useSecurityLockout } from '../hooks/useSecurityLockout'
 
 export default function LoginForm() {
