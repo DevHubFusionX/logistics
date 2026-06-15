@@ -4,24 +4,7 @@ import { motion } from 'framer-motion'
 import { ScheduleDemoModal } from './demo'
 import { heroData } from './Data'
 
-// Client logo SVGs
-import logoMain from '../../../../assets/ClientLogo/image.svg'
-import logo1 from '../../../../assets/ClientLogo/image (1).svg'
-import logo2 from '../../../../assets/ClientLogo/image (2).svg'
-import logo3 from '../../../../assets/ClientLogo/image (3).svg'
-import logo4 from '../../../../assets/ClientLogo/image (4).svg'
-import logo5 from '../../../../assets/ClientLogo/image (5).svg'
-import logo6 from '../../../../assets/ClientLogo/image (6).svg'
 
-const clientLogos = [
-  { src: logoMain, alt: 'Client Main' },
-  { src: logo1, alt: 'Client 1' },
-  { src: logo2, alt: 'Client 2' },
-  { src: logo3, alt: 'Client 3' },
-  { src: logo4, alt: 'Client 4' },
-  { src: logo5, alt: 'Client 5' },
-  { src: logo6, alt: 'Client 6' },
-]
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -136,25 +119,7 @@ export default function DaraHero() {
           </button>
         </motion.div>
 
-        {/* Client Logos Row */}
-        <motion.div
-          variants={itemVariants}
-          className="w-full border-t border-white/10 pt-6 pb-6 md:pb-12 flex flex-col gap-4"
-        >
-          <span className="text-white/35 text-[10px] font-bold tracking-[0.2em] uppercase font-body-unique">
-            Trusted by Nigeria's leading brands
-          </span>
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-4 opacity-40 hover:opacity-70 transition-opacity duration-300">
-            {clientLogos.map((logo, idx) => (
-              <img 
-                key={idx} 
-                src={logo.src} 
-                alt={logo.alt} 
-                className="h-5 sm:h-6 w-auto object-contain brightness-0 invert" 
-              />
-            ))}
-          </div>
-        </motion.div>
+
 
       </motion.div>
 

@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { LogOut, LayoutDashboard, ArrowRight } from 'lucide-react'
+import { LogOut, LayoutDashboard, ArrowRight, Phone, Mail, MapPin, Linkedin, Instagram } from 'lucide-react'
 import { useAuth } from '../../hooks'
 import { AnimatedLogo } from './'
 import { motion, AnimatePresence } from 'framer-motion'
+import { ScheduleDemoModal } from '../../features/landing/components/landing/demo'
 
 const navLinks = [
   { label: 'About us', path: '/about' },
@@ -12,41 +13,41 @@ const navLinks = [
   { label: 'Contact', path: '/contact' },
 ]
 
-
 // Framer Motion Variants for mobile navigation stagger
 const mobileContainerVariants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.06,
-      delayChildren: 0.08
+      staggerChildren: 0.05,
+      delayChildren: 0.1
     }
   }
 }
 
 const mobileItemVariants = {
-  hidden: { opacity: 0, x: 25 },
+  hidden: { opacity: 0, x: 20 },
   show: {
     opacity: 1,
     x: 0,
     transition: {
       type: "spring",
-      stiffness: 280,
-      damping: 24
+      stiffness: 300,
+      damping: 26
     }
   }
 }
-
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [visible, setVisible] = useState(true)
+  const [isDemoOpen, setIsDemoOpen] = useState(false)
   const lastScrollY = useRef(0)
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
+  
   const isDarkLogoText = location.pathname !== '/' || scrolled
 
   useEffect(() => {
@@ -83,52 +84,56 @@ export default function Navbar() {
     y: visible ? 0 : -90
   }), [visible])
 
-
-  // Memoized Mobile Action buttons
+  // Mobile Action buttons synchronized with Hero CTAs
   const mobileActions = useMemo(() => {
     if (user) {
       return (
-        <>
+        <div className="space-y-2">
           <Link
             to="/my-bookings"
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 border border-slate-200 bg-white text-slate-700 rounded-sm text-sm font-semibold transition-all shadow-sm"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 border border-slate-200 bg-white text-slate-700 rounded-sm text-xs font-bold uppercase tracking-wider transition-all shadow-sm font-body-unique hover:bg-slate-50 cursor-pointer"
           >
+            <LayoutDashboard className="w-3.5 h-3.5" />
             Dashboard
           </Link>
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center gap-2 w-full px-4 py-3 border border-slate-200 bg-white text-slate-700 rounded-sm text-sm font-semibold transition-all shadow-sm cursor-pointer"
+            className="flex items-center justify-center gap-2 w-full px-4 py-3 border border-red-100 bg-red-50/30 hover:bg-red-50 text-red-650 rounded-sm text-xs font-bold uppercase tracking-wider transition-all shadow-sm font-body-unique cursor-pointer"
           >
+            <LogOut className="w-3.5 h-3.5" />
             Logout
           </button>
-        </>
+        </div>
       )
     }
 
     return (
-      <>
+      <div className="space-y-3">
         <Link
           to="/auth/login"
-          className="block w-full py-3 text-center border border-slate-300 hover:border-slate-800 hover:bg-slate-50 text-slate-800 rounded-sm text-sm font-semibold transition-all shadow-sm"
+          className="block w-full py-3 text-center border border-slate-300 hover:border-slate-800 hover:bg-slate-50 text-slate-850 rounded-sm text-xs font-bold uppercase tracking-wider transition-all shadow-sm font-body-unique"
         >
           Login
         </Link>
+        <button
+          onClick={() => {
+            setMenuOpen(false)
+            setIsDemoOpen(true)
+          }}
+          className="block w-full py-3 text-center border border-[#0056B8]/40 hover:border-[#0056B8] hover:bg-blue-50/20 text-[#0056B8] rounded-sm text-xs font-bold uppercase tracking-wider transition-all shadow-sm font-body-unique cursor-pointer"
+        >
+          Schedule a Consultation
+        </button>
         <Link
           to="/booking/request"
-          className="block w-full py-3 text-center border border-[#0056B8]/40 hover:border-[#0056B8] text-[#0056B8] rounded-sm text-sm font-bold transition-all shadow-sm"
+          className="w-full py-3 bg-[#0056B8] hover:bg-[#004cba] text-white rounded-sm text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center justify-center gap-2 group font-body-unique"
         >
-          Book a demo
-        </Link>
-        <Link
-          to="/booking/request"
-          className="w-full py-3 bg-[#0056B8] hover:bg-[#004cba] text-white rounded-sm text-sm font-bold transition-all shadow-md flex items-center justify-center gap-2 group"
-        >
-          <span>Book</span>
+          <span>Book a Shipment</span>
           <span className="flex-shrink-0 bg-white text-[#0056B8] rounded-full p-1 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
             <ArrowRight className="w-2.5 h-2.5" />
           </span>
         </Link>
-      </>
+      </div>
     )
   }, [user, handleLogout])
 
@@ -202,9 +207,9 @@ export default function Navbar() {
                     </Link>
                     <Link
                       to="/booking/request"
-                      className="px-6 py-2.5 bg-[#0056B8] hover:bg-[#004cba] text-white font-body-unique text-[11px] font-bold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-md hover:shadow-lg border border-[#0056B8] flex items-center gap-2 group"
+                      className="px-6 py-2.5 bg-[#0056B8] hover:bg-[#004cba] text-white font-body-unique text-[11px] font-bold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-md hover:shadow-lg border border-[#0056B8] flex items-center gap-2 group cursor-pointer"
                     >
-                      <span>Book</span>
+                      <span>Book a Shipment</span>
                       <span className="flex-shrink-0 bg-white text-[#0056B8] rounded-full p-1 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
                         <ArrowRight className="w-2.5 h-2.5" />
                       </span>
@@ -221,45 +226,24 @@ export default function Navbar() {
                 aria-label="Toggle Menu"
                 className="p-3 rounded-full bg-[#f1f3f4]/95 backdrop-blur-md border border-white/20 text-slate-700 hover:text-slate-900 shadow-sm transition-all cursor-pointer flex items-center justify-center"
               >
-                <svg width="18" height="18" viewBox="0 0 20 20" className="text-current">
-                  <motion.path
-                    fill="transparent"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    variants={{
-                      closed: { d: "M 2 5 L 18 5" },
-                      open: { d: "M 4.5 15.5 L 15.5 4.5" }
-                    }}
-                    animate={menuOpen ? "open" : "closed"}
-                    transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                  />
-                  <motion.path
-                    fill="transparent"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    d="M 2 10 L 18 10"
-                    variants={{
-                      closed: { opacity: 1 },
-                      open: { opacity: 0 }
-                    }}
-                    animate={menuOpen ? "open" : "closed"}
-                    transition={{ duration: 0.12 }}
-                  />
-                  <motion.path
-                    fill="transparent"
-                    strokeWidth="2.5"
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    variants={{
-                      closed: { d: "M 2 15 L 18 15" },
-                      open: { d: "M 4.5 4.5 L 15.5 15.5" }
-                    }}
-                    animate={menuOpen ? "open" : "closed"}
-                    transition={{ type: 'spring', stiffness: 260, damping: 24 }}
-                  />
-                </svg>
+                <motion.div
+                  animate={{ rotate: menuOpen ? 90 : 0 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                  className="w-[18px] h-[18px] flex items-center justify-center"
+                >
+                  {menuOpen ? (
+                    <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <path d="M 4.5 15.5 L 15.5 4.5 M 4.5 4.5 L 15.5 15.5" />
+                    </svg>
+                  ) : (
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="text-current">
+                      <rect x="2" y="2" width="7" height="7" rx="1.5" fill="currentColor" />
+                      <rect x="11" y="2" width="7" height="7" rx="1.5" fill="currentColor" />
+                      <rect x="2" y="11" width="7" height="7" rx="1.5" fill="currentColor" />
+                      <rect x="11" y="11" width="7" height="7" rx="1.5" fill="currentColor" />
+                    </svg>
+                  )}
+                </motion.div>
               </button>
             </div>
 
@@ -306,36 +290,102 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Links with staggered entrance */}
-              <motion.div
-                variants={mobileContainerVariants}
-                initial="hidden"
-                animate="show"
-                className="flex-1 overflow-y-auto px-4 py-6 space-y-1"
-              >
-                {navLinks.map(({ label, path }) => (
-                  <motion.div key={path} variants={mobileItemVariants}>
-                    <Link
-                      to={path}
-                      className={`block px-4 py-3 rounded-xl text-sm font-semibold transition-all ${location.pathname === path
-                          ? 'bg-blue-50/50 text-[#0056B8]'
-                          : 'text-slate-600 hover:text-[#0056B8] hover:bg-slate-50'
-                        }`}
-                    >
-                      {label}
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
+              {/* Drawer Main Scrollable Area */}
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-8">
+                
+                {/* 1. Staggered Navigation Links */}
+                <motion.div
+                  variants={mobileContainerVariants}
+                  initial="hidden"
+                  animate="show"
+                  className="flex flex-col gap-1.5"
+                >
+                  {navLinks.map(({ label, path }) => (
+                    <motion.div key={path} variants={mobileItemVariants}>
+                      <Link
+                        to={path}
+                        className={`block px-4 py-3 rounded-md text-sm font-semibold transition-all ${location.pathname === path
+                            ? 'bg-blue-50/50 text-[#0056B8]'
+                            : 'text-slate-600 hover:text-[#0056B8] hover:bg-slate-50'
+                          }`}
+                      >
+                        {label}
+                      </Link>
+                    </motion.div>
+                  ))}
+                </motion.div>
 
-              {/* Actions */}
-              <div className="p-6 border-t border-slate-100 space-y-3 bg-slate-50/50">
+                {/* Divider */}
+                <div className="h-[1px] bg-slate-100" />
+
+                {/* 2. Footer-inspired Office/Contact Details */}
+                <div className="space-y-4 text-left">
+                  <p className="text-slate-400 text-[10px] font-bold tracking-[0.18em] uppercase font-body-unique">
+                    Contact Us
+                  </p>
+                  <ul className="space-y-3.5 font-body-unique">
+                    <li className="flex items-start gap-3">
+                      <Phone className="w-4 h-4 text-[#0056B8] mt-0.5 flex-shrink-0" />
+                      <div className="text-xs text-slate-600 space-y-0.5 font-light">
+                        <p>+234 811 577 9007</p>
+                        <p>+234 912 116 8485</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <Mail className="w-4 h-4 text-[#0056B8] mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-slate-600 font-light">hello@daraexpress.com</p>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <MapPin className="w-4 h-4 text-[#0056B8] mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-slate-600 font-light leading-relaxed">
+                        MJS House, 366 Murtala Muhammed Road, Yaba, Lagos
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Divider */}
+                <div className="h-[1px] bg-slate-100" />
+
+                {/* 3. Follow Us social links */}
+                <div className="space-y-3.5 text-left">
+                  <p className="text-slate-400 text-[10px] font-bold tracking-[0.18em] uppercase font-body-unique">
+                    Follow Us
+                  </p>
+                  <div className="flex gap-4 font-body-unique">
+                    <a
+                      href="https://www.linkedin.com/company/darafort-global-services/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-xs text-slate-600 hover:text-[#0056B8] transition-colors font-light"
+                    >
+                      <Linkedin className="w-4 h-4 text-[#0056B8]" />
+                      LinkedIn
+                    </a>
+                    <a
+                      href="https://instagram.com/dara.express"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-xs text-slate-600 hover:text-[#0056B8] transition-colors font-light"
+                    >
+                      <Instagram className="w-4 h-4 text-[#0056B8]" />
+                      Instagram
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Sticky Actions Area */}
+              <div className="p-6 border-t border-slate-100 bg-slate-50/50">
                 {mobileActions}
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
+
+      <ScheduleDemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </>
   )
 }

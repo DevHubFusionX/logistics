@@ -24,26 +24,42 @@ body {
 }
 
 /* Headings use Mulish for consistency */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Mulish', sans-serif;
   font-weight: 600;
 }
 
 /* Buttons use Mulish for consistency */
-button, .btn {
+button,
+.btn {
   font-family: 'Mulish', sans-serif;
   font-weight: 500;
 }
 
 /* Marquee Animation */
 @keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes marquee-slow {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .animate-marquee {
@@ -107,6 +123,7 @@ button, .btn {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

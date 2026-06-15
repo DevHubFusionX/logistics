@@ -5,14 +5,7 @@ import {
     Phone, Mail, CheckCircle
 } from 'lucide-react'
 
-// Import client logos
-import logo1 from '../../../../assets/ClientLogo/image.svg'
-import logo2 from '../../../../assets/ClientLogo/image (1).svg'
-import logo3 from '../../../../assets/ClientLogo/image (2).svg'
-import logo4 from '../../../../assets/ClientLogo/image (3).svg'
-import logo5 from '../../../../assets/ClientLogo/image (4).svg'
-import logo6 from '../../../../assets/ClientLogo/image (5).svg'
-import logo7 from '../../../../assets/ClientLogo/image (6).svg'
+
 
 // Hero Data
 export const heroData = {
@@ -41,16 +34,6 @@ export const heroData = {
     }
 }
 
-// Clients Data
-export const clientsData = [
-    { name: 'Client 1', logo: logo1 },
-    { name: 'Client 2', logo: logo2 },
-    { name: 'Client 3', logo: logo3 },
-    { name: 'Client 4', logo: logo4 },
-    { name: 'Client 5', logo: logo5 },
-    { name: 'Client 6', logo: logo6 },
-    { name: 'Client 7', logo: logo7 }
-]
 
 // About Data
 export const aboutData = {
