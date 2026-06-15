@@ -42,7 +42,7 @@ const chapters = [
     subtitle: 'Logistics is blind without live compliance data.',
     body: 'We integrated real-time GPS tracking and precise IoT temperature telemetry loggers into every single reefer vehicle on our network. For the first time, cargo owners and logistics managers could watch their temperature charts live, receiving instant alerts if a reefer drifted by even a fraction of a degree.',
     metric: '±0.1°C sensor accuracy logging active telemetry every 30 seconds.',
-    img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=85'
+    img: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=800&q=85'
   },
   {
     num: 'Chapter IV',
