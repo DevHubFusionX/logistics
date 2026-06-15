@@ -78,14 +78,14 @@ const team = [
 
 export default function Team() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0056B8] text-white rounded-sm mb-6"
           >
             <span className="text-sm font-semibold">Meet Our Experts</span>
           </motion.div>
@@ -97,7 +97,7 @@ export default function Team() {
             className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6"
           >
             The People Behind
-            <span className="block mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="block mt-2 bg-gradient-to-r from-[#0056B8] to-cyan-600 bg-clip-text text-transparent">
               Cold Chain Excellence
             </span>
           </motion.h1>
@@ -157,7 +157,7 @@ export default function Team() {
                   <h3 className="text-xl font-bold text-slate-900 mb-1">
                     {member.name}
                   </h3>
-                  <p className="text-blue-600 font-semibold text-sm mb-3">
+                  <p className="text-[#0056B8] font-semibold text-sm mb-3">
                     {member.role}
                   </p>
                   <p className="text-slate-600 text-sm leading-relaxed">
@@ -177,18 +177,18 @@ export default function Team() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
+            className="bg-gradient-to-r from-[#0056B8] to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
           >
             <h2 className="text-4xl font-bold mb-4">Join Our Team</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              We're always looking for talented individuals passionate about 
+              We\'re always looking for talented individuals passionate about 
               pharmaceutical logistics and cold chain excellence.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl">
+              <button className="px-8 py-4 bg-white text-[#0056B8] rounded-sm font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl cursor-pointer">
                 View Open Positions
               </button>
-              <button className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-bold hover:bg-white/10 transition-all">
+              <button className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-sm font-bold hover:bg-white/10 transition-all cursor-pointer">
                 Send Your CV
               </button>
             </div>

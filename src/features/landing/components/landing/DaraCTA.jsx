@@ -1,144 +1,123 @@
-import { motion, useInView } from 'framer-motion'
-import { ArrowUpRight, Thermometer, Shield, Clock } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { useRef } from 'react'
-
-const ease = [0.22, 1, 0.36, 1]
-
-const trust = [
-  { icon: Thermometer, label: 'IoT temp monitoring' },
-  { icon: Shield,      label: 'GIT insured cargo' },
-  { icon: Clock,       label: 'Same-day available' },
-]
+import { useState } from 'react'
+import { ScheduleDemoModal } from './demo'
+import { ArrowRight } from 'lucide-react'
 
 export default function DaraCTA() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-10% 0px' })
+  const [isDemoOpen, setIsDemoOpen] = useState(false)
 
   return (
-    <section ref={ref} className="bg-white px-5 sm:px-14 lg:px-20 py-16 sm:py-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section className="relative bg-white py-12 md:py-24 px-4 md:px-12 lg:px-20 overflow-hidden">
 
-        {/* ── Main card ── */}
+      {/* Background Dot Grid Layer */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.25]"
+        style={{
+          backgroundImage: 'radial-gradient(#cbd5e1 1.2px, transparent 1.2px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto relative z-10">
+
+        {/* Main CTA Card Container */}
         <motion.div
-          initial={{ opacity: 0, y: 48, scale: 0.97 }}
-          animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-          transition={{ duration: 0.75, ease }}
-          className="relative bg-[#e8f0f7] rounded-2xl sm:rounded-3xl overflow-hidden px-6 py-10 sm:px-16 sm:py-16 flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-12"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="bg-[#0056B8] text-white rounded-2xl md:rounded-3xl py-8 px-6 md:p-16 shadow-[0_24px_60px_rgba(0,86,184,0.18)] relative overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center"
         >
+          {/* Decorative Background Glows */}
+          <div className="absolute right-[-10%] top-[-10%] w-96 h-96 rounded-full bg-blue-600/25 blur-3xl pointer-events-none" />
+          <div className="absolute left-[-5%] bottom-[-10%] w-80 h-80 bg-sky-600/20 blur-3xl pointer-events-none" />
 
-          {/* decorative blue blob top-right */}
-          <div className="absolute -top-16 -right-16 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-12 -left-12 w-48 h-48 bg-blue-400/10 rounded-full blur-2xl pointer-events-none" />
+          {/* Left Side: Content Block (Col span 7) */}
+          <div className="lg:col-span-7 flex flex-col items-start text-left relative z-10">
 
-          {/* Left — text */}
-          <div className="relative z-10 max-w-xl">
+            <span className="font-body-unique text-[10px] md:text-xs font-bold tracking-widest text-blue-200 uppercase mb-3 lg:mb-4">
+              GET STARTED TODAY
+            </span>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.15, ease }}
-              className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-4"
-            >
-              Ready to ship?
-            </motion.p>
+            <h2 className="font-heading-unique text-2xl sm:text-3xl lg:text-4.5xl font-bold leading-[1.2] lg:leading-[1.15] mb-4 lg:mb-6 tracking-tight">
+              Start shipping with <br />
+              Dara today.
+            </h2>
 
-            <motion.h2
-              initial={{ opacity: 0, y: 32 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.7, delay: 0.2, ease }}
-              className="font-heading font-black text-sky-900 leading-tight tracking-tight"
-              style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)' }}
-            >
-              Your cold chain,{' '}
-              <span className="text-blue-500">handled right.</span>
-            </motion.h2>
+            <p className="font-body-unique text-blue-100/90 text-xs sm:text-sm lg:text-base leading-relaxed mb-6 lg:mb-8 max-w-xl">
+              Join thousands of businesses using our simple app to move food, medicines, and chemicals across Nigeria with complete temperature safety, zero stress, and low prices.
+            </p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.32, ease }}
-              className="mt-5 text-[#4a6080] text-base leading-relaxed"
-            >
-              Get a quote in minutes. We'll match you with a verified reefer truck,
-              monitor your cargo in real time, and deliver with full temperature
-              documentation — Lagos, Abuja, Port Harcourt and all 36 states.
-            </motion.p>
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
 
-            {/* trust pills */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.44, ease }}
-              className="mt-7 flex flex-wrap gap-3"
-            >
-              {trust.map(({ icon: Icon, label }) => (
-                <span
-                  key={label}
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-xl text-xs font-bold text-sky-900 shadow-sm"
-                >
-                  <Icon className="w-3.5 h-3.5 text-blue-500" />
-                  {label}
-                </span>
-              ))}
-            </motion.div>
-
-            {/* buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.54, ease }}
-              className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4"
-            >
+              {/* Start shipping (Solid White) */}
               <Link
                 to="/booking/request"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-blue-500 hover:bg-blue-400 active:scale-95 text-white font-bold rounded-xl text-sm transition-all duration-200 shadow-lg shadow-blue-500/25"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 md:px-7 md:py-3.5 bg-white text-[#0056B8] hover:bg-blue-50 font-bold rounded-sm text-xs md:text-sm transition-all active:scale-97 shadow-lg shadow-black/10 group"
               >
-                Get a free quote
-                <ArrowUpRight className="w-4 h-4" />
+                Book
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-white hover:bg-gray-50 active:scale-95 text-sky-900 font-bold rounded-xl text-sm transition-all duration-200 shadow-sm"
+
+              {/* Book a demo (Outline Glass) */}
+              <button
+                onClick={() => setIsDemoOpen(true)}
+                className="w-full sm:w-auto inline-flex items-center justify-center px-5 py-3 md:px-7 md:py-3.5 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-xs md:text-sm transition-all active:scale-97 backdrop-blur-sm"
               >
-                Talk to us
-              </Link>
-            </motion.div>
+                Book a demo
+              </button>
+
+            </div>
+
           </div>
 
-          {/* Right — stat stack */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.35, ease }}
-            className="relative z-10 flex-shrink-0 grid grid-cols-2 gap-3 sm:gap-4 w-full lg:w-auto"
-          >
-            {[
-              { value: '120',    label: 'Reefer trucks\non network' },
-              { value: '200+',   label: 'Cold chain\ntrips completed' },
-              { value: '36',     label: 'States\ncovered' },
-              { value: '±0.1°C', label: 'Temperature\nprecision' },
-            ].map(({ value, label }, i) => (
-              <motion.div
-                key={value}
-                initial={{ opacity: 0, y: 24, scale: 0.92 }}
-                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{ duration: 0.5, delay: 0.45 + i * 0.09, ease }}
-                className="bg-white rounded-xl sm:rounded-2xl px-4 py-4 sm:px-6 sm:py-5 shadow-sm"
+          {/* Right Side: Glowing Route Vector (Col span 5) - hidden on mobile */}
+          <div className="hidden lg:flex lg:col-span-5 relative w-full h-64 lg:h-80 items-center justify-center z-10 pointer-events-none select-none">
+            <svg className="w-full h-full max-w-[340px]" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Perspective Grid Background Paths */}
+              <path d="M10 160 H190 M10 130 H190 M10 100 H190 M10 70 H190" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+              <path d="M100 20 L20 180 M100 20 L60 180 M100 20 L100 180 M100 20 L140 180 M100 20 L180 180" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+
+              {/* Glowing Route Line */}
+              <motion.path
+                d="M 60 160 Q 110 120 100 80 T 140 40"
+                stroke="#38bdf8"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray="6 4"
+                initial={{ pathLength: 0 }}
+                whileInView={{ pathLength: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.8, ease: "easeInOut" }}
+              />
+
+              {/* Glowing Pulse Nodes */}
+              <circle cx="60" cy="160" r="4.5" fill="#38bdf8" />
+              <circle cx="60" cy="160" r="1.5" fill="white" />
+
+              <circle cx="140" cy="40" r="4.5" fill="#38bdf8" />
+              <circle cx="140" cy="40" r="1.5" fill="white" />
+
+              {/* Center Transit Dot Pulse */}
+              <motion.g
+                animate={{
+                  scale: [1, 1.4, 1],
+                  opacity: [0.7, 1, 0.7]
+                }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               >
-                <p className="font-heading font-black text-sky-900 text-xl sm:text-2xl leading-none mb-1">
-                  {value}
-                </p>
-                <p className="text-gray-400 text-xs leading-snug whitespace-pre-line">
-                  {label}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
+                <circle cx="103" cy="98" r="8" fill="rgba(56, 189, 248, 0.2)" />
+                <circle cx="103" cy="98" r="3" fill="#38bdf8" />
+              </motion.g>
+            </svg>
+          </div>
 
         </motion.div>
-
       </div>
+
+      <ScheduleDemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </section>
   )
 }

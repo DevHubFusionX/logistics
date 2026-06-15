@@ -22,11 +22,11 @@ export default function Home() {
 
       <SectionDivider />
 
-      <DaraJourney />
+      <DaraServices />
 
       <SectionDivider />
 
-      <DaraServices />
+      <DaraJourney />
 
       <SectionDivider />
 

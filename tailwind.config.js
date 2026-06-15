@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'Roboto', 'sans-serif'],
-        heading: ['Montserrat', 'sans-serif'],
+        sans: ['Mulish', 'sans-serif'],
+        heading: ['Mulish', 'sans-serif'],
       },
       fontSize: {
         'body': '14px',

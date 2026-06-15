@@ -30,8 +30,7 @@ export default function NotFound() {
         >
           <Link
             to="/"
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 text-white rounded-xl font-bold shadow-lg transition-all"
-            style={{ backgroundColor: '#00843D' }}
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#0056B8] hover:bg-[#004cba] text-white rounded-sm font-bold shadow-lg transition-all"
           >
             <Home className="w-5 h-5" />
             Go Home
@@ -39,7 +38,7 @@ export default function NotFound() {
           
           <button
             onClick={() => window.history.back()}
-            className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-primary text-primary rounded-xl font-bold hover:bg-blue-50 transition-all"
+            className="inline-flex items-center justify-center gap-2 px-8 py-4 border-2 border-[#0056B8] text-[#0056B8] rounded-sm font-bold hover:bg-blue-50 transition-all"
           >
             <ArrowLeft className="w-5 h-5" />
             Go Back

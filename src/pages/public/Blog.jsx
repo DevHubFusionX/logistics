@@ -127,14 +127,14 @@ export default function Blog() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0056B8] text-white rounded-sm mb-6"
           >
             <span className="text-sm font-semibold">Insights & Updates</span>
           </motion.div>
@@ -146,7 +146,7 @@ export default function Blog() {
             className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6"
           >
             Cold Chain
-            <span className="block mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="block mt-2 bg-gradient-to-r from-[#0056B8] to-cyan-600 bg-clip-text text-transparent">
               Knowledge Hub
             </span>
           </motion.h1>
@@ -175,7 +175,7 @@ export default function Blog() {
                 placeholder="Search articles..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 bg-white rounded-full text-slate-900 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 shadow-sm transition-all"
+                className="w-full pl-12 pr-6 py-4 bg-white rounded-sm text-slate-900 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-100 focus:border-blue-400 shadow-sm transition-all"
               />
             </div>
           </motion.div>
@@ -195,9 +195,9 @@ export default function Blog() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-2.5 rounded-full font-semibold transition-all ${
+                className={`px-6 py-2.5 rounded-sm font-semibold transition-all cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-lg'
+                    ? 'bg-[#0056B8] text-white shadow-lg'
                     : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
@@ -250,7 +250,7 @@ export default function Blog() {
               </p>
               <button
                 onClick={() => { setSearchTerm(''); setSelectedCategory('All') }}
-                className="mt-6 px-6 py-3 bg-blue-600 text-white rounded-full font-semibold hover:bg-blue-700 transition-colors"
+                className="mt-6 px-6 py-3 bg-[#0056B8] text-white rounded-sm font-semibold hover:bg-[#004cba] transition-colors cursor-pointer"
               >
                 View all articles
               </button>
@@ -284,13 +284,13 @@ export default function Blog() {
                       </span>
                     </div>
                   )}
-                  <div className="absolute top-6 left-6 px-4 py-2 bg-blue-600 text-white text-sm font-bold rounded-full">
+                  <div className="absolute top-6 left-6 px-4 py-2 bg-[#0056B8] text-white text-sm font-bold rounded-sm">
                     Featured
                   </div>
                 </div>
                 <div className="p-12 flex flex-col justify-center">
                   {posts[0].categories[0] && posts[0].categories[0] !== 'Uncategorized' && (
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-sm font-semibold mb-4 w-fit">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-[#0056B8] rounded-sm text-sm font-semibold mb-4 w-fit">
                       {posts[0].categories[0]}
                     </div>
                   )}
@@ -309,7 +309,7 @@ export default function Blog() {
                       />
                     ) : (
                       <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                        <User className="w-6 h-6 text-blue-600" />
+                        <User className="w-6 h-6 text-[#0056B8]" />
                       </div>
                     )}
                     <div>
@@ -329,7 +329,7 @@ export default function Blog() {
                   </div>
                   <Link
                     to={`/blog/${posts[0].slug}`}
-                    className="flex items-center gap-2 text-blue-600 font-bold hover:gap-3 transition-all w-fit"
+                    className="flex items-center gap-2 text-[#0056B8] font-bold hover:gap-3 transition-all w-fit"
                   >
                     Read Full Article
                     <ArrowRight className="w-5 h-5" />
@@ -371,14 +371,14 @@ export default function Blog() {
                       </div>
                     )}
                     {post.categories[0] && post.categories[0] !== 'Uncategorized' && (
-                      <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold rounded-full">
+                      <div className="absolute top-4 right-4 px-3 py-1 bg-white/90 backdrop-blur-sm text-slate-900 text-xs font-bold rounded-sm">
                         {post.categories[0]}
                       </div>
                     )}
                   </div>
 
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-[#0056B8] transition-colors line-clamp-2">
                       {stripHtml(post.title)}
                     </h3>
 
@@ -395,7 +395,7 @@ export default function Blog() {
                         />
                       ) : (
                         <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <User className="w-5 h-5 text-blue-600" />
+                          <User className="w-5 h-5 text-[#0056B8]" />
                         </div>
                       )}
                       <div className="flex-1 min-w-0">
@@ -410,7 +410,7 @@ export default function Blog() {
 
                     <Link
                       to={`/blog/${post.slug}`}
-                      className="flex items-center gap-2 text-blue-600 font-semibold text-sm group-hover:gap-3 transition-all"
+                      className="flex items-center gap-2 text-[#0056B8] font-semibold text-sm group-hover:gap-3 transition-all"
                     >
                       Read More
                       <ArrowRight className="w-4 h-4" />
@@ -426,7 +426,7 @@ export default function Blog() {
                 <button
                   onClick={loadMore}
                   disabled={loadingMore}
-                  className="px-8 py-4 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-2"
+                  className="px-8 py-4 bg-[#0056B8] text-white rounded-sm font-bold hover:bg-[#004cba] transition-all shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-2 cursor-pointer"
                 >
                   {loadingMore ? (
                     <>
@@ -459,7 +459,7 @@ export default function Blog() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
+            className="bg-gradient-to-r from-[#0056B8] to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
           >
             <h2 className="text-4xl font-bold mb-4">Stay Updated</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
@@ -469,9 +469,9 @@ export default function Blog() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-4 rounded-full text-slate-900 focus:outline-none focus:ring-4 focus:ring-white/30"
+                className="flex-1 px-6 py-4 rounded-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-white/30"
               />
-              <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl whitespace-nowrap">
+              <button className="px-8 py-4 bg-white text-[#0056B8] rounded-sm font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl whitespace-nowrap cursor-pointer">
                 Subscribe
               </button>
             </div>

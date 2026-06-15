@@ -69,14 +69,14 @@ export default function Portfolio() {
     : projects.filter(p => p.category === selectedCategory)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-slate-50">
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0056B8] text-white rounded-sm mb-6"
           >
             <Package className="w-4 h-4" />
             <span className="text-sm font-semibold">Our Success Stories</span>
@@ -89,7 +89,7 @@ export default function Portfolio() {
             className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6"
           >
             Delivering Excellence
-            <span className="block mt-2 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="block mt-2 bg-gradient-to-r from-[#0056B8] to-cyan-600 bg-clip-text text-transparent">
               Across Nigeria
             </span>
           </motion.h1>
@@ -119,9 +119,9 @@ export default function Portfolio() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-2.5 rounded-full font-semibold transition-all ${
+                className={`px-6 py-2.5 rounded-sm font-semibold transition-all cursor-pointer ${
                   selectedCategory === cat
-                    ? 'bg-blue-600 text-white shadow-lg'
+                    ? 'bg-[#0056B8] text-white shadow-lg'
                     : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
@@ -152,7 +152,7 @@ export default function Portfolio() {
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">
+                  <div className="absolute top-4 right-4 px-3 py-1 bg-[#0056B8] text-white text-xs font-bold rounded-sm">
                     {project.category}
                   </div>
                 </div>
@@ -177,7 +177,7 @@ export default function Portfolio() {
                     </div>
                   </div>
 
-                  <button className="flex items-center gap-2 text-blue-600 font-semibold group-hover:gap-3 transition-all">
+                  <button className="flex items-center gap-2 text-[#0056B8] font-semibold group-hover:gap-3 transition-all cursor-pointer">
                     View Details
                     <ArrowRight className="w-4 h-4" />
                   </button>
@@ -195,13 +195,13 @@ export default function Portfolio() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
+            className="bg-gradient-to-r from-[#0056B8] to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
           >
             <h2 className="text-4xl font-bold mb-4">Ready to Start Your Project?</h2>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Let's discuss how our cold chain expertise can support your pharmaceutical logistics needs.
             </p>
-            <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl">
+            <button className="px-8 py-4 bg-white text-[#0056B8] rounded-sm font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl cursor-pointer">
               Get in Touch
             </button>
           </motion.div>

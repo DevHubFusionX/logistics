@@ -1,7 +1,7 @@
-import { motion as Motion, useInView } from 'framer-motion'
-import { ArrowUpRight, ChevronRight, Thermometer, Clock, MapPin } from 'lucide-react'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ArrowUpRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useRef } from 'react'
 import { servicesData } from './Data'
 
 import PharmaImg from '../../../../assets/climateImage/Pharma.jpg'
@@ -10,9 +10,7 @@ import FreshImg from '../../../../assets/climateImage/fresh-produce.jpg'
 import HaulageImg from '../../../../assets/climateImage/enterprise-Haulage.png'
 import LastMileImg from '../../../../assets/climateImage/1.jpg'
 
-const ease = [0.22, 1, 0.36, 1]
-
-const images = [
+const localImages = [
   PharmaImg,
   FrozenImg,
   FreshImg,
@@ -20,230 +18,279 @@ const images = [
   LastMileImg,
 ]
 
-const container = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.11, delayChildren: 0.25 } },
-}
+const fallbackImages = [
+  "https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=600&q=80",
+  "https://images.unsplash.com/photo-1516576880352-25e2e80a068a?auto=format&fit=crop&w=600&q=80"
+]
 
-const cardAnim = {
-  hidden: { opacity: 0, y: 56, scale: 0.96 },
+// Framer Motion variants for Section Header columns
+const headerColVariants = {
+  hidden: { opacity: 0, y: 15 },
   visible: {
-    opacity: 1, y: 0, scale: 1,
-    transition: { duration: 0.65, ease },
-  },
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.65, ease: [0.16, 1, 0.3, 1] }
+  }
 }
 
-const headerAnim = {
-  hidden: { opacity: 0, y: 36 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease } },
+// Slide up animation variants for individual cards
+const cardEntranceVariants = {
+  hidden: {
+    opacity: 0,
+    y: 30
+  },
+  visible: (idx) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 280, // high stiffness
+      damping: 17,    // bounce
+      mass: 1.25,     // heavier feel
+      delay: idx * 0.08
+    }
+  })
+}
+
+// Custom quote helper block animations
+const footerVariants = {
+  hidden: { opacity: 0, y: 25 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.75,
+      ease: [0.16, 1, 0.3, 1],
+      delay: 0.45
+    }
+  }
 }
 
 export default function DaraServices() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-10% 0px' })
-
-  const [featured, ...rest] = servicesData.map((s, i) => ({ ...s, img: images[i] }))
+  const [activeIndex, setActiveIndex] = useState(0)
 
   return (
-    <section ref={ref} className="relative bg-[#e8f0f7] overflow-hidden">
-      <div className="px-8 sm:px-14 lg:px-20 pt-24 pb-20">
+    <section id="services" className="relative bg-white py-24 px-6 md:px-12 lg:px-20 overflow-hidden font-sans">
 
-        {/* ── Header ── */}
-        <Motion.div
-          variants={container}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="flex items-end justify-between mb-16"
-        >
-          <Motion.div variants={headerAnim}>
-            <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-3">
-              What we move
-            </p>
-            <h2 className="font-heading font-black text-sky-900 text-3xl sm:text-4xl lg:text-5xl leading-tight">
-              Services built for{' '}
-              <Motion.span
-                className="text-blue-500 inline-block"
-                initial={{ opacity: 0, x: -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.5, ease }}
-              >
-                cold cargo
-              </Motion.span>
-            </h2>
-          </Motion.div>
+      {/* Background Dot Grid Layer */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.25]"
+        style={{
+          backgroundImage: 'radial-gradient(#cbd5e1 1.2px, transparent 1.2px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
 
-          <Motion.div variants={headerAnim} className="hidden sm:block">
-            <Link
-              to="/services"
-              className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              All services
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </Motion.div>
-        </Motion.div>
+      <div className="max-w-7xl mx-auto relative z-10">
 
-        {/* ── Grid: 1 featured + 4 cards ── */}
-        <Motion.div
-          variants={container}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-        >
+        {/* ── SECTION HEADER ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end justify-between mb-16 text-left">
 
-          {/* Featured card — spans 1 col, tall */}
-          <Motion.div
-            variants={cardAnim}
-            whileHover={{ y: -6, transition: { duration: 0.25 } }}
-            className="relative bg-white rounded-2xl overflow-hidden shadow-sm group flex flex-col min-h-[520px] lg:row-span-2"
+          {/* Left Column: Badge & Title */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={headerColVariants}
+            className="lg:col-span-8"
           >
-            {/* image */}
-            <div className="relative h-56 overflow-hidden flex-shrink-0">
-              <img
-                src={featured.img}
-                alt={featured.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-white/60 to-transparent" />
-              {/* temp badge */}
-              <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 backdrop-blur-sm rounded-lg text-[11px] font-black text-blue-600 tracking-wider uppercase shadow-sm">
-                <Thermometer className="w-3 h-3" />
-                2°C – 8°C
-              </span>
-            </div>
-
-            {/* ghost number */}
-            <span
-              className="absolute bottom-2 right-3 font-black leading-none text-blue-50 select-none pointer-events-none"
-              style={{ fontSize: '7rem' }}
-            >
-              01
+            <span className="font-body-unique text-xs font-bold tracking-widest text-[#0056B8] uppercase mb-3 block">
+              🚚 USE CASES
             </span>
+            <h2 className="font-heading-unique text-3xl sm:text-4.5xl font-bold text-slate-900 tracking-tight leading-[1.15]">
+              We cover everything that keeps <br className="hidden sm:inline" />
+              your cold cargo fresh
+            </h2>
+          </motion.div>
 
-            <div className="relative z-10 p-7 flex flex-col flex-1">
-              <div className="flex items-start justify-between mb-4">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
-                  Featured
-                </span>
-                <Motion.div
-                  initial={{ rotate: 0, opacity: 0.3 }}
-                  whileHover={{ rotate: 45, opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
-                </Motion.div>
-              </div>
+          {/* Right Column: Paragraph */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={headerColVariants}
+            className="lg:col-span-4 lg:pl-6 pb-1"
+          >
+            <p className="font-body-unique text-slate-600 text-sm sm:text-base leading-relaxed">
+              Dispatch reefer trucks, track temperature <br />
+              <span className="text-slate-400">and deliver your perishables safely.</span>
+            </p>
+          </motion.div>
 
-              <h3 className="font-heading font-black text-sky-900 text-2xl leading-tight mb-2">
-                {featured.title}
-              </h3>
-              <p className="text-gray-400 text-sm leading-relaxed mb-6">{featured.description}</p>
+        </div>
 
-              <ul className="mt-auto space-y-2">
-                {featured.features.slice(0, 3).map((f, i) => (
-                  <li key={i} className="flex items-start gap-2 text-xs text-gray-500">
-                    <span className="mt-0.5 w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
-                    {f}
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-6 flex items-center gap-4 text-xs text-gray-400 font-semibold">
-                <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{featured.deliveryTime}</span>
-                <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{featured.coverage}</span>
-              </div>
-            </div>
-
-            {/* hover accent line */}
-            <Motion.div
-              className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
-              initial={{ scaleX: 0 }}
-              whileHover={{ scaleX: 1 }}
-              transition={{ duration: 0.3 }}
-            />
-          </Motion.div>
-
-          {/* 3 smaller cards */}
-          {rest.map(({ title, subtitle, description, features, deliveryTime, coverage, img }, i) => (
-            <Motion.div
-              key={title}
-              variants={cardAnim}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className="relative bg-white rounded-2xl overflow-hidden shadow-sm group flex flex-col min-h-[240px]"
-            >
-              {/* image strip */}
-              <div className="relative h-36 overflow-hidden flex-shrink-0">
-                <img
-                  src={img}
-                  alt={title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/50 to-transparent" />
-              </div>
-
-              {/* ghost number */}
-              <span
-                className="absolute bottom-1 right-3 font-black leading-none text-blue-50 select-none pointer-events-none"
-                style={{ fontSize: '5rem' }}
-              >
-                {String(i + 2).padStart(2, '0')}
-              </span>
-
-              <div className="relative z-10 p-6 flex flex-col flex-1">
-                <div className="flex items-start justify-between mb-3">
-                  <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
-                    {subtitle}
-                  </span>
-                  <Motion.div
-                    initial={{ rotate: 0, opacity: 0.3 }}
-                    whileHover={{ rotate: 45, opacity: 1 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
-                  </Motion.div>
-                </div>
-
-                <h3 className="font-heading font-black text-sky-900 text-lg leading-tight mb-2">
-                  {title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed line-clamp-2">{description}</p>
-
-                <div className="mt-auto pt-4 flex items-center gap-4 text-xs text-gray-400 font-semibold">
-                  <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{deliveryTime}</span>
-                  <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{coverage}</span>
-                </div>
-              </div>
-
-              {/* hover accent line */}
-              <Motion.div
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.3 }}
-              />
-            </Motion.div>
-          ))}
-
-        </Motion.div>
-
-        {/* ── Bottom CTA strip ── */}
-        <Motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.7, ease }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white rounded-2xl px-8 py-5 shadow-sm"
+        {/* ── RESPONSIVE ACCORDION (VERTICAL ON MOBILE, HORIZONTAL ON DESKTOP) ── */}
+        <div
+          className="w-full flex flex-col md:flex-row gap-4 h-auto md:h-[500px] overflow-hidden"
         >
-          <p className="text-sky-900 font-bold text-base">
+          {servicesData.map((service, idx) => {
+            const displayImg = localImages[idx] || fallbackImages[idx]
+            const isActive = activeIndex === idx
+
+            return (
+              <motion.div
+                key={service.title}
+                onMouseEnter={() => setActiveIndex(idx)}
+                onClick={() => setActiveIndex(idx)}
+                className={`relative rounded-2xl overflow-hidden cursor-pointer transition-all duration-700 ease-out flex w-full md:w-auto ${isActive
+                    ? 'h-[400px] sm:h-[380px] md:h-full md:flex-[5] shadow-xl shadow-black/10'
+                    : 'h-[80px] md:h-full md:flex-[1] md:min-w-[70px] lg:min-w-[80px]'
+                  }`}
+              >
+                {/* Background Image Frame */}
+                <div className="absolute inset-0 z-0 w-full h-full">
+                  <img
+                    src={displayImg}
+                    alt={service.title}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out"
+                    style={{
+                      transform: isActive ? 'scale(1.05)' : 'scale(1.0)',
+                      filter: isActive ? 'brightness(0.85)' : 'brightness(0.55)'
+                    }}
+                    onError={(e) => {
+                      e.target.src = fallbackImages[idx]
+                    }}
+                  />
+                  {/* Black Soft Shadow Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/20" />
+                </div>
+
+                {/* Inactive Title Text */}
+                <AnimatePresence>
+                  {!isActive && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 0.8 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 px-4"
+                    >
+                      <span className="md:rotate-180 md:[writing-mode:vertical-lr] text-center uppercase tracking-widest text-xs sm:text-sm font-bold text-white whitespace-normal md:whitespace-nowrap">
+                        <span className="hidden md:inline">{service.title.split(' ')[0]}</span>
+                        <span className="inline md:hidden">{service.title}</span>
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Active Content Block */}
+                <AnimatePresence>
+                  {isActive && (
+                    <motion.div
+                      initial="hidden"
+                      animate="visible"
+                      exit="hidden"
+                      variants={{
+                        hidden: { opacity: 0 },
+                        visible: {
+                          opacity: 1,
+                          transition: {
+                            staggerChildren: 0.08,
+                            delayChildren: 0.1
+                          }
+                        }
+                      }}
+                      className="absolute inset-0 z-10 flex flex-col justify-between p-6 sm:p-8 text-left h-full w-full"
+                    >
+
+                      {/* Top Bar inside active card */}
+                      <motion.span
+                        variants={{
+                          hidden: { opacity: 0, y: -10 },
+                          visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+                        }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/95 rounded-lg text-[9px] font-bold text-[#0056B8] tracking-widest uppercase shadow-sm self-start font-heading-unique"
+                      >
+                        {service.coverage}
+                      </motion.span>
+
+                      {/* Bottom details block */}
+                      <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between w-full gap-6">
+
+                        <div className="max-w-xl">
+                          {/* Subtitle Badge */}
+                          <motion.span
+                            variants={{
+                              hidden: { opacity: 0, y: 10 },
+                              visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+                            }}
+                            className="font-body-unique text-[10px] font-bold tracking-widest text-blue-300 uppercase mb-2 block"
+                          >
+                            {service.subtitle}
+                          </motion.span>
+
+                          {/* Title */}
+                          <motion.h3
+                            variants={{
+                              hidden: { opacity: 0, y: 12 },
+                              visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                            }}
+                            className="font-heading-unique font-bold text-white text-lg sm:text-2xl mb-3 leading-tight"
+                          >
+                            {service.title}
+                          </motion.h3>
+
+                          {/* Description */}
+                          <motion.p
+                            variants={{
+                              hidden: { opacity: 0, y: 12 },
+                              visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+                            }}
+                            className="font-body-unique text-slate-200/90 text-xs sm:text-sm leading-relaxed"
+                          >
+                            {service.description}
+                          </motion.p>
+                        </div>
+
+                        {/* Start Shipping Link Button */}
+                        <motion.div
+                          className="w-full sm:w-auto self-start lg:self-auto"
+                          variants={{
+                            hidden: { opacity: 0, scale: 0.95 },
+                            visible: { opacity: 1, scale: 1, transition: { duration: 0.4, ease: "easeOut" } }
+                          }}
+                        >
+                          <Link
+                            to="/booking/request"
+                            className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-6 py-3 bg-white text-[#0056B8] hover:bg-blue-50 font-bold rounded-sm text-xs sm:text-sm transition-all active:scale-95 shadow-md flex-shrink-0 cursor-pointer"
+                          >
+                            Book
+                            <ArrowUpRight className="w-4 h-4" />
+                          </Link>
+                        </motion.div>
+
+                      </div>
+
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+              </motion.div>
+            )
+          })}
+        </div>
+
+        {/* Bottom CTA Block */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={footerVariants}
+          className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 bg-white border border-slate-100 rounded-xl p-6 md:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.015)] mt-8"
+        >
+          <p className="font-heading-unique text-slate-900 font-bold text-base text-left">
             Not sure which service fits your cargo?
           </p>
           <Link
             to="/booking/request"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl text-sm transition-colors flex-shrink-0"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-[#0056B8] hover:bg-blue-750 text-white font-bold rounded-sm text-sm transition-all active:scale-97 shadow-lg shadow-black/10 flex-shrink-0"
           >
             Get a custom quote
             <ArrowUpRight className="w-4 h-4" />
           </Link>
-        </Motion.div>
+        </motion.div>
 
       </div>
     </section>

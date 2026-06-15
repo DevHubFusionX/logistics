@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, useLocation } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { AnimatePresence } from 'framer-motion'
 import { Navbar, Footer, LoadingScreen } from './components/common'
 import AppRoutes from './routes/AppRoutes'
 import { AuthProvider } from './hooks'
@@ -8,33 +9,27 @@ import { Toaster } from 'react-hot-toast'
 function AppContent() {
   const location = useLocation()
 
+  const [isLoading, setIsLoading] = useState(true)
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [location.pathname])
-
-  const [isLoading, setIsLoading] = useState(() => {
-    return !sessionStorage.getItem('hasVisited')
-  })
+  }, [location.pathname, isLoading])
 
   useEffect(() => {
-    if (isLoading) {
-      const timer = setTimeout(() => {
-        setIsLoading(false)
-        sessionStorage.setItem('hasVisited', 'true')
-      }, 1500)
-      return () => clearTimeout(timer)
-    }
-  }, [isLoading])
-
-  if (isLoading) {
-    return <LoadingScreen />
-  }
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#0a152a]">
       <Toaster position="top-right" />
       <AppRoutes />
 
+      <AnimatePresence>
+        {isLoading && <LoadingScreen key="loader" />}
+      </AnimatePresence>
     </div>
   )
 }

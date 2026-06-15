@@ -1,47 +1,52 @@
-import { motion, useInView } from 'framer-motion'
-import { useState, useRef } from 'react'
-import { ArrowUpRight, Phone, Mail, MapPin, Clock, MessageSquare, Truck } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useState } from 'react'
+import { ArrowUpRight, Check, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SEO from '../../components/common/SEO'
-import HeroVideo from '../../components/common/HeroVideo'
 
-const ease = [0.22, 1, 0.36, 1]
+const ease = [0.16, 1, 0.3, 1]
 
-const contactDetails = [
-  {
-    icon: Phone,
-    label: 'Call us',
-    lines: ['+234 811 577 9007', '+234 912 116 8485'],
-    sub: '24/7 available',
-    href: 'tel:+2348115779007',
-  },
-  {
-    icon: Mail,
-    label: 'Email us',
-    lines: ['hello@daraexpress.com', 'contact@daraexpress.com'],
-    sub: 'We reply within the hour',
-    href: 'mailto:hello@daraexpress.com',
-  },
-  {
-    icon: MapPin,
-    label: 'Visit us',
-    lines: ['MJS House, 366 Murtala', 'Muhammed Road, Yaba, Lagos'],
-    sub: 'Mon – Sat, 8am – 6pm',
-    href: 'https://maps.google.com/?q=MJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos+Nigeria',
-  },
-]
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1
+    }
+  }
+}
 
-const reasons = [
-  { icon: Truck,         label: 'Get a shipping quote' },
-  { icon: MessageSquare, label: 'General enquiry' },
-  { icon: Clock,         label: 'Schedule a demo' },
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease
+    }
+  }
+}
+
+const checkListItems = [
+  "Talk about your custom temperature control needs with our specialists",
+  "Hear about vaccine and pharma transport frameworks we've partnered with",
+  "Learn how our real-time GPS reefer monitoring operations work"
 ]
 
 export default function Contact() {
-  const formRef = useRef(null)
-  const formInView = useInView(formRef, { once: true, margin: '-8% 0px' })
-
-  const [form, setForm] = useState({ name: '', email: '', phone: '', cargo: '', message: '' })
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    website: '',
+    origin: '',
+    volume: '',
+    requirement: '',
+    consent: false
+  })
   const [sent, setSent] = useState(false)
 
   function handleSubmit(e) {
@@ -58,293 +63,259 @@ export default function Contact() {
         canonical="/contact"
       />
 
-      {/* ── 1. Hero ── */}
-      <section className="relative w-full overflow-hidden bg-sky-800" style={{ minHeight: '80vh' }}>
-        <HeroVideo />
-        <div className="absolute inset-0 bg-sky-800/60" />
-        <div className="absolute inset-0 bg-gradient-to-r from-sky-900/95 via-sky-800/50 to-transparent lg:block hidden" />
-        <div className="absolute inset-0 bg-sky-800/40 lg:hidden block" />
-        <div className="absolute inset-0 bg-gradient-to-t from-sky-900 via-transparent to-transparent" />
+      {/* Main Section */}
+      <section className="bg-slate-50 min-h-screen pt-28 pb-16 md:py-24 flex items-center">
+        <div className="max-w-7xl w-full mx-auto px-6 md:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
 
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-end justify-between h-full px-6 sm:px-14 lg:px-20 pb-16 lg:pb-20 pt-32 lg:pt-40 gap-10 lg:gap-12">
-
-          {/* Left — headline + contact details */}
-          <div className="flex-1 max-w-xl">
+          {/* Left Column: Headline & Details */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="lg:col-span-5 flex flex-col items-start text-left pt-4 lg:pt-8"
+          >
             <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease }}
-              className="text-blue-400 font-bold text-sm tracking-[0.2em] uppercase mb-5"
+              variants={itemVariants}
+              className="text-[#0056B8] font-bold text-xs tracking-[0.2em] uppercase mb-4"
             >
-              Get in touch
+              Contact Us
             </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 48 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.1, ease }}
-              className="font-heading font-black text-white leading-[0.95] tracking-tight mb-8 lg:mb-10"
-              style={{ fontSize: 'clamp(2.5rem, 8vw, 6rem)' }}
+              variants={itemVariants}
+              className="font-heading-unique font-extrabold text-slate-900 leading-[1.08] tracking-tight mb-6"
+              style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)' }}
             >
-              {"Let's move"}
-              <br />
-              <span className="text-blue-400">your cargo.</span>
+              Speak to our cold chain experts.
             </motion.h1>
 
-            {/* contact detail rows */}
-            <div className="space-y-5">
-              {contactDetails.map(({ icon: Icon, label, lines, sub, href }, i) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  target={href.startsWith('http') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  initial={{ opacity: 0, x: -24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.55, delay: 0.3 + i * 0.1, ease }}
-                  className="flex items-start gap-4 group"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-500 transition-colors">
-                    <Icon className="w-4 h-4 text-white/60 group-hover:text-white transition-colors" />
-                  </div>
-                  <div>
-                    <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-0.5">{label}</p>
-                    {lines.map(l => (
-                      <p key={l} className="text-white font-semibold text-sm leading-snug">{l}</p>
-                    ))}
-                    <p className="text-white/35 text-xs mt-0.5">{sub}</p>
-                  </div>
-                </motion.a>
-              ))}
-            </div>
-          </div>
+            <motion.p
+              variants={itemVariants}
+              className="font-body-unique text-slate-600 text-sm sm:text-base leading-relaxed mb-8"
+            >
+              Submitting an enquiry is the fastest way to get a logistics consultation. If you'd like to discuss custom cold storage, pharma distribution, or nationwide logistics routes, our team is ready to guide you.
+            </motion.p>
 
-          {/* Right — reason pills */}
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5, ease }}
-            className="flex-shrink-0 w-full lg:w-auto"
-          >
-            <div className="bg-white/8 backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-7 w-full lg:w-64">
-              <p className="text-white/30 text-[10px] font-bold tracking-widest uppercase mb-4">How can we help?</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3">
-                {reasons.map(({ icon: Icon, label }) => (
-                  <div key={label} className="flex items-center gap-3 px-4 py-3 bg-white/5 hover:bg-white/10 rounded-xl cursor-pointer transition-colors group">
-                    <Icon className="w-4 h-4 text-blue-400 flex-shrink-0 group-hover:scale-110 transition-transform" />
-                    <span className="text-white/70 text-sm font-semibold">{label}</span>
+            {/* Checklist */}
+            <div className="space-y-4">
+              {checkListItems.map((text, i) => (
+                <motion.div
+                  key={i}
+                  variants={itemVariants}
+                  className="flex items-start gap-3.5 text-left"
+                >
+                  <div className="flex items-center justify-center w-5.5 h-5.5 rounded-full bg-blue-50 text-[#0056B8] flex-shrink-0 mt-0.5 shadow-sm">
+                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
                   </div>
-                ))}
-              </div>
+                  <span className="font-body-unique text-slate-700 text-sm font-medium leading-relaxed">
+                    {text}
+                  </span>
+                </motion.div>
+              ))}
             </div>
           </motion.div>
 
-        </div>
-      </section>
-
-      {/* ── 2. Form + info split ── */}
-      <section ref={formRef} className="bg-white">
-        <div className="grid grid-cols-1 lg:grid-cols-5 min-h-[700px]">
-
-          {/* Form — 3 cols */}
+          {/* Right Column: Floating Form Card */}
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={formInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.75, ease }}
-            className="lg:col-span-3 px-6 sm:px-14 lg:px-16 py-16 lg:py-20 border-b lg:border-b-0 lg:border-r border-gray-100"
+            initial={{ opacity: 0, scale: 0.98, y: 30 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.15, ease }}
+            className="lg:col-span-7 bg-white border border-slate-100 rounded-3xl p-8 md:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.03)] w-full"
           >
             {sent ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.4, ease }}
-                className="flex flex-col items-start justify-center h-full gap-6 py-20"
+                className="flex flex-col items-center justify-center py-20 text-center gap-6"
               >
-                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center">
-                  <ArrowUpRight className="w-6 h-6 text-blue-500" />
+                <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center shadow-inner">
+                  <ArrowUpRight className="w-6 h-6 text-[#0056B8]" />
                 </div>
-                <h2 className="font-heading font-black text-sky-900 text-3xl leading-tight">
-                  Message received!
+                <h2 className="font-heading-unique font-bold text-slate-900 text-2xl">
+                  Enquiry received!
                 </h2>
-                <p className="text-[#4a6080] text-base leading-relaxed max-w-md">
-                  We will get back to you within the hour. In the meantime, feel free to call us directly.
+                <p className="font-body-unique text-slate-500 text-sm max-w-sm leading-relaxed">
+                  Thank you for reaching out. A cold chain specialist will contact you shortly to guide you.
                 </p>
                 <Link
-                  to="/booking/request"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl text-sm transition-colors"
+                  to="/"
+                  className="font-body-unique inline-flex items-center gap-2 px-6 py-3 bg-[#0056B8] hover:bg-blue-700 text-white font-bold rounded-sm text-xs sm:text-sm transition-all"
                 >
-                  Get a quote now <ArrowUpRight className="w-4 h-4" />
+                  Return to Home
                 </Link>
               </motion.div>
             ) : (
-              <>
-                <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-3">Send a message</p>
-                <h2
-                  className="font-heading font-black text-sky-900 leading-tight mb-10"
-                  style={{ fontSize: 'clamp(1.8rem, 3vw, 2.6rem)' }}
-                >
-                  Tell us about
-                  <br />
-                  <span className="text-blue-500">your cargo.</span>
-                </h2>
-
-                <form onSubmit={handleSubmit} className="space-y-0">
-                  {/* Name + Email row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                    <div className="border-b border-gray-200 pb-4">
-                      <label className="text-[10px] font-bold tracking-widest uppercase text-gray-400 block mb-2">Full name</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="Adebayo Ogundimu"
-                        value={form.name}
-                        onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
-                        className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none font-semibold"
-                      />
-                    </div>
-                    <div className="border-b border-gray-200 pb-4">
-                      <label className="text-[10px] font-bold tracking-widest uppercase text-gray-400 block mb-2">Email</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="you@company.com"
-                        value={form.email}
-                        onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                        className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none font-semibold"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Phone + Cargo type row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                    <div className="border-b border-gray-200 pb-4">
-                      <label className="text-[10px] font-bold tracking-widest uppercase text-gray-400 block mb-2">Phone</label>
-                      <input
-                        type="tel"
-                        placeholder="+234 800 000 0000"
-                        value={form.phone}
-                        onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
-                        className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none font-semibold"
-                      />
-                    </div>
-                    <div className="border-b border-gray-200 pb-4">
-                      <label className="text-[10px] font-bold tracking-widest uppercase text-gray-400 block mb-2">Cargo type</label>
-                      <select
-                        value={form.cargo}
-                        onChange={e => setForm(f => ({ ...f, cargo: e.target.value }))}
-                        className="w-full bg-transparent text-sky-900 text-base outline-none font-semibold appearance-none cursor-pointer"
-                      >
-                        <option value="">Select cargo type</option>
-                        <option>Pharmaceuticals / Vaccines</option>
-                        <option>Frozen Food</option>
-                        <option>Fresh Produce</option>
-                        <option>Enterprise Haulage</option>
-                        <option>Other</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Message */}
-                  <div className="border-b border-gray-200 pb-4 mb-10">
-                    <label className="text-[10px] font-bold tracking-widest uppercase text-gray-400 block mb-2">Message</label>
-                    <textarea
-                      rows={4}
-                      placeholder="Tell us your route, volume, temperature requirements..."
-                      value={form.message}
-                      onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      className="w-full bg-transparent text-sky-900 placeholder-gray-300 text-base outline-none resize-none font-semibold"
+              <form onSubmit={handleSubmit} className="space-y-5 text-left font-body-unique">
+                
+                {/* First Name & Last Name */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">First name*</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Adebayo"
+                      value={form.firstName}
+                      onChange={e => setForm(f => ({ ...f, firstName: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all"
                     />
                   </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Last name*</label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Ogundimu"
+                      value={form.lastName}
+                      onChange={e => setForm(f => ({ ...f, lastName: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all"
+                    />
+                  </div>
+                </div>
 
-                  <motion.button
+                {/* Email & Phone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Work email*</label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="you@company.com"
+                      value={form.email}
+                      onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Phone number*</label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="+234 800 000 0000"
+                      value={form.phone}
+                      onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all"
+                    />
+                  </div>
+                </div>
+
+                {/* Company Website */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Your company website*</label>
+                  <input
+                    type="url"
+                    required
+                    placeholder="https://company.com"
+                    value={form.website}
+                    onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-900 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all"
+                  />
+                </div>
+
+                {/* Origin & Expected Volume */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Origin Region*</label>
+                    <select
+                      required
+                      value={form.origin}
+                      onChange={e => setForm(f => ({ ...f, origin: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-700 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all cursor-pointer appearance-none"
+                    >
+                      <option value="">Select origin</option>
+                      <option value="lagos">Lagos Region</option>
+                      <option value="abuja">Abuja Region</option>
+                      <option value="south-south">Port Harcourt / South Region</option>
+                      <option value="north">Kano / North Region</option>
+                      <option value="international">West Africa / International</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">Expected Monthly Volume*</label>
+                    <select
+                      required
+                      value={form.volume}
+                      onChange={e => setForm(f => ({ ...f, volume: e.target.value }))}
+                      className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-700 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all cursor-pointer appearance-none"
+                    >
+                      <option value="">Select volume</option>
+                      <option value="small">Less than 5 tons</option>
+                      <option value="medium">5 - 20 tons</option>
+                      <option value="large">More than 20 tons</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Requirement Category */}
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-700 uppercase tracking-widest mb-2">What best describes your business requirements?*</label>
+                  <select
+                    required
+                    value={form.requirement}
+                    onChange={e => setForm(f => ({ ...f, requirement: e.target.value }))}
+                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-slate-700 text-sm focus:outline-none focus:border-[#0056B8] focus:bg-white transition-all cursor-pointer appearance-none"
+                  >
+                    <option value="">Select requirement type</option>
+                    <option value="pharma">Pharmaceuticals & Vaccines Logistics</option>
+                    <option value="frozen">Frozen Foods & Cold Storage Transport</option>
+                    <option value="perishable">Fresh Fruits, Veggies & Perishables</option>
+                    <option value="haulage">Dedicated Fleet Refrigerated Haulage</option>
+                  </select>
+                </div>
+
+                {/* Consent Checkbox */}
+                <div className="flex items-start gap-3 pt-2">
+                  <input
+                    type="checkbox"
+                    id="consent"
+                    required
+                    checked={form.consent}
+                    onChange={e => setForm(f => ({ ...f, consent: e.target.checked }))}
+                    className="w-4 h-4 rounded border-slate-300 text-[#0056B8] focus:ring-[#0056B8] mt-1 cursor-pointer"
+                  />
+                  <label htmlFor="consent" className="text-slate-500 text-xs leading-relaxed cursor-pointer select-none">
+                    Yes, I'd like to receive updates, offers, and insights from Dara. I can unsubscribe anytime.
+                  </label>
+                </div>
+
+                {/* Submit Button */}
+                <div className="pt-2">
+                  <button
                     type="submit"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.97 }}
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-blue-500 hover:bg-blue-400 text-white font-bold rounded-xl text-sm transition-colors"
+                    className="px-8 py-3 bg-[#0056B8] hover:bg-[#004bb0] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.98] shadow-md"
                   >
-                    Send message
-                    <ArrowUpRight className="w-4 h-4" />
-                  </motion.button>
-                </form>
-              </>
+                    Submit
+                  </button>
+                </div>
+
+              </form>
             )}
-          </motion.div>
-
-          {/* Info panel — 2 cols */}
-          <motion.div
-            initial={{ opacity: 0, x: 32 }}
-            animate={formInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.75, delay: 0.2, ease }}
-            className="lg:col-span-2 bg-[#e8f0f7] px-6 sm:px-10 py-16 lg:py-20 flex flex-col justify-between gap-12"
-          >
-            <div>
-              <p className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-8">Contact details</p>
-              <div className="space-y-8">
-                {contactDetails.map(({ icon: Icon, label, lines, sub, href }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target={href.startsWith('http') ? '_blank' : undefined}
-                    rel="noopener noreferrer"
-                    className="flex items-start gap-4 group"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center flex-shrink-0 shadow-sm group-hover:bg-blue-500 transition-colors">
-                      <Icon className="w-4 h-4 text-blue-500 group-hover:text-white transition-colors" />
-                    </div>
-                    <div>
-                      <p className="text-[#4a6080] text-[10px] font-bold tracking-widest uppercase mb-1">{label}</p>
-                      {lines.map(l => (
-                        <p key={l} className="text-sky-900 font-bold text-sm leading-snug">{l}</p>
-                      ))}
-                      <p className="text-[#4a6080] text-xs mt-0.5">{sub}</p>
-                    </div>
-                  </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Quick links */}
-            <div className="space-y-3">
-              <p className="text-[#4a6080] text-[10px] font-bold tracking-widest uppercase mb-4">Quick actions</p>
-              <Link
-                to="/booking/request"
-                className="flex items-center justify-between px-5 py-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group"
-              >
-                <span className="font-bold text-sky-900 text-sm">Get an instant quote</span>
-                <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </Link>
-              <Link
-                to="/tracking"
-                className="flex items-center justify-between px-5 py-4 bg-white rounded-2xl shadow-sm hover:shadow-md transition-all group"
-              >
-                <span className="font-bold text-sky-900 text-sm">Track a shipment</span>
-                <ArrowUpRight className="w-4 h-4 text-blue-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-              </Link>
-            </div>
           </motion.div>
 
         </div>
       </section>
 
-      {/* ── 3. Map strip ── */}
-      <section className="h-[360px] sm:h-[440px] relative overflow-hidden">
+      {/* Office Locations Map Section (Bottom) */}
+      <section className="h-[360px] sm:h-[440px] relative overflow-hidden bg-slate-100">
         <iframe
           title="Dara Express Location"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7!2d3.3792!3d6.5095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8c5!2sMJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos!5e0!3m2!1sen!2sng!4v1"
-          className="absolute inset-0 w-full h-full border-0 grayscale"
+          className="absolute inset-0 w-full h-full border-0 grayscale opacity-85"
           allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         />
-        {/* overlay card */}
-        <div className="absolute bottom-6 left-6 right-6 sm:left-14 sm:right-auto bg-sky-800 rounded-2xl px-6 py-4 shadow-2xl">
-          <p className="text-white/40 text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>
-          <p className="text-white font-bold text-sm">MJS House, 366 Murtala Muhammed Road, Yaba, Lagos</p>
+        
+        {/* HQ Coordinates overlay */}
+        <div className="absolute bottom-6 left-6 right-6 sm:left-14 sm:right-auto bg-white/95 backdrop-blur border border-slate-100 rounded-2xl px-6 py-4 shadow-xl max-w-sm text-left">
+          <p className="text-[#0056B8] text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>
+          <p className="font-heading-unique font-bold text-slate-800 text-sm">MJS House, 366 Murtala Muhammed Road, Yaba, Lagos</p>
           <a
             href="https://maps.google.com/?q=MJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos+Nigeria"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-blue-400 text-xs font-semibold mt-1 hover:text-blue-300 transition-colors"
+            className="inline-flex items-center gap-1 text-[#0056B8] text-xs font-semibold mt-1 hover:underline transition-colors"
           >
             Get directions <ArrowUpRight className="w-3 h-3" />
           </a>

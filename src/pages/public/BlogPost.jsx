@@ -44,7 +44,7 @@ export default function BlogPost() {
   // Loading skeleton
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+      <div className="min-h-screen bg-slate-50">
         <div className="pt-32 pb-20 px-6">
           <div className="container mx-auto max-w-4xl">
             <div className="animate-pulse space-y-6">
@@ -73,7 +73,7 @@ export default function BlogPost() {
   // Error state
   if (error || !post) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+      <div className="min-h-screen bg-slate-50">
         <div className="pt-32 pb-20 px-6">
           <div className="container mx-auto max-w-4xl text-center">
             <motion.div
@@ -91,7 +91,7 @@ export default function BlogPost() {
               </p>
               <Link
                 to="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-full font-bold hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#0056B8] text-white rounded-sm font-bold hover:bg-[#004cba] transition-colors cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Back to Blog
@@ -106,7 +106,7 @@ export default function BlogPost() {
   const readTime = calculateReadTime(post.content || post.excerpt)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-slate-50">
       {/* Article Header */}
       <section className="pt-32 pb-12 px-6">
         <div className="container mx-auto max-w-4xl">
@@ -118,7 +118,7 @@ export default function BlogPost() {
           >
             <Link
               to="/blog"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue-600 transition-colors"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#0056B8] transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Blog
@@ -135,7 +135,7 @@ export default function BlogPost() {
               {post.categories.map(cat => (
                 <span
                   key={cat}
-                  className="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full uppercase tracking-wider"
+                  className="px-3 py-1 bg-blue-100 text-[#0056B8] text-xs font-bold rounded-sm uppercase tracking-wider"
                 >
                   {cat}
                 </span>
@@ -170,7 +170,7 @@ export default function BlogPost() {
                 />
               ) : (
                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center ring-2 ring-white shadow-md">
-                  <User className="w-6 h-6 text-blue-600" />
+                  <User className="w-6 h-6 text-[#0056B8]" />
                 </div>
               )}
               <div>
@@ -244,9 +244,9 @@ export default function BlogPost() {
                 prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4
                 prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
                 prose-p:text-slate-700 prose-p:leading-relaxed prose-p:mb-6
-                prose-a:text-blue-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
+                prose-a:text-[#0056B8] prose-a:font-semibold prose-a:no-underline hover:prose-a:underline
                 prose-img:rounded-2xl prose-img:shadow-lg prose-img:my-8
-                prose-blockquote:border-l-blue-500 prose-blockquote:bg-blue-50 prose-blockquote:rounded-r-xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic
+                prose-blockquote:border-l-[#0056B8] prose-blockquote:bg-blue-50 prose-blockquote:rounded-r-xl prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:not-italic
                 prose-code:bg-slate-100 prose-code:px-2 prose-code:py-0.5 prose-code:rounded-md prose-code:text-sm
                 prose-pre:bg-slate-900 prose-pre:rounded-2xl
                 prose-ul:space-y-2 prose-ol:space-y-2
@@ -267,7 +267,7 @@ export default function BlogPost() {
                   {post.tags.map(tag => (
                     <span
                       key={tag}
-                      className="px-3 py-1.5 bg-slate-100 text-slate-600 text-sm font-medium rounded-full hover:bg-slate-200 transition-colors"
+                      className="px-3 py-1.5 bg-slate-100 text-slate-600 text-sm font-medium rounded-sm hover:bg-slate-200 transition-colors"
                     >
                       #{tag}
                     </span>
@@ -282,7 +282,7 @@ export default function BlogPost() {
                 href={post.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-blue-600 hover:text-blue-700 transition-colors"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-[#0056B8] hover:text-[#004cba] transition-colors"
               >
                 <Share2 className="w-4 h-4" />
                 View on WordPress
@@ -293,7 +293,7 @@ export default function BlogPost() {
                   navigator.clipboard.writeText(window.location.href)
                   alert('Link copied to clipboard!')
                 }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-full text-sm font-semibold hover:bg-slate-200 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-sm text-sm font-semibold hover:bg-slate-200 transition-colors cursor-pointer"
               >
                 <Share2 className="w-4 h-4" />
                 Copy Link
@@ -337,7 +337,7 @@ export default function BlogPost() {
                     )}
                   </div>
                   <div className="p-6">
-                    <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors line-clamp-2">
+                    <h3 className="text-lg font-bold text-slate-900 mb-2 group-hover:text-[#0056B8] transition-colors line-clamp-2">
                       {stripHtml(rp.title)}
                     </h3>
                     <p className="text-slate-600 text-sm mb-4 line-clamp-2">
@@ -345,7 +345,7 @@ export default function BlogPost() {
                     </p>
                     <Link
                       to={`/blog/${rp.slug}`}
-                      className="text-blue-600 text-sm font-semibold hover:text-blue-700 transition-colors"
+                      className="text-[#0056B8] text-sm font-semibold hover:text-[#004cba] transition-colors"
                     >
                       Read More →
                     </Link>

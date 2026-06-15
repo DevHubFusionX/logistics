@@ -28,26 +28,16 @@ export const heroData = {
         'Reefer Trucks in Nigeria: Express transport for vaccines & perishables',
         'Top Logistics Companies in Nigeria: 24/7 temperature tracking'
     ],
-    backgroundImages: [
-        'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1280&q=75',
-        'https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=1280&q=55',
-        'https://images.unsplash.com/photo-1605902711834-8b11c3e3ef2f?auto=format&fit=crop&w=1280&q=55',
-        'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1280&q=55'
-    ],
-    imageAlts: [
-        "Reefer trucks in Nigeria for cold chain logistics",
-        "Pharmaceutical cold storage Lagos Nigeria",
-        "Refrigerated transport services Lagos to Abuja",
-        "Frozen food transport Nigeria logistics"
-    ],
+
+
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
         { icon: 'Truck', value: '69', label: 'Trucks on Network via partner model' },
         { icon: 'Clock', value: '137', label: 'Cold Chain Trips Completed' }
     ],
     buttons: {
-        primary: { text: "Start Shipping Now", link: "/booking/request" },
-        secondary: { text: "Schedule a Demo", link: "/tracking" }
+        primary: { text: "Book", link: "/booking/request" },
+        secondary: { text: "Book a demo", link: "/tracking" }
     }
 }
 

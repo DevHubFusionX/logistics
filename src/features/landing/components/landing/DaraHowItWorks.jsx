@@ -1,215 +1,274 @@
-import { motion, useInView } from 'framer-motion'
-import { ChevronRight, ArrowUpRight } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { useRef } from 'react'
+import { ArrowRight } from 'lucide-react'
 
-const steps = [
+const problems = [
   {
-    step: '01',
-    title: 'Request a Quote',
-    description: 'Tell us your cargo type, route and temperature needs. We respond within the hour.',
-    icon: '📋',
+    num: '01',
+    title: 'Hard to find trucks',
+    desc: 'Finding a cold truck is hard. Shippers have to make too many phone calls to find a driver.',
   },
   {
-    step: '02',
-    title: 'Get Matched',
-    description: 'We assign a verified reefer truck and driver suited for your cargo requirements.',
-    icon: '🚛',
+    num: '02',
+    title: 'No live updates',
+    desc: 'You cannot see the temperature of your food during the trip. Items get spoiled easily.',
   },
   {
-    step: '03',
-    title: 'Track Live',
-    description: 'IoT sensors monitor temperature in real time. You get updates throughout transit.',
-    icon: '📡',
-  },
-  {
-    step: '04',
-    title: 'Delivered',
-    description: 'Your cargo arrives safely with a full delivery confirmation and temperature report.',
-    icon: '✅',
-  },
+    num: '03',
+    title: 'Slow and expensive',
+    desc: 'Getting a price quote takes too long. Prices change everyday and drivers are late.',
+  }
 ]
 
-const containerVariants = {
+// Framer Motion Variants for Section Header
+const headerContainerVariants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.3 },
-  },
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.05
+    }
+  }
 }
 
-const headerVariants = {
-  hidden: { opacity: 0, y: 40 },
+const headerItemVariants = {
+  hidden: { opacity: 0, y: 15 },
   visible: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+  }
 }
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 60, scale: 0.96 },
-  visible: {
-    opacity: 1, y: 0, scale: 1,
-    transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
-  },
-}
-
-const lineVariants = {
+const headerLineVariants = {
   hidden: { scaleX: 0 },
   visible: {
     scaleX: 1,
-    transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.5 },
-  },
+    transition: { duration: 0.85, ease: [0.22, 1, 0.36, 1], delay: 0.15 }
+  }
 }
 
-const numberVariants = {
-  hidden: { opacity: 0, scale: 0.4 },
+// Framer Motion Variants for Problem Grid & Cards
+const gridContainerVariants = {
+  hidden: {},
   visible: {
-    opacity: 1, scale: 1,
-    transition: { duration: 0.5, ease: [0.34, 1.56, 0.64, 1] },
-  },
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
 }
 
-const bottomVariants = {
-  hidden: { opacity: 0, y: 30 },
+const problemCardVariants = {
+  hidden: { opacity: 0, y: 25 },
   visible: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: 0.8 },
-  },
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.75,
+      ease: [0.16, 1, 0.3, 1]
+    }
+  }
+}
+
+const cardItemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] }
+  }
+}
+
+// Framer Motion Variants for Solution Banner
+const bannerContainerVariants = {
+  hidden: { opacity: 0, y: 35 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1],
+      staggerChildren: 0.08,
+      delayChildren: 0.15
+    }
+  }
+}
+
+const bannerItemVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+  }
+}
+
+const bannerGlowVariants = {
+  hidden: { opacity: 0, scale: 0.85 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: { duration: 1.6, ease: "easeOut" }
+  }
 }
 
 export default function DaraHowItWorks() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-10% 0px' })
-
   return (
-    <section id="how-it-works" ref={ref} className="relative bg-[#e8f0f7] overflow-hidden">
+    <section id="how-it-works" className="relative bg-white py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
 
-      {/* ── Top zone ── */}
-      <div className="relative z-10 px-8 sm:px-14 lg:px-20 pt-24 pb-0">
+      {/* Background Dot Grid Layer */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.25]"
+        style={{
+          backgroundImage: 'radial-gradient(#cbd5e1 1.2px, transparent 1.2px)',
+          backgroundSize: '24px 24px',
+        }}
+      />
 
-        {/* Header */}
+      <div className="max-w-7xl mx-auto relative z-10">
+
+        {/* Section Heading with Animated Line */}
         <motion.div
-          variants={containerVariants}
+          variants={headerContainerVariants}
           initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="flex items-end justify-between mb-20"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="relative pb-8 mb-16 text-left"
         >
-          <motion.div variants={headerVariants}>
-            <motion.p
-              variants={headerVariants}
-              className="text-blue-600 font-bold text-sm tracking-[0.2em] uppercase mb-3"
-            >
-              How it works
-            </motion.p>
-            <h2 className="font-heading font-black text-sky-900 text-3xl sm:text-4xl lg:text-5xl leading-tight">
-              Our processes are{' '}
-              <motion.span
-                className="text-blue-500 inline-block"
-                initial={{ opacity: 0, x: -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                transition={{ duration: 0.6, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              >
-                simple
-              </motion.span>
-            </h2>
-          </motion.div>
-
-          <motion.div
-            variants={headerVariants}
-            className="hidden sm:block"
+          <motion.p
+            variants={headerItemVariants}
+            className="font-body-unique text-xs font-bold tracking-widest text-[#0056B8] uppercase mb-3"
           >
-            <Link
-              to="/booking/request"
-              className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
-            >
-              For Shippers
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </motion.div>
+            CHALLENGES
+          </motion.p>
+          <motion.h2
+            variants={headerItemVariants}
+            className="font-heading-unique text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight"
+          >
+            The problem today
+          </motion.h2>
+
+          {/* Animated border bottom line */}
+          <motion.div
+            variants={headerLineVariants}
+            className="absolute bottom-0 left-0 right-0 h-[1.2px] bg-slate-100 origin-left"
+          />
         </motion.div>
 
-        {/* Connecting line */}
-        <div className="hidden lg:block relative mb-0 px-[calc(12.5%-1rem)]">
-          <div className="relative h-px bg-blue-200/50">
-            <motion.div
-              variants={lineVariants}
-              initial="hidden"
-              animate={inView ? 'visible' : 'hidden'}
-              className="absolute inset-0 bg-blue-400 origin-left"
-            />
-            {/* dots on the line */}
-            {steps.map((_, i) => (
-              <motion.div
-                key={i}
-                initial={{ scale: 0, opacity: 0 }}
-                animate={inView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 + i * 0.12, ease: [0.34, 1.56, 0.64, 1] }}
-                className="absolute top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-blue-500 border-2 border-white shadow-sm"
-                style={{ left: `${(i / 3) * 100}%`, transform: 'translate(-50%, -50%)' }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Cards */}
+        {/* Clean Typographic 3-Column Problems Grid */}
         <motion.div
-          variants={containerVariants}
+          variants={gridContainerVariants}
           initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 mb-24"
         >
-          {steps.map(({ step, title, description }, i) => (
+          {problems.map((prob) => (
             <motion.div
-              key={step}
-              variants={cardVariants}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className="bg-white rounded-2xl p-7 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[240px] group cursor-default"
+              key={prob.num}
+              variants={problemCardVariants}
+              className="flex flex-col items-start group"
             >
-              {/* big number bg */}
-              <motion.span
-                variants={numberVariants}
-                className="absolute top-1 left-3 font-black leading-none text-blue-50 select-none pointer-events-none"
-                style={{ fontSize: '6rem' }}
-              >
-                {step}
-              </motion.span>
-
-              {/* top: step badge */}
-              <div className="relative z-10 flex items-center justify-between mb-auto">
-                <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-blue-50 text-blue-500 text-[10px] font-black tracking-widest uppercase">
-                  Step {step}
-                </span>
-                <motion.div
-                  initial={{ rotate: 0, opacity: 0.3 }}
-                  whileHover={{ rotate: 45, opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ArrowUpRight className="w-4 h-4 text-blue-300 group-hover:text-blue-500 transition-colors" />
-                </motion.div>
-              </div>
-
-              {/* bottom: title + description */}
-              <div className="relative z-10 mt-12">
-                <h3 className="font-heading font-black text-sky-900 text-xl mb-2 leading-tight">
-                  {title}
-                </h3>
-                <p className="text-gray-400 text-sm leading-relaxed">{description}</p>
-              </div>
-
-              {/* hover accent line */}
+              {/* Clean Step Number */}
               <motion.div
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500 origin-left"
-                initial={{ scaleX: 0 }}
-                whileHover={{ scaleX: 1 }}
-                transition={{ duration: 0.3 }}
-              />
+                variants={cardItemVariants}
+                className="font-heading-unique text-4xl font-light text-slate-300 mb-5 select-none leading-none group-hover:text-[#0056B8] transition-colors duration-300"
+              >
+                {prob.num}
+              </motion.div>
+
+              {/* Title */}
+              <motion.h3
+                variants={cardItemVariants}
+                className="font-heading-unique font-bold text-slate-950 text-lg mb-2"
+              >
+                {prob.title}
+              </motion.h3>
+
+              {/* Description */}
+              <motion.p
+                variants={cardItemVariants}
+                className="font-body-unique text-slate-500 text-sm leading-relaxed max-w-[280px]"
+              >
+                {prob.desc}
+              </motion.p>
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Dynamic Solution Banner Block at the Bottom */}
+        <motion.div
+          variants={bannerContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-60px" }}
+          className="bg-[#0056B8] text-white rounded-2xl p-8 md:p-12 shadow-[0_20px_50px_rgba(0,86,184,0.15)] relative overflow-hidden"
+        >
+          {/* Decorative Background Circles */}
+          <motion.div
+            variants={bannerGlowVariants}
+            className="absolute right-[-10%] top-[-20%] w-96 h-96 rounded-full bg-blue-600/20 blur-3xl pointer-events-none"
+          />
+          <motion.div
+            variants={bannerGlowVariants}
+            className="absolute left-[-10%] bottom-[-20%] w-96 h-96 rounded-full bg-sky-600/10 blur-2xl pointer-events-none"
+          />
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+
+            {/* Left Column: Content */}
+            <div className="lg:col-span-7 flex flex-col items-start text-left relative z-10">
+              {/* Tag */}
+              <motion.span
+                variants={bannerItemVariants}
+                className="font-body-unique text-xs font-bold tracking-widest text-blue-200 uppercase mb-4"
+              >
+                THE DARA SOLUTION
+              </motion.span>
+
+              {/* Headline */}
+              <motion.h3
+                variants={bannerItemVariants}
+                className="font-heading-unique text-xl sm:text-3xl font-bold leading-tight mb-4"
+              >
+                We build a simple system to connect you to cold trucks, show you the live temperature, and deliver your items safely on time.
+              </motion.h3>
+
+              {/* Description */}
+              <motion.p
+                variants={bannerItemVariants}
+                className="font-body-unique text-blue-100 text-sm sm:text-base leading-relaxed mb-8"
+              >
+                A simple way to move food, medicines, and chemicals across Nigeria – with zero stress, low prices, and complete safety.
+              </motion.p>
+
+              {/* Action CTA */}
+              <motion.div variants={bannerItemVariants}>
+                <Link
+                  to="/booking/request"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0056B8] hover:bg-blue-50 font-bold rounded-sm text-sm transition-all active:scale-97 shadow-lg shadow-black/10 group cursor-pointer"
+                >
+                  Book
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </motion.div>
+            </div>
+
+            {/* Right Column: Image */}
+            <div className="absolute lg:relative right-[-8%] bottom-[-10%] sm:right-[-4%] sm:bottom-[-8%] lg:right-auto lg:bottom-auto z-0 lg:z-10 lg:col-span-5 w-[220px] sm:w-[320px] lg:w-full opacity-20 lg:opacity-100 pointer-events-none lg:pointer-events-auto">
+              <motion.img
+                variants={bannerItemVariants}
+                src="/assets/img/reefer-truck.png"
+                alt="Dara Reefer Truck"
+                className="w-full h-auto object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.35)]"
+              />
+            </div>
+
+          </div>
+        </motion.div>
+
       </div>
-
-      
-
     </section>
   )
 }

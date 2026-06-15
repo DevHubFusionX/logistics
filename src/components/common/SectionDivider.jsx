@@ -1,52 +1,64 @@
-import { motion, useInView } from 'framer-motion'
-import { useRef } from 'react'
-import { Thermometer, Shield, MapPin, Clock, Truck, Star } from 'lucide-react'
+import { Thermometer, Shield, Truck, MapPin } from 'lucide-react'
+import { motion } from 'framer-motion'
 
-const items = [
+const highlightItems = [
   { icon: Thermometer, text: '±0.1°C Precision' },
   { icon: Shield,      text: 'GIT Insured' },
   { icon: Truck,       text: '120 Reefer Trucks' },
   { icon: MapPin,      text: 'All 36 States' },
-  { icon: Clock,       text: 'Same-Day Available' },
-  { icon: Star,        text: '200+ Trips Completed' },
-  { icon: Thermometer, text: 'IoT Monitored' },
   { icon: Shield,      text: 'Pharma Grade' },
-  { icon: Truck,       text: 'Cold Chain Experts' },
-  { icon: MapPin,      text: 'Lagos · Abuja · PH' },
+  { icon: Truck,       text: 'Cold Chain Experts' }
 ]
 
-// duplicate for seamless loop
-const track = [...items, ...items]
+// Duplicate the items array for infinite looping ticker
+const duplicatedItems = [...highlightItems, ...highlightItems]
 
 export default function SectionDivider() {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-5% 0px' })
-
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0 }}
-      animate={inView ? { opacity: 1 } : {}}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="bg-sky-800 overflow-hidden py-4 border-y border-white/5"
-    >
-      <div className="flex items-center gap-0 w-max">
-        <motion.div
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 28, repeat: Infinity, ease: 'linear' }}
-          className="flex items-center gap-0"
+    <div className="w-full bg-white border-y border-slate-100 py-6 overflow-hidden">
+      
+      {/* Mobile View: Infinite Auto-scrolling Carousel */}
+      <div className="md:hidden w-full relative">
+        {/* Soft edge gradient fade overlays */}
+        <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+        
+        <motion.div 
+          className="flex gap-12 whitespace-nowrap w-max"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            ease: "linear",
+            duration: 18, // speed of scrolling
+            repeat: Infinity
+          }}
         >
-          {track.map(({ icon: Icon, text }, i) => (
-            <span
+          {duplicatedItems.map(({ icon: Icon, text }, i) => (
+            <div
               key={i}
-              className="inline-flex items-center gap-2 px-8 text-white/30 text-xs font-bold tracking-[0.15em] uppercase whitespace-nowrap border-r border-white/8 last:border-0"
+              className="inline-flex items-center gap-2.5 text-slate-500 text-[10px] font-bold tracking-wider uppercase select-none"
             >
-              <Icon className="w-3 h-3 text-blue-500/60 flex-shrink-0" />
-              {text}
-            </span>
+              <Icon className="w-4 h-4 text-[#0056B8] flex-shrink-0" />
+              <span>{text}</span>
+            </div>
           ))}
         </motion.div>
       </div>
-    </motion.div>
+
+      {/* Desktop View: Standard Flex Wrap Row */}
+      <div className="hidden md:block max-w-7xl mx-auto px-6">
+        <div className="flex flex-wrap items-center justify-center gap-y-4 gap-x-12 md:gap-x-16">
+          {highlightItems.map(({ icon: Icon, text }, i) => (
+            <div
+              key={i}
+              className="inline-flex items-center gap-2.5 text-slate-500 text-xs font-bold tracking-wider uppercase select-none"
+            >
+              <Icon className="w-4 h-4 text-[#0056B8] flex-shrink-0" />
+              <span>{text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+    </div>
   )
 }
