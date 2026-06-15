@@ -105,12 +105,14 @@ export default function DaraHero() {
         </motion.h1>
 
         {/* Subtitle / Description (Outfit) using info from Data.jsx */}
-        <motion.p
+        <motion.div
           variants={itemVariants}
-          className="font-body-unique text-slate-200 text-sm sm:text-base leading-relaxed max-w-2xl mb-8"
+          className="font-body-unique text-slate-200 text-sm sm:text-base leading-relaxed max-w-2xl mb-8 space-y-4"
         >
-          {heroData.description}
-        </motion.p>
+          {heroData.description.split('\n\n').map((para, i) => (
+            <p key={i}>{para}</p>
+          ))}
+        </motion.div>
 
         {/* Action Buttons using info from Data.jsx */}
         <motion.div

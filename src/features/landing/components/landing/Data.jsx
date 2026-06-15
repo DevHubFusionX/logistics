@@ -19,9 +19,9 @@ export const heroData = {
     title: {
         prefix: "Nigeria's Leading",
         highlight: "Cold Chain",
-        suffix: "Logistics"
+        suffix: "Logistics Partner"
     },
-    description: "Expert cold chain logistics Nigeria and temperature controlled logistics. Specialized reefer trucks in Nigeria for pharma logistics and frozen food transport Lagos to Abuja.",
+    description: "Temperature-controlled transportation and cold storage solutions for food, pharmaceutical, and FMCG businesses across Nigeria.\n\nWith a network of over 120 refrigerated trucks, real-time shipment visibility, and strict temperature compliance, Dara helps businesses move sensitive products safely, efficiently, and on time.",
     features: [
         'Premium Cold Chain Logistics Nigeria: Real-time reefer monitoring',
         'Nationwide Haulage Services Nigeria: Dedicated refrigerated fleet',
@@ -32,12 +32,12 @@ export const heroData = {
 
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
-        { icon: 'Truck', value: '69', label: 'Trucks on Network via partner model' },
+        { icon: 'Truck', value: '120+', label: 'Trucks on Network via partner model' },
         { icon: 'Clock', value: '137', label: 'Cold Chain Trips Completed' }
     ],
     buttons: {
-        primary: { text: "Book", link: "/booking/request" },
-        secondary: { text: "Book a demo", link: "/tracking" }
+        primary: { text: "Book a Shipment", link: "/booking/request" },
+        secondary: { text: "Schedule a Consultation", link: "/tracking" }
     }
 }
 
@@ -90,7 +90,7 @@ export const aboutData = {
     },
     stats: [
         { value: "TrendingUp", label: "Growing number of happy businesses", color: "blue" },
-        { value: "69", label: "Trucks on Network via partner model", color: "green" },
+        { value: "120+", label: "Trucks on Network via partner model", color: "green" },
         { value: "137", label: "Cold Chain Trips Completed", color: "blue" }
     ]
 }
@@ -289,7 +289,7 @@ export const testimonialsData = {
     },
     stats: [
         { number: 'TrendingUp', label: 'Growing number of happy businesses' },
-        { number: '69', label: 'Trucks on Network via partner model' },
+        { number: '120+', label: 'Trucks on Network via partner model' },
         { number: '137', label: 'Cold Chain Trips Completed' }
     ],
     featured: [
