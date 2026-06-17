@@ -25,6 +25,7 @@ const Tracking = lazy(() => import('../pages/public/Tracking'))
 
 // Auth Pages
 const SignUp = lazy(() => import('../pages/auth/SignUp'))
+const MobileSignUp = lazy(() => import('../pages/auth/MobileSignUp'))
 const Login = lazy(() => import('../pages/auth/Login'))
 
 // Lazy Load Dashboard Pages
@@ -109,6 +110,7 @@ export default function AppRoutes() {
         {/* Auth Routes */}
         <Route element={<AuthLayout />}>
           <Route path="/auth/signup" element={<Suspense fallback={<PageLoader />}><SignUp /></Suspense>} />
+          <Route path="/sign-up/mobile/user" element={<Suspense fallback={<PageLoader />}><MobileSignUp /></Suspense>} />
           <Route path="/auth/login" element={<Suspense fallback={<PageLoader />}><Login /></Suspense>} />
           <Route path="/auth/admin/login" element={<Suspense fallback={<PageLoader />}><AdminLogin /></Suspense>} />
           <Route path="/auth/admin/managers/login" element={<Suspense fallback={<PageLoader />}><ManagerLogin /></Suspense>} />
