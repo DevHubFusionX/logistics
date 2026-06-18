@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react'
+import { validateEmail as checkEmail, getPasswordStrength } from '../utils/validation'
 
 /**
  * Custom hook for shared form validation logic across auth forms
@@ -8,7 +9,7 @@ export const useFormValidation = (initialState = {}) => {
 
     const validateEmail = (email) => {
         if (!email) return 'Email is required'
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return 'Invalid email format'
+        if (!checkEmail(email)) return 'Invalid email format'
         return null
     }
 
@@ -19,13 +20,7 @@ export const useFormValidation = (initialState = {}) => {
     }
 
     const validatePasswordStrength = (password) => {
-        let strength = 0
-        if (password.length >= 8) strength++
-        if (/[A-Z]/.test(password)) strength++
-        if (/[a-z]/.test(password)) strength++
-        if (/[0-9]/.test(password)) strength++
-        if (/[^A-Za-z0-9]/.test(password)) strength++
-        return strength
+        return getPasswordStrength(password).level
     }
 
     const validateRequired = (value, fieldName) => {

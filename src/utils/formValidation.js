@@ -1,47 +1,17 @@
 // Form validation utilities for booking flow
+// Validators imported from canonical module
+import {
+  validateEmail,
+  validatePhone,
+  validateWeight,
+  validateQuantity,
+  validateDate,
+  validateBusinessHours,
+  validateAddress
+} from './validation'
 
-export const validateEmail = (email) => {
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return regex.test(email)
-}
-
-export const validatePhone = (phone) => {
-  // Nigerian phone format: +234XXXXXXXXXX or 0XXXXXXXXXXX
-  const regex = /^(\+234|0)[7-9][0-1]\d{8}$/
-  return regex.test(phone.replace(/[\s-]/g, ''))
-}
-
-export const validateWeight = (weight) => {
-  const num = parseFloat(weight)
-  return !isNaN(num) && num >= 0.1 && num <= 50000
-}
-
-export const validateQuantity = (quantity) => {
-  const num = parseInt(quantity)
-  return !isNaN(num) && num >= 1 && num <= 1000
-}
-
-export const validateDate = (dateString) => {
-  const date = new Date(dateString)
-  const now = new Date()
-  const maxDate = new Date()
-  maxDate.setFullYear(maxDate.getFullYear() + 1)
-  
-  return date > now && date < maxDate
-}
-
-export const validateBusinessHours = (dateString) => {
-  const date = new Date(dateString)
-  const hours = date.getHours()
-  const day = date.getDay()
-  
-  // Monday-Saturday, 6 AM - 8 PM
-  return day !== 0 && hours >= 6 && hours <= 20
-}
-
-export const validateAddress = (address) => {
-  return address && address.trim().length >= 10
-}
+// Re-export for backward compatibility
+export { validateEmail, validatePhone, validateWeight, validateQuantity, validateDate, validateBusinessHours, validateAddress }
 
 export const getValidationErrors = (formData) => {
   const errors = {}

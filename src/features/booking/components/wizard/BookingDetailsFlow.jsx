@@ -11,20 +11,16 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
   const validateStep = (step) => {
     const e = {}
     if (step === 1) {
-      if (!formData.fullNameOrBusiness) e.fullNameOrBusiness = 'Required'
-      if (!formData.email) e.email = 'Required'
-      if (!formData.contactPhone) e.contactPhone = 'Required'
-    } else if (step === 2) {
-      if (!formData.pickupPerson.name) e.pickupPersonName = 'Required'
-      if (!formData.pickupPerson.phone) e.pickupPersonPhone = 'Required'
-      if (!formData.pickupPerson.email) e.pickupPersonEmail = 'Required'
-      if (!formData.pickupLocation.address) e.pickupAddress = 'Required'
+      if (!formData.pickupPerson?.name) e.pickupPersonName = 'Required'
+      if (!formData.pickupPerson?.phone) e.pickupPersonPhone = 'Required'
+      if (!formData.pickupPerson?.email) e.pickupPersonEmail = 'Required'
+      if (!formData.pickupLocation?.address) e.pickupAddress = 'Required'
       if (!formData.estimatedPickupDate) e.estimatedPickupDate = 'Required'
-    } else if (step === 3) {
-      if (!formData.receiverPerson.name) e.receiverPersonName = 'Required'
-      if (!formData.receiverPerson.phone) e.receiverPersonPhone = 'Required'
-      if (!formData.receiverPerson.email) e.receiverPersonEmail = 'Required'
-      if (!formData.dropoffLocation.address) e.dropoffAddress = 'Required'
+    } else if (step === 2) {
+      if (!formData.receiverPerson?.name) e.receiverPersonName = 'Required'
+      if (!formData.receiverPerson?.phone) e.receiverPersonPhone = 'Required'
+      if (!formData.receiverPerson?.email) e.receiverPersonEmail = 'Required'
+      if (!formData.dropoffLocation?.address) e.dropoffAddress = 'Required'
       if (!formData.estimatedDeliveryDate) e.estimatedDeliveryDate = 'Required'
     }
     setErrors(e)
@@ -33,7 +29,7 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
 
   const handleNext = () => {
     if (!validateStep(subStep)) return
-    if (subStep < 3) setSubStep(subStep + 1)
+    if (subStep < 2) setSubStep(subStep + 1)
     else onSubmit()
   }
 
@@ -42,10 +38,18 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
     else onBack()
   }
 
-  const subStepLabels = ['Your info', 'Pickup details', 'Delivery details']
+  const subStepLabels = ['Pickup details', 'Delivery details']
 
   return (
     <div className="space-y-4 w-full">
+      {/* Read-only profile confirmation header */}
+      <div className="bg-sky-50/50 border border-sky-100/50 rounded-xl p-3 px-4 flex items-center justify-between text-xs sm:text-sm text-sky-900">
+        <div className="flex items-center gap-2">
+          <User className="w-4 h-4 text-sky-600 flex-shrink-0" />
+          <span>Booking as <strong>{formData.fullNameOrBusiness || 'Dara Customer'}</strong> ({formData.email})</span>
+        </div>
+      </div>
+
       {/* Sub-step pills */}
       <div className="flex gap-2 px-0">
         {subStepLabels.map((label, i) => (
@@ -62,18 +66,6 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
       </div>
 
       {subStep === 1 && (
-        <FormSection icon={User} title="Your contact information">
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="sm:col-span-2">
-              <FormInput label="Full name / Business" value={formData.fullNameOrBusiness} onChange={e => onChange('fullNameOrBusiness', e.target.value)} error={errors.fullNameOrBusiness} />
-            </div>
-            <FormInput label="Email" type="email" value={formData.email} onChange={e => onChange('email', e.target.value)} error={errors.email} />
-            <FormInput label="Phone" type="tel" value={formData.contactPhone} onChange={e => onChange('contactPhone', e.target.value)} placeholder="+234XXXXXXXXXX" error={errors.contactPhone} />
-          </div>
-        </FormSection>
-      )}
-
-      {subStep === 2 && (
         <FormSection icon={MapPin} title="Pickup details">
           <AddressBookSelector currentCity={formData.pickupLocation.city} onSelect={addr => {
             onNestedChange('pickupPerson', 'name', addr.contact_name)
@@ -92,7 +84,7 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
         </FormSection>
       )}
 
-      {subStep === 3 && (
+      {subStep === 2 && (
         <FormSection icon={Truck} title="Delivery details">
           <AddressBookSelector currentCity={formData.dropoffLocation.city} onSelect={addr => {
             onNestedChange('receiverPerson', 'name', addr.contact_name)
@@ -128,7 +120,7 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
         >
           {loading ? (
             <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Processing…</>
-          ) : subStep === 3 ? (
+          ) : subStep === 2 ? (
             <>Confirm booking <ArrowRight className="w-4 h-4" /></>
           ) : (
             <>Continue <ArrowRight className="w-4 h-4" /></>

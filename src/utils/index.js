@@ -7,8 +7,9 @@ export * from './formValidation'
 export * from './helpers'
 export * from './paymentValidation'
 export * from './paymentVerification'
-export * from './pricingEngine'
+export * from './validation'
 export * from './retryHandler'
 export * from './sanitize'
 export * from './validators'
-export * from './devTools'
+// devTools.js self-registers in DEV mode only — not re-exported to ensure
+// tree-shaking removes it from production bundles

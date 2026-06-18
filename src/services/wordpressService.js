@@ -7,6 +7,7 @@ const API_BASE = `https://public-api.wordpress.com/rest/v1.1/sites/${SITE_DOMAIN
 // Simple in-memory cache
 const cache = new Map()
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
+const CACHE_MAX_SIZE = 100            // max entries before LRU eviction
 
 function getCached(key) {
   const entry = cache.get(key)
@@ -18,6 +19,11 @@ function getCached(key) {
 }
 
 function setCache(key, data) {
+  // Evict oldest entry when cap is reached
+  if (cache.size >= CACHE_MAX_SIZE) {
+    const oldestKey = cache.keys().next().value
+    cache.delete(oldestKey)
+  }
   cache.set(key, { data, timestamp: Date.now() })
 }
 

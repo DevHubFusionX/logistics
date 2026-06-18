@@ -381,16 +381,18 @@ export function useAdminMutations() {
 
     const updateClientMutation = useMutation({
         mutationFn: ({ id, data }) => clientService.updateClient(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+        onSuccess: (_, { id }) => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.customers() })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'clients', id] })
             toast.success('Client updated successfully')
         }
     })
 
     const updateDriverMutation = useMutation({
         mutationFn: ({ id, data }) => driverService.updateDriver(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+        onSuccess: (_, { id }) => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.drivers() })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'driver', id] })
             toast.success('Driver updated successfully')
         }
     })
@@ -398,7 +400,7 @@ export function useAdminMutations() {
     const createVehicleMutation = useMutation({
         mutationFn: (data) => fleetService.createTruck(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
             toast.success('Vehicle added successfully')
         },
         onError: (error) => {
@@ -409,7 +411,7 @@ export function useAdminMutations() {
     const updateVehicleMutation = useMutation({
         mutationFn: ({ id, data }) => fleetService.updateVehicle(id, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
             toast.success('Vehicle updated successfully')
         }
     })
@@ -417,7 +419,7 @@ export function useAdminMutations() {
     const updatePricingRulesMutation = useMutation({
         mutationFn: ({ rules, user }) => pricingService.updateGlobalRules(rules, user),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.pricing('global') })
             toast.success('Pricing rules updated successfully')
         }
     })
@@ -425,21 +427,22 @@ export function useAdminMutations() {
     const manageClientOverrideMutation = useMutation({
         mutationFn: ({ action, id, data }) => {
             switch (action) {
-                case 'add': return pricingService.addClientOverride(data)
+                case 'add':    return pricingService.addClientOverride(data)
                 case 'update': return pricingService.updateClientOverride(id, data)
                 case 'delete': return pricingService.deleteClientOverride(id)
                 default: throw new Error(`Unknown action: ${action}`)
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.pricing('clients') })
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.pricing('audit') })
         }
     })
 
     const createManagerMutation = useMutation({
         mutationFn: (data) => adminService.createManager(data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
             toast.success('Manager created successfully')
         },
         onError: (error) => {
@@ -449,8 +452,8 @@ export function useAdminMutations() {
 
     const updateManagerMutation = useMutation({
         mutationFn: ({ id, data }) => adminService.updateManager(id, data),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+        onSuccess: (_, { id }) => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
             toast.success('Manager updated successfully')
         }
     })
@@ -458,7 +461,7 @@ export function useAdminMutations() {
     const deleteManagerMutation = useMutation({
         mutationFn: (id) => adminService.deleteManager(id),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['admin'] })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
             toast.success('Manager deleted successfully')
         }
     })

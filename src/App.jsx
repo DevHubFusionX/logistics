@@ -14,9 +14,7 @@ function AppContent() {
     return !hasLoaded
   })
 
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' })
-  }, [location.pathname, isLoading])
+  // Scroll-to-top is handled by ScrollToTop component in AppRoutes
 
   useEffect(() => {
     if (isLoading) {

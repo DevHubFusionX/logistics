@@ -8,19 +8,8 @@ export class ApiError extends Error {
 }
 
 export const handleApiError = (error) => {
-  if (error?.response?.status === 401 || error?.status === 401) {
-    if (typeof window !== "undefined") {
-      const path = window.location.pathname;
-      const isAuthPath = path.includes('/auth/');
-
-      // Don't redirect if we're already on an auth page or if the error is from a login attempt
-      if (!isAuthPath) {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        window.location.href = "/auth/login";
-      }
-    }
-  }
+  // 401 handling is done by httpClient (calls logout → ProtectedRoute redirects)
+  // No hard redirect here to avoid competing with that flow
 
   if (import.meta.env.DEV) {
     // API Error logged in development

@@ -1,0 +1,37 @@
+# Refactoring Task Tracker
+
+## Phase 1: Critical Fixes (Security + Bugs)
+- [ ] Fix devTools.js security vulnerability — guard behind DEV check
+- [ ] Remove devTools from utils/index.js barrel export
+- [ ] Fix authStore.js extendSession bug (65 → 60)
+- [ ] Extract TOKEN_KEY to shared constant, unify httpClient token access
+- [ ] Remove competing 401 redirect from errorHandler.js
+
+## Phase 2: Eliminate Duplicate Logic
+- [ ] Create consolidated validation.js module
+- [ ] Refactor formValidation.js to use validation.js
+- [ ] Refactor validators.js to re-export from validation.js
+- [ ] Refactor useFormValidation.js to use validation.js
+- [ ] Clean securityService.js — remove duplicate sanitizeInput & validateBookingData
+- [ ] Verify pricingEngine.js consumers and delete it
+- [ ] Remove duplicate getPrices from bookingService.js
+- [ ] Remove duplicated constants from mockData.js
+- [ ] Remove duplicate scroll-to-top from App.jsx
+- [ ] Clean errorCodes.js — fix 503 vs 500 ordering, remove duplicate isRetryableError
+
+## Phase 3: Architecture Improvements
+- [ ] Simplify useAuth.jsx — remove dead Context providers
+- [ ] Add response normalization to httpClient.js
+- [ ] Optimize clientService.js with pagination
+- [ ] Add cache eviction to wordpressService.js
+- [ ] Narrow cache invalidation in useAdminQueries.js
+- [ ] Add TTL eviction to paymentVerification.js
+- [ ] Add cleanup to securityService.js rateLimits
+- [ ] Optimize useTripData.js (single reduce)
+- [ ] Stabilize useRetry.js config dependency
+- [ ] Extract normalizePhone from useBookingFlow.js to validation.js
+- [ ] Remove `assets (2)` directory
+
+## Phase 4: Production Hardening
+- [ ] Add JSDoc to retryHandler.js clarifying usage
+- [ ] Fix vite.config.js treeshake setting

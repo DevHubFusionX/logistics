@@ -48,7 +48,10 @@ export default defineConfig({
     },
     rollupOptions: {
       treeshake: {
-        moduleSideEffects: false,
+        // 'no-external' is safe: tree-shakes internal side-effect-free modules
+        // while leaving third-party packages (CSS, Zustand persist, etc.) intact.
+        // moduleSideEffects: false breaks Tailwind @layer and Zustand persist.
+        moduleSideEffects: 'no-external',
         propertyReadSideEffects: false,
         tryCatchDeoptimization: false,
       },

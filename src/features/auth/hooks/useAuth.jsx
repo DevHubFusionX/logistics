@@ -1,13 +1,8 @@
-import React, { useEffect, createContext, useContext, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useAuthStore } from '../../../stores/authStore'
 
-// Keep the context for backwards compatibility if needed, 
-// but most consumers should just use the store directly later.
-const AuthStateContext = createContext()
-const AuthActionsContext = createContext()
-
 /**
- * Backwards compatible hook for auth state
+ * Hook for auth state — reads directly from Zustand store.
  */
 export const useAuthState = () => {
   const { user, isLoading, isAuthenticated } = useAuthStore()
@@ -15,7 +10,7 @@ export const useAuthState = () => {
 }
 
 /**
- * Backwards compatible hook for auth actions
+ * Hook for auth actions and role checks.
  */
 export const useAuthActions = () => {
   const store = useAuthStore()
@@ -32,17 +27,15 @@ export const useAuthActions = () => {
     hasPermission: (allowedRoles) => {
       if (!allowedRoles || allowedRoles.length === 0) return true
       const userRole = store.user?.role || 'Customer'
-      
-      // Case-insensitive inclusion check
-      return allowedRoles.some(role => 
-        role.toLowerCase() === userRole.toLowerCase()
+      return allowedRoles.some(
+        (role) => role.toLowerCase() === userRole.toLowerCase()
       )
     }
   }
 }
 
 /**
- * Combined hook for backwards compatibility
+ * Combined hook — the primary way to access auth throughout the app.
  */
 export const useAuth = () => {
   const state = useAuthState()
@@ -51,50 +44,42 @@ export const useAuth = () => {
 }
 
 /**
- * AuthProvider that manages the Zustand store lifecycle
+ * AuthProvider — manages the Zustand session lifecycle (checks, activity
+ * extension, cleanup).  No longer wraps children in React Context because
+ * all consumers read from the Zustand store directly via useAuth().
  */
 export const AuthProvider = ({ children }) => {
   const { checkSession, logout, isLoading, user } = useAuthStore()
 
   useEffect(() => {
-    // Initial session check
+    // Initial session validity check
     const isValid = checkSession()
     if (!isValid && user) logout()
     useAuthStore.setState({ isLoading: false })
 
-    // Periodic session check every 5 minutes (not every 60s)
-    const interval = setInterval(() => checkSession(), 5 * 60 * 1000)
+    // Periodic session check every 5 minutes
+    const intervalId = setInterval(() => checkSession(), 5 * 60 * 1000)
 
-    // Extend session on user activity
-    const events = ['mousedown', 'keydown', 'touchstart', 'scroll']
+    // Extend session on user activity (debounced 2 s)
+    const ACTIVITY_EVENTS = ['mousedown', 'keydown', 'touchstart', 'scroll']
     let activityTimer
     const onActivity = () => {
       clearTimeout(activityTimer)
-      activityTimer = setTimeout(() => {
-        useAuthStore.getState().extendSession()
-      }, 2000) // debounce 2s
+      activityTimer = setTimeout(
+        () => useAuthStore.getState().extendSession(),
+        2000
+      )
     }
-    events.forEach(e => window.addEventListener(e, onActivity, { passive: true }))
+    ACTIVITY_EVENTS.forEach((e) =>
+      window.addEventListener(e, onActivity, { passive: true })
+    )
 
     return () => {
-      clearInterval(interval)
+      clearInterval(intervalId)
       clearTimeout(activityTimer)
-      events.forEach(e => window.removeEventListener(e, onActivity))
+      ACTIVITY_EVENTS.forEach((e) => window.removeEventListener(e, onActivity))
     }
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Provider values for legacy consumers
-  const stateValue = useMemo(() => ({ user, loading: isLoading }), [user, isLoading])
-  const actionsValue = useMemo(() => ({
-    logout,
-    setUser: (u) => useAuthStore.getState().updateUser(u),
-  }), [])
-
-  return (
-    <AuthStateContext.Provider value={stateValue}>
-      <AuthActionsContext.Provider value={actionsValue}>
-        {children}
-      </AuthActionsContext.Provider>
-    </AuthStateContext.Provider>
-  )
+  return children
 }

@@ -1,20 +1,33 @@
 
-// Rate limiting tracker
+import { sanitizeInput } from '../utils/sanitize'
+import { validateAddress } from '../utils/validation'
+
+/** @type {Map<string, { count: number, resetTime: number }>} */
 const rateLimits = new Map()
+
+// Periodically prune entries whose window has already expired so the Map
+// doesn't grow unbounded for keys that are never re-checked.
+setInterval(() => {
+  const now = Date.now()
+  for (const [key, record] of rateLimits) {
+    if (now > record.resetTime) rateLimits.delete(key)
+  }
+}, 10 * 60 * 1000) // every 10 minutes
 
 const checkRateLimit = (key, maxRequests = 10, windowMs = 60000) => {
   const now = Date.now()
   const record = rateLimits.get(key) || { count: 0, resetTime: now + windowMs }
-  
+
   if (now > record.resetTime) {
+    // Window expired — start a fresh window
     rateLimits.set(key, { count: 1, resetTime: now + windowMs })
     return true
   }
-  
+
   if (record.count >= maxRequests) {
     return false
   }
-  
+
   record.count++
   rateLimits.set(key, record)
   return true
@@ -66,11 +79,9 @@ export const clearDraft = (key) => {
   localStorage.removeItem(`draft_${key}_ts`)
 }
 
-// Input validation
-export const sanitizeInput = (input) => {
-  if (typeof input !== 'string') return input
-  return input.replace(/[<>]/g, '')
-}
+// Input validation — use canonical sanitizeInput from utils/sanitize.js
+// Re-exported here for backward compatibility
+export { sanitizeInput }
 
 export const validateBookingData = (data) => {
   const errors = {}

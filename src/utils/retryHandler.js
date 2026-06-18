@@ -1,4 +1,18 @@
-// Retry mechanism for failed requests
+/**
+ * Manual retry mechanism for imperative operations.
+ *
+ * WHEN TO USE THIS vs TanStack Query built-in retry:
+ * - Use TanStack Query's `retry` option (configured in lib/queryClient.js) for
+ *   all data-fetching queries and mutations.  It handles backoff, cancellation,
+ *   and cache coordination automatically.
+ * - Use this module (via the `useRetry` hook) for imperative operations that
+ *   run OUTSIDE the query lifecycle: payment initialisations, file uploads,
+ *   background polling, etc.
+ *
+ * NOTE: `shouldRetry` below is the canonical retry-predicate.
+ * `isRetryableError` in utils/errorCodes.js duplicates this logic and
+ * should be removed in a future cleanup.
+ */
 
 const DEFAULT_RETRY_CONFIG = {
   maxRetries: 3,

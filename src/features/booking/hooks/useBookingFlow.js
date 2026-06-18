@@ -1,15 +1,19 @@
 import { useEffect, useCallback } from 'react'
-import { useAuth } from '@/features/auth'
+import { useAuth, useProfileQuery } from '@/features/auth'
 import { useBookingStore } from '../stores/bookingStore'
 import { useCreateBookingMutation } from './useBookingQueries'
 import { useVerifyPaymentMutation } from '@/hooks/queries/usePaymentQueries'
 import bookingService from '../services/bookingService'
 import { getUserFriendlyMessage } from '@/utils/errorCodes'
+import { normalizePhone } from '@/utils/validation'
 import toast from 'react-hot-toast'
 
 export const useBookingFlow = () => {
   const auth = useAuth()
   const user = auth?.user || null
+
+  // Fetch full profile data (has firstName, lastName, email, phoneNumber, companyName)
+  const { data: profileData } = useProfileQuery()
 
   // Zustand Store
   const {
@@ -25,12 +29,14 @@ export const useBookingFlow = () => {
   const createBookingMutation = useCreateBookingMutation()
   const verifyPaymentMutation = useVerifyPaymentMutation()
 
-  // Sync user data when user changes
+  // Sync user data when profile loads or when form is reset/empty
+  // Prefer profileData (full profile) over auth store user (minimal login payload)
   useEffect(() => {
-    if (user) {
-      syncUserToForm(user)
+    const source = profileData || user
+    if (source && (!formData.email || !formData.fullNameOrBusiness || !formData.contactPhone)) {
+      syncUserToForm(source)
     }
-  }, [user, syncUserToForm])
+  }, [profileData, user, formData.email, formData.fullNameOrBusiness, formData.contactPhone, syncUserToForm])
 
   // Handlers
   const handleLocationNext = useCallback(() => {
@@ -69,14 +75,6 @@ export const useBookingFlow = () => {
       if (!formData.cargoWeightKg || isNaN(Number(formData.cargoWeightKg))) throw new Error('Valid cargo weight is required')
       if (!formData.quantity || isNaN(Number(formData.quantity))) throw new Error('Valid quantity is required')
 
-      const normalizePhone = (phone) => {
-        if (!phone) return phone
-        const p = phone.replace(/\s+/g, '')
-        if (p.startsWith('+')) return p
-        if (p.startsWith('0')) return '+234' + p.slice(1)
-        if (p.startsWith('234')) return '+' + p
-        return '+234' + p
-      }
 
       // Build payload matching POST /bookings/ API schema
       const bookingPayload = {

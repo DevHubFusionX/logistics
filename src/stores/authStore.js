@@ -25,7 +25,7 @@ const normalizeUser = (user) => {
 
 // Token lives in sessionStorage by default (cleared on tab/browser close)
 // When rememberMe=true we also write it to localStorage so it survives restarts
-const TOKEN_KEY = 'dara_token'
+export const TOKEN_KEY = 'dara_token'
 
 const tokenStorage = {
   get: () => {
@@ -120,7 +120,7 @@ export const useAuthStore = create(
         if (!isAuthenticated) return
         const expiresIn = rememberMe
           ? 7 * 24 * 60 * 60 * 1000
-          : 8 * 60 * 65 * 1000
+          : 8 * 60 * 60 * 1000
         set({ sessionExpiresAt: Date.now() + expiresIn })
       },
 

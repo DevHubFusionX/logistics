@@ -77,8 +77,8 @@ export const getErrorCode = (error) => {
   if (status === 409) return ERROR_CODES.BOOKING_ALREADY_EXISTS
   if (status === 422) return ERROR_CODES.VALIDATION_ERROR
   if (status === 429) return ERROR_CODES.RATE_LIMIT_EXCEEDED
-  if (status >= 500) return ERROR_CODES.SERVER_ERROR
   if (status === 503) return ERROR_CODES.SERVICE_UNAVAILABLE
+  if (status >= 500) return ERROR_CODES.SERVER_ERROR
   
   // Error messages
   const message = error.message?.toLowerCase() || ''

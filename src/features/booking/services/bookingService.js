@@ -25,6 +25,8 @@ const bookingService = {
   trackShipment: (trackingNumber) =>
     httpClient.request(`/tracking/${trackingNumber}`),
 
+  // NOTE: Price fetching is the authority of pricingService.calculatePrice()
+  // This wrapper is kept for backward compat with useBookingFlow
   getPrices: (destination, weight, isAdmin = false) => {
     const path = isAdmin ? '/admin/bookings/prices' : '/bookings/prices'
     return httpClient.request(`${path}/${encodeURIComponent(destination)}/${encodeURIComponent(weight)}`)

@@ -87,29 +87,27 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-      {/* Customer Information */}
-      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
-        <div className="flex items-center gap-2.5 mb-5">
-          <div className="p-2 bg-sky-50 rounded-xl text-sky-600">
-            <User className="w-5 h-5" />
+      {/* Customer Information (Read-only Profile Confirmation) */}
+      <div className="bg-gradient-to-br from-sky-50/50 to-sky-100/20 rounded-2xl border border-sky-100/50 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.01)]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="p-2.5 bg-sky-100/80 rounded-xl text-sky-600 flex-shrink-0">
+              <User className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="text-xs font-bold text-sky-800 uppercase tracking-wider">Booking Account</h4>
+              <p className="text-base font-bold text-gray-800 mt-0.5">{formData.fullNameOrBusiness || 'Dara Customer'}</p>
+            </div>
           </div>
-          <h3 className="text-base sm:text-lg font-bold text-gray-900">Customer Information</h3>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Business Name</label>
-            <input type="text" name="fullNameOrBusiness" value={formData.fullNameOrBusiness} onChange={handleFieldChange} onBlur={() => handleBlur('fullNameOrBusiness')} className={inputClass('fullNameOrBusiness')} required />
-            <ErrorMessage error={touched.fullNameOrBusiness && errors.fullNameOrBusiness} />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Email</label>
-            <input type="email" name="email" value={formData.email} onChange={handleFieldChange} onBlur={() => handleBlur('email')} className={inputClass('email')} required />
-            <ErrorMessage error={touched.email && errors.email} />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Phone</label>
-            <input type="tel" name="contactPhone" value={formData.contactPhone} onChange={handleFieldChange} onBlur={() => handleBlur('contactPhone')} className={inputClass('contactPhone')} placeholder="+234XXXXXXXXXX" required />
-            <ErrorMessage error={touched.contactPhone && errors.contactPhone} />
+          <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm text-gray-500 font-medium border-t sm:border-t-0 pt-3 sm:pt-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-gray-400">Email:</span>
+              <span className="text-gray-700">{formData.email}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-gray-400">Phone:</span>
+              <span className="text-gray-700">{formData.contactPhone}</span>
+            </div>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ArrowLeft, ArrowRight, CheckCircle, Package, MapPin, DollarSign, Tag } from 'lucide-react'
 import { PageHeader } from '@/features/dashboard'
-import { calculateQuote } from '../../utils/pricingEngine'
 import { useBookingStore } from '@/features/booking'
 
 export default function Quotation() {
@@ -19,13 +18,15 @@ export default function Quotation() {
     return null
   }
 
-  const quote = calculateQuote(bookingData, clientId)
+  // Use the API-calculated price from the store (set by useBookingFlow)
+  const estimatedCost = location.state?.quote?.total || store.estimatedCost || 0
 
   const handleAccept = () => {
-    // Sync to store just in case
-    store.setEstimatedCost(quote.total)
-    navigate('/booking/payment', { state: { bookingData, quote, bookingId } })
+    store.setEstimatedCost(estimatedCost)
+    navigate('/booking/payment', { state: { bookingData, estimatedCost, bookingId } })
   }
+
+  const formattedPrice = Number(estimatedCost).toLocaleString()
 
   return (
     <div className="space-y-6 pb-6">
@@ -50,27 +51,27 @@ export default function Quotation() {
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
                 <span className="text-gray-600">Service Type:</span>
-                <span className="font-semibold capitalize">{bookingData.serviceType}</span>
+                <span className="font-semibold capitalize">{bookingData.serviceType || bookingData.vehicleType}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Cargo Type:</span>
-                <span className="font-semibold capitalize">{bookingData.cargoType}</span>
+                <span className="font-semibold capitalize">{bookingData.cargoType || bookingData.goodsType}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Weight:</span>
-                <span className="font-semibold">{bookingData.weight} kg</span>
+                <span className="font-semibold">{bookingData.weight || bookingData.cargoWeightKg} kg</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">From:</span>
-                <span className="font-semibold">{bookingData.pickupCity}</span>
+                <span className="font-semibold">{bookingData.pickupCity || bookingData.pickupLocation?.city}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">To:</span>
-                <span className="font-semibold">{bookingData.deliveryCity}</span>
+                <span className="font-semibold">{bookingData.deliveryCity || bookingData.dropoffLocation?.city}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Pickup Date:</span>
-                <span className="font-semibold">{bookingData.pickupDate}</span>
+                <span className="font-semibold">{bookingData.pickupDate || bookingData.estimatedPickupDate}</span>
               </div>
             </div>
 
@@ -108,55 +109,18 @@ export default function Quotation() {
               <div className="p-2 bg-blue-100 rounded-lg">
                 <DollarSign className="w-5 h-5 text-blue-600" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900">Price Breakdown</h2>
+              <h2 className="text-xl font-bold text-gray-900">Estimated Price</h2>
             </div>
           </div>
           <div className="p-6">
             <div className="space-y-3 text-sm">
-              {quote.hasClientOverride && (
-                <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
-                  <div className="flex items-center gap-2 text-green-700 mb-1">
-                    <Tag className="w-4 h-4" />
-                    <span className="text-xs font-semibold">Special Client Rate Applied</span>
-                  </div>
-                  <p className="text-xs text-green-600">Custom pricing for {quote.clientName}</p>
-                  <p className="text-xs text-green-600">Base rate: ${quote.appliedRate}/kg • Discount: {quote.discountPercentage}%</p>
-                </div>
-              )}
-              <div className="flex justify-between">
-                <span className="text-gray-600">Base Price ({bookingData.weight} kg × ${quote.appliedRate}):</span>
-                <span>${quote.basePrice}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Service ({bookingData.serviceType} {quote.serviceMultiplier}×):</span>
-                <span>${(parseFloat(quote.basePrice) * quote.serviceMultiplier).toFixed(2)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Insurance:</span>
-                <span>${quote.insurance}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Handling:</span>
-                <span>${quote.handling}</span>
-              </div>
-              {parseFloat(quote.discount) > 0 && (
-                <div className="flex justify-between text-green-600">
-                  <span>Client Discount:</span>
-                  <span>-${quote.discount}</span>
-                </div>
-              )}
-              <div className="flex justify-between border-t pt-2">
-                <span className="text-gray-600">Subtotal:</span>
-                <span>${quote.subtotal}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Tax (8%):</span>
-                <span>${quote.tax}</span>
-              </div>
-              <div className="flex justify-between text-lg font-bold border-t pt-2">
+              <div className="flex justify-between text-lg font-bold border-b pb-4">
                 <span>Total:</span>
-                <span className="text-blue-600">${quote.total}</span>
+                <span className="text-blue-600">₦{formattedPrice}</span>
               </div>
+              <p className="text-xs text-gray-500 mt-2">
+                Price includes insurance, handling, and applicable taxes. Final amount calculated by our system based on route, weight, and service type.
+              </p>
             </div>
 
             <button onClick={handleAccept} className="w-full mt-6 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-sm">

@@ -73,7 +73,7 @@ export const useBookingStore = create(
                     formData: {
                         ...formData,
                         fullNameOrBusiness: formData.fullNameOrBusiness || user.companyName || (user.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : ''),
-                        contactPhone: formData.contactPhone || user.phone || '',
+                        contactPhone: formData.contactPhone || user.phoneNumber || user.phone || '',
                         email: formData.email || user.email || ''
                     }
                 })

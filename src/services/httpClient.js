@@ -1,5 +1,5 @@
 import { ApiError, handleApiError } from '../utils/errorHandler'
-import { useAuthStore } from '../stores/authStore'
+import { useAuthStore, TOKEN_KEY } from '../stores/authStore'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
@@ -42,8 +42,8 @@ class HttpClient {
     // Read directly from storage — not from Zustand state
     // so we always get the latest value even after a refresh
     return (
-      sessionStorage.getItem('dara_token') ||
-      localStorage.getItem('dara_token') ||
+      sessionStorage.getItem(TOKEN_KEY) ||
+      localStorage.getItem(TOKEN_KEY) ||
       null
     )
   }
@@ -172,6 +172,34 @@ class HttpClient {
       handleApiError(e)
       throw e
     }
+  }
+  /**
+   * Standardise the backend's nested { error, message, data: { ... } } envelope.
+   *
+   * Usage in query hooks:
+   *   const response = await someService.getItems(params)
+   *   const { records, pagination } = httpClient.extractList(response)
+   *
+   * The raw `response.data` object is still returned for cases that need it.
+   */
+  extractData(response) {
+    // Support both { data: { data: payload } } and { data: payload }
+    return response?.data?.data ?? response?.data ?? response ?? {}
+  }
+
+  /**
+   * Extract a records array + pagination meta from a standard list response.
+   * Falls back gracefully for older endpoints that return arrays directly.
+   */
+  extractList(response) {
+    const payload = this.extractData(response)
+    const records =
+      payload?.records ??
+      payload?.bookings ??
+      payload?.data ??
+      (Array.isArray(payload) ? payload : [])
+    const pagination = payload?.pagination ?? {}
+    return { records, pagination, total: pagination.totalRecords ?? records.length }
   }
 }
 

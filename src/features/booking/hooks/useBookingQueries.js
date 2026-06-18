@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import bookingService from '../services/bookingService'
+import httpClient from '@/services/httpClient'
 
 /**
  * Hook for fetching current user's bookings
@@ -9,9 +10,8 @@ export function useBookingsQuery(params = {}) {
     queryKey: ['bookings', 'user-list', params],
     queryFn: async () => {
       const response = await bookingService.getBookings(params)
-      // Robust extraction of records from new and old API structures
-      const apiData = response.data?.data || response.data
-      return apiData?.records || apiData?.bookings || (Array.isArray(apiData) ? apiData : [])
+      const { records } = httpClient.extractList(response)
+      return records
     },
     staleTime: 5 * 60 * 1000,
   })
@@ -25,16 +25,7 @@ export function useAllBookingsQuery(params = {}) {
     queryKey: ['admin', 'all-bookings', params],
     queryFn: async () => {
       const response = await bookingService.getAdminBookings(params)
-      // Robust extraction of records from new and old API structures
-      const apiBody = response.data
-      const apiData = apiBody?.data || apiBody
-      const pagination = apiData?.pagination || {}
-      
-      return {
-        records: apiData?.records || apiData?.bookings || (Array.isArray(apiData) ? apiData : []),
-        total: pagination.totalRecords || 0,
-        pagination
-      }
+      return httpClient.extractList(response)
     },
     staleTime: 5 * 60 * 1000,
   })
@@ -53,14 +44,7 @@ export function useAdminUserBookingsQuery(userId, params = {}) {
     queryKey: ['admin', 'user-bookings', userId, params],
     queryFn: async () => {
       const response = await bookingService.getUserBookingsForAdmin(userId, params)
-      const apiBody = response.data
-      const apiData = apiBody?.data || apiBody
-      const pagination = apiData?.pagination || {}
-      
-      return {
-        records: apiData?.records || [],
-        pagination
-      }
+      return httpClient.extractList(response)
     },
     enabled: !!userId,
     staleTime: 5 * 60 * 1000,
@@ -74,10 +58,10 @@ export function useBookingQuery(id, isAdmin = false) {
   return useQuery({
     queryKey: ['booking', id, isAdmin],
     queryFn: async () => {
-      const response = isAdmin 
+      const response = isAdmin
         ? await bookingService.getAdminBookingById(id)
         : await bookingService.getBookingById(id)
-      return response.data
+      return httpClient.extractData(response)
     },
     enabled: !!id,
     staleTime: 5 * 60 * 1000,
@@ -91,50 +75,38 @@ export function useBookingMutations() {
   const queryClient = useQueryClient()
 
   const createBooking = useMutation({
-    mutationFn: async (bookingData) => {
-      const response = await bookingService.createBooking(bookingData)
-      return response.data
-    },
+    mutationFn: (bookingData) => bookingService.createBooking(bookingData),
     onSuccess: () => {
+      // Only invalidate what actually changed
       queryClient.invalidateQueries({ queryKey: ['bookings', 'user-list'] })
-      queryClient.invalidateQueries({ queryKey: ['admin'] }) // Refreshes Bookings + Analytics
+      queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
     }
   })
 
   const updateBooking = useMutation({
-    mutationFn: async ({ id, data }) => {
-      const response = await bookingService.updateBooking(id, data)
-      return response.data
-    },
-    onSuccess: (data, variables) => {
+    mutationFn: ({ id, data }) => bookingService.updateBooking(id, data),
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['booking', variables.id] })
       queryClient.invalidateQueries({ queryKey: ['bookings', 'user-list'] })
-      queryClient.invalidateQueries({ queryKey: ['admin'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
     }
   })
 
   const updateBookingStatus = useMutation({
-    mutationFn: async ({ id, status, data = {} }) => {
-      // Merge status with other update data (e.g., driverId)
-      const payload = { status, ...data }
-      const response = await bookingService.updateAdminBooking(id, payload)
-      return response.data
-    },
-    onSuccess: (data, variables) => {
+    mutationFn: ({ id, status, data = {} }) =>
+      bookingService.updateAdminBooking(id, { status, ...data }),
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['booking', variables.id] })
-      queryClient.invalidateQueries({ queryKey: ['admin'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
     }
   })
 
   const cancelBooking = useMutation({
-    mutationFn: async (id) => {
-      const response = await bookingService.cancelBooking(id)
-      return response.data
-    },
-    onSuccess: (data, id) => {
+    mutationFn: (id) => bookingService.cancelBooking(id),
+    onSuccess: (_, id) => {
       queryClient.invalidateQueries({ queryKey: ['booking', id] })
       queryClient.invalidateQueries({ queryKey: ['bookings', 'user-list'] })
-      queryClient.invalidateQueries({ queryKey: ['admin'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
     }
   })
 
@@ -142,7 +114,7 @@ export function useBookingMutations() {
 }
 
 /**
- * Individual mutation hooks for specific usage (like in useBookingFlow)
+ * Individual mutation hook for specific usage (e.g. in useBookingFlow)
  */
 export function useCreateBookingMutation() {
   const { createBooking } = useBookingMutations()
