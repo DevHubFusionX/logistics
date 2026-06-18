@@ -2,7 +2,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { CheckCircle, MapPin, Package, Calendar, FileText, Home } from 'lucide-react'
 import { ReceiptDownload, InvoiceGenerator } from '../../features/billing/components/payments'
-import { notificationService } from '../../services'
+import notificationService from '../../services/notificationService'
 
 export default function Confirmation() {
   const location = useLocation()

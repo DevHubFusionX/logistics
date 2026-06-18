@@ -1,6 +1,6 @@
 // Central export for all services
 export { default as authService } from '@/features/auth/services/authService'
-export { bookingService } from '@/features/booking'
+export { default as bookingService } from '@/features/booking/services/bookingService'
 export { default as paymentService } from './paymentService'
 export { default as fleetService } from './fleetService'
 export { default as driverService } from './driverService'

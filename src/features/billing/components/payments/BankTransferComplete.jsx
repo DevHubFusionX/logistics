@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Building2, CheckCircle, AlertCircle, Loader } from 'lucide-react'
-import { paymentService, uploadService } from '@/services'
-import { FileUpload } from '@/components/common'
+import paymentService from '@/services/paymentService'
+import uploadService from '@/services/uploadService'
+import FileUpload from '@/components/common/FileUpload'
 import toast from 'react-hot-toast'
 
 export default function BankTransferComplete({ bookingId, amount, onSuccess }) {

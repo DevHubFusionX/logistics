@@ -1,10 +1,14 @@
 import { lazy, Suspense } from 'react'
 import { useRoutes, Outlet } from 'react-router-dom'
-import { ProtectedRoute } from '../components/common'
+import ProtectedRoute from '../components/common/ProtectedRoute'
 import PublicLayout from '../components/layout/PublicLayout'
-import AuthLayout from '../components/layout/AuthLayout'
-import DashboardLayout from '../components/layout/DashboardLayout'
 import ScrollToTop from '../components/common/ScrollToTop'
+
+// Lazy-load layout shells so their heavy dependency trees
+// (dashboard, sidebar, auth forms, booking, payments, etc.)
+// never load on the public Home page.
+const AuthLayout = lazy(() => import('../components/layout/AuthLayout'))
+const DashboardLayout = lazy(() => import('../components/layout/DashboardLayout'))
 
 // Common Loading Component
 const PageLoader = () => (

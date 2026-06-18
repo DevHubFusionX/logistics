@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { LogOut, LayoutDashboard, ArrowRight, Phone, Mail, MapPin, Linkedin, Instagram } from 'lucide-react'
 import { useAuth } from '../../hooks'
-import { AnimatedLogo } from './'
+import AnimatedLogo from './AnimatedLogo'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ScheduleDemoModal } from '../../features/landing/components/landing/demo'
 

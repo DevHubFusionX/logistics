@@ -1,6 +1,17 @@
-import { DaraHero, DaraHowItWorks, DaraTrustedBy, DaraJourney, DaraServices, DaraCTA, DaraFAQ } from '../../features/landing/components/landing'
-import { SectionDivider } from '../../components/common'
+import { lazy, Suspense } from 'react'
+import DaraHero from '../../features/landing/components/landing/DaraHero'
+import SectionDivider from '../../components/common/SectionDivider'
 import SEO from '../../components/common/SEO'
+
+// Lazy-load below-the-fold sections — only DaraHero is above the fold
+const DaraHowItWorks = lazy(() => import('../../features/landing/components/landing/DaraHowItWorks'))
+const DaraTrustedBy = lazy(() => import('../../features/landing/components/landing/DaraTrustedBy'))
+const DaraServices = lazy(() => import('../../features/landing/components/landing/DaraServices'))
+const DaraJourney = lazy(() => import('../../features/landing/components/landing/DaraJourney'))
+const DaraFAQ = lazy(() => import('../../features/landing/components/landing/DaraFAQ'))
+const DaraCTA = lazy(() => import('../../features/landing/components/landing/DaraCTA'))
+
+import LazyViewportRender from '../../components/common/LazyViewportRender'
 
 export default function Home() {
   return (
@@ -28,27 +39,41 @@ export default function Home() {
 
       <DaraHero />
 
-      <DaraHowItWorks />
+      <Suspense fallback={null}>
+        <LazyViewportRender placeholderHeight="600px">
+          <DaraHowItWorks />
+        </LazyViewportRender>
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <DaraTrustedBy />
+        <LazyViewportRender placeholderHeight="400px">
+          <DaraTrustedBy />
+        </LazyViewportRender>
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <DaraServices />
+        <LazyViewportRender placeholderHeight="600px">
+          <DaraServices />
+        </LazyViewportRender>
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <DaraJourney />
+        <LazyViewportRender placeholderHeight="600px">
+          <DaraJourney />
+        </LazyViewportRender>
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <DaraFAQ />
+        <LazyViewportRender placeholderHeight="500px">
+          <DaraFAQ />
+        </LazyViewportRender>
 
-      <SectionDivider />
+        <SectionDivider />
 
-      <DaraCTA />
+        <LazyViewportRender placeholderHeight="300px">
+          <DaraCTA />
+        </LazyViewportRender>
+      </Suspense>
     </>
   )
 }

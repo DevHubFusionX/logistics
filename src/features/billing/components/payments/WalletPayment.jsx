@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Wallet, AlertCircle, CheckCircle, Loader } from 'lucide-react'
-import { paymentService } from '@/services'
+import paymentService from '@/services/paymentService'
 import toast from 'react-hot-toast'
 
 export default function WalletPayment({ bookingId, amount, onSuccess, onError }) {

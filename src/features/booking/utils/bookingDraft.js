@@ -1,4 +1,4 @@
-import { securityService } from '@/services'
+import securityService from '@/services/securityService'
 
 const DRAFT_KEY = 'booking_draft'
 const DRAFT_EXPIRY_HOURS = 24

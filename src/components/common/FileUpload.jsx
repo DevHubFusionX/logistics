@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Upload, X, File, CheckCircle, AlertCircle } from 'lucide-react'
-import { uploadService } from '@/services'
+import uploadService from '@/services/uploadService'
 import toast from 'react-hot-toast'
 
 export default function FileUpload({ 

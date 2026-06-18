@@ -1,4 +1,4 @@
-export { useAuth, AuthProvider } from '@/features/auth'
+export { useAuth, AuthProvider } from '@/features/auth/hooks/useAuth'
 export { useLogisticsShortcuts } from './useKeyboardShortcuts'
 export { usePaymentStatus } from './usePaymentStatus'
 export { usePaymentVerification } from './usePaymentVerification'

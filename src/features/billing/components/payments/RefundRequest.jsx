@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AlertCircle, Send, X } from 'lucide-react'
-import { paymentService } from '@/services'
+import paymentService from '@/services/paymentService'
 import toast from 'react-hot-toast'
 
 export default function RefundRequest({ paymentId, amount, onSuccess, onClose }) {

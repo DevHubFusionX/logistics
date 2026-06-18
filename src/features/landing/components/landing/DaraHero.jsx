@@ -41,7 +41,7 @@ export default function DaraHero() {
         loop
         muted
         playsInline
-        preload="none"
+        preload="metadata"
         className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none opacity-90"
       >
         <source

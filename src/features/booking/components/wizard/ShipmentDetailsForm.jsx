@@ -2,7 +2,7 @@ import { User, MapPin, Truck, Package, ArrowRight, AlertCircle } from 'lucide-re
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { validateField, getValidationErrors } from '@/utils/formValidation'
-import { securityService } from '@/services'
+import securityService from '@/services/securityService'
 import AddressBookSelector from './AddressBookSelector'
 import FormSelect from './FormSelect'
 

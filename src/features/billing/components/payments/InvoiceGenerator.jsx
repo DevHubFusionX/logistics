@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { FileText, Download, Mail, Loader } from 'lucide-react'
-import { paymentService } from '@/services'
+import paymentService from '@/services/paymentService'
 import toast from 'react-hot-toast'
 
 export default function InvoiceGenerator({ bookingId, email }) {
