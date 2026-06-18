@@ -8,20 +8,44 @@ export default function CookieConsent() {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    const consent = localStorage.getItem(COOKIE_KEY)
-    if (!consent) {
+    const consentString = localStorage.getItem(COOKIE_KEY)
+    if (consentString) {
+      try {
+        const consent = JSON.parse(consentString)
+        const ageInMs = Date.now() - consent.timestamp
+        const thirtyDaysInMs = 30 * 24 * 60 * 60 * 1000
+        
+        if (ageInMs > thirtyDaysInMs) {
+          // Expired, clear and show banner
+          localStorage.removeItem(COOKIE_KEY)
+          const t = setTimeout(() => setVisible(true), 1500)
+          return () => clearTimeout(t)
+        }
+      } catch (e) {
+        // Fallback for old simple string or invalid JSON
+        localStorage.removeItem(COOKIE_KEY)
+        const t = setTimeout(() => setVisible(true), 1500)
+        return () => clearTimeout(t)
+      }
+    } else {
       const t = setTimeout(() => setVisible(true), 1500)
       return () => clearTimeout(t)
     }
   }, [])
 
   const accept = () => {
-    localStorage.setItem(COOKIE_KEY, 'accepted')
+    localStorage.setItem(
+      COOKIE_KEY,
+      JSON.stringify({ value: 'accepted', timestamp: Date.now() })
+    )
     setVisible(false)
   }
 
   const decline = () => {
-    localStorage.setItem(COOKIE_KEY, 'declined')
+    localStorage.setItem(
+      COOKIE_KEY,
+      JSON.stringify({ value: 'declined', timestamp: Date.now() })
+    )
     setVisible(false)
   }
 
@@ -46,12 +70,19 @@ export default function CookieConsent() {
                 Cookie Settings
               </p>
               <p className="font-body-unique text-slate-400 text-xs leading-relaxed">
-                We use cookies to improve your experience and analyze our traffic. By clicking "Accept All", you agree to our use of cookies. Read our{' '}
+                We use cookies to optimize our website, analyze traffic, and personalize services. By clicking "Accept All", you consent to our use of cookies. Read our{' '}
                 <Link
                   to="/privacy"
                   className="text-sky-400 hover:text-sky-300 underline underline-offset-2 transition-colors font-semibold"
                 >
                   Privacy Policy
+                </Link>{' '}
+                and{' '}
+                <Link
+                  to="/terms"
+                  className="text-sky-400 hover:text-sky-300 underline underline-offset-2 transition-colors font-semibold"
+                >
+                  Terms of Service
                 </Link>
                 .
               </p>

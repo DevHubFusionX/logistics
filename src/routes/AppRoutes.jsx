@@ -40,6 +40,7 @@ const Blog = lazy(() => import('../pages/public/Blog'))
 const BlogPost = lazy(() => import('../pages/public/BlogPost'))
 const Contact = lazy(() => import('../pages/public/Contact'))
 const Privacy = lazy(() => import('../pages/public/Privacy'))
+const Terms = lazy(() => import('../pages/public/Terms'))
 
 // --- Auth Pages ---
 const SignUp = lazy(() => import('../pages/auth/SignUp'))
@@ -114,7 +115,8 @@ const routesConfig = [
       { path: '/contact', element: <Contact /> },
       { path: '/tracking', element: <Tracking /> },
       { path: '/booking-calculator', element: <BookingCalculatorPage /> },
-      { path: '/privacy', element: <Privacy /> }
+      { path: '/privacy', element: <Privacy /> },
+      { path: '/terms', element: <Terms /> }
     ]
   },
 
