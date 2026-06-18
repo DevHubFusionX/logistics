@@ -46,7 +46,7 @@ export default function DaraHero() {
         className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none opacity-90"
       >
         <source
-          src="https://wp.allylogistics.com/wp-content/uploads/2019/03/ally_bg_video_highres_720.mp4"
+          src="/hero.mp4"
           type="video/mp4"
         />
         Your browser does not support the video tag.
