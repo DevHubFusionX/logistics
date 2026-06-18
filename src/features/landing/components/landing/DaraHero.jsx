@@ -63,8 +63,7 @@ export default function DaraHero() {
       >
 
         {/* Title / Headline (Space Grotesk) using info from Data.jsx with Playful Underline */}
-        <motion.h1
-          variants={itemVariants}
+        <h1
           className="font-heading-unique tracking-tight leading-[1.08] text-white mb-6 max-w-4xl"
           style={{ fontSize: 'clamp(2.0rem, 4.8vw, 3.8rem)' }}
         >
@@ -86,7 +85,7 @@ export default function DaraHero() {
             </svg>
           </span>{' '}
           {heroData.title.suffix}
-        </motion.h1>
+        </h1>
 
         {/* Subtitle / Description (Outfit) using info from Data.jsx */}
         <motion.div
