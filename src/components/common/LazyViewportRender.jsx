@@ -1,10 +1,13 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, Suspense } from 'react'
 
 /**
  * LazyViewportRender delays rendering of below-the-fold components
  * until they are close to entering the viewport. Since React.lazy
  * components only fetch their JS chunks when rendered, this completely
  * prevents below-the-fold JS chunks from loading during initial page mount.
+ * 
+ * Local Suspense boundary ensures that when a component suspends during chunk loading,
+ * the layout maintains its height instead of collapsing to 0px (avoiding page jumps).
  */
 export default function LazyViewportRender({ children, placeholderHeight = '200px' }) {
   const [shouldRender, setShouldRender] = useState(false)
@@ -39,5 +42,11 @@ export default function LazyViewportRender({ children, placeholderHeight = '200p
     }
   }, [])
 
-  return shouldRender ? children : <div ref={ref} style={{ minHeight: placeholderHeight, width: '100%' }} />
+  return shouldRender ? (
+    <Suspense fallback={<div style={{ minHeight: placeholderHeight, width: '100%' }} />}>
+      {children}
+    </Suspense>
+  ) : (
+    <div ref={ref} style={{ minHeight: placeholderHeight, width: '100%' }} />
+  )
 }

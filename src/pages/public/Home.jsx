@@ -39,41 +39,39 @@ export default function Home() {
 
       <DaraHero />
 
-      <Suspense fallback={null}>
-        <LazyViewportRender placeholderHeight="600px">
-          <DaraHowItWorks />
-        </LazyViewportRender>
+      <LazyViewportRender placeholderHeight="600px">
+        <DaraHowItWorks />
+      </LazyViewportRender>
 
-        <SectionDivider />
+      <SectionDivider />
 
-        <LazyViewportRender placeholderHeight="400px">
-          <DaraTrustedBy />
-        </LazyViewportRender>
+      <LazyViewportRender placeholderHeight="400px">
+        <DaraTrustedBy />
+      </LazyViewportRender>
 
-        <SectionDivider />
+      <SectionDivider />
 
-        <LazyViewportRender placeholderHeight="600px">
-          <DaraServices />
-        </LazyViewportRender>
+      <LazyViewportRender placeholderHeight="600px">
+        <DaraServices />
+      </LazyViewportRender>
 
-        <SectionDivider />
+      <SectionDivider />
 
-        <LazyViewportRender placeholderHeight="600px">
-          <DaraJourney />
-        </LazyViewportRender>
+      <LazyViewportRender placeholderHeight="600px">
+        <DaraJourney />
+      </LazyViewportRender>
 
-        <SectionDivider />
+      <SectionDivider />
 
-        <LazyViewportRender placeholderHeight="500px">
-          <DaraFAQ />
-        </LazyViewportRender>
+      <LazyViewportRender placeholderHeight="500px">
+        <DaraFAQ />
+      </LazyViewportRender>
 
-        <SectionDivider />
+      <SectionDivider />
 
-        <LazyViewportRender placeholderHeight="300px">
-          <DaraCTA />
-        </LazyViewportRender>
-      </Suspense>
+      <LazyViewportRender placeholderHeight="300px">
+        <DaraCTA />
+      </LazyViewportRender>
     </>
   )
 }
