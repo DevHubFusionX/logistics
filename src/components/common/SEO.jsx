@@ -19,7 +19,7 @@ export default function SEO({
   const siteName = 'Dara Express'
   const fullTitle = title
     ? `${title} | Dara Express`
-    : 'Dara Express — Nigeria\'s Leading Cold Chain Logistics & Reefer Trucks'
+    : 'Dara Express — Cold Chain Logistics & Haulage Company in Nigeria'
 
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl
   const fullImage = `${siteUrl}${ogImage}`

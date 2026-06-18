@@ -11,8 +11,8 @@ import {
 export const heroData = {
     title: {
         prefix: "Nigeria's Leading",
-        highlight: "Cold Chain",
-        suffix: "Logistics Partner"
+        highlight: "Cold Chain Logistics",
+        suffix: "and Reefer Haulage Company"
     },
     description: "Temperature-controlled transportation and cold storage solutions for food, pharmaceutical, and FMCG businesses across Nigeria.\n\nWith a network of over 120 refrigerated trucks, real-time shipment visibility, and strict temperature compliance, Dara helps businesses move sensitive products safely, efficiently, and on time.",
     features: [

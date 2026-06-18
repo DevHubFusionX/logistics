@@ -74,4 +74,20 @@
     <priority>0.60</priority>
   </url>
 
+  <!-- Privacy: legal pages -->
+  <url>
+    <loc>https://daraexpress.com/privacy</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+
+  <!-- Terms: legal pages -->
+  <url>
+    <loc>https://daraexpress.com/terms</loc>
+    <lastmod>2026-06-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.30</priority>
+  </url>
+
 </urlset>

@@ -1,4 +1,4 @@
-import { DaraHero, DaraHowItWorks, DaraTrustedBy, DaraJourney, DaraServices, DaraCTA } from '../../features/landing/components/landing'
+import { DaraHero, DaraHowItWorks, DaraTrustedBy, DaraJourney, DaraServices, DaraCTA, DaraFAQ } from '../../features/landing/components/landing'
 import { SectionDivider } from '../../components/common'
 import SEO from '../../components/common/SEO'
 
@@ -41,6 +41,10 @@ export default function Home() {
       <SectionDivider />
 
       <DaraJourney />
+
+      <SectionDivider />
+
+      <DaraFAQ />
 
       <SectionDivider />
 
