@@ -76,8 +76,8 @@ export default function AppLayout({ children }) {
           className={`flex-1 transition-all duration-300 overflow-y-auto ${isMobile
             ? 'w-full ml-0'
             : sidebarCollapsed
-              ? 'ml-[4.5rem]'
-              : 'ml-72'
+              ? 'ml-16'
+              : 'ml-64'
             }`}
         >
           <div className="p-3 sm:p-4 lg:p-6 min-h-full">

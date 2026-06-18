@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { validateField, getValidationErrors } from '@/utils/formValidation'
 import { securityService } from '@/services'
 import AddressBookSelector from './AddressBookSelector'
+import FormSelect from './FormSelect'
 
 export default function ShipmentDetailsForm({ formData, onChange, onNestedChange, onSubmit }) {
   const navigate = useNavigate()
@@ -50,39 +51,63 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
 
   const ErrorMessage = ({ error }) => (
     error ? (
-      <div className="flex items-center gap-1 mt-1 text-red-600 text-xs">
+      <div className="flex items-center gap-1 mt-1 text-red-655 text-xs">
         <AlertCircle className="w-3 h-3" />
         <span>{error}</span>
       </div>
     ) : null
   )
 
-  const inputClass = (fieldName) => `w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 ${touched[fieldName] && errors[fieldName] ? 'border-red-500 bg-red-50' : 'border-gray-300'
+  const inputClass = (fieldName) => `w-full px-4 py-3 border rounded-xl text-sm font-medium outline-none transition-all duration-205
+    ${touched[fieldName] && errors[fieldName]
+      ? 'border-red-300 bg-red-50/50 text-red-900 focus:ring-4 focus:ring-red-500/5'
+      : 'border-gray-200 bg-white text-gray-900 focus:border-sky-400 focus:ring-4 focus:ring-sky-500/5 hover:border-gray-300'
     }`
+
+  const cityOptions = [
+    { value: 'Lagos', label: 'Lagos' },
+    { value: 'Abuja', label: 'Abuja' },
+    { value: 'Warri', label: 'Warri' },
+    { value: 'Benin City', label: 'Benin City' },
+    { value: 'Enugu', label: 'Enugu' },
+    { value: 'Port Harcourt', label: 'Port Harcourt' }
+  ]
+
+  const goodsOptions = [
+    { value: 'Frozen Foods', label: 'Frozen Foods' },
+    { value: 'Pharmaceuticals', label: 'Pharmaceuticals' },
+    { value: 'General Cargo', label: 'General Cargo' }
+  ]
+
+  const vehicleOptions = [
+    { value: '5 Tons', label: '5 Tons' },
+    { value: '10 Tons', label: '10 Tons' },
+    { value: '15 Tons', label: '15 Tons' }
+  ]
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
       {/* Customer Information */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <User className="w-5 h-5 text-blue-600" />
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="p-2 bg-sky-50 rounded-xl text-sky-600">
+            <User className="w-5 h-5" />
           </div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">Customer Information</h3>
+          <h3 className="text-base sm:text-lg font-bold text-gray-900">Customer Information</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Business Name</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Business Name</label>
             <input type="text" name="fullNameOrBusiness" value={formData.fullNameOrBusiness} onChange={handleFieldChange} onBlur={() => handleBlur('fullNameOrBusiness')} className={inputClass('fullNameOrBusiness')} required />
             <ErrorMessage error={touched.fullNameOrBusiness && errors.fullNameOrBusiness} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Email</label>
             <input type="email" name="email" value={formData.email} onChange={handleFieldChange} onBlur={() => handleBlur('email')} className={inputClass('email')} required />
             <ErrorMessage error={touched.email && errors.email} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Phone</label>
             <input type="tel" name="contactPhone" value={formData.contactPhone} onChange={handleFieldChange} onBlur={() => handleBlur('contactPhone')} className={inputClass('contactPhone')} placeholder="+234XXXXXXXXXX" required />
             <ErrorMessage error={touched.contactPhone && errors.contactPhone} />
           </div>
@@ -90,65 +115,64 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
       </div>
 
       {/* Pickup Details */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-2 bg-green-100 rounded-lg">
-            <MapPin className="w-5 h-5 text-green-600" />
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="p-2 bg-emerald-50 rounded-xl text-emerald-600">
+            <MapPin className="w-5 h-5" />
           </div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">Pickup Details</h3>
+          <h3 className="text-base sm:text-lg font-bold text-gray-900">Pickup Details</h3>
         </div>
         <AddressBookSelector
           currentCity={formData.pickupLocation.city}
           onSelect={(addr) => {
             onNestedChange('pickupPerson', 'name', addr.contact_name);
             onNestedChange('pickupPerson', 'phone', addr.phone);
+            onNestedChange('dropoffLocation', 'city', addr.city);
             onNestedChange('pickupLocation', 'address', addr.street);
             onNestedChange('pickupLocation', 'city', addr.city);
             onNestedChange('pickupLocation', 'state', addr.state);
           }}
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4 mt-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Person Name</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Pickup Person Name</label>
             <input type="text" value={formData.pickupPerson.name} onChange={(e) => handleNestedFieldChange('pickupPerson', 'name', e.target.value)} onBlur={() => handleBlur('pickupPersonName')} className={inputClass('pickupPersonName')} required />
             <ErrorMessage error={touched.pickupPersonName && errors.pickupPersonName} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Phone</label>
             <input type="tel" value={formData.pickupPerson.phone} onChange={(e) => handleNestedFieldChange('pickupPerson', 'phone', e.target.value)} onBlur={() => handleBlur('pickupPersonPhone')} className={inputClass('pickupPersonPhone')} placeholder="+234XXXXXXXXXX" required />
             <ErrorMessage error={touched.pickupPersonPhone && errors.pickupPersonPhone} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Email</label>
             <input type="email" value={formData.pickupPerson.email} onChange={(e) => handleNestedFieldChange('pickupPerson', 'email', e.target.value)} onBlur={() => handleBlur('pickupPersonEmail')} className={inputClass('pickupPersonEmail')} required />
             <ErrorMessage error={touched.pickupPersonEmail && errors.pickupPersonEmail} />
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div className="sm:col-span-2 md:col-span-3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Address</label>
             <input type="text" value={formData.pickupLocation.address} onChange={(e) => handleNestedFieldChange('pickupLocation', 'address', e.target.value)} onBlur={() => handleBlur('pickupAddress')} className={inputClass('pickupAddress')} placeholder="Full street address (min 10 characters)" required />
             <ErrorMessage error={touched.pickupAddress && errors.pickupAddress} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <select value={formData.pickupLocation.city || 'Lagos'} onChange={(e) => handleNestedFieldChange('pickupLocation', 'city', e.target.value)} onBlur={() => handleBlur('pickupCity')} className={inputClass('pickupCity')} required>
-              <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja</option>
-              <option value="Warri">Warri</option>
-              <option value="Benin City">Benin City</option>
-              <option value="Enugu">Enugu</option>
-              <option value="Port Harcourt">Port Harcourt</option>
-            </select>
-            <ErrorMessage error={touched.pickupCity && errors.pickupCity} />
+            <FormSelect
+              label="City"
+              value={formData.pickupLocation.city || 'Lagos'}
+              onChange={(value) => handleNestedFieldChange('pickupLocation', 'city', value)}
+              options={cityOptions}
+              placeholder="Select City..."
+              error={touched.pickupCity && errors.pickupCity}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">State</label>
             <input type="text" value={formData.pickupLocation.state} onChange={(e) => handleNestedFieldChange('pickupLocation', 'state', e.target.value)} onBlur={() => handleBlur('pickupState')} className={inputClass('pickupState')} required />
             <ErrorMessage error={touched.pickupState && errors.pickupState} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Pickup Date</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Pickup Date</label>
             <input type="datetime-local" name="estimatedPickupDate" value={formData.estimatedPickupDate} onChange={handleFieldChange} onBlur={() => handleBlur('estimatedPickupDate')} className={inputClass('estimatedPickupDate')} required />
             <ErrorMessage error={touched.estimatedPickupDate && errors.estimatedPickupDate} />
           </div>
@@ -156,12 +180,12 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
       </div>
 
       {/* Delivery Details */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-2 bg-orange-100 rounded-lg">
-            <Truck className="w-5 h-5 text-orange-600" />
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="p-2 bg-amber-50 rounded-xl text-amber-600">
+            <Truck className="w-5 h-5" />
           </div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">Delivery Details</h3>
+          <h3 className="text-base sm:text-lg font-bold text-gray-900">Delivery Details</h3>
         </div>
         <AddressBookSelector
           currentCity={formData.dropoffLocation.city}
@@ -173,49 +197,46 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
             onNestedChange('dropoffLocation', 'state', addr.state);
           }}
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4 mt-3">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Receiver Name</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Receiver Name</label>
             <input type="text" value={formData.receiverPerson.name} onChange={(e) => handleNestedFieldChange('receiverPerson', 'name', e.target.value)} onBlur={() => handleBlur('receiverPersonName')} className={inputClass('receiverPersonName')} required />
             <ErrorMessage error={touched.receiverPersonName && errors.receiverPersonName} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Phone</label>
             <input type="tel" value={formData.receiverPerson.phone} onChange={(e) => handleNestedFieldChange('receiverPerson', 'phone', e.target.value)} onBlur={() => handleBlur('receiverPersonPhone')} className={inputClass('receiverPersonPhone')} placeholder="+234XXXXXXXXXX" required />
             <ErrorMessage error={touched.receiverPersonPhone && errors.receiverPersonPhone} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Email</label>
             <input type="email" value={formData.receiverPerson.email} onChange={(e) => handleNestedFieldChange('receiverPerson', 'email', e.target.value)} onBlur={() => handleBlur('receiverPersonEmail')} className={inputClass('receiverPersonEmail')} required />
             <ErrorMessage error={touched.receiverPersonEmail && errors.receiverPersonEmail} />
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div className="sm:col-span-2 md:col-span-3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Address</label>
             <input type="text" value={formData.dropoffLocation.address} onChange={(e) => handleNestedFieldChange('dropoffLocation', 'address', e.target.value)} onBlur={() => handleBlur('dropoffAddress')} className={inputClass('dropoffAddress')} placeholder="Full street address (min 10 characters)" required />
             <ErrorMessage error={touched.dropoffAddress && errors.dropoffAddress} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
-            <select value={formData.dropoffLocation.city} onChange={(e) => handleNestedFieldChange('dropoffLocation', 'city', e.target.value)} onBlur={() => handleBlur('dropoffCity')} className={inputClass('dropoffCity')} required>
-              <option value="">Select City...</option>
-              <option value="Lagos">Lagos</option>
-              <option value="Abuja">Abuja</option>
-              <option value="Warri">Warri</option>
-              <option value="Benin City">Benin City</option>
-              <option value="Enugu">Enugu</option>
-              <option value="Port Harcourt">Port Harcourt</option>
-            </select>
-            <ErrorMessage error={touched.dropoffCity && errors.dropoffCity} />
+            <FormSelect
+              label="City"
+              value={formData.dropoffLocation.city}
+              onChange={(value) => handleNestedFieldChange('dropoffLocation', 'city', value)}
+              options={cityOptions}
+              placeholder="Select City..."
+              error={touched.dropoffCity && errors.dropoffCity}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">State</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">State</label>
             <input type="text" value={formData.dropoffLocation.state} onChange={(e) => handleNestedFieldChange('dropoffLocation', 'state', e.target.value)} onBlur={() => handleBlur('dropoffState')} className={inputClass('dropoffState')} required />
             <ErrorMessage error={touched.dropoffState && errors.dropoffState} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Date</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Delivery Date</label>
             <input type="datetime-local" name="estimatedDeliveryDate" value={formData.estimatedDeliveryDate} onChange={handleFieldChange} onBlur={() => handleBlur('estimatedDeliveryDate')} className={inputClass('estimatedDeliveryDate')} required />
             <ErrorMessage error={touched.estimatedDeliveryDate && errors.estimatedDeliveryDate} />
           </div>
@@ -223,70 +244,77 @@ export default function ShipmentDetailsForm({ formData, onChange, onNestedChange
       </div>
 
       {/* Cargo Details */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 shadow-sm">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="p-2 bg-purple-100 rounded-lg">
-            <Package className="w-5 h-5 text-purple-600" />
+      <div className="bg-white rounded-2xl border border-gray-100 p-4 sm:p-6 shadow-[0_8px_30px_rgba(0,0,0,0.02)]">
+        <div className="flex items-center gap-2.5 mb-5">
+          <div className="p-2 bg-purple-50 rounded-xl text-purple-600">
+            <Package className="w-5 h-5" />
           </div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">Cargo Information</h3>
+          <h3 className="text-base sm:text-lg font-bold text-gray-900">Cargo Information</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Goods Type</label>
-            <select name="goodsType" value={formData.goodsType} onChange={handleFieldChange} onBlur={() => handleBlur('goodsType')} className={inputClass('goodsType')} required>
-              <option value="">Select...</option>
-              <option value="Frozen Foods">Frozen Foods</option>
-              <option value="Pharmaceuticals">Pharmaceuticals</option>
-              <option value="General Cargo">General Cargo</option>
-            </select>
-            <ErrorMessage error={touched.goodsType && errors.goodsType} />
+            <FormSelect
+              label="Goods Type"
+              value={formData.goodsType}
+              onChange={(value) => handleFieldChange({ target: { name: 'goodsType', value } })}
+              options={goodsOptions}
+              placeholder="Select..."
+              error={touched.goodsType && errors.goodsType}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Weight (kg)</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Weight (kg)</label>
             <input type="number" step="0.1" name="cargoWeightKg" value={formData.cargoWeightKg} onChange={handleFieldChange} onBlur={() => handleBlur('cargoWeightKg')} className={inputClass('cargoWeightKg')} placeholder="0.1 - 50,000" required />
             <ErrorMessage error={touched.cargoWeightKg && errors.cargoWeightKg} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Quantity</label>
             <input type="number" name="quantity" value={formData.quantity} onChange={handleFieldChange} onBlur={() => handleBlur('quantity')} className={inputClass('quantity')} placeholder="1 - 1,000" required />
             <ErrorMessage error={touched.quantity && errors.quantity} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
-            <select name="vehicleType" value={formData.vehicleType} onChange={handleFieldChange} onBlur={() => handleBlur('vehicleType')} className={inputClass('vehicleType')} required>
-              <option value="">Select...</option>
-              <option value="5 Tons">5 Tons</option>
-              <option value="10 Tons">10 Tons</option>
-              <option value="15 Tons">15 Tons</option>
-            </select>
-            <ErrorMessage error={touched.vehicleType && errors.vehicleType} />
+            <FormSelect
+              label="Vehicle Type"
+              value={formData.vehicleType}
+              onChange={(value) => handleFieldChange({ target: { name: 'vehicleType', value } })}
+              options={vehicleOptions}
+              placeholder="Select..."
+              error={touched.vehicleType && errors.vehicleType}
+            />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Temperature (°C)</label>
-            <input type="number" name="tempControlCelsius" value={formData.tempControlCelsius} onChange={handleFieldChange} className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Temperature (°C)</label>
+            <input type="number" name="tempControlCelsius" value={formData.tempControlCelsius} onChange={handleFieldChange} className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-500/5 hover:border-gray-300 transition-all duration-200" />
           </div>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 pt-4 sm:pt-6">
-            <label className="flex items-center gap-2">
-              <input type="checkbox" name="isFragile" checked={formData.isFragile} onChange={handleFieldChange} className="rounded" />
-              <span className="text-sm font-medium text-gray-700">Fragile</span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-5">
+            <label className="flex items-center gap-2 select-none cursor-pointer">
+              <input type="checkbox" name="isFragile" checked={formData.isFragile} onChange={handleFieldChange} className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-gray-300" />
+              <span className="text-sm font-semibold text-gray-700">Fragile</span>
             </label>
-            <label className="flex items-center gap-2">
-              <input type="checkbox" name="isPerishable" checked={formData.isPerishable} onChange={handleFieldChange} className="rounded" />
-              <span className="text-sm font-medium text-gray-700">Perishable</span>
+            <label className="flex items-center gap-2 select-none cursor-pointer">
+              <input type="checkbox" name="isPerishable" checked={formData.isPerishable} onChange={handleFieldChange} className="w-4 h-4 rounded text-sky-600 focus:ring-sky-500 border-gray-300" />
+              <span className="text-sm font-semibold text-gray-700">Perishable</span>
             </label>
           </div>
           <div className="sm:col-span-2 md:col-span-3">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
-            <textarea name="notes" value={formData.notes} onChange={handleFieldChange} rows="3" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Additional instructions..."></textarea>
+            <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">Notes</label>
+            <textarea name="notes" value={formData.notes} onChange={handleFieldChange} rows="3" className="w-full px-4 py-3 border border-gray-200 rounded-xl text-sm font-medium outline-none focus:border-sky-400 focus:ring-4 focus:ring-sky-500/5 hover:border-gray-300 transition-all duration-200" placeholder="Additional instructions..."></textarea>
           </div>
         </div>
       </div>
 
       <div className="flex flex-col sm:flex-row gap-3">
-        <button type="button" onClick={() => navigate('/my-bookings')} className="px-4 sm:px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base">
+        <button
+          type="button"
+          onClick={() => navigate('/my-bookings')}
+          className="px-4 sm:px-6 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-gray-655 text-sm sm:text-base cursor-pointer"
+        >
           Cancel
         </button>
-        <button type="submit" className="flex-1 flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold shadow-sm text-sm sm:text-base">
+        <button
+          type="submit"
+          className="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-500 hover:to-sky-600 active:scale-[0.99] text-white py-3 rounded-xl font-bold shadow-sm shadow-sky-500/10 transition-all duration-200 text-sm sm:text-base cursor-pointer"
+        >
           Continue to Review <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
         </button>
       </div>

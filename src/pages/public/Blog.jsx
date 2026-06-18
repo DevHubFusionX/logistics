@@ -3,6 +3,7 @@ import { Calendar, User, ArrowRight, Clock, Search, Loader2 } from 'lucide-react
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { wordpressApi, stripHtml, formatDate, calculateReadTime } from '../../services/wordpressService'
+import SEO from '../../components/common/SEO'
 
 // Fallback data for when WordPress API is unavailable
 const fallbackPosts = [
@@ -128,6 +129,25 @@ export default function Blog() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <SEO
+        title="Cold Chain Logistics Blog — Nigeria Freight & Pharma Insights"
+        description="Expert insights on cold chain logistics Nigeria, pharma transport, frozen food haulage, and refrigerated trucking from Dara Express — Nigeria's #1 reefer truck company."
+        keywords="cold chain logistics blog Nigeria, pharma logistics insights, frozen food transport blog, reefer trucks Nigeria news, logistics company Nigeria articles, cold chain best practices"
+        canonical="/blog"
+        breadcrumbs={[{ name: 'Blog', url: '/blog' }]}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Blog',
+          'name': 'Dara Express Cold Chain Knowledge Hub',
+          'description': 'Expert insights on cold chain logistics, pharma transport, frozen food haulage and reefer trucking across Nigeria.',
+          'url': 'https://daraexpress.com/blog',
+          'publisher': {
+            '@type': 'Organization',
+            'name': 'Dara Express',
+            'logo': { '@type': 'ImageObject', 'url': 'https://daraexpress.com/og-image.png?v=2' }
+          }
+        }}
+      />
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-6xl text-center">

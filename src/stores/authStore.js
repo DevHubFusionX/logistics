@@ -120,7 +120,7 @@ export const useAuthStore = create(
         if (!isAuthenticated) return
         const expiresIn = rememberMe
           ? 7 * 24 * 60 * 60 * 1000
-          : 8 * 60 * 60 * 1000
+          : 8 * 60 * 65 * 1000
         set({ sessionExpiresAt: Date.now() + expiresIn })
       },
 

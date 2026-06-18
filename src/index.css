@@ -1,14 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@200;300;400;500;600;700;800;900&family=Mulish:wght@300;400;500;600;700;800;900&display=swap');
+/* Google Fonts loaded non-blocking via index.html <link> tags */
+/* Fallback font-families defined below for zero-FOIT */
 @import 'tailwindcss';
 @import './theme.css';
 /* @import './styles/design-system.css'; */
 
+/* ─── Font-display overrides: ensure text visible before web fonts load ─── */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-display: swap;
+  src: local('Space Grotesk');
+}
+@font-face {
+  font-family: 'Outfit';
+  font-display: swap;
+  src: local('Outfit');
+}
+@font-face {
+  font-family: 'Mulish';
+  font-display: swap;
+  src: local('Mulish');
+}
+
 .font-heading-unique {
-  font-family: 'Space Grotesk', sans-serif;
+  /* Space Grotesk with system font fallback — renders immediately */
+  font-family: 'Space Grotesk', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 .font-body-unique {
-  font-family: 'Outfit', sans-serif;
+  /* Outfit with system font fallback */
+  font-family: 'Outfit', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 
@@ -30,14 +50,14 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Mulish', sans-serif;
+  font-family: 'Mulish', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 600;
 }
 
 /* Buttons use Mulish for consistency */
 button,
 .btn {
-  font-family: 'Mulish', sans-serif;
+  font-family: 'Mulish', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   font-weight: 500;
 }
 

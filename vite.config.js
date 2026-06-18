@@ -40,7 +40,18 @@ export default defineConfig({
     cssMinify: true,
     cssCodeSplit: true,
     reportCompressedSize: false,
+    // Drop console.log and debugger statements in production (reduces TBT)
+    esbuild: {
+      drop: ['console', 'debugger'],
+      pure: ['console.log', 'console.debug', 'console.warn', 'console.error'],
+      legalComments: 'none',
+    },
     rollupOptions: {
+      treeshake: {
+        moduleSideEffects: false,
+        propertyReadSideEffects: false,
+        tryCatchDeoptimization: false,
+      },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/') || id.includes('node_modules/scheduler/')) {
@@ -64,11 +75,18 @@ export default defineConfig({
           if (id.includes('node_modules/react-paystack/')) {
             return 'vendor-paystack'
           }
+          // Heavy maps library — only used in admin, never load on public pages
+          if (id.includes('node_modules/react-simple-maps/') || id.includes('node_modules/d3')) {
+            return 'vendor-maps'
+          }
+          // Tour/onboarding libraries — never needed on first load
+          if (id.includes('node_modules/react-joyride/') || id.includes('node_modules/onborda')) {
+            return 'vendor-tours'
+          }
           if (id.includes('node_modules/zustand/') || id.includes('node_modules/prop-types/') || id.includes('node_modules/react-hot-toast/')) {
             return 'vendor-utils'
           }
         },
-        // Smaller filenames = faster mobile parsing
         entryFileNames: 'assets/[name]-[hash].js',
         chunkFileNames: 'assets/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash][extname]',

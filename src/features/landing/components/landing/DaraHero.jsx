@@ -35,12 +35,14 @@ export default function DaraHero() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex items-end bg-black pt-28 pb-16 md:py-0 md:h-screen">
 
-      {/* Background Looping Video */}
+      {/* Background Looping Video — poster shows instantly as LCP, video loads after */}
       <video
         autoPlay
         loop
         muted
         playsInline
+        preload="none"
+        poster="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1280&q=75"
         className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none opacity-90"
       >
         <source

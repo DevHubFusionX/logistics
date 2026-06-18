@@ -29,7 +29,7 @@ export default function AddressBookSelector({ onSelect, type = 'pickup', current
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center gap-2 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-blue-100 mb-2 shadow-sm"
+                className="flex items-center gap-2 text-xs font-bold text-sky-750 hover:text-sky-800 bg-sky-50 px-3 py-1.5 rounded-xl transition-all border border-sky-100/40 mb-2 shadow-sm duration-200 cursor-pointer"
             >
                 <Book className="w-3.5 h-3.5" />
                 Select from Address Book
@@ -38,13 +38,13 @@ export default function AddressBookSelector({ onSelect, type = 'pickup', current
             {isOpen && (
                 <>
                     <div className="fixed inset-0 z-[60]" onClick={() => setIsOpen(false)} />
-                    <div className="absolute top-10 left-0 w-full sm:w-80 bg-white rounded-xl shadow-2xl border border-gray-200 z-[70] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 max-h-[400px] flex flex-col">
-                        <div className="p-3 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
-                            <h4 className="font-bold text-gray-900 text-sm flex items-center gap-2">
-                                <MapPin className="w-4 h-4 text-blue-600" />
+                    <div className="absolute top-10 left-0 w-full sm:w-80 bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.06)] border border-gray-100 z-[70] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 max-h-[400px] flex flex-col">
+                        <div className="p-3 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
+                            <h4 className="font-bold text-gray-905 text-sm flex items-center gap-2">
+                                <MapPin className="w-4 h-4 text-sky-600" />
                                 Your Saved Addresses
                             </h4>
-                            <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-600">
+                            <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-gray-600 cursor-pointer">
                                 <X className="w-4 h-4" />
                             </button>
                         </div>
@@ -57,7 +57,7 @@ export default function AddressBookSelector({ onSelect, type = 'pickup', current
                                     placeholder="Search saved addresses..."
                                     value={search}
                                     onChange={(e) => setSearch(e.target.value)}
-                                    className="w-full pl-8 pr-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                                    className="w-full pl-8 pr-3 py-1.5 bg-white border border-gray-200 rounded-lg text-xs focus:ring-4 focus:ring-sky-500/5 focus:border-sky-400 outline-none transition-all duration-200"
                                     autoFocus
                                 />
                             </div>
@@ -66,7 +66,7 @@ export default function AddressBookSelector({ onSelect, type = 'pickup', current
                         <div className="overflow-y-auto p-2 space-y-1 custom-scrollbar">
                             {isLoading ? (
                                 <div className="p-8 text-center">
-                                    <div className="w-6 h-6 border-2 border-blue-600/30 border-t-blue-600 rounded-full animate-spin mx-auto mb-2" />
+                                    <div className="w-6 h-6 border-2 border-sky-600/30 border-t-sky-600 rounded-full animate-spin mx-auto mb-2" />
                                     <p className="text-xs text-gray-400">Loading addresses...</p>
                                 </div>
                             ) : cityMatchedAddresses.length > 0 ? (
@@ -78,12 +78,12 @@ export default function AddressBookSelector({ onSelect, type = 'pickup', current
                                             onSelect(addr)
                                             setIsOpen(false)
                                         }}
-                                        className="w-full text-left p-3 rounded-lg hover:bg-blue-50 group transition-all border border-transparent hover:border-blue-100"
+                                        className="w-full text-left p-3 rounded-lg hover:bg-sky-50/50 group transition-all border border-transparent hover:border-sky-100/30"
                                     >
                                         <div className="flex justify-between items-start mb-1">
-                                            <span className="font-bold text-gray-900 text-xs group-hover:text-blue-700">{addr.label}</span>
+                                            <span className="font-bold text-gray-900 text-xs group-hover:text-sky-750">{addr.label}</span>
                                             {addr.is_default && (
-                                                <span className="text-[10px] font-bold bg-green-100 text-green-700 px-1.5 py-0.5 rounded uppercase tracking-wider">Default</span>
+                                                <span className="text-[10px] font-bold bg-green-50 text-green-700 px-1.5 py-0.5 rounded uppercase tracking-wider">Default</span>
                                             )}
                                         </div>
                                         <p className="text-[11px] text-gray-500 font-medium mb-1 line-clamp-1">{addr.contact_name}</p>
@@ -98,8 +98,8 @@ export default function AddressBookSelector({ onSelect, type = 'pickup', current
                         </div>
 
                         {currentCity && filteredAddresses.length > cityMatchedAddresses.length && (
-                            <div className="p-2 bg-yellow-50 border-t border-yellow-100">
-                                <p className="text-[10px] text-yellow-700 text-center font-medium">
+                            <div className="p-2 bg-amber-50/30 border-t border-amber-100/30">
+                                <p className="text-[10px] text-amber-700 text-center font-medium">
                                     Other addresses are hidden because they don't match {currentCity}.
                                 </p>
                             </div>

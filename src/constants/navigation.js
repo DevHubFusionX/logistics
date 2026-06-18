@@ -1,29 +1,20 @@
 import {
-  Home, Package, Truck, Map, Warehouse, ShoppingCart, Users,
-  UserCheck, BarChart3, AlertTriangle, Clipboard, Puzzle,
-  Settings, HelpCircle, Thermometer, CreditCard, MapPin, FileText, DollarSign, ClipboardList, Navigation, Info, BookOpen, MessageSquare, TrendingUp
+  Package, Truck, Users, UserCheck, BarChart3, Settings, 
+  Thermometer, CreditCard, MapPin, DollarSign, ClipboardList, 
+  Navigation, Info, BookOpen, MessageSquare, TrendingUp, Home
 } from 'lucide-react'
 
 export const NAVIGATION_SECTIONS = [
   {
-    title: 'Main',
+    title: 'Overview',
     items: [
       {
         id: 'my-bookings',
-        label: 'My Bookings',
-        icon: Package,
+        label: 'Home',
+        icon: Home,
         path: '/my-bookings',
-        description: 'View your bookings',
+        description: 'Customer home page',
         color: 'blue',
-        roles: ['Customer']
-      },
-      {
-        id: 'payment-history',
-        label: 'Payment History',
-        icon: CreditCard,
-        path: '/payment-history',
-        description: 'View payment transactions',
-        color: 'green',
         roles: ['Customer']
       },
       {
@@ -53,7 +44,12 @@ export const NAVIGATION_SECTIONS = [
         color: 'purple',
         comingSoon: true,
         roles: ['Super Admin', 'Dispatcher', 'Admin Manager']
-      },
+      }
+    ]
+  },
+  {
+    title: 'Shipments & Bookings',
+    items: [
       {
         id: 'bookings',
         label: 'New Booking',
@@ -73,50 +69,8 @@ export const NAVIGATION_SECTIONS = [
         roles: ['Customer']
       },
       {
-        id: 'address-book',
-        label: 'Address Book',
-        icon: BookOpen,
-        path: '/address-book',
-        description: 'Manage saved addresses',
-        color: 'indigo',
-        roles: ['Customer']
-      },
-      {
-        id: 'my-temperature',
-        label: 'Temperature Monitor',
-        icon: Thermometer,
-        path: '/my-temperature',
-        description: 'Cold chain tracking',
-        color: 'cyan',
-        comingSoon: true,
-        roles: ['Customer']
-      },
-      {
-        id: 'my-analytics',
-        label: 'My Analytics',
-        icon: TrendingUp,
-        path: '/my-analytics',
-        description: 'Cost & performance insights',
-        color: 'purple',
-        roles: ['Customer']
-      },
-      {
-        id: 'support',
-        label: 'Support Center',
-        icon: MessageSquare,
-        path: '/support',
-        description: 'Get help & create tickets',
-        color: 'blue',
-        roles: ['Customer']
-      }
-    ]
-  },
-  {
-    title: 'Operations',
-    items: [
-      {
         id: 'admin-bookings',
-        label: 'Bookings',
+        label: 'All Bookings',
         icon: Package,
         path: '/bookings-management',
         description: 'Manage all shipments',
@@ -127,7 +81,7 @@ export const NAVIGATION_SECTIONS = [
         id: 'user-bookings',
         label: 'User Bookings',
         icon: Users,
-        path: '/customers', // Fallback to customers list to select a user
+        path: '/customers',
         description: 'View bookings by user',
         color: 'indigo',
         roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
@@ -140,7 +94,12 @@ export const NAVIGATION_SECTIONS = [
         description: 'View logical dispatch orders',
         color: 'blue',
         roles: ['Super Admin', 'Dispatcher', 'Admin Manager']
-      },
+      }
+    ]
+  },
+  {
+    title: 'Fleet & Cold Chain',
+    items: [
       {
         id: 'fleet',
         label: 'Fleet Management',
@@ -155,42 +114,32 @@ export const NAVIGATION_SECTIONS = [
       },
       {
         id: 'temperature',
-        label: 'Temperature',
+        label: 'Temperature Monitor',
         icon: Thermometer,
         path: '/temperature',
         description: 'Cold chain monitoring',
         color: 'cyan',
-        comingSoon: true,
         badge: { count: 3, type: 'error' },
         roles: ['Super Admin', 'Fleet Officer', 'Admin Manager']
+      },
+      {
+        id: 'my-temperature',
+        label: 'Temperature Monitor',
+        icon: Thermometer,
+        path: '/my-temperature',
+        description: 'Cold chain tracking',
+        color: 'cyan',
+        comingSoon: true,
+        roles: ['Customer']
       }
     ]
   },
   {
-    title: 'People & Analytics',
+    title: 'Finance & Analytics',
     items: [
-
-      {
-        id: 'drivers',
-        label: 'Drivers & Staff',
-        icon: UserCheck,
-        path: '/drivers',
-        description: 'Personnel management',
-        color: 'green',
-        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
-      },
-      {
-        id: 'analytics',
-        label: 'Reports',
-        icon: BarChart3,
-        path: '/reports',
-        description: 'Reports & insights',
-        color: 'violet',
-        roles: ['Super Admin', 'Fleet Officer', 'Finance', 'Support']
-      },
       {
         id: 'payments',
-        label: 'Payments',
+        label: 'Payments & Invoicing',
         icon: CreditCard,
         path: '/payments',
         description: 'Invoicing & revenue',
@@ -206,6 +155,15 @@ export const NAVIGATION_SECTIONS = [
         ]
       },
       {
+        id: 'payment-history',
+        label: 'Payment History',
+        icon: CreditCard,
+        path: '/payment-history',
+        description: 'View payment transactions',
+        color: 'green',
+        roles: ['Customer']
+      },
+      {
         id: 'pricing',
         label: 'Pricing Rules',
         icon: DollarSign,
@@ -214,6 +172,56 @@ export const NAVIGATION_SECTIONS = [
         color: 'emerald',
         isNew: true,
         roles: ['Super Admin', 'Finance', 'Admin Manager']
+      },
+      {
+        id: 'analytics',
+        label: 'Reports & Analytics',
+        icon: BarChart3,
+        path: '/reports',
+        description: 'Reports & insights',
+        color: 'violet',
+        roles: ['Super Admin', 'Fleet Officer', 'Finance', 'Support']
+      },
+      {
+        id: 'my-analytics',
+        label: 'My Analytics',
+        icon: TrendingUp,
+        path: '/my-analytics',
+        description: 'Cost & performance insights',
+        color: 'purple',
+        roles: ['Customer']
+      }
+    ]
+  },
+  {
+    title: 'Account & Support',
+    items: [
+      {
+        id: 'address-book',
+        label: 'Address Book',
+        icon: BookOpen,
+        path: '/address-book',
+        description: 'Manage saved addresses',
+        color: 'indigo',
+        roles: ['Customer']
+      },
+      {
+        id: 'drivers',
+        label: 'Drivers & Staff',
+        icon: UserCheck,
+        path: '/drivers',
+        description: 'Personnel management',
+        color: 'green',
+        roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
+      },
+      {
+        id: 'support',
+        label: 'Support Center',
+        icon: MessageSquare,
+        path: '/support',
+        description: 'Get help & create tickets',
+        color: 'blue',
+        roles: ['Customer']
       }
     ]
   },

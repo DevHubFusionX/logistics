@@ -34,7 +34,7 @@ function Sidebar({ collapsed, isMobile, isOpen }) {
 
   return (
     <aside
-      className={`fixed left-0 top-16 bg-white border-r border-gray-200 transition-all duration-300 ${isMobile
+      className={`fixed left-0 top-16 bg-white border-r border-gray-100 transition-all duration-300 ${isMobile
         ? `z-50 ${isOpen ? 'translate-x-0' : '-translate-x-full'} w-64 shadow-2xl`
         : `z-30 ${collapsed ? 'w-16' : 'w-64'}`
         }`}

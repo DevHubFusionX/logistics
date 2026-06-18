@@ -57,10 +57,31 @@ export default function Contact() {
   return (
     <>
       <SEO
-        title="Contact Dara — Get a Cold Chain Quote Nigeria"
-        description="Contact Dara Express for cold chain logistics quotes, pharma transport, frozen food haulage and refrigerated transport across Nigeria."
-        keywords="contact Dara logistics, cold chain quote Nigeria, freight quote Lagos, logistics inquiry Nigeria"
+        title="Contact Dara Express — Get a Cold Chain Logistics Quote Nigeria"
+        description="Get a free cold chain logistics quote from Dara Express — Nigeria's #1 reefer truck company. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Lagos, Abuja and all 36 states."
+        keywords="contact Dara Express, cold chain quote Nigeria, logistics quote Lagos, freight quote Nigeria, refrigerated transport quote, reefer truck hire Nigeria, logistics inquiry Nigeria"
         canonical="/contact"
+        breadcrumbs={[{ name: 'Contact', url: '/contact' }]}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'ContactPage',
+          'name': 'Contact Dara Express',
+          'description': 'Get a free cold chain logistics quote from Dara Express. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Nigeria.',
+          'url': 'https://daraexpress.com/contact',
+          'mainEntity': {
+            '@type': 'LocalBusiness',
+            'name': 'Dara Express',
+            'telephone': '+2349054610119',
+            'email': 'hello@daraexpress.com',
+            'address': {
+              '@type': 'PostalAddress',
+              'streetAddress': 'MJS House, 366 Murtala Muhammed Road, Yaba',
+              'addressLocality': 'Lagos',
+              'addressRegion': 'Lagos State',
+              'addressCountry': 'NG'
+            }
+          }
+        }}
       />
 
       {/* Main Section */}

@@ -49,7 +49,7 @@ export default function TrackShipment() {
 
   return (
     <div className="h-full overflow-y-auto">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
 
         {/* ── Hero search ── */}
         <div className="bg-sky-800 rounded-2xl px-6 py-8 text-center">

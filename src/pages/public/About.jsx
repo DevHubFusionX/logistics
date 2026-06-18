@@ -58,10 +58,31 @@ export default function About() {
   return (
     <>
       <SEO
-        title="About Dara — Nigeria's Cold Chain Logistics Company"
-        description="Learn about Dara Express, Nigeria's leading cold chain logistics company. Specialized in pharma logistics, frozen food transport and refrigerated haulage across all 36 states."
-        keywords="about Dara logistics, cold chain Nigeria, logistics company Nigeria, transport company Abuja, cold storage Lagos"
+        title="About Dara Express — Nigeria's Cold Chain Logistics Company"
+        description="Dara Express is Nigeria's leading cold chain logistics company, built in Lagos to move pharma, frozen food, and perishables safely across all 36 states. Learn how we're building Nigeria's cold chain backbone."
+        keywords="about Dara Express, cold chain logistics company Nigeria, logistics company Lagos, transport company Abuja, reefer trucks history Nigeria, cold chain Nigeria, logistics company Nigeria"
         canonical="/about"
+        breadcrumbs={[{ name: 'About', url: '/about' }]}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'Organization',
+          'name': 'Dara Express',
+          'alternateName': 'Dara Cold Chain Logistics',
+          'url': 'https://daraexpress.com',
+          'logo': 'https://daraexpress.com/og-image.png?v=2',
+          'foundingDate': '2025',
+          'foundingLocation': { '@type': 'Place', 'name': 'Yaba, Lagos, Nigeria' },
+          'description': "Nigeria's leading cold chain logistics company specializing in pharma logistics, frozen food transport, refrigerated haulage and temperature-controlled supply chain solutions across all 36 states.",
+          'address': {
+            '@type': 'PostalAddress',
+            'streetAddress': 'MJS House, 366 Murtala Muhammed Road, Yaba',
+            'addressLocality': 'Lagos',
+            'addressRegion': 'Lagos State',
+            'addressCountry': 'NG'
+          },
+          'numberOfEmployees': { '@type': 'QuantitativeValue', 'minValue': 10, 'maxValue': 100 },
+          'sameAs': ['https://twitter.com/daraexpress', 'https://linkedin.com/company/dara-express']
+        }}
       />
 
       {/* Hero Header */}
@@ -137,6 +158,8 @@ export default function About() {
                     <img
                       src={ch.img}
                       alt={ch.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover hover:scale-105 transition-transform duration-700 ease"
                     />
                     <div className="absolute inset-0 bg-sky-950/10" />

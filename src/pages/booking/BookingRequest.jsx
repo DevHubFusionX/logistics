@@ -199,7 +199,7 @@ export default function BookingRequest() {
 
   if (step === 6) {
     return (
-      <div className="max-w-xl mx-auto px-4 py-6">
+      <div className="max-w-4xl mx-auto px-4 py-8">
         <BookingConfirmation bookingId={bookingId} estimatedCost={estimatedCost} formData={formData} />
       </div>
     )
