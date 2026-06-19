@@ -45,22 +45,22 @@ export const aboutData = {
     description: "Dara Express is the go-to transport company in Abuja and Lagos for specialized reefer trucks in Nigeria. We provide end-to-end haulage services Nigeria with a focus on cold room services Lagos and pharma logistics.",
     timeline: [
         {
-            year: "Founded (2025)",
-            title: "Founded (2025)",
+            year: "Founded",
+            title: "Founded",
             description: "Dara Cold Chain Logistics was established to address the critical need for reliable temperature-controlled transportation in Nigeria's pharmaceutical and perishable goods sectors.",
             icon: Target,
             color: "bg-primary"
         },
         {
-            year: "Tech Integration (2025)",
-            title: "Tech Integration (2025)",
+            year: "Tech Integration",
+            title: "Tech Integration",
             description: "Equipped our fleet with real-time GPS and temperature monitoring systems, ensuring every shipment maintains optimal conditions. Added Goods-in-Transit insurance for complete peace of mind.",
             icon: Truck,
             color: "bg-primary"
         },
         {
-            year: "Nationwide Expansion (2026)",
-            title: "Nationwide Expansion (2026)",
+            year: "Nationwide Expansion",
+            title: "Nationwide Expansion",
             description: "Expanding enterprise solutions and coverage nationwide. From vaccines and medical supplies to frozen foods and fresh produce—we're your trusted partner for end-to-end cold-chain transportation.",
             icon: TrendingUp,
             color: "#00843D"

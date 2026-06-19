@@ -9,7 +9,7 @@ const stats = [
   { value: '120',  label: 'Reefer trucks on network' },
   { value: '200+', label: 'Cold chain trips completed' },
   { value: '36',   label: 'States covered' },
-  { value: '2025', label: 'Year founded' },
+  { value: '99.8%', label: 'Delivery success rate' },
 ]
 
 const values = [
@@ -24,7 +24,7 @@ const chapters = [
     num: 'Chapter I',
     title: 'The Fragile State',
     subtitle: 'Laying bare Nigeria\'s cold chain fragmentation.',
-    body: 'In 2025, we noticed a critical vulnerability in Nigeria\'s supply chain: cold chain logistics was fragmented. Essential medicines, life-saving vaccines, fresh produce, and food products were regularly lost to heat excursions, uncoordinated transport, and a complete lack of visibility. We set out to change that.',
+    body: 'We noticed a critical vulnerability in Nigeria\'s supply chain: cold chain logistics was fragmented. Essential medicines, life-saving vaccines, fresh produce, and food products were regularly lost to heat excursions, uncoordinated transport, and a complete lack of visibility. We set out to change that.',
     metric: '60%+ spoilage rate of perishables prior to modern cold chain intervention.',
     img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=85'
   },
@@ -70,7 +70,6 @@ export default function About() {
           'alternateName': 'Dara Cold Chain Logistics',
           'url': 'https://daraexpress.com',
           'logo': 'https://daraexpress.com/og-image.png?v=2',
-          'foundingDate': '2025',
           'foundingLocation': { '@type': 'Place', 'name': 'Yaba, Lagos, Nigeria' },
           'description': "Nigeria's leading cold chain logistics company specializing in pharma logistics, frozen food transport, refrigerated haulage and temperature-controlled supply chain solutions across all 36 states.",
           'address': {
@@ -241,7 +240,7 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {values.map((val, idx) => {
+            {values.map((val) => {
               const IconComp = val.icon
               return (
                 <div
