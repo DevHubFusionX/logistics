@@ -232,7 +232,7 @@ export default function DaraHowItWorks() {
                 variants={bannerItemVariants}
                 className="font-heading-unique text-xl sm:text-3xl font-bold leading-tight mb-4"
               >
-                We build a simple system to connect you to cold trucks, show you the live temperature, and deliver your items safely on time.
+                Dara provides a seamless platform that connects businesses to reliable refrigerated trucks, offers real-time temperature monitoring, and ensures the safe, timely delivery of temperature-sensitive goods.
               </motion.h3>
 
               {/* Description */}
@@ -240,7 +240,7 @@ export default function DaraHowItWorks() {
                 variants={bannerItemVariants}
                 className="font-body-unique text-blue-100 text-sm sm:text-base leading-relaxed mb-8"
               >
-                A simple way to move food, medicines, and chemicals across Nigeria – with zero stress, low prices, and complete safety.
+                A smarter way to transport food, pharmaceuticals, and industrial chemicals across Nigeria — with complete visibility, competitive pricing, and uncompromising cold-chain integrity.
               </motion.p>
 
               {/* Action CTA */}

@@ -39,36 +39,36 @@ export const heroData = {
 export const aboutData = {
     badge: "Our Journey",
     title: {
-        prefix: "The Leading",
-        highlight: "Logistics Company in Nigeria"
+        prefix: "A Simple and Reliable",
+        highlight: "Transport Partner"
     },
-    description: "Dara Express is the go-to transport company in Abuja and Lagos for specialized reefer trucks in Nigeria. We provide end-to-end haulage services Nigeria with a focus on cold room services Lagos and pharma logistics.",
+    description: "Dara Express is a simple, reliable transport company in Abuja and Lagos. We make it easy to move items that need to stay cold, like food and medicine, so they arrive fresh and safe.",
     timeline: [
         {
-            year: "Founded",
-            title: "Founded",
-            description: "Dara Cold Chain Logistics was established to address the critical need for reliable temperature-controlled transportation in Nigeria's pharmaceutical and perishable goods sectors.",
+            year: "How We Started",
+            title: "How We Started",
+            description: "We started Dara because we saw how hard it was to transport fresh food and medicine in Nigeria without them spoiling on the way.",
             icon: Target,
             color: "bg-primary"
         },
         {
-            year: "Tech Integration",
-            title: "Tech Integration",
-            description: "Equipped our fleet with real-time GPS and temperature monitoring systems, ensuring every shipment maintains optimal conditions. Added Goods-in-Transit insurance for complete peace of mind.",
+            year: "Adding Tracking",
+            title: "Adding Tracking",
+            description: "We put temperature sensors and GPS trackers in our trucks so you can always check how cold your items are and where they are on the road.",
             icon: Truck,
             color: "bg-primary"
         },
         {
-            year: "Nationwide Expansion",
-            title: "Nationwide Expansion",
-            description: "Expanding enterprise solutions and coverage nationwide. From vaccines and medical supplies to frozen foods and fresh produce—we're your trusted partner for end-to-end cold-chain transportation.",
+            year: "Delivering Everywhere",
+            title: "Delivering Everywhere",
+            description: "Today, we deliver to all parts of Nigeria. From vaccines to fresh farm produce, we make sure they stay cold and arrive safe.",
             icon: TrendingUp,
             color: "#00843D"
         }
     ],
     image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     quote: {
-        text: "Cold-chain logistics isn't just about transportation—it's about trust, precision, and product integrity. We preserve quality and deliver consistency.",
+        text: "Keeping things cold is not just about driving a truck—it's about making sure your food and medicines arrive exactly as fresh as they started.",
         author: "— Dara Leadership Team"
     },
     stats: [
@@ -83,14 +83,14 @@ export const servicesData = [
     {
         icon: 'Package',
         image: "/assets/img/pharmaceutical.jpg",
-        title: "Pharma Logistics Nigeria",
-        subtitle: "Cold chain solutions in Lagos & Abuja",
-        description: "Specialized cold room services Lagos and reefer trucks in Nigeria for vaccines and medicine. Hospital-grade cold chain logistics Nigeria with 24/7 monitoring.",
+        title: "Vaccines & Medicine Transport",
+        subtitle: "Keeping medical supplies safe",
+        description: "We transport vaccines, medicines, and medical supplies in clean, temperature-controlled trucks to keep them safe and effective.",
         features: [
-            "Temperature-controlled logistics Nigeria: 2°C to 8°C",
-            "Refrigerated warehouse Abuja & Lagos storage",
-            "Goods-in-Transit (GIT) insurance for pharma",
-            "Reefer trucks in Nigeria with precision cooling"
+            "Precise temperature control between 2°C to 8°C",
+            "Clean cold rooms in Lagos and Abuja for storage",
+            "Full insurance cover for all medical shipments",
+            "Reliable refrigerated trucks that do not fail"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Same-day available",
@@ -99,14 +99,14 @@ export const servicesData = [
     {
         icon: 'Clock',
         image: "/assets/img/frozen-foods.jpg",
-        title: "Frozen Food Transport Lagos",
-        subtitle: "Sub-zero reefer trucking services",
-        description: "Reliable frozen food transport Lagos and haulage services Nigeria. Specialized reefer trucks in Nigeria for seafood, meat, and poultry at -18°C.",
+        title: "Frozen Food Delivery",
+        subtitle: "Keeping food frozen on the road",
+        description: "We deliver frozen foods like fish, meat, and poultry using trucks that stay freezing cold at -18°C all through the journey.",
         features: [
-            "Frozen storage facilities Nigeria coverage",
-            "Dry truck services Lagos for stable cargo",
-            "Cargo transport Lagos to Abuja express",
-            "Trucking services in Lagos: 24/7 support"
+            "Deep-freeze storage spaces at our local hubs",
+            "Dry trucks also available for regular food items",
+            "Fast transport from Lagos to Abuja",
+            "Helpful driver and support team available 24/7"
         ],
         pricing: "Custom Quote",
         deliveryTime: "1-3 days",
@@ -115,14 +115,14 @@ export const servicesData = [
     {
         icon: 'Truck',
         image: "/assets/img/fresh-produce.jpg",
-        title: "Refrigerated Transport Lagos",
-        subtitle: "Farm to market cold chain Nigeria",
-        description: "Efficient refrigerated transport Lagos and food storage warehouse Nigeria solutions. Maintaining freshness with advanced reefer trucks in Nigeria.",
+        title: "Fresh Produce Transport",
+        subtitle: "From farm to market",
+        description: "We transport fresh fruits and vegetables from farms to cities, keeping them cool so they do not rot or lose their value.",
         features: [
-            "Cold room services Lagos: Fresh produce storage",
-            "Truck hire Lagos Nigeria for perishables",
-            "Direct cargo transport Lagos to Abuja",
-            "Best transport company in Abuja for fresh cargo"
+            "Cool storage rooms for fresh fruits and veggies",
+            "Easy truck hire in Lagos and Abuja",
+            "Direct transport without any delays",
+            "Careful handling so your harvest doesn't get crushed"
         ],
         pricing: "Custom Quote",
         deliveryTime: "12-48 hours",
@@ -131,14 +131,14 @@ export const servicesData = [
     {
         icon: 'Users',
         image: "/assets/img/enterprise.jpg",
-        title: "Haulage Services Nigeria",
-        subtitle: "Enterprise logistics companies in Nigeria",
-        description: "Complete freight services Lagos Nigeria and long haul trucking Nigeria. Scalable solutions for dry truck services Lagos and temperature controlled logistics.",
+        title: "Large Cargo Transport",
+        subtitle: "Moving big shipments easily",
+        description: "If you have large shipments of goods, we provide big trucks to move them from ports or warehouses to anywhere in Nigeria.",
         features: [
-            "Goods transportation companies Nigeria leader",
-            "Custom trucking services in Lagos solutions",
-            "Long haul trucking Nigeria: Port to Warehouse",
-            "Freight services Lagos Nigeria expert support"
+            "Reliable long-distance moving across the country",
+            "Big trucks available for dry and cold goods",
+            "Direct point-to-point delivery",
+            "Full customer support every step of the way"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Daily Departures",
@@ -147,14 +147,14 @@ export const servicesData = [
     {
         icon: 'Shield',
         image: "/assets/img/service-1.jpg",
-        title: "Last-Mile Delivery Nigeria",
-        subtitle: "Door-to-door cold chain delivery",
-        description: "Reliable last-mile cold chain delivery across Lagos, Abuja and Port Harcourt. Temperature-maintained from our hub directly to your customer's door.",
+        title: "Door-to-Door Delivery",
+        subtitle: "Right to your customer",
+        description: "We deliver items directly to your customer's home or shop in Lagos, Abuja, and Port Harcourt, making sure they stay in perfect condition.",
         features: [
-            "Door-to-door refrigerated delivery Nigeria",
-            "Real-time SMS & app tracking updates",
-            "Proof of delivery with digital sign-off",
-            "Same-day slots available in major cities"
+            "Refrigerated vans for small packages",
+            "Real-time updates sent straight to your phone",
+            "Digital proof when delivery is complete",
+            "Same-day delivery slots in major cities"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Same-day / Next-day",
@@ -165,110 +165,110 @@ export const servicesData = [
 // Why Us Data
 export const whyUsData = {
     header: {
-        badge: "Our Impact",
+        badge: "Why Us",
         title: "Why businesses choose Dara",
-        subtitle: "Fast, reliable logistics with local expertise",
-        description: "We deliver predictable logistics that reduce cost, save time, and help you scale — backed by tech, local teams and nationwide coverage."
+        subtitle: "Simple, reliable transport that you can trust",
+        description: "We make logistics easy. We save you money, deliver your items faster, and keep you updated every step of the way."
     },
     impactAreas: [
         {
             icon: Clock,
-            title: "Faster delivery, happier customers",
-            description: "Cut transit times with optimized routing and local hubs — same-day in major cities, next-day nationwide.",
-            impact: "40% faster delivery",
-            metric: "Average time reduction"
+            title: "Faster delivery for your peace of mind",
+            description: "We use the best routes to deliver your goods quickly — same-day in major cities, next-day across the country.",
+            impact: "40% faster",
+            metric: "Shorter travel times"
         },
         {
             icon: MapPin,
-            title: "Nationwide coverage & local reach",
-            description: "A network spanning all 36 states and hundreds of local partners to deliver where your customers are — reliably and affordably.",
-            impact: "36 states covered",
-            metric: "Nationwide reach"
+            title: "We deliver everywhere in Nigeria",
+            description: "Our network covers all 36 states, meaning we can deliver to your customers no matter where they are.",
+            impact: "All 36 states",
+            metric: "Nationwide coverage"
         },
         {
             icon: Package,
-            title: "Secure handling & near-zero loss",
-            description: "End-to-end tracking, secure handling and insurance policies that keep loss below industry benchmarks — protecting your customers and brand.",
-            impact: "99.8% success rate",
-            metric: "Delivery accuracy"
+            title: "Zero damage, zero worries",
+            description: "We handle your goods with care and have full insurance, so you do not have to worry about missing or damaged items.",
+            impact: "99.8% safe deliveries",
+            metric: "Arrived in perfect shape"
         },
         {
             icon: Users,
-            title: "Logistics that scales your business",
-            description: "Affordable, predictable services and tools that let SMEs expand without logistics overhead — from one-off parcels to high-volume fulfilment.",
-            impact: "5,000+ SMEs served",
-            metric: "Business growth enabled"
+            title: "Built to help your business grow",
+            description: "Whether you are sending one package or renting a whole truck, we have cheap options that fit your budget.",
+            impact: "5,000+ businesses helped",
+            metric: "Growing together"
         },
         {
             icon: Zap,
-            title: "Technology that removes friction",
-            description: "Real-time tracking, API integrations and automated notifications that cut admin work and give you control over every shipment.",
-            impact: "60% time saved",
-            metric: "Operational efficiency"
+            title: "Track everything on your phone",
+            description: "No need to call the driver. See where your truck is and its live temperature directly on our platform.",
+            impact: "60% less stress",
+            metric: "Saved time and effort"
         },
         {
             icon: Award,
-            title: "Committed to excellence",
-            description: "We invest in people, sustainability and standards — raising service quality across the industry so our partners can scale with confidence.",
-            impact: "Industry leadership",
-            metric: "Sector transformation"
+            title: "Friendly and professional team",
+            description: "Our drivers and support team are well-trained, polite, and always ready to help you solve any issue.",
+            impact: "Best-in-class support",
+            metric: "Here for you 24/7"
         }
     ],
     cta: {
-        title: "Best Logistics Company in Nigeria?",
-        description: "Join thousands of businesses using the best transport company in Abuja and Lagos. Competitive truck hire Lagos Nigeria and dry truck services Lagos.",
+        title: "Ready to send a shipment?",
+        description: "Join thousands of businesses that trust us to deliver their goods safely and on time.",
         primaryBtn: { text: "Get a quote", link: "/booking/request" },
-        secondaryBtn: { text: "Learn more", link: "/services" }
+        secondaryBtn: { text: "See our services", link: "/services" }
     }
 }
 
 // Climate Tech Data
 export const climateTechData = {
     header: {
-        badge: "Climate Technology",
-        title: "Sustainable Cold Chain",
-        subtitle: "Solutions",
-        description: "Pioneering eco-friendly logistics with solar-powered refrigeration systems that reduce carbon footprint while maintaining optimal temperature control."
+        badge: "Solar Technology",
+        title: "Solar-Powered Trucks",
+        subtitle: "Good for the Earth",
+        description: "We use solar power to keep our refrigerated trucks cold. This protects the environment and reduces fuel costs."
     },
     carouselSlides: [
         {
             id: 1,
             image: "/climateImage/image-3.jpeg",
-            title: "Solar-Powered Fleet",
-            description: "Our hybrid solar containers harvest energy while in transit, drastically reducing fuel consumption and emissions.",
+            title: "Powered by the Sun",
+            description: "Our trucks use solar panels to run their cooling systems, saving fuel and reducing smoke emissions.",
             icon: Sun,
             color: "bg-green-500"
         },
         {
             id: 2,
             image: "/climateImage/image-1.png",
-            title: "Cold Chain Integrity",
-            description: "Advanced insulation and active cooling ensuring your perishable goods stay fresh from farm to fork.",
+            title: "Always Cold and Fresh",
+            description: "Thick insulation and modern cooling keep food and medicines fresh from start to finish.",
             icon: Snowflake,
             color: "bg-blue-500"
         },
         {
             id: 3,
             image: "/climateImage/image-2.png",
-            title: "Global Reach",
-            description: "Seamless international logistics network optimized for climate-sensitive cargo transport.",
+            title: "Seamless Delivery",
+            description: "A well-planned delivery system designed to move temperature-sensitive goods without waste.",
             icon: Globe,
             color: "bg-amber-500"
         }
     ],
     stats: {
-        efficiency: { value: "70%", label: "Energy Cost Reduction" },
-        precision: { accuracy: "±0.1°C", minTemp: "-30°C" }
+        efficiency: { value: "70%", label: "Lower Carbon Emissions" },
+        precision: { accuracy: "±0.1°C", minTemp: "Perfect Temperature" }
     }
 }
 
 // Testimonials Data
 export const testimonialsData = {
     header: {
-        badge: "Partner Success",
-        title: "Powering the Growth of",
-        subtitle: "Nigeria's Leading Businesses",
-        description: "From ambitious startups to national enterprises, see how we're delivering consistency and scaling impact for our partners nationwide."
+        badge: "Reviews",
+        title: "What our clients",
+        subtitle: "say about us",
+        description: "Read stories from real businesses in Nigeria who trust us to deliver their goods every day."
     },
     stats: [
         { number: 'TrendingUp', label: 'Growing number of happy businesses' },
@@ -278,7 +278,7 @@ export const testimonialsData = {
     featured: [
         {
             rating: 5,
-            content: "Dara revolutionized our e-commerce operations. Same-day delivery in Lagos increased our customer satisfaction by 85% and repeat orders by 60%. They're not just a logistics partner—they're a growth enabler.",
+            content: "Dara changed the way we deliver packages. Doing same-day delivery in Lagos made our customers much happier, and they keep coming back.",
             author: "Adunni Bankole",
             position: "CEO, ShopNaija",
             company: "ShopNaija",
@@ -288,7 +288,7 @@ export const testimonialsData = {
         },
         {
             rating: 5,
-            content: "As a small business owner, I thought reliable logistics was only for big companies. Dara proved me wrong. Their affordable rates and professional service helped us expand from Lagos to 12 states in just 8 months.",
+            content: "I used to think only big companies could afford reliable transport. Dara proved me wrong. Their low prices and helpful team helped us grow our business from Lagos to 12 states in just 8 months.",
             author: "Chinedu Okafor",
             position: "Founder, Afro Crafts",
             company: "Afro Crafts",
@@ -298,7 +298,7 @@ export const testimonialsData = {
         },
         {
             rating: 5,
-            content: "Dara's enterprise solution transformed our supply chain efficiency. Real-time tracking, API integration, and dedicated support reduced our logistics costs by 35% while improving delivery times by 50%.",
+            content: "Dara made our shipping so much easier. Being able to track our trucks in real-time and talk to support anytime reduced our shipping costs by 35% and made delivery twice as fast.",
             author: "Fatima Al-Hassan",
             position: "Supply Chain Director, MegaMart Nigeria",
             company: "MegaMart",
@@ -308,24 +308,24 @@ export const testimonialsData = {
         }
     ],
     marquee: [
-        { content: "Dara's tracking system is incredible. I always know exactly where my packages are.", author: "Kemi Adebayo", position: "Fashion Designer", company: "Kemi Designs", businessType: "SME", rating: 5, image: null },
-        { content: "Same-day delivery in Abuja? Dara made it possible for our restaurant supplies.", author: "Ibrahim Musa", position: "Restaurant Owner", company: "Green Palate", businessType: "SME", rating: 5, image: null },
-        { content: "Professional, reliable, and affordable. Dara is our go-to logistics partner.", author: "Grace Okonkwo", position: "Online Store Owner", company: "Gracie's Boutique", businessType: "SME", rating: 5, image: null },
-        { content: "From Lagos to Kano in 24 hours. Dara delivers on their promises every time.", author: "Ahmed Bello", position: "Electronics Retailer", company: "Bello Tech", businessType: "SME", rating: 5, image: null }
+        { content: "I love the tracking system. I always know exactly where my goods are.", author: "Kemi Adebayo", position: "Fashion Designer", company: "Kemi Designs", businessType: "SME", rating: 5, image: null },
+        { content: "Dara makes it easy to get fresh supplies on the same day in Abuja.", author: "Ibrahim Musa", position: "Restaurant Owner", company: "Green Palate", businessType: "SME", rating: 5, image: null },
+        { content: "Friendly, reliable, and cheap. Dara is the best partner for our shop.", author: "Grace Okonkwo", position: "Online Store Owner", company: "Gracie's Boutique", businessType: "SME", rating: 5, image: null },
+        { content: "Moving goods from Lagos to Kano in 24 hours is amazing. They never disappoint.", author: "Ahmed Bello", position: "Electronics Retailer", company: "Bello Tech", businessType: "SME", rating: 5, image: null }
     ]
 }
 
 // Contact Data
 export const contactData = {
     hero: {
-        badge: "Get In Touch",
-        title: "Best Transport",
-        highlight: "Company in Abuja & Lagos",
-        description: "Get a precision freight quote Nigeria. Expert truck hire Lagos Nigeria and cargo transport Lagos to Abuja specialists."
+        badge: "Contact Us",
+        title: "We are here",
+        highlight: "to help you",
+        description: "Have questions or need to hire a truck? Send us a message or call us. We will get back to you quickly."
     },
     form: {
-        title: "Get Your Custom Quote",
-        subtitle: "Tell us about your shipping needs and we'll provide a personalized solution with transparent pricing and delivery timelines."
+        title: "Ask for a price quote",
+        subtitle: "Tell us what you want to ship, where it is going, and we will give you a clear price and delivery time."
     },
     info: [
         {

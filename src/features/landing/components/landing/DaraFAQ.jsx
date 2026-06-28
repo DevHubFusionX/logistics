@@ -5,28 +5,28 @@ import { Link } from 'react-router-dom'
 
 const faqData = [
   {
-    question: "What makes Dara Express one of the top logistics companies in Nigeria?",
-    answer: "Dara Express is a leading logistics and haulage company in Nigeria specializing in cold chain transport. With a robust network of over 120+ modern reefer trucks, advanced IoT telemetry tracking, and comprehensive Goods-in-Transit (GIT) insurance, we provide enterprise-grade reliability that standard transport companies cannot match."
+    question: "What makes Dara Express different from other transport companies?",
+    answer: "Unlike regular transport companies, we specialize in moving items that need to stay cold. We have over 120 cold trucks, live temperature tracking, and full insurance to protect your goods if anything goes wrong."
   },
   {
-    question: "How does temperature-controlled cold chain logistics work in Nigeria?",
-    answer: "Our cold chain logistics utilizes state-of-the-art refrigerated trucks (reefers) and hybrid solar-powered refrigeration units. We maintain precise temperature controls ranging from deep-freeze (-18°C) to chilled (2°C to 8°C). Real-time telemetry monitoring tracks temperature fluctuation down to ±0.1°C, sending instant alerts if anomalies occur."
+    question: "How do you keep items cold during transport?",
+    answer: "We use modern refrigerated trucks and solar-powered cooling systems. We can set the exact temperature your goods need — from deep freeze (-18°C) for food, to cool temperatures (2°C to 8°C) for medicines. We also track the temperature live and get alerts if it changes."
   },
   {
-    question: "Do you offer reefer truck hire in Lagos, Abuja, and other states?",
-    answer: "Yes. We offer flexible reefer truck hire and dry truck services in Lagos, Abuja, Port Harcourt, and across all 36 states in Nigeria. Whether you need last-mile delivery, express cargo transport from Lagos to Abuja, or containerized long-haul haulage from ports to warehouses, our fleet is fully equipped to scale with your demand."
+    question: "Can I hire a cold truck in Lagos, Abuja, and other states?",
+    answer: "Yes. You can rent our trucks in Lagos, Abuja, Port Harcourt, and any other state in Nigeria. We do local deliveries within cities and long trips across the country."
   },
   {
-    question: "How do I calculate rates for cargo transport and haulage services in Nigeria?",
-    answer: "You can get instant pricing estimates using our interactive Booking Calculator on the website, which accounts for distance, tonnage, temperature specifications, and cargo category. For large enterprise logistics contracts, contract logistics, and bulk haulage services, contact our support team for a custom quote."
+    question: "How much does it cost to ship with Dara?",
+    answer: "You can get a quick price estimate using the Booking Calculator on our website. Just select the distance, weight, and temperature you need. For large businesses with regular shipments, you can contact us for special rates."
   },
   {
-    question: "Can you handle pharmaceutical logistics and vaccine transport safely?",
-    answer: "Absolutely. We are specialists in pharma logistics in Nigeria, complying with strict healthcare storage guidelines. We regularly transport vaccines, insulin, biologics, and clinical trial supplies. Our vehicles feature hospital-grade sanitization, automated cooling backups, and we provide complete temperature data logs upon delivery."
+    question: "Is it safe to transport medicines and vaccines with you?",
+    answer: "Yes, we have clean, sanitized trucks specifically for transporting vaccines and medicines. We keep them at the exact temperature required and provide you with a full history log of the temperature during the trip."
   },
   {
-    question: "What features does your real-time shipment telemetry tracking offer?",
-    answer: "Our custom tracking portal provides 24/7 visibility into your shipment. By entering your booking ID at /tracking/track, you can view live GPS coordinates, continuous temperature logs, driver contact details, and estimated time of arrival (ETA) updates."
+    question: "How can I track my shipment?",
+    answer: "Once you book a shipment, you can enter your Booking ID on our tracking page. You will see a live map of where the truck is, the current temperature of your goods, and the driver's contact details."
   }
 ]
 
@@ -116,14 +116,14 @@ export default function DaraFAQ() {
               Frequently Asked Questions
             </h3>
             <p className="font-body-unique text-slate-500 text-sm leading-relaxed">
-              Find detailed explanations regarding our fleet capabilities, temperature management systems, coverage network, and booking processes.
+              Find simple answers to common questions about our trucks, how we track temperature, and how to book a shipment.
             </p>
             <p className="font-body-unique text-slate-500 text-sm leading-relaxed">
               If your question is not listed here, feel free to visit our{' '}
               <Link to="/contact" className="text-[#0056B8] font-bold hover:underline">
                 Contact page
               </Link>{' '}
-              to speak with our operations desk.
+              to speak with our team.
             </p>
           </div>
 

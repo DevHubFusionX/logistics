@@ -30,7 +30,7 @@ const fallbackPosts = [
   {
     id: 1,
     title: "Cold Chain Best Practices for Nigerian Businesses",
-    excerpt: "Essential guidelines for maintaining temperature-controlled logistics across Nigeria's diverse climate zones...",
+    excerpt: "Simple rules for keeping your food and medicines cold and fresh anywhere in Nigeria...",
     featured_image: "/assets/img/service-1.jpg",
     date: "2024-01-15T10:00:00",
     author: { name: "Dara Logistics Team", avatar: "" },
@@ -41,7 +41,7 @@ const fallbackPosts = [
   {
     id: 2,
     title: "Pharmaceutical Transport: Ensuring Drug Safety",
-    excerpt: "How proper cold chain logistics protects pharmaceutical integrity from Lagos to remote Nigerian communities...",
+    excerpt: "How we safely transport vaccines and medicines from Lagos to any village in Nigeria...",
     featured_image: "/assets/img/pharmaceutical.jpg",
     date: "2024-01-10T14:30:00",
     author: { name: "Dr. Sarah Adebayo", avatar: "" },
@@ -52,7 +52,7 @@ const fallbackPosts = [
   {
     id: 3,
     title: "The Future of Logistics Technology in Africa",
-    excerpt: "Exploring how IoT, AI, and blockchain are revolutionizing supply chain management across African markets...",
+    excerpt: "How new technology and smart tracking are making delivery faster and safer in Africa...",
     featured_image: "/assets/img/enterprise.jpg",
     date: "2024-01-05T09:15:00",
     author: { name: "Tech Innovation Team", avatar: "" },
@@ -146,7 +146,7 @@ export default function DaraBlog() {
               </motion.span>
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-              Stay updated with the latest trends, insights, and best practices in cold chain logistics and supply chain management.
+              Read our latest articles to learn about moving cold goods, technology, and shipping tips.
             </p>
           </motion.div>
 
