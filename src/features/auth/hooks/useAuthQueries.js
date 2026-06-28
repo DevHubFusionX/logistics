@@ -18,19 +18,17 @@ export function useProfileQuery() {
     return useQuery({
         queryKey: [...authKeys.profile, user?.id],
         queryFn: async () => {
-            try {
-                const response = isAdmin
-                    ? await authService.getAdminProfile()
-                    : await authService.getProfile()
-                return response.data?.data || response.data || response
-            } catch (error) {
-                if (error.status === 401) logout()
-                throw error
-            }
+            // httpClient already handles 401 globally — don't call logout()
+            // here as well, that causes double-logout races mid-session
+            const response = isAdmin
+                ? await authService.getAdminProfile()
+                : await authService.getProfile()
+            return response.data?.data || response.data || response
         },
-        staleTime: 0,           // always fetch fresh profile on mount
-        gcTime: 0,              // don't keep in cache after unmount
-        enabled: !!user
+        staleTime: 5 * 60 * 1000,  // 5 minutes — avoids hammering API on every render
+        gcTime:    5 * 60 * 1000,
+        enabled: !!user,
+        retry: false                // don't retry auth errors
     })
 }
 

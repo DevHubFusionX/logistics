@@ -23,8 +23,10 @@ const normalizeUser = (user) => {
   }
 }
 
-// Token lives in sessionStorage by default (cleared on tab/browser close)
-// When rememberMe=true we also write it to localStorage so it survives restarts
+// Token lives in both sessionStorage (tab-scoped) and localStorage (persistent).
+// Session duration is controlled by sessionExpiresAt in the store, not by
+// where the token is stored. This ensures the Authorization header is always
+// available even across modals, reloads, and Paystack redirects.
 export const TOKEN_KEY = 'dara_token'
 
 const tokenStorage = {
@@ -32,16 +34,23 @@ const tokenStorage = {
     return sessionStorage.getItem(TOKEN_KEY) || localStorage.getItem(TOKEN_KEY) || null
   },
   set: (token, rememberMe) => {
+    // Always write to both storages so the token is reliably available
+    // in all browser contexts (modals, page transitions, Paystack redirects).
+    // Session lifetime (8h vs 7d) is enforced via sessionExpiresAt.
     sessionStorage.setItem(TOKEN_KEY, token)
-    if (rememberMe) {
-      localStorage.setItem(TOKEN_KEY, token)
+    localStorage.setItem(TOKEN_KEY, token)
+    if (!rememberMe) {
+      // For non-remember-me sessions, tag localStorage entry with a short-lived
+      // marker so we know to clear it when the auth session expires.
+      localStorage.setItem(TOKEN_KEY + '_session_only', '1')
     } else {
-      localStorage.removeItem(TOKEN_KEY)
+      localStorage.removeItem(TOKEN_KEY + '_session_only')
     }
   },
   clear: () => {
     sessionStorage.removeItem(TOKEN_KEY)
     localStorage.removeItem(TOKEN_KEY)
+    localStorage.removeItem(TOKEN_KEY + '_session_only')
   }
 }
 
@@ -146,10 +155,17 @@ export const useAuthStore = create(
       }),
       onRehydrateStorage: () => (state) => {
         if (state) {
-          // After rehydration, verify the token still exists in storage
           const token = tokenStorage.get()
-          if (!token) {
-            // Token gone (sessionStorage cleared) but localStorage had user info
+          const sessionOnly = localStorage.getItem(TOKEN_KEY + '_session_only')
+
+          // If this was a session-only login and the session has expired, clear the token
+          if (sessionOnly && state.sessionExpiresAt && Date.now() > state.sessionExpiresAt) {
+            tokenStorage.clear()
+            state.user = null
+            state.isAuthenticated = false
+            state.sessionExpiresAt = null
+          } else if (!token) {
+            // Token gone but localStorage had user info — clear everything
             state.user = null
             state.isAuthenticated = false
             state.sessionExpiresAt = null

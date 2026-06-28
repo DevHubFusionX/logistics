@@ -22,6 +22,14 @@ const processQueue = (error) => {
   failedQueue = []
 }
 
+// Endpoints where a 401 should NOT trigger an automatic logout.
+// The payment flow has its own error UI — we don't want users booted
+// mid-payment just because the payment API returned a 401.
+const NO_AUTO_LOGOUT_ENDPOINTS = [
+  '/payment',
+  '/payments',
+]
+
 class HttpClient {
   validateEndpoint(endpoint) {
     if (!endpoint.startsWith('/')) return false
@@ -128,6 +136,18 @@ class HttpClient {
       if (!response.ok) {
         // 401 — token expired or revoked
         if (response.status === 401) {
+          // Check if this is a payment endpoint — payment 401s should NOT
+          // force a logout because the payment flow has its own error UI
+          // and the user's main session token is still valid.
+          const isPaymentEndpoint = NO_AUTO_LOGOUT_ENDPOINTS.some(
+            (path) => endpoint === path || endpoint.startsWith(path + '/')
+          )
+
+          if (isPaymentEndpoint) {
+            const errMsg = data.msg || data.message || 'Payment authorisation failed. Please try again.'
+            throw new ApiError(errMsg, 401, data)
+          }
+
           // If a refresh is already in progress, queue this request
           if (isRefreshing) {
             return new Promise((resolve, reject) => {
