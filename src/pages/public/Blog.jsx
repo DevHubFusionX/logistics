@@ -84,7 +84,7 @@ export default function Blog() {
         }
 
         const { posts: wpPosts, hasMore: more } = await wordpressApi.getPosts(params)
-        
+
         if (wpPosts.length > 0) {
           setPosts(wpPosts)
           setHasMore(more)
@@ -131,14 +131,14 @@ export default function Blog() {
     <div className="min-h-screen bg-slate-50">
       <SEO
         title="Cold Chain Logistics Blog — Nigeria Freight & Pharma Insights"
-        description="Expert insights on cold chain logistics Nigeria, pharma transport, frozen food haulage, and refrigerated trucking from Dara Express — Nigeria's #1 reefer truck company."
+        description="Expert insights on cold chain logistics Nigeria, pharma transport, frozen food haulage, and refrigerated trucking from Darafort— Nigeria's #1 reefer truck company."
         keywords="cold chain logistics blog Nigeria, pharma logistics insights, frozen food transport blog, reefer trucks Nigeria news, logistics company Nigeria articles, cold chain best practices"
         canonical="/blog"
         breadcrumbs={[{ name: 'Blog', url: '/blog' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Blog',
-          'name': 'Dara Express Cold Chain Knowledge Hub',
+          'name': 'DarafortCold Chain Knowledge Hub',
           'description': 'Expert insights on cold chain logistics, pharma transport, frozen food haulage and reefer trucking across Nigeria.',
           'url': 'https://daraexpress.com/blog',
           'publisher': {
@@ -177,7 +177,7 @@ export default function Blog() {
             transition={{ delay: 0.2 }}
             className="text-xl text-slate-600 max-w-3xl mx-auto"
           >
-            Expert insights, industry trends, and best practices in pharmaceutical 
+            Expert insights, industry trends, and best practices in pharmaceutical
             cold chain logistics from our team of specialists.
           </motion.p>
 
@@ -215,11 +215,10 @@ export default function Blog() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-6 py-2.5 rounded-sm font-semibold transition-all cursor-pointer ${
-                  selectedCategory === cat
+                className={`px-6 py-2.5 rounded-sm font-semibold transition-all cursor-pointer ${selectedCategory === cat
                     ? 'bg-[#0056B8] text-white shadow-lg'
                     : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200'
-                }`}
+                  }`}
               >
                 {cat}
               </button>

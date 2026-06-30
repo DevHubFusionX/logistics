@@ -7,7 +7,7 @@ export default function Terms() {
   const sections = [
     {
       title: '1. Acceptance of Terms',
-      content: `By accessing or using the Dara Express website, platform, and mobile application (operated by DaraFort Global Services), you agree to be bound by these Terms of Service, all applicable laws, and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.`,
+      content: `By accessing or using the Darafortwebsite, platform, and mobile application (operated by DaraFort Global Services), you agree to be bound by these Terms of Service, all applicable laws, and regulations. If you do not agree with any of these terms, you are prohibited from using or accessing this site.`,
     },
     {
       title: '2. Logistics Services & Cargo Requirements',
@@ -23,7 +23,7 @@ export default function Terms() {
     },
     {
       title: '4. Limitation of Liability',
-      content: `Dara Express and its partners will not be held liable for:
+      content: `Darafortand its partners will not be held liable for:
       • Indirect, incidental, or consequential damages resulting from delays in transit caused by force majeure event (including but not limited to severe weather, port congestion, civil unrest, or road construction).
       • Spoilage of cargo where instructions or temperature tolerances were incorrectly declared during booking.
       • Maximum liability for verified loss or damage during transit is limited to the declared value of the cargo up to the maximum liability cap covered by our transit insurance.`,
@@ -43,7 +43,7 @@ export default function Terms() {
       <SEO
         title="Terms of Service — Dara Express"
         description="Read the terms and conditions for booking shipments, logistics services, payments, and cargo rules with Dara Express."
-        keywords="terms of service, Dara Express terms, logistics conditions Nigeria, cold chain terms"
+        keywords="terms of service, Darafortterms, logistics conditions Nigeria, cold chain terms"
         canonical="/terms"
         breadcrumbs={[{ name: 'Terms of Service', url: '/terms' }]}
       />

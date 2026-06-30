@@ -1,5 +1,5 @@
 /**
- * Canonical validation module for the Dara Express application.
+ * Canonical validation module for the Darafortapplication.
  * 
  * All validation logic is consolidated here. Other modules should import
  * from this file instead of re-implementing validation rules.

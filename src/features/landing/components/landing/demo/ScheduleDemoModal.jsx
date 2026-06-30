@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { 
-    X, CheckCircle2, User, Mail, Phone, Building, 
+import {
+    X, CheckCircle2, User, Mail, Phone, Building,
     Briefcase, Globe, ChevronDown, Clock, Shield, Zap
 } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -25,7 +25,7 @@ export default function ScheduleDemoModal({ isOpen, onClose }) {
     }
 
     const toggleProduct = (product) => {
-        setSelectedProducts(prev => 
+        setSelectedProducts(prev =>
             prev.includes(product)
                 ? prev.filter(p => p !== product)
                 : [...prev, product]
@@ -36,8 +36,8 @@ export default function ScheduleDemoModal({ isOpen, onClose }) {
         e.preventDefault()
         setIsSubmitting(true)
 
-        const productsString = selectedProducts.length > 0 
-            ? selectedProducts.join(', ') 
+        const productsString = selectedProducts.length > 0
+            ? selectedProducts.join(', ')
             : 'Not specified'
 
         try {
@@ -50,7 +50,7 @@ export default function ScheduleDemoModal({ isOpen, onClose }) {
                 body: JSON.stringify({
                     access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
                     subject: `New Demo Request from ${formData.fullName}`,
-                    from_name: 'DARA Express Demo Form',
+                    from_name: 'DarafortDemo Form',
                     to: 'contact@daraexpress.com',
                     ...formData,
                     productsOfInterest: productsString,
@@ -219,13 +219,13 @@ Products of Interest: ${productsString}
                         {/* RIGHT COLUMN: FORM OR SUCCESS STATE */}
                         <div className="w-full md:w-[60%] bg-slate-50/50 p-5 sm:p-8 flex flex-col justify-center">
                             {isSuccess ? (
-                                <motion.div 
+                                <motion.div
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="text-center space-y-4 py-8"
                                 >
                                     <div className="flex justify-center">
-                                        <motion.div 
+                                        <motion.div
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
                                             transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.1 }}
@@ -239,7 +239,7 @@ Products of Interest: ${productsString}
                                             Request Confirmed!
                                         </h3>
                                         <p className="font-body-unique text-slate-600 text-sm leading-relaxed">
-                                            Thanks for reaching out, <span className="font-bold text-slate-800">{formData.fullName}</span>. 
+                                            Thanks for reaching out, <span className="font-bold text-slate-800">{formData.fullName}</span>.
                                             We've sent a summary to <span className="font-semibold text-slate-800">{formData.email}</span>.
                                         </p>
                                         <p className="font-body-unique text-slate-500 text-xs leading-relaxed pt-2">
@@ -337,11 +337,10 @@ Products of Interest: ${productsString}
                                                             whileHover={{ y: -1 }}
                                                             whileTap={{ scale: 0.97 }}
                                                             onClick={() => toggleProduct(prod.label)}
-                                                            className={`px-2.5 py-1.5 rounded-xl text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${
-                                                                isSelected 
+                                                            className={`px-2.5 py-1.5 rounded-xl text-[11px] font-semibold border transition-all flex items-center gap-1 cursor-pointer ${isSelected
                                                                     ? 'bg-[#0056B8]/5 border-[#0056B8] text-[#0056B8] font-bold shadow-sm shadow-[#0056B8]/5'
                                                                     : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-800 shadow-sm shadow-slate-100/50'
-                                                            }`}
+                                                                }`}
                                                         >
                                                             {prod.label}
                                                         </motion.button>

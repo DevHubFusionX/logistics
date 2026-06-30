@@ -5,18 +5,18 @@ import { motion } from 'framer-motion'
 import { ScheduleDemoModal } from '../../features/landing/components/landing/demo'
 
 const quickLinks = [
-  { label: 'Home',          to: '/' },
-  { label: 'The Problem',   to: '#why-us' },
-  { label: 'How it works',  to: '#how-it-works' },
-  { label: 'Services',      to: '/services' },
-  { label: 'Contact',       to: '/contact' },
+  { label: 'Home', to: '/' },
+  { label: 'The Problem', to: '#why-us' },
+  { label: 'How it works', to: '#how-it-works' },
+  { label: 'Services', to: '/services' },
+  { label: 'Contact', to: '/contact' },
 ]
 
 const serviceLinks = [
-  { label: 'Pharma Logistics',        to: '/services' },
-  { label: 'Frozen Food Transport',   to: '/services' },
-  { label: 'Refrigerated Transport',  to: '/services' },
-  { label: 'Haulage Services',        to: '/services' },
+  { label: 'Pharma Logistics', to: '/services' },
+  { label: 'Frozen Food Transport', to: '/services' },
+  { label: 'Refrigerated Transport', to: '/services' },
+  { label: 'Haulage Services', to: '/services' },
 ]
 
 export default function Footer() {
@@ -24,12 +24,12 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#0056B8] text-white px-4 sm:px-14 lg:px-20 pt-16 md:pt-20 pb-12 font-sans relative overflow-hidden">
-      
+
       <div className="max-w-7xl mx-auto">
-        
+
         {/* ── TOP SECTION: Large Headline & Action ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start pb-10 md:pb-16 border-b border-white/20">
-          
+
           {/* Headline and Button */}
           <div className="lg:col-span-8 flex flex-col items-start text-left">
             <h2 className="font-heading-unique text-xl sm:text-4.5xl lg:text-5.5xl font-bold leading-tight tracking-tight max-w-2xl">
@@ -54,7 +54,7 @@ export default function Footer() {
 
         {/* ── MIDDLE SECTION: Links Grid ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 py-12 md:py-16 text-left">
-          
+
           {/* Column 1: Company Links */}
           <div className="col-span-1">
             <p className="text-white/40 text-[10px] font-bold tracking-[0.2em] uppercase mb-6 font-body-unique">
@@ -100,8 +100,8 @@ export default function Footer() {
             </p>
             <ul className="space-y-4 font-body-unique">
               {[
-                { icon: Phone,  lines: ['+234 811 577 9007', '+234 912 116 8485'] },
-                { icon: Mail,   lines: ['hello@daraexpress.com'] },
+                { icon: Phone, lines: ['+234 811 577 9007', '+234 912 116 8485'] },
+                { icon: Mail, lines: ['hello@daraexpress.com'] },
                 { icon: MapPin, lines: ['MJS House, 366 Murtala Muhammed Road, Yaba, Lagos'] },
               ].map(({ icon: Icon, lines }, i) => (
                 <li key={i} className="flex items-start gap-3">
@@ -148,7 +148,7 @@ export default function Footer() {
         {/* ── BOTTOM SECTION: Large Wordmark with Animated Truck ── */}
         <div className="hidden md:flex w-full items-center justify-center py-16 border-t border-white/10 select-none overflow-hidden text-center">
           <div className="flex items-center justify-center gap-2 hover:scale-[1.02] transition-all duration-700 cursor-pointer relative">
-            
+
             {/* Wrapper for the letters */}
             <div className="flex items-center select-none tracking-tighter relative z-0">
               {/* 
@@ -163,15 +163,15 @@ export default function Footer() {
                 const TOTAL_CHARS = 14; // last index
                 const letterDelay = TRUCK_DELAY + (index / TOTAL_CHARS) * TRUCK_DURATION;
                 return (
-                  <motion.span 
+                  <motion.span
                     key={index}
                     initial={{ opacity: 0, y: 36 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.1 }}
-                    transition={{ 
-                      duration: 0.5, 
-                      delay: letterDelay, 
-                      ease: [0.16, 1, 0.3, 1] 
+                    transition={{
+                      duration: 0.5,
+                      delay: letterDelay,
+                      ease: [0.16, 1, 0.3, 1]
                     }}
                     className={`inline-block font-heading-unique font-black text-white leading-none tracking-tighter text-[9.5vw] ${char === ' ' ? '' : '-mr-[0.03em]'}`}
                     style={{
@@ -190,19 +190,19 @@ export default function Footer() {
               initial={{ x: "-70vw" }}
               whileInView={{ x: 0 }}
               viewport={{ once: true, amount: 0.1 }}
-              transition={{ 
-                duration: 3.0, 
-                delay: 0.3, 
+              transition={{
+                duration: 3.0,
+                delay: 0.3,
                 ease: "linear"
               }}
               className="flex items-center relative z-10 self-center"
             >
               {/* Wind / Speed lines — dissolve when truck stops at 3.3s total */}
-              <motion.div 
+              <motion.div
                 initial={{ opacity: 0.85, scaleX: 1 }}
                 animate={{ opacity: 0, scaleX: 0 }}
-                transition={{ 
-                  delay: 3.3, 
+                transition={{
+                  delay: 3.3,
                   duration: 0.4,
                   ease: "easeOut"
                 }}
@@ -214,16 +214,16 @@ export default function Footer() {
               </motion.div>
 
               {/* Speed boost on the SVG itself — squish/stretch + bounce while driving, settle when parked */}
-              <motion.svg 
-                version="1.1" 
-                id="Capa_1" 
-                viewBox="0 0 612 612" 
+              <motion.svg
+                version="1.1"
+                id="Capa_1"
+                viewBox="0 0 612 612"
                 fill="currentColor"
                 className="w-[7.5vw] h-[7.5vw] text-white/85 drop-shadow-[0_8px_20px_rgba(0,0,0,0.12)]"
                 animate={{
                   scaleX: [1, 1.12, 0.95, 1.08, 1, 1],
                   scaleY: [1, 0.92, 1.05, 0.94, 1, 1],
-                  y:      [0, -4,   2,   -3,   0, 0],
+                  y: [0, -4, 2, -3, 0, 0],
                 }}
                 transition={{
                   duration: 3.0,
@@ -258,7 +258,7 @@ export default function Footer() {
         {/* ── COPYRIGHT ROW ── */}
         <div className="border-t border-white/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left font-body-unique text-xs text-blue-100/60">
           <p>
-            © {new Date().getFullYear()} Dara Express Logistics. All rights reserved.
+            © {new Date().getFullYear()} DarafortLogistics. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="hover:text-white transition-colors">

@@ -331,9 +331,8 @@ export default function ManagerLoginForm() {
                   }}
                 >
                   <Mail
-                    className={`w-[18px] h-[18px] transition-colors duration-200 ${
-                      focusedField === 'email' ? 'text-sky-500' : 'text-gray-400'
-                    }`}
+                    className={`w-[18px] h-[18px] transition-colors duration-200 ${focusedField === 'email' ? 'text-sky-500' : 'text-gray-400'
+                      }`}
                   />
                 </div>
                 <input
@@ -385,9 +384,8 @@ export default function ManagerLoginForm() {
                   }}
                 >
                   <Lock
-                    className={`w-[18px] h-[18px] transition-colors duration-200 ${
-                      focusedField === 'password' ? 'text-sky-500' : 'text-gray-400'
-                    }`}
+                    className={`w-[18px] h-[18px] transition-colors duration-200 ${focusedField === 'password' ? 'text-sky-500' : 'text-gray-400'
+                      }`}
                   />
                 </div>
                 <input
@@ -450,9 +448,9 @@ export default function ManagerLoginForm() {
               whileHover={
                 !isLoading && !isLocked
                   ? {
-                      scale: 1.01,
-                      boxShadow: '0 12px 32px rgba(3, 105, 161, 0.4), 0 4px 12px rgba(0,0,0,0.15)'
-                    }
+                    scale: 1.01,
+                    boxShadow: '0 12px 32px rgba(3, 105, 161, 0.4), 0 4px 12px rgba(0,0,0,0.15)'
+                  }
                   : {}
               }
               whileTap={!isLoading && !isLocked ? { scale: 0.99 } : {}}
@@ -528,7 +526,7 @@ export default function ManagerLoginForm() {
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-xs text-slate-400">
-              Protected by enterprise-grade security • Dara Express © {new Date().getFullYear()}
+              Protected by enterprise-grade security • Darafort© {new Date().getFullYear()}
             </p>
           </div>
         </motion.div>

@@ -57,8 +57,8 @@ export default function Contact() {
   return (
     <>
       <SEO
-        title="Contact Dara Express — Get a Cold Chain Logistics Quote Nigeria"
-        description="Get a free cold chain logistics quote from Dara Express — Nigeria's #1 reefer truck company. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Lagos, Abuja and all 36 states."
+        title="Contact Darafort— Get a Cold Chain Logistics Quote Nigeria"
+        description="Get a free cold chain logistics quote from Darafort— Nigeria's #1 reefer truck company. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Lagos, Abuja and all 36 states."
         keywords="contact Dara Express, cold chain quote Nigeria, logistics quote Lagos, freight quote Nigeria, refrigerated transport quote, reefer truck hire Nigeria, logistics inquiry Nigeria"
         canonical="/contact"
         breadcrumbs={[{ name: 'Contact', url: '/contact' }]}
@@ -168,7 +168,7 @@ export default function Contact() {
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-5 text-left font-body-unique">
-                
+
                 {/* First Name & Last Name */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
@@ -320,14 +320,14 @@ export default function Contact() {
       {/* Office Locations Map Section (Bottom) */}
       <section className="h-[360px] sm:h-[440px] relative overflow-hidden bg-slate-100">
         <iframe
-          title="Dara Express Location"
+          title="DarafortLocation"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7!2d3.3792!3d6.5095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8c5!2sMJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos!5e0!3m2!1sen!2sng!4v1"
           className="absolute inset-0 w-full h-full border-0 grayscale opacity-85"
           allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         />
-        
+
         {/* HQ Coordinates overlay */}
         <div className="absolute bottom-6 left-6 right-6 sm:left-14 sm:right-auto bg-white/95 backdrop-blur border border-slate-100 rounded-2xl px-6 py-4 shadow-xl max-w-sm text-left">
           <p className="text-[#0056B8] text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const faqData = [
   {
-    question: "What makes Dara Express different from other transport companies?",
+    question: "What makes Darafortdifferent from other transport companies?",
     answer: "Unlike regular transport companies, we specialize in moving items that need to stay cold. We have over 120 cold trucks, live temperature tracking, and full insurance to protect your goods if anything goes wrong."
   },
   {
@@ -67,7 +67,7 @@ export default function DaraFAQ() {
 
   return (
     <section id="faq" className="relative bg-white py-24 px-6 md:px-12 lg:px-20 overflow-hidden">
-      
+
       {/* Background Dot Grid Layer (exactly matches DaraHowItWorks.jsx) */}
       <div
         className="absolute inset-0 z-0 opacity-[0.25]"
@@ -78,7 +78,7 @@ export default function DaraFAQ() {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        
+
         {/* Section Heading with Animated Line */}
         <motion.div
           variants={headerContainerVariants}
@@ -109,7 +109,7 @@ export default function DaraFAQ() {
 
         {/* Clean, Spacious Two-Column layout: info callout & questions */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
+
           {/* Left Column: Text Summary */}
           <div className="lg:col-span-4 space-y-6 text-left">
             <h3 className="font-heading-unique font-bold text-slate-950 text-xl leading-snug">
@@ -132,7 +132,7 @@ export default function DaraFAQ() {
             {faqData.map((item, idx) => {
               const isOpen = openIndex === idx
               return (
-                <div 
+                <div
                   key={idx}
                   className="bg-white border border-slate-100 rounded-lg overflow-hidden transition-all duration-300 hover:border-slate-200"
                 >
@@ -142,9 +142,8 @@ export default function DaraFAQ() {
                     aria-expanded={isOpen}
                   >
                     <span>{item.question}</span>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                      isOpen ? 'bg-blue-50 text-[#0056B8]' : 'bg-slate-50 text-slate-400'
-                    }`}>
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${isOpen ? 'bg-blue-50 text-[#0056B8]' : 'bg-slate-50 text-slate-400'
+                      }`}>
                       {isOpen ? <Minus className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
                     </div>
                   </button>

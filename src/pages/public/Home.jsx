@@ -17,8 +17,8 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Dara Express — Cold Chain Logistics & Reefer Trucks Nigeria"
-        description="Dara Express is Nigeria's #1 cold chain logistics company. 120+ reefer trucks for pharma logistics, frozen food transport Lagos to Abuja, refrigerated transport, and haulage services across all 36 Nigerian states."
+        title="Darafort— Cold Chain Logistics & Reefer Trucks Nigeria"
+        description="Darafortis Nigeria's #1 cold chain logistics company. 120+ reefer trucks for pharma logistics, frozen food transport Lagos to Abuja, refrigerated transport, and haulage services across all 36 Nigerian states."
         keywords="Dara Express, cold chain logistics Nigeria, reefer trucks Nigeria, refrigerated transport Lagos, pharma logistics Nigeria, frozen food transport Lagos, haulage services Nigeria, logistics companies in Nigeria, transport company Abuja, temperature controlled logistics Nigeria"
         canonical="/"
         jsonLd={{

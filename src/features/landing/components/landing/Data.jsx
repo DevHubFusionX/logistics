@@ -42,7 +42,7 @@ export const aboutData = {
         prefix: "A Simple and Reliable",
         highlight: "Transport Partner"
     },
-    description: "Dara Express is a simple, reliable transport company in Abuja and Lagos. We make it easy to move items that need to stay cold, like food and medicine, so they arrive fresh and safe.",
+    description: "Darafortis a simple, reliable transport company in Abuja and Lagos. We make it easy to move items that need to stay cold, like food and medicine, so they arrive fresh and safe.",
     timeline: [
         {
             year: "How We Started",

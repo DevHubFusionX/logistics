@@ -125,15 +125,15 @@ export default function Services() {
     <>
       <SEO
         title="Cold Chain & Reefer Truck Services Nigeria — Pharma, Frozen Food, Haulage"
-        description="Dara Express offers Nigeria's best cold chain services — pharma logistics, frozen food transport Lagos to Abuja, refrigerated transport, and enterprise haulage across all 36 states. Get an instant quote."
+        description="Darafortoffers Nigeria's best cold chain services — pharma logistics, frozen food transport Lagos to Abuja, refrigerated transport, and enterprise haulage across all 36 states. Get an instant quote."
         keywords="pharma logistics Nigeria, frozen food transport Lagos, refrigerated transport Lagos Abuja, reefer trucks Nigeria, haulage services Nigeria, cold chain services Nigeria, temperature controlled logistics, last mile delivery Nigeria"
         canonical="/services"
         breadcrumbs={[{ name: 'Services', url: '/services' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          'name': 'Dara Express Cold Chain Services',
-          'description': 'Cold chain logistics services offered by Dara Express across Nigeria',
+          'name': 'DarafortCold Chain Services',
+          'description': 'Cold chain logistics services offered by Darafortacross Nigeria',
           'itemListElement': [
             {
               '@type': 'ListItem', 'position': 1,
@@ -166,7 +166,7 @@ export default function Services() {
           >
             Our Core Capabilities
           </motion.p>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -196,9 +196,9 @@ export default function Services() {
           >
             {[
               { icon: Thermometer, label: '±0.1°C precision' },
-              { icon: Shield,      label: 'GIT fully insured' },
-              { icon: MapPin,      label: 'All 36 states' },
-              { icon: Clock,       label: 'Same-day available' },
+              { icon: Shield, label: 'GIT fully insured' },
+              { icon: MapPin, label: 'All 36 states' },
+              { icon: Clock, label: 'Same-day available' },
             ].map(({ icon: Icon, label }) => (
               <span key={label} className="inline-flex items-center gap-2 text-slate-400 text-xs sm:text-sm font-semibold font-body-unique">
                 <Icon className="w-4 h-4 text-[#0056B8]" />
@@ -304,7 +304,7 @@ export default function Services() {
       {/* Call to Action Section */}
       <section className="bg-white pb-20 max-w-7xl mx-auto px-6 md:px-12">
         <div className="bg-[#0056B8] rounded-3xl p-8 sm:p-12 lg:p-14 text-white text-left relative overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           <div className="lg:col-span-7 relative z-10">
             <p className="text-blue-300 font-bold text-xs tracking-[0.2em] uppercase mb-4">Ready to ship?</p>
             <h2 className="font-heading-unique font-extrabold text-white text-2xl sm:text-3xl lg:text-4xl leading-tight mb-5">
@@ -315,7 +315,7 @@ export default function Services() {
             <p className="font-body-unique text-white/70 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
               Get custom freight rates, fleet allocation schedules, and route proposals from our account managers today.
             </p>
-            
+
             <div className="flex flex-wrap gap-3.5">
               <Link
                 to="/booking/request"
@@ -335,9 +335,9 @@ export default function Services() {
           {/* Quick highlights grid */}
           <div className="lg:col-span-5 grid grid-cols-2 gap-4 relative z-10 w-full">
             {[
-              { value: '120',    label: 'Reefer trucks\non network' },
-              { value: '200+',   label: 'Cold chain\ntrips completed' },
-              { value: '36',     label: 'States\ncovered' },
+              { value: '120', label: 'Reefer trucks\non network' },
+              { value: '200+', label: 'Cold chain\ntrips completed' },
+              { value: '36', label: 'States\ncovered' },
               { value: '±0.1°C', label: 'Temperature\nprecision' },
             ].map(({ value, label }) => (
               <div

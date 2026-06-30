@@ -6,17 +6,17 @@ import SEO from '../../components/common/SEO'
 const ease = [0.16, 1, 0.3, 1]
 
 const stats = [
-  { value: '120',  label: 'Reefer trucks on network' },
+  { value: '120', label: 'Reefer trucks on network' },
   { value: '200+', label: 'Cold chain trips completed' },
-  { value: '36',   label: 'States covered' },
+  { value: '36', label: 'States covered' },
   { value: '99.8%', label: 'Delivery success rate' },
 ]
 
 const values = [
-  { icon: Shield,      num: '01', title: 'Reliability',    body: 'We show up. Every shipment, every route, every time — your cargo arrives safely and on schedule.' },
-  { icon: Thermometer, num: '02', title: 'Precision',      body: 'Temperature is not a suggestion. We maintain ±0.1°C accuracy from pickup to delivery, with full documentation.' },
-  { icon: Zap,         num: '03', title: 'Innovation',     body: 'IoT sensors, real-time GPS, live dashboards — we use technology to give you visibility and control.' },
-  { icon: MapPin,      num: '04', title: 'Customer Focus', body: 'Every solution is tailored. We learn your cargo, your routes, your timelines — and we build around them.' },
+  { icon: Shield, num: '01', title: 'Reliability', body: 'We show up. Every shipment, every route, every time — your cargo arrives safely and on schedule.' },
+  { icon: Thermometer, num: '02', title: 'Precision', body: 'Temperature is not a suggestion. We maintain ±0.1°C accuracy from pickup to delivery, with full documentation.' },
+  { icon: Zap, num: '03', title: 'Innovation', body: 'IoT sensors, real-time GPS, live dashboards — we use technology to give you visibility and control.' },
+  { icon: MapPin, num: '04', title: 'Customer Focus', body: 'Every solution is tailored. We learn your cargo, your routes, your timelines — and we build around them.' },
 ]
 
 const chapters = [
@@ -58,8 +58,8 @@ export default function About() {
   return (
     <>
       <SEO
-        title="About Dara Express — Nigeria's Cold Chain Logistics Company"
-        description="Dara Express is Nigeria's leading cold chain logistics company, built in Lagos to move pharma, frozen food, and perishables safely across all 36 states. Learn how we're building Nigeria's cold chain backbone."
+        title="About Darafort— Nigeria's Cold Chain Logistics Company"
+        description="Darafortis Nigeria's leading cold chain logistics company, built in Lagos to move pharma, frozen food, and perishables safely across all 36 states. Learn how we're building Nigeria's cold chain backbone."
         keywords="about Dara Express, cold chain logistics company Nigeria, logistics company Lagos, transport company Abuja, reefer trucks history Nigeria, cold chain Nigeria, logistics company Nigeria"
         canonical="/about"
         breadcrumbs={[{ name: 'About', url: '/about' }]}
@@ -95,7 +95,7 @@ export default function About() {
           >
             Our Story
           </motion.p>
-          
+
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -141,9 +141,8 @@ export default function About() {
             return (
               <div
                 key={ch.num}
-                className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-20 ${
-                  isEven ? '' : 'lg:flex-row-reverse'
-                }`}
+                className={`flex flex-col lg:flex-row items-center gap-10 lg:gap-20 ${isEven ? '' : 'lg:flex-row-reverse'
+                  }`}
               >
                 {/* Image panel */}
                 <div className="w-full lg:w-1/2">
@@ -253,7 +252,7 @@ export default function About() {
                     </div>
                     <span className="font-heading-unique font-black text-slate-200 text-3xl select-none">{val.num}</span>
                   </div>
-                  
+
                   <h3 className="font-heading-unique font-bold text-slate-800 text-lg mb-2">{val.title}</h3>
                   <p className="font-body-unique text-slate-400 text-xs leading-relaxed flex-1">{val.body}</p>
                 </div>
@@ -266,7 +265,7 @@ export default function About() {
       {/* Call to Action */}
       <section className="bg-white pb-20 max-w-7xl mx-auto px-6 md:px-12">
         <div className="bg-[#0056B8] rounded-3xl p-8 sm:p-12 lg:p-14 text-white text-left relative overflow-hidden shadow-xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          
+
           <div className="lg:col-span-7 relative z-10">
             <p className="text-blue-300 font-bold text-xs tracking-[0.2em] uppercase mb-4">Work with us</p>
             <h2 className="font-heading-unique font-extrabold text-white text-2xl sm:text-3xl lg:text-4xl leading-tight mb-5">
@@ -277,7 +276,7 @@ export default function About() {
             <p className="font-body-unique text-white/70 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
               Join businesses across Nigeria who trust Dara to move their most sensitive cargo — on time, every time.
             </p>
-            
+
             <div className="flex flex-wrap gap-3.5">
               <Link
                 to="/booking/request"

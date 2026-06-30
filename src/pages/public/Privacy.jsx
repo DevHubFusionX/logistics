@@ -14,7 +14,7 @@ export default function Privacy() {
     },
     {
       title: '2. How We Use Your Information',
-      content: `Dara Express uses the collected data for various purposes:
+      content: `Darafortuses the collected data for various purposes:
       • To process, calculate, and coordinate your shipment bookings.
       • To monitor cargo temperature logs and provide real-time GPS tracking status.
       • To send invoices, payment confirmations, and support ticket updates.
@@ -55,8 +55,8 @@ export default function Privacy() {
     <>
       <SEO
         title="Privacy Policy — Dara Express"
-        description="Learn how Dara Express collects, protects, and uses your personal and shipment information. Our commitment to privacy, cold chain transparency, and data security."
-        keywords="privacy policy, Dara Express privacy, data security logistics Nigeria, cold chain privacy"
+        description="Learn how Darafortcollects, protects, and uses your personal and shipment information. Our commitment to privacy, cold chain transparency, and data security."
+        keywords="privacy policy, Darafortprivacy, data security logistics Nigeria, cold chain privacy"
         canonical="/privacy"
         breadcrumbs={[{ name: 'Privacy Policy', url: '/privacy' }]}
       />
@@ -99,7 +99,7 @@ export default function Privacy() {
             className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_15px_30px_rgba(0,0,0,0.01)] mb-12"
           >
             <p className="font-body-unique text-slate-600 text-sm sm:text-base leading-relaxed">
-              At Dara Express (operated by DaraFort Global Services), protecting your privacy and securing your operational data is fundamental to how we build our logistics products. This Privacy Policy describes how we collect, store, and process information from our website visitors, customers, and partners.
+              At Darafort(operated by DaraFort Global Services), protecting your privacy and securing your operational data is fundamental to how we build our logistics products. This Privacy Policy describes how we collect, store, and process information from our website visitors, customers, and partners.
             </p>
           </motion.div>
 
@@ -133,7 +133,7 @@ export default function Privacy() {
             className="mt-12 bg-blue-50/50 border border-blue-100/50 rounded-3xl p-6 sm:p-8 text-center"
           >
             <p className="font-body-unique text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
-              We periodically update our policies to align with national logistics regulations and global data privacy standards. Continuing to use Dara Express services signifies your consent to any changes.
+              We periodically update our policies to align with national logistics regulations and global data privacy standards. Continuing to use Darafortservices signifies your consent to any changes.
             </p>
           </motion.div>
         </div>

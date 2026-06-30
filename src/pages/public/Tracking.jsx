@@ -48,15 +48,15 @@ export default function Tracking() {
     <>
       <SEO
         title="Track Your Shipment — Real-Time Cold Chain Tracking Nigeria"
-        description="Track your Dara Express shipment in real-time. Live updates for reefer trucks in Nigeria, cargo transport Lagos to Abuja, and temperature controlled logistics."
-        keywords="track shipment Nigeria, cargo tracking, cold chain tracking, Dara Express tracking"
+        description="Track your Darafortshipment in real-time. Live updates for reefer trucks in Nigeria, cargo transport Lagos to Abuja, and temperature controlled logistics."
+        keywords="track shipment Nigeria, cargo tracking, cold chain tracking, Daraforttracking"
         canonical="/tracking"
       />
 
       {/* Main Section */}
       <section className="bg-slate-50 min-h-screen pt-28 pb-16 flex flex-col items-center">
         <div className="max-w-7xl w-full mx-auto px-6 md:px-12">
-          
+
           {/* Header Description */}
           <div className="text-center max-w-2xl mx-auto mb-10">
             <motion.p
@@ -161,7 +161,7 @@ export default function Tracking() {
                   transition={{ duration: 0.85, ease }}
                   className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
                 >
-                  
+
                   {/* Left Column: Metadata Dashboard (col-span-5) */}
                   <div className="lg:col-span-5 space-y-6">
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
@@ -236,7 +236,7 @@ export default function Tracking() {
 
                   {/* Right Column: Telemetry & Timeline (col-span-7) */}
                   <div className="lg:col-span-7 space-y-6">
-                    
+
                     {/* Live Temperature Telemetry widget */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
                       <div className="flex items-start justify-between gap-4 mb-6">
@@ -282,11 +282,11 @@ export default function Tracking() {
                     {/* Timeline tracker */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
                       <p className="text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-6">Shipment Milestones</p>
-                      
+
                       <div className="relative pl-6">
                         {/* Connecting Line */}
                         <div className="absolute left-2.5 top-2 bottom-2 w-0.5 bg-slate-100" />
-                        
+
                         <div className="space-y-6">
                           {shipment.timeline?.map((event, i) => (
                             <motion.div
@@ -297,16 +297,15 @@ export default function Tracking() {
                               className="relative flex items-start gap-4"
                             >
                               {/* Indicator Ring */}
-                              <div className={`absolute -left-6 z-10 w-5.5 h-5.5 rounded-full flex items-center justify-center ${
-                                event.completed ? 'bg-[#0056B8] text-white' : 'bg-slate-100 text-slate-400'
-                              } border-4 border-white shadow-sm`}>
+                              <div className={`absolute -left-6 z-10 w-5.5 h-5.5 rounded-full flex items-center justify-center ${event.completed ? 'bg-[#0056B8] text-white' : 'bg-slate-100 text-slate-400'
+                                } border-4 border-white shadow-sm`}>
                                 {event.completed ? (
                                   <CheckCircle className="w-2.5 h-2.5" />
                                 ) : (
                                   <Clock className="w-2.5 h-2.5" />
                                 )}
                               </div>
-                              
+
                               <div className="flex-1 min-w-0">
                                 <p className={`font-body-unique font-bold text-sm leading-tight ${event.completed ? 'text-slate-900' : 'text-slate-400'}`}>
                                   {event.status}
