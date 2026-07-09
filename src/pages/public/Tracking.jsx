@@ -5,6 +5,7 @@ import { Search, MapPin, Package, Truck, CheckCircle, Clock, AlertCircle, Refres
 import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import toast from 'react-hot-toast'
 import SEO from '../../components/common/SEO'
+import TrackingMap from '../../features/tracking/components/tracking/TrackingMap'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -29,6 +30,14 @@ export default function Tracking() {
     refetchInterval: autoRefresh ? 30000 : false,
     enabled: !!searchId,
   })
+
+  const [liveLocation, setLiveLocation] = useState('')
+
+  useEffect(() => {
+    if (shipment) {
+      setLiveLocation(shipment.currentLocation)
+    }
+  }, [shipment])
 
   const handleTrack = (e) => {
     if (e) e.preventDefault()
@@ -194,7 +203,7 @@ export default function Tracking() {
                         </div>
                         <div className="bg-blue-50/50 border border-blue-100/50 rounded-2xl p-4">
                           <p className="text-[#0056B8] text-[8px] font-bold tracking-widest uppercase mb-1">Current Location</p>
-                          <p className="font-body-unique font-bold text-blue-900 text-sm">{shipment.currentLocation}</p>
+                          <p className="font-body-unique font-bold text-blue-900 text-sm">{liveLocation || shipment.currentLocation}</p>
                         </div>
                         <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100/50">
                           <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-1">To (Destination)</p>
@@ -205,27 +214,7 @@ export default function Tracking() {
 
                     {/* Live GPS Transit Map */}
                     {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
-                      <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left overflow-hidden">
-                        <div className="flex items-center gap-2.5 mb-4">
-                          <div className="w-8 h-8 rounded-xl bg-blue-50/60 flex items-center justify-center flex-shrink-0">
-                            <MapPin className="w-4 h-4 text-[#0056B8]" />
-                          </div>
-                          <div>
-                            <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase">Live Transit Map</p>
-                            <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time GPS Tracking</h3>
-                          </div>
-                        </div>
-                        <div className="w-full h-[450px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
-                          <iframe
-                            title="Live GPS Location"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.currentLocation + ' to: ' + shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
-                            allowFullScreen
-                          />
-                        </div>
-                      </div>
+                      <TrackingMap shipment={shipment} onLocationUpdate={setLiveLocation} />
                     )}
 
                   </div>

@@ -24,7 +24,7 @@ export const KPI_DATA = [
   {
     id: 'revenue_this_month',
     title: 'Net Revenue (MTD)',
-    value: '₦50,000,000',
+    value: '₦53,250,000',
     change: 0,
     period: 'Month-to-Date fulfilled revenue.',
     sparklineData: [],
@@ -33,18 +33,18 @@ export const KPI_DATA = [
   {
     id: 'revenue_this_year',
     title: 'Net Revenue (YTD)',
-    value: '₦202,350,000',
+    value: '₦289,470,000',
     change: 0,
     period: 'Year-to-Date fulfilled revenue.',
     sparklineData: [],
     color: 'green'
   },
-  
+
   // Trips & Fulfillment
   {
     id: 'completed_trips',
     title: 'Cold-Chain Trips Completed',
-    value: '212',
+    value: '223',
     change: 0,
     period: 'Total completed to date.',
     sparklineData: [],
@@ -53,7 +53,7 @@ export const KPI_DATA = [
   {
     id: 'pending_trips',
     title: 'Trips Pending/In Progress',
-    value: '12',
+    value: '7',
     change: 0,
     period: 'Currently active.',
     sparklineData: [],
@@ -71,7 +71,7 @@ export const KPI_DATA = [
   {
     id: 'fleet_map',
     title: 'Live Fleet Map',
-    value: '63 Trucks',
+    value: '76 Trucks',
     change: 0,
     period: 'Active vehicles.',
     sparklineData: [],
@@ -80,7 +80,7 @@ export const KPI_DATA = [
   {
     id: 'active_drivers',
     title: 'Active Drivers',
-    value: '42',
+    value: '61',
     change: 0,
     period: 'Currently on duty.',
     sparklineData: [],
@@ -107,7 +107,7 @@ export const KPI_DATA = [
   {
     id: 'booking_mtd',
     title: 'Bookings (MTD)',
-    value: '35',
+    value: '32',
     change: 0,
     period: 'Volume for current month.',
     sparklineData: [],
@@ -116,7 +116,7 @@ export const KPI_DATA = [
   {
     id: 'booking_ytd',
     title: 'Bookings (YTD)',
-    value: '202',
+    value: '233',
     change: 0,
     period: 'Volume for current year.',
     sparklineData: [],
@@ -125,7 +125,7 @@ export const KPI_DATA = [
   {
     id: 'total_bookings',
     title: 'Total Bookings',
-    value: '202',
+    value: '246',
     change: 0,
     period: 'All-time system volume.',
     sparklineData: [],

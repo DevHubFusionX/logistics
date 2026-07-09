@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Search, MapPin, Package, Truck, CheckCircle,
   Clock, AlertCircle, ArrowRight, User, Phone,
@@ -7,6 +7,7 @@ import {
 import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
+import TrackingMap from '../../features/tracking/components/tracking/TrackingMap'
 
 const STATUS_CONFIG = {
   pending:    { label: 'Pending',    pill: 'bg-amber-50 text-amber-700 border-amber-200'   },
@@ -36,6 +37,14 @@ export default function TrackShipment() {
   const { data: shipment, isLoading, error, refetch } = useTrackingQuery(searchId, {
     enabled: !!searchId
   })
+
+  const [liveLocation, setLiveLocation] = useState('')
+
+  useEffect(() => {
+    if (shipment) {
+      setLiveLocation(shipment.currentLocation)
+    }
+  }, [shipment])
 
   const handleTrack = (e) => {
     e.preventDefault()
@@ -150,29 +159,14 @@ export default function TrackShipment() {
               {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
                 <div className="mt-3 flex items-center gap-2 px-4 py-2.5 bg-sky-50 rounded-xl border border-sky-100">
                   <MapPin className="w-3.5 h-3.5 text-sky-700 flex-shrink-0" />
-                  <p className="text-xs font-semibold text-sky-800">Current location: {shipment.currentLocation}</p>
+                  <p className="text-xs font-semibold text-sky-800">Current location: {liveLocation || shipment.currentLocation}</p>
                 </div>
               )}
             </div>
 
             {/* Live GPS Map */}
             {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
-              <div className="bg-white rounded-2xl border border-gray-100 p-5 overflow-hidden">
-                <div className="flex items-center gap-2 mb-4">
-                  <MapPin className="w-4 h-4 text-sky-700" />
-                  <h2 className="font-heading font-bold text-sm text-gray-900">Live GPS Location</h2>
-                </div>
-                <div className="w-full h-[400px] rounded-xl overflow-hidden border border-gray-100 shadow-inner">
-                  <iframe
-                    title="Live Location Map"
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.currentLocation + ' to: ' + shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
-                    allowFullScreen
-                  />
-                </div>
-              </div>
+              <TrackingMap shipment={shipment} onLocationUpdate={setLiveLocation} />
             )}
 
             {/* Timeline */}

@@ -6,6 +6,7 @@ import { useVerifyPaymentMutation } from '@/hooks/queries/usePaymentQueries'
 import bookingService from '../services/bookingService'
 import { getUserFriendlyMessage } from '@/utils/errorCodes'
 import { normalizePhone } from '@/utils/validation'
+import { getCoordinatesForCity } from '@/utils/helpers'
 import toast from 'react-hot-toast'
 
 export const useBookingFlow = () => {
@@ -96,11 +97,12 @@ export const useBookingFlow = () => {
         pickupLocation: formData.pickupLocation?.address
           ? `${formData.pickupLocation.address}, ${formData.pickupLocation.city || 'Lagos'}`
           : formData.pickupLocation?.city || 'Lagos',
-        // API accepts dropoffLocation as object with address + city (no state)
+        // API accepts dropoffLocation as object with address + city
         dropoffLocation: {
           address: formData.dropoffLocation?.address || '',
           city: formData.dropoffLocation?.city || ''
         },
+        dropOffCoordinates: getCoordinatesForCity(formData.dropoffLocation?.city),
         goodsType: formData.goodsType,
         cargoWeightKg: Number(formData.cargoWeightKg),
         quantity: parseInt(formData.quantity, 10) || 1,

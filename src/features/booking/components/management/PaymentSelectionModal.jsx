@@ -7,7 +7,6 @@ import toast from 'react-hot-toast'
 const METHODS = [
   { id: 'card',          icon: CreditCard, label: 'Pay with Paystack', desc: 'Card, bank transfer & USSD' },
   { id: 'bank_transfer', icon: Building2,  label: 'Bank transfer',     desc: 'Upload proof of payment' },
-  { id: 'cash',          icon: Banknote,   label: 'Cash on delivery',  desc: 'Pay when shipment arrives' },
 ]
 
 function Row({ label, value }) {
@@ -25,6 +24,7 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
   const [fetching, setFetching]         = useState(true)
   const [method, setMethod]             = useState('card')
   const [payStatus, setPayStatus]       = useState(null) // null | 'processing' | 'success' | 'failed'
+  const [showBankModal, setShowBankModal] = useState(false)
 
   const initializePayment = useInitializePaymentMutation()
   const verifyPayment     = useVerifyPaymentMutation()
@@ -39,13 +39,15 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
     bookingService.getBookingById(bookingId)
       .then(res => {
         const data = res.data?.data || res.data
-        setFullBooking(data)
+        setFullBooking(data || booking)
       })
       .catch(err => {
-        setFetchError(err.message || 'Failed to load booking details')
+        console.warn('Failed to load full booking details from API, falling back to local booking data:', err)
+        // Fallback to local booking data so the user can still complete payment
+        setFullBooking(booking)
       })
       .finally(() => setFetching(false))
-  }, [bookingId])
+  }, [bookingId, booking])
 
   const amount    = fullBooking?.price || fullBooking?.shipping_fee || fullBooking?.amount || booking?.amount || booking?.calculatedPrice || 0
   const email     = user?.email || fullBooking?.email || booking?.email || ''
@@ -173,7 +175,12 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
                 {METHODS.map(m => (
                   <button
                     key={m.id}
-                    onClick={() => setMethod(m.id)}
+                    onClick={() => {
+                      setMethod(m.id)
+                      if (m.id === 'bank_transfer') {
+                        setShowBankModal(true)
+                      }
+                    }}
                     className={`w-full flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all ${
                       method === m.id
                         ? 'border-sky-700 bg-sky-50'
@@ -196,12 +203,6 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
                     </div>
                   </button>
                 ))}
-              </div>
-
-              {/* Security note */}
-              <div className="flex items-start gap-2 text-xs text-gray-400">
-                <Shield className="w-3.5 h-3.5 flex-shrink-0 mt-0.5 text-sky-700" />
-                <span>Payments are processed securely via Paystack. Your card details are never stored.</span>
               </div>
             </>
           )}
@@ -226,6 +227,68 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
           </div>
         )}
       </div>
+
+      {showBankModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[100] p-4">
+          <div className="bg-white w-full max-w-sm rounded-2xl p-6 shadow-2xl space-y-5 animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between">
+              <h3 className="font-heading font-bold text-gray-900 text-lg">Bank Transfer Details</h3>
+              <button 
+                onClick={() => setShowBankModal(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-gray-100 transition-colors"
+              >
+                <X className="w-4 h-4 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="p-4 bg-sky-50/50 rounded-xl border border-sky-100/50 text-center space-y-1">
+              <span className="text-[10px] text-sky-700 font-bold uppercase tracking-wider">Amount to Transfer</span>
+              <p className="font-heading font-black text-2xl text-sky-850">
+                ₦{amount.toLocaleString(undefined, { minimumFractionDigits: 0 })}
+              </p>
+            </div>
+
+            <div className="space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100">
+              <div className="space-y-1">
+                <span className="text-[10px] text-gray-400 font-bold uppercase">Bank Name</span>
+                <p className="text-sm font-semibold text-gray-800">United Bank for Africa (UBA)</p>
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] text-gray-400 font-bold uppercase">Account Name</span>
+                <p className="text-sm font-semibold text-gray-800">Darafort Global Services</p>
+              </div>
+              <div className="space-y-1">
+                <span className="text-[10px] text-gray-400 font-bold uppercase">Account Number</span>
+                <div className="flex items-center justify-between">
+                  <p className="text-base font-mono font-bold text-gray-950 tracking-wider">1030295741</p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText('1030295741')
+                      toast.success('Account number copied!')
+                    }}
+                    className="text-xs font-bold text-sky-750 hover:text-sky-850 px-2 py-1 rounded bg-sky-100/40 hover:bg-sky-150 transition-all cursor-pointer"
+                  >
+                    Copy
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-amber-50 border border-amber-100 rounded-xl p-3">
+              <p className="text-[11px] text-amber-800 leading-relaxed">
+                Please include your **Booking ID** <code className="font-mono text-[10px] bg-amber-100 px-1 rounded">{bookingId}</code> in the transfer reference.
+              </p>
+            </div>
+
+            <button
+              onClick={() => setShowBankModal(false)}
+              className="w-full py-3 bg-sky-700 hover:bg-sky-600 text-white text-sm font-bold rounded-xl transition-all shadow-sm cursor-pointer"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

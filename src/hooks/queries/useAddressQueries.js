@@ -16,6 +16,8 @@ export function useAddressesQuery() {
             return response.data || response || []
         },
         staleTime: 5 * 60 * 1000,
+        // Disabled: /addresses endpoint is not yet available on the backend
+        enabled: false,
     })
 }
 

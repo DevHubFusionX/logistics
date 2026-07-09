@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Save, MapPin, Package, User, Loader } from 'lucide-react'
 import { bookingService } from '@/features/booking'
+import { getCoordinatesForCity } from '@/utils/helpers'
 import toast from 'react-hot-toast'
 
 function Label({ children }) {
@@ -81,8 +82,14 @@ export default function BookingModification({ booking, onSuccess, onClose }) {
     setLoading(true)
     try {
       await bookingService.updateBooking(booking._id || booking.id, {
-        pickupLocation:       formData.pickupLocation,
-        dropoffLocation:      formData.dropoffLocation,
+        pickupLocation:       formData.pickupLocation?.address
+          ? `${formData.pickupLocation.address}, ${formData.pickupLocation.city || 'Lagos'}`
+          : formData.pickupLocation?.city || 'Lagos',
+        dropoffLocation: {
+          address: formData.dropoffLocation?.address || '',
+          city: formData.dropoffLocation?.city || ''
+        },
+        dropOffCoordinates:   getCoordinatesForCity(formData.dropoffLocation?.city),
         goodsType:            formData.goodsType,
         cargoWeightKg:        Number(formData.cargoWeightKg),
         quantity:             parseInt(formData.quantity) || 1,

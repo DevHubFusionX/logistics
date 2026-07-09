@@ -179,6 +179,17 @@ export default function AddressBook() {
           Add Address
         </button>
       </div>
+      
+      {/* Offline Alert Banner */}
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex gap-3 text-amber-800 text-sm shadow-sm">
+        <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+        <div>
+          <p className="font-semibold">Address Book is temporarily undergoing maintenance</p>
+          <p className="text-xs text-amber-650 mt-0.5">
+            The saved addresses system is offline. However, you can still type any pickup and delivery locations directly inside the booking request form to complete your shipment.
+          </p>
+        </div>
+      </div>
 
       {/* Search bar */}
       {addresses.length > 0 && (

@@ -12,9 +12,16 @@ const demoLocations = [
     { city: 'Abuja (Garki)', state: 'FCT', lat: '9.0192', lng: '7.4184' }
 ]
 
+const kanoLocations = [
+    { city: 'Lagos (Ketu)', state: 'Lagos State', lat: '6.5976', lng: '3.3853' },
+    { city: 'Ilorin Bypass', state: 'Kwara State', lat: '8.4799', lng: '4.5418' },
+    { city: 'Kaduna Bypass', state: 'Kaduna State', lat: '10.5105', lng: '7.4165' },
+    { city: 'Kano (Fagge)', state: 'Kano State', lat: '12.0022', lng: '8.5920' }
+]
+
 function getDemoStep() {
-    // Advance step once every 2 minutes (120,000 ms)
-    return Math.floor(Date.now() / 120000) % demoLocations.length
+    // Advance step once every 2 hours (7,200,000 ms)
+    return Math.floor(Date.now() / 7200000) % demoLocations.length
 }
 
 /**
@@ -27,9 +34,9 @@ export function useTrackingQuery(trackingId, options = {}) {
             await delay(800)
             const normalizedId = trackingId?.trim().toUpperCase()
             if (normalizedId === 'DARA-BK100190726') {
-                const step = getDemoStep()
+                const step = getDemoStep() % (demoLocations.length - 1)
                 const loc = demoLocations[step]
-                const status = step === demoLocations.length - 1 ? 'delivered' : 'in_transit'
+                const status = 'in_transit'
 
                 const result = {
                     id: normalizedId,
@@ -37,7 +44,7 @@ export function useTrackingQuery(trackingId, options = {}) {
                     origin: 'Lagos (Ketu)',
                     destination: 'Abuja (Garki)',
                     currentLocation: `${loc.city}, ${loc.state}`,
-                    estimatedDelivery: new Date(Date.now() + 86400000).toLocaleDateString(),
+                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
                     driver: 'Alhaji Musa Ibrahim',
                     vehicle: 'LSD-849XX (Reefer Truck)',
                     temperature: '4.2°C',
@@ -59,8 +66,49 @@ export function useTrackingQuery(trackingId, options = {}) {
                         },
                         {
                             status: 'Delivered',
-                            date: step === demoLocations.length - 1 ? new Date().toLocaleString() : 'Pending',
-                            completed: step === demoLocations.length - 1
+                            date: 'Pending (Est. 5 hours)',
+                            completed: false
+                        }
+                    ]
+                }
+                return result
+            }
+
+            if (normalizedId === 'DARA-BK300390726') {
+                const step = getDemoStep() % (kanoLocations.length - 1)
+                const loc = kanoLocations[step]
+                const status = 'in_transit'
+
+                const result = {
+                    id: normalizedId,
+                    status: status,
+                    origin: 'Lagos (Ketu)',
+                    destination: 'Kano (Fagge)',
+                    currentLocation: `${loc.city}, ${loc.state}`,
+                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
+                    driver: 'Haruna Yusuf',
+                    vehicle: 'KND-912YY (Reefer Truck)',
+                    temperature: '5.5°C',
+                    timeline: [
+                        {
+                            status: 'Booked',
+                            date: new Date(Date.now() - 172800000).toLocaleString(),
+                            completed: true
+                        },
+                        {
+                            status: 'Confirmed',
+                            date: new Date(Date.now() - 129600000).toLocaleString(),
+                            completed: true
+                        },
+                        {
+                            status: 'In Transit',
+                            date: new Date(Date.now() - 43200000).toLocaleString(),
+                            completed: true
+                        },
+                        {
+                            status: 'Delivered',
+                            date: 'Pending (Est. 5 hours)',
+                            completed: false
                         }
                     ]
                 }
@@ -140,9 +188,9 @@ export function useShipmentDetailsQuery(shipmentId) {
             await delay(800)
             const normalizedId = shipmentId?.trim().toUpperCase()
             if (normalizedId === 'DARA-BK100190726') {
-                const step = getDemoStep()
+                const step = getDemoStep() % (demoLocations.length - 1)
                 const loc = demoLocations[step]
-                const status = step === demoLocations.length - 1 ? 'delivered' : 'in_transit'
+                const status = 'in_transit'
 
                 const result = {
                     id: normalizedId,
@@ -159,7 +207,7 @@ export function useShipmentDetailsQuery(shipmentId) {
                     serviceType: 'REEFER CONTAINER',
                     createdAt: new Date(Date.now() - 172800000).toLocaleString(),
                     pickupDate: new Date(Date.now() - 129600000).toLocaleString(),
-                    estimatedDelivery: new Date(Date.now() + 86400000).toLocaleString(),
+                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
                     driver: {
                         name: 'Alhaji Musa Ibrahim',
                         phone: '+234 811 555 0199',
@@ -177,8 +225,53 @@ export function useShipmentDetailsQuery(shipmentId) {
                         { status: 'booking_created', label: 'Booking Created', timestamp: new Date(Date.now() - 172800000).toLocaleString(), completed: true, current: false },
                         { status: 'pending', label: 'Pending Review', timestamp: new Date(Date.now() - 151200000).toLocaleString(), completed: true, current: false },
                         { status: 'confirmed', label: 'Confirmed', timestamp: new Date(Date.now() - 129600000).toLocaleString(), completed: true, current: false },
-                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: step < demoLocations.length - 1 },
-                        { status: 'delivered', label: 'Delivered', timestamp: step === demoLocations.length - 1 ? new Date().toLocaleString() : null, completed: step === demoLocations.length - 1, current: step === demoLocations.length - 1 }
+                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: true },
+                        { status: 'delivered', label: 'Delivered', timestamp: null, completed: false, current: false }
+                    ]
+                }
+                return result
+            }
+
+            if (normalizedId === 'DARA-BK300390726') {
+                const step = getDemoStep() % (kanoLocations.length - 1)
+                const loc = kanoLocations[step]
+                const status = 'in_transit'
+
+                const result = {
+                    id: normalizedId,
+                    status: status,
+                    customerName: 'Demo Client 3',
+                    customerEmail: 'demo3@daraexpress.com',
+                    customerPhone: '+234 800 555 4321',
+                    pickupAddress: 'Plot 12, Ketu Industrial Estate, Lagos',
+                    deliveryAddress: 'Checkpoint Road, Fagge, Kano',
+                    pickupCity: 'Lagos',
+                    deliveryCity: 'Kano',
+                    weight: 3100,
+                    cargoType: 'FROZEN MEAT',
+                    serviceType: 'REEFER CONTAINER',
+                    createdAt: new Date(Date.now() - 172800000).toLocaleString(),
+                    pickupDate: new Date(Date.now() - 129600000).toLocaleString(),
+                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
+                    driver: {
+                        name: 'Haruna Yusuf',
+                        phone: '+234 802 555 0122',
+                        vehicle: 'Volvo FH16',
+                        plate: 'KND-912YY',
+                        photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=256'
+                    },
+                    currentLocation: {
+                        city: `${loc.city}, ${loc.state}`,
+                        lat: loc.lat,
+                        lng: loc.lng,
+                        timestamp: new Date().toLocaleString()
+                    },
+                    timeline: [
+                        { status: 'booking_created', label: 'Booking Created', timestamp: new Date(Date.now() - 172800000).toLocaleString(), completed: true, current: false },
+                        { status: 'pending', label: 'Pending Review', timestamp: new Date(Date.now() - 151200000).toLocaleString(), completed: true, current: false },
+                        { status: 'confirmed', label: 'Confirmed', timestamp: new Date(Date.now() - 129600000).toLocaleString(), completed: true, current: false },
+                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: true },
+                        { status: 'delivered', label: 'Delivered', timestamp: null, completed: false, current: false }
                     ]
                 }
                 return result

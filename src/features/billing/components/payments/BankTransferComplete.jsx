@@ -18,10 +18,9 @@ export default function BankTransferComplete({ bookingId, amount, onSuccess }) {
   const [previewUrl, setPreviewUrl] = useState(null)
 
   const bankDetails = {
-    bankName: 'First Bank of Nigeria',
-    accountName: 'Dara Logistics Ltd',
-    accountNumber: '1234567890',
-    sortCode: '011'
+    bankName: 'United Bank for Africa (UBA)',
+    accountName: 'Darafort Global Services',
+    accountNumber: '1030295741'
   }
 
   const handleFileUpload = (data) => {
@@ -79,10 +78,6 @@ export default function BankTransferComplete({ bookingId, amount, onSuccess }) {
           <div className="flex justify-between">
             <span className="text-gray-600">Account Number:</span>
             <span className="font-mono font-semibold text-gray-900">{bankDetails.accountNumber}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-600">Sort Code:</span>
-            <span className="font-mono font-semibold text-gray-900">{bankDetails.sortCode}</span>
           </div>
           <div className="flex justify-between text-lg font-bold border-t pt-3 mt-3">
             <span>Amount to Transfer:</span>
