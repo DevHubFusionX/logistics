@@ -162,94 +162,37 @@ export default function Tracking() {
                   className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start"
                 >
 
-                  {/* Left Column: Metadata Dashboard (col-span-5) */}
-                  <div className="lg:col-span-5 space-y-6">
-                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
-                      <div className="flex items-center justify-between gap-4 mb-6">
-                        <div>
-                          <p className="text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-1">Active Shipment</p>
-                          <h2 className="font-heading-unique font-bold text-slate-900 text-xl">{shipment.id}</h2>
-                        </div>
-                        <button
-                          onClick={handleRefresh}
-                          disabled={loading}
-                          className="w-9 h-9 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-100 flex items-center justify-center transition-colors"
-                        >
-                          <RefreshCw className={`w-3.5 h-3.5 text-slate-600 ${loading ? 'animate-spin' : ''}`} />
-                        </button>
-                      </div>
-
-                      {/* Info grid */}
-                      <div className="space-y-4">
-                        {[
-                          { label: 'Origin', value: shipment.origin, icon: MapPin },
-                          { label: 'Destination', value: shipment.destination, icon: MapPin },
-                          { label: 'Current Location', value: shipment.currentLocation, icon: MapPin },
-                          { label: 'Estimated Delivery', value: shipment.estimatedDelivery, icon: Clock },
-                          { label: 'Driver Assignee', value: shipment.driver, icon: Truck },
-                          { label: 'Reefer Truck License', value: shipment.vehicle, icon: Package },
-                        ].map(({ label, value, icon: Icon }) => (
-                          <div key={label} className="flex items-start gap-3.5 border-b border-slate-50 pb-3 last:border-0 last:pb-0">
-                            <div className="w-8 h-8 rounded-xl bg-blue-50/60 flex items-center justify-center flex-shrink-0 mt-0.5">
-                              <Icon className="w-4 h-4 text-[#0056B8]" />
-                            </div>
-                            <div className="min-w-0">
-                              <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase mb-0.5">{label}</p>
-                              <p className="font-body-unique font-bold text-slate-800 text-sm truncate">{value}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* Auto Refresh & Insurance widget */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3.5 text-left">
-                        <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                          <Shield className="w-4 h-4 text-emerald-600" />
-                        </div>
-                        <div>
-                          <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">Insurance</p>
-                          <p className="font-body-unique font-bold text-slate-800 text-xs">GIT Fully Covered</p>
-                        </div>
-                      </div>
-
-                      <div className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center justify-between text-left">
-                        <div className="flex items-center gap-3.5">
-                          <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                            <RefreshCw className="w-4 h-4 text-purple-600" />
-                          </div>
-                          <div>
-                            <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">Auto-refresh</p>
-                            <p className="font-body-unique font-bold text-slate-800 text-xs">{autoRefresh ? 'Enabled' : 'Disabled'}</p>
-                          </div>
-                        </div>
-                        <input
-                          type="checkbox"
-                          checked={autoRefresh}
-                          onChange={e => setAutoRefresh(e.target.checked)}
-                          className="w-4 h-4 rounded text-[#0056B8] focus:ring-[#0056B8] cursor-pointer"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Telemetry & Timeline (col-span-7) */}
-                  <div className="lg:col-span-7 space-y-6">
+                  {/* Left Column: Map & Transit Details (col-span-8) */}
+                  <div className="lg:col-span-8 space-y-6">
 
                     {/* Live GPS Transit Map */}
                     {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
                       <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left overflow-hidden">
-                        <div className="flex items-center gap-2.5 mb-4">
-                          <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <MapPin className="w-4 h-4 text-[#0056B8]" />
+                        <div className="flex items-center justify-between gap-4 mb-4">
+                          <div className="flex items-center gap-2.5">
+                            <div className="w-8 h-8 rounded-xl bg-blue-50/60 flex items-center justify-center flex-shrink-0">
+                              <MapPin className="w-4 h-4 text-[#0056B8]" />
+                            </div>
+                            <div>
+                              <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase">Live Transit Map</p>
+                              <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time GPS Tracking</h3>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase">Live Transit Map</p>
-                            <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time GPS Tracking</h3>
+                          <div className="flex items-center gap-3">
+                            <div className="text-right hidden sm:block">
+                              <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">Tracking ID</p>
+                              <p className="font-body-unique font-bold text-slate-800 text-xs">{shipment.id}</p>
+                            </div>
+                            <button
+                              onClick={handleRefresh}
+                              disabled={loading}
+                              className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-100 flex items-center justify-center transition-colors"
+                            >
+                              <RefreshCw className={`w-3.5 h-3.5 text-slate-600 ${loading ? 'animate-spin' : ''}`} />
+                            </button>
                           </div>
                         </div>
-                        <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
+                        <div className="w-full h-[450px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
                           <iframe
                             title="Live GPS Location"
                             width="100%"
@@ -262,47 +205,29 @@ export default function Tracking() {
                       </div>
                     )}
 
-                    {/* Live Temperature Telemetry widget */}
+                    {/* Transit Details Grid */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
-                      <div className="flex items-start justify-between gap-4 mb-6">
-                        <div>
-                          <p className="text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-1">Reefer Sensor Readings</p>
-                          <h3 className="font-heading-unique font-bold text-slate-800 text-lg">Live Temperature Stability</h3>
+                      <h3 className="font-heading-unique font-bold text-slate-800 text-sm mb-4">Transit Details</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100/50">
+                          <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-1">From (Origin)</p>
+                          <p className="font-body-unique font-bold text-slate-800 text-sm">{shipment.origin}</p>
                         </div>
-                        <div className="text-right">
-                          <div className="flex items-center gap-2">
-                            <Thermometer className="w-4 h-4 text-blue-500 animate-pulse" />
-                            <span className="font-heading-unique font-extrabold text-2xl text-slate-900">{shipment.temperature || '4.2°C'}</span>
-                          </div>
-                          <span className="inline-block text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md mt-1 uppercase tracking-wider">
-                            Optimal Range (2.0°C - 8.0°C)
-                          </span>
+                        <div className="bg-blue-50/50 border border-blue-100/50 rounded-2xl p-4">
+                          <p className="text-[#0056B8] text-[8px] font-bold tracking-widest uppercase mb-1">Current Location</p>
+                          <p className="font-body-unique font-bold text-blue-900 text-sm">{shipment.currentLocation}</p>
                         </div>
-                      </div>
-
-                      {/* Custom Mock Temperature SVG Waveform */}
-                      <div className="bg-slate-50/50 rounded-2xl p-4 border border-slate-100/50 mb-4">
-                        <svg className="w-full h-20 text-[#0056B8]/75" viewBox="0 0 100 20" preserveAspectRatio="none">
-                          <path
-                            d="M0,10 Q10,7 20,11 T40,8 T60,11 T80,7 T100,10"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                          />
-                          {/* glowing telemetry nodes */}
-                          <circle cx="20" cy="11" r="1.5" className="fill-[#0056B8] animate-ping" />
-                          <circle cx="20" cy="11" r="1" className="fill-[#0056B8]" />
-                          <circle cx="60" cy="11" r="1.5" className="fill-[#0056B8] animate-ping" />
-                          <circle cx="60" cy="11" r="1" className="fill-[#0056B8]" />
-                        </svg>
-                      </div>
-
-                      <div className="flex items-center justify-between text-slate-400 text-[10px] font-semibold font-body-unique px-1">
-                        <span>Precision check: ±0.1°C</span>
-                        <span>Telemetry updates live</span>
+                        <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100/50">
+                          <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-1">To (Destination)</p>
+                          <p className="font-body-unique font-bold text-slate-800 text-sm">{shipment.destination}</p>
+                        </div>
                       </div>
                     </div>
+
+                  </div>
+
+                  {/* Right Column: Milestones & Meta Info (col-span-4) */}
+                  <div className="lg:col-span-4 space-y-6">
 
                     {/* Timeline tracker */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
@@ -345,17 +270,65 @@ export default function Tracking() {
                       </div>
                     </div>
 
-                    {/* Help Support Strip */}
-                    <div className="bg-[#0056B8] rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-left shadow-lg">
-                      <div>
-                        <p className="font-heading-unique font-bold text-white text-base mb-0.5">Need help with this shipment?</p>
-                        <p className="font-body-unique text-white/65 text-xs">Our transport managers are available 24/7 to assist.</p>
+                    {/* Metadata list */}
+                    <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left space-y-4">
+                      {[
+                        { label: 'Estimated Delivery', value: shipment.estimatedDelivery, icon: Clock },
+                        { label: 'Driver Assignee', value: shipment.driver, icon: Truck },
+                        { label: 'Reefer Truck License', value: shipment.vehicle, icon: Package },
+                      ].map(({ label, value, icon: Icon }) => (
+                        <div key={label} className="flex items-start gap-3 pb-3 border-b border-slate-50 last:border-0 last:pb-0">
+                          <div className="w-7 h-7 rounded-lg bg-blue-50/60 flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <Icon className="w-3.5 h-3.5 text-[#0056B8]" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">{label}</p>
+                            <p className="font-body-unique font-bold text-slate-800 text-xs truncate">{value}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Auto Refresh & Insurance widget */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3 text-left">
+                        <div className="w-7 h-7 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                          <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                        </div>
+                        <div>
+                          <p className="text-slate-400 text-[7px] font-bold tracking-widest uppercase mb-0.5">Insurance</p>
+                          <p className="font-body-unique font-bold text-slate-800 text-[10px]">GIT Covered</p>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3">
-                        <a href="tel:+2348115779007" className="font-body-unique px-4 py-2 border border-white/20 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-all">
-                          Call Support
+
+                      <div className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center justify-between text-left">
+                        <div className="flex items-center gap-3">
+                          <div className="w-7 h-7 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+                            <RefreshCw className="w-3.5 h-3.5 text-purple-600" />
+                          </div>
+                          <div>
+                            <p className="text-slate-400 text-[7px] font-bold tracking-widest uppercase mb-0.5">Live Refresh</p>
+                            <p className="font-body-unique font-bold text-slate-800 text-[10px]">{autoRefresh ? 'On' : 'Off'}</p>
+                          </div>
+                        </div>
+                        <input
+                          type="checkbox"
+                          checked={autoRefresh}
+                          onChange={e => setAutoRefresh(e.target.checked)}
+                          className="w-3.5 h-3.5 rounded text-[#0056B8] focus:ring-[#0056B8] cursor-pointer"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Help Support Strip */}
+                    <div className="bg-[#0056B8] rounded-3xl p-5 text-left shadow-lg">
+                      <p className="font-heading-unique font-bold text-white text-sm mb-1">Need help?</p>
+                      <p className="font-body-unique text-white/70 text-xs mb-4">Our support team is active 24/7.</p>
+                      <div className="flex items-center gap-2">
+                        <a href="tel:+2348115779007" className="flex-1 font-body-unique text-center py-2 border border-white/20 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-all">
+                          Call
                         </a>
-                        <a href="mailto:hello@daraexpress.com" className="font-body-unique px-4 py-2 bg-white text-[#0056B8] hover:bg-blue-50 text-xs font-bold rounded-sm transition-all shadow-sm">
+                        <a href="mailto:hello@daraexpress.com" className="flex-1 font-body-unique text-center py-2 bg-white text-[#0056B8] hover:bg-blue-50 text-xs font-bold rounded-sm transition-all shadow-sm">
                           Email
                         </a>
                       </div>
