@@ -6,7 +6,6 @@ import { useVerifyPaymentMutation } from '@/hooks/queries/usePaymentQueries'
 import bookingService from '../services/bookingService'
 import { getUserFriendlyMessage } from '@/utils/errorCodes'
 import { normalizePhone } from '@/utils/validation'
-import { getCoordinatesForCity } from '@/utils/helpers'
 import toast from 'react-hot-toast'
 
 export const useBookingFlow = () => {
@@ -77,32 +76,32 @@ export const useBookingFlow = () => {
       if (!formData.quantity || isNaN(Number(formData.quantity))) throw new Error('Valid quantity is required')
 
 
-      // Build payload matching POST /bookings/ API schema
+      // Build payload matching the documented POST /bookings/ API schema.
       const bookingPayload = {
         fullNameOrBusiness: formData.fullNameOrBusiness,
         contactPhone: normalizePhone(formData.contactPhone),
         email: formData.email,
         customerType: formData.customerType || 'Business',
         pickupPerson: {
-          name: formData.pickupPerson?.name,
-          phone: normalizePhone(formData.pickupPerson?.phone),
-          email: formData.pickupPerson?.email
+          name: formData.pickupPerson?.name || formData.fullNameOrBusiness || '',
+          phone: normalizePhone(formData.pickupPerson?.phone || formData.contactPhone),
+          email: formData.pickupPerson?.email || formData.email || ''
         },
         receiverPerson: {
-          name: formData.receiverPerson?.name,
-          phone: normalizePhone(formData.receiverPerson?.phone),
-          email: formData.receiverPerson?.email
+          name: formData.receiverPerson?.name || '',
+          phone: normalizePhone(formData.receiverPerson?.phone || ''),
+          email: formData.receiverPerson?.email || ''
         },
-        // API accepts pickupLocation as a string
-        pickupLocation: formData.pickupLocation?.address
-          ? `${formData.pickupLocation.address}, ${formData.pickupLocation.city || 'Lagos'}`
-          : formData.pickupLocation?.city || 'Lagos',
-        // API accepts dropoffLocation as object with address + city
+        pickupLocation: {
+          address: formData.pickupLocation?.address || '',
+          city: formData.pickupLocation?.city || 'Lagos',
+          state: formData.pickupLocation?.state || 'Nigeria'
+        },
         dropoffLocation: {
           address: formData.dropoffLocation?.address || '',
-          city: formData.dropoffLocation?.city || ''
+          city: formData.dropoffLocation?.city || '',
+          state: formData.dropoffLocation?.state || 'Nigeria'
         },
-        dropOffCoordinates: getCoordinatesForCity(formData.dropoffLocation?.city),
         goodsType: formData.goodsType,
         cargoWeightKg: Number(formData.cargoWeightKg),
         quantity: parseInt(formData.quantity, 10) || 1,
@@ -112,8 +111,7 @@ export const useBookingFlow = () => {
         vehicleType: formData.vehicleType || 'Van',
         estimatedPickupDate: formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : new Date().toISOString(),
         estimatedDeliveryDate: formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: formData.notes || '',
-        truckSize: formData.truckSize || 5
+        notes: formData.notes || ''
       }
 
       const response = await createBookingMutation.mutateAsync(bookingPayload)

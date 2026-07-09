@@ -47,7 +47,7 @@ export function useTrackingQuery(trackingId, options = {}) {
                     estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
                     driver: 'Alhaji Musa Ibrahim',
                     vehicle: 'LSD-849XX (Reefer Truck)',
-                    temperature: '4.2°C',
+                    temperature: '-10°C',
                     timeline: [
                         {
                             status: 'Booked',
@@ -163,6 +163,7 @@ export function useTrackingQuery(trackingId, options = {}) {
         ...options,
     })
 }
+
 
 /**
  * Fetch all shipments (admin view)
@@ -328,4 +329,3 @@ export function useShipmentDetailsQuery(shipmentId) {
             data?.status !== 'delivered' && data?.status !== 'cancelled' ? 30000 : false
     })
 }
-
