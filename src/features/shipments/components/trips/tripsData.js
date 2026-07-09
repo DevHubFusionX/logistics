@@ -122,7 +122,7 @@ export const TRIP_TIMELINE = {
 
 export const TRIP_TEMPERATURE_DATA = {
   'TRP-001': [
-    { time: '06:00', temp: 5.5 },
+    { time: '06:00', temp: -10.5 },
     { time: '07:00', temp: 5.3 },
     { time: '08:00', temp: 5.1 },
     { time: '09:00', temp: 5.2 },

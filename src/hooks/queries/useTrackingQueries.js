@@ -88,7 +88,7 @@ export function useTrackingQuery(trackingId, options = {}) {
                     estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
                     driver: 'Haruna Yusuf',
                     vehicle: 'KND-912YY (Reefer Truck)',
-                    temperature: '5.5°C',
+                    temperature: '-10.5°C',
                     timeline: [
                         {
                             status: 'Booked',
