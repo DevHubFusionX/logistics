@@ -165,49 +165,28 @@ export default function Tracking() {
                   {/* Left Column: Map & Transit Details (col-span-8) */}
                   <div className="lg:col-span-8 space-y-6">
 
-                    {/* Live GPS Transit Map */}
-                    {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
-                      <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left overflow-hidden">
-                        <div className="flex items-center justify-between gap-4 mb-4">
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 rounded-xl bg-blue-50/60 flex items-center justify-center flex-shrink-0">
-                              <MapPin className="w-4 h-4 text-[#0056B8]" />
-                            </div>
-                            <div>
-                              <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase">Live Transit Map</p>
-                              <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time GPS Tracking</h3>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <div className="text-right hidden sm:block">
-                              <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">Tracking ID</p>
-                              <p className="font-body-unique font-bold text-slate-800 text-xs">{shipment.id}</p>
-                            </div>
-                            <button
-                              onClick={handleRefresh}
-                              disabled={loading}
-                              className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-100 flex items-center justify-center transition-colors"
-                            >
-                              <RefreshCw className={`w-3.5 h-3.5 text-slate-600 ${loading ? 'animate-spin' : ''}`} />
-                            </button>
-                          </div>
-                        </div>
-                        <div className="w-full h-[450px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
-                          <iframe
-                            title="Live GPS Location"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
-                            allowFullScreen
-                          />
-                        </div>
-                      </div>
-                    )}
-
                     {/* Transit Details Grid */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">
-                      <h3 className="font-heading-unique font-bold text-slate-800 text-sm mb-4">Transit Details</h3>
+                      <div className="flex items-center justify-between gap-4 mb-6">
+                        <div>
+                          <p className="text-slate-400 text-[10px] font-bold tracking-widest uppercase mb-1">Transit Details</p>
+                          <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time Location Status</h3>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="text-right hidden sm:block">
+                            <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">Tracking ID</p>
+                            <p className="font-body-unique font-bold text-slate-800 text-xs">{shipment.id}</p>
+                          </div>
+                          <button
+                            onClick={handleRefresh}
+                            disabled={loading}
+                            className="w-8 h-8 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-100 flex items-center justify-center transition-colors"
+                          >
+                            <RefreshCw className={`w-3.5 h-3.5 text-slate-600 ${loading ? 'animate-spin' : ''}`} />
+                          </button>
+                        </div>
+                      </div>
+
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="bg-slate-50/60 rounded-2xl p-4 border border-slate-100/50">
                           <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-1">From (Origin)</p>
@@ -223,6 +202,31 @@ export default function Tracking() {
                         </div>
                       </div>
                     </div>
+
+                    {/* Live GPS Transit Map */}
+                    {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
+                      <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left overflow-hidden">
+                        <div className="flex items-center gap-2.5 mb-4">
+                          <div className="w-8 h-8 rounded-xl bg-blue-50/60 flex items-center justify-center flex-shrink-0">
+                            <MapPin className="w-4 h-4 text-[#0056B8]" />
+                          </div>
+                          <div>
+                            <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase">Live Transit Map</p>
+                            <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time GPS Tracking</h3>
+                          </div>
+                        </div>
+                        <div className="w-full h-[450px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
+                          <iframe
+                            title="Live GPS Location"
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
+                            allowFullScreen
+                          />
+                        </div>
+                      </div>
+                    )}
 
                   </div>
 
