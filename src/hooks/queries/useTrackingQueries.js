@@ -5,6 +5,18 @@ import toast from 'react-hot-toast'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
+const demoLocations = [
+    { city: 'Lagos (Ketu)', state: 'Lagos State', lat: '6.5976', lng: '3.3853' },
+    { city: 'Ibadan Bypass', state: 'Oyo State', lat: '7.3775', lng: '3.9470' },
+    { city: 'Lokoja Bypass', state: 'Kogi State', lat: '7.8024', lng: '6.7333' },
+    { city: 'Abuja (Garki)', state: 'FCT', lat: '9.0192', lng: '7.4184' }
+]
+
+function getDemoStep() {
+    // Advance step once every 2 minutes (120,000 ms)
+    return Math.floor(Date.now() / 120000) % demoLocations.length
+}
+
 /**
  * Track a shipment by ID or tracking number
  */
@@ -15,12 +27,16 @@ export function useTrackingQuery(trackingId, options = {}) {
             await delay(800)
             const normalizedId = trackingId?.trim().toUpperCase()
             if (normalizedId === 'DARA-BK100190726') {
-                return {
+                const step = getDemoStep()
+                const loc = demoLocations[step]
+                const status = step === demoLocations.length - 1 ? 'delivered' : 'in_transit'
+
+                const result = {
                     id: normalizedId,
-                    status: 'in_transit',
+                    status: status,
                     origin: 'Lagos (Ketu)',
                     destination: 'Abuja (Garki)',
-                    currentLocation: 'Lokoja Bypass',
+                    currentLocation: `${loc.city}, ${loc.state}`,
                     estimatedDelivery: new Date(Date.now() + 86400000).toLocaleDateString(),
                     driver: 'Alhaji Musa Ibrahim',
                     vehicle: 'LSD-849XX (Reefer Truck)',
@@ -43,11 +59,12 @@ export function useTrackingQuery(trackingId, options = {}) {
                         },
                         {
                             status: 'Delivered',
-                            date: 'Pending',
-                            completed: false
+                            date: step === demoLocations.length - 1 ? new Date().toLocaleString() : 'Pending',
+                            completed: step === demoLocations.length - 1
                         }
                     ]
                 }
+                return result
             }
 
             if (normalizedId === 'DARA-BK200290726') {
@@ -93,6 +110,8 @@ export function useTrackingQuery(trackingId, options = {}) {
         gcTime: 0,
         cacheTime: 0,
         retry: false,
+        refetchInterval: (data) =>
+            data?.status !== 'delivered' && data?.status !== 'cancelled' ? 30000 : false,
         ...options,
     })
 }
@@ -121,9 +140,13 @@ export function useShipmentDetailsQuery(shipmentId) {
             await delay(800)
             const normalizedId = shipmentId?.trim().toUpperCase()
             if (normalizedId === 'DARA-BK100190726') {
-                return {
+                const step = getDemoStep()
+                const loc = demoLocations[step]
+                const status = step === demoLocations.length - 1 ? 'delivered' : 'in_transit'
+
+                const result = {
                     id: normalizedId,
-                    status: 'in_transit',
+                    status: status,
                     customerName: 'Demo Client',
                     customerEmail: 'demo@daraexpress.com',
                     customerPhone: '+234 800 123 4567',
@@ -145,19 +168,20 @@ export function useShipmentDetailsQuery(shipmentId) {
                         photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256'
                     },
                     currentLocation: {
-                        city: 'Lokoja Bypass',
-                        lat: '7.8024',
-                        lng: '6.7333',
+                        city: `${loc.city}, ${loc.state}`,
+                        lat: loc.lat,
+                        lng: loc.lng,
                         timestamp: new Date().toLocaleString()
                     },
                     timeline: [
                         { status: 'booking_created', label: 'Booking Created', timestamp: new Date(Date.now() - 172800000).toLocaleString(), completed: true, current: false },
                         { status: 'pending', label: 'Pending Review', timestamp: new Date(Date.now() - 151200000).toLocaleString(), completed: true, current: false },
                         { status: 'confirmed', label: 'Confirmed', timestamp: new Date(Date.now() - 129600000).toLocaleString(), completed: true, current: false },
-                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: true },
-                        { status: 'delivered', label: 'Delivered', timestamp: null, completed: false, current: false }
+                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: step < demoLocations.length - 1 },
+                        { status: 'delivered', label: 'Delivered', timestamp: step === demoLocations.length - 1 ? new Date().toLocaleString() : null, completed: step === demoLocations.length - 1, current: step === demoLocations.length - 1 }
                     ]
                 }
+                return result
             }
 
             if (normalizedId === 'DARA-BK200290726') {

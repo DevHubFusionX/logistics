@@ -168,7 +168,7 @@ export default function TrackShipment() {
                     width="100%"
                     height="100%"
                     style={{ border: 0 }}
-                    src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
+                    src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.currentLocation + ' to: ' + shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
                     allowFullScreen
                   />
                 </div>

@@ -6,9 +6,11 @@ export default function TrackingMap({ shipment }) {
   const destination = shipment.deliveryAddress || shipment.deliveryCity
   const hasRoute = origin && destination
 
-  const mapUrl = hasRoute
-    ? `https://maps.google.com/maps?saddr=${encodeURIComponent(origin)}&daddr=${encodeURIComponent(destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`
-    : null
+  const mapUrl = currentLocation.city && hasRoute
+    ? `https://maps.google.com/maps?saddr=${encodeURIComponent(origin)}&daddr=${encodeURIComponent(currentLocation.city + ' to: ' + destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`
+    : hasRoute
+      ? `https://maps.google.com/maps?saddr=${encodeURIComponent(origin)}&daddr=${encodeURIComponent(destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`
+      : null
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm">
