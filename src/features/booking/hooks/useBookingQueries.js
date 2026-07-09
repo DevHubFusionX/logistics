@@ -110,7 +110,25 @@ export function useBookingMutations() {
     }
   })
 
-  return { createBooking, updateBooking, updateBookingStatus, cancelBooking }
+  const assignTruck = useMutation({
+    mutationFn: ({ bookingId, truckId }) => bookingService.assignTruck(bookingId, truckId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({ queryKey: ['booking', variables.bookingId] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'user-bookings'] })
+    }
+  })
+
+  const removeTruck = useMutation({
+    mutationFn: (bookingId) => bookingService.removeTruck(bookingId),
+    onSuccess: (_, bookingId) => {
+      queryClient.invalidateQueries({ queryKey: ['booking', bookingId] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
+      queryClient.invalidateQueries({ queryKey: ['admin', 'user-bookings'] })
+    }
+  })
+
+  return { createBooking, updateBooking, updateBookingStatus, cancelBooking, assignTruck, removeTruck }
 }
 
 /**

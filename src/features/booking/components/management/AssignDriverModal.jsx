@@ -1,173 +1,217 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { X, UserCheck, Truck, Star, MapPin, Phone, RefreshCcw, AlertTriangle } from 'lucide-react'
-import { useDriversQuery } from '@/hooks/queries/useAdminQueries'
+import { useFleetQuery, useDriversQuery } from '@/hooks/queries/useAdminQueries'
 import { useBookingMutations } from '@/features/booking'
 
 export default function AssignDriverModal({ booking, onClose, onAssign }) {
-  const { data: drivers = [], isLoading: loadingDrivers, isError, refetch: fetchDrivers } = useDriversQuery({ status: 'active' })
-  const { updateBookingStatus } = useBookingMutations()
-  const [selectedDriver, setSelectedDriver] = useState(null)
+  const { data: fleetResponse, isLoading: loadingFleet, isError: fleetError, refetch: fetchFleet } = useFleetQuery({ status: 'approved' })
+  const { data: drivers = [], isLoading: loadingDrivers } = useDriversQuery({ status: 'active' })
+  const { assignTruck } = useBookingMutations()
+  const [selectedTruck, setSelectedTruck] = useState(null)
   const [loading, setLoading] = useState(false)
 
+  const driverMap = useMemo(() => {
+    const map = {}
+    drivers.forEach(d => {
+      map[d.id || d._id] = d
+    })
+    return map
+  }, [drivers])
+
+  const trucks = useMemo(() => {
+    return fleetResponse?.records || []
+  }, [fleetResponse])
+
   const handleAssign = async () => {
-    if (!selectedDriver) return
+    if (!selectedTruck) return
     setLoading(true)
     try {
-      // Use the mutation hook to ensure Admin Overview refreshes
-      await updateBookingStatus.mutateAsync({ 
-        id: booking.id, 
-        status: 'confirmed',
-        data: { driverId: selectedDriver.id } // Pass driverId if needed
+      await assignTruck.mutateAsync({ 
+        bookingId: booking.id, 
+        truckId: selectedTruck.id
       })
-      
-      onAssign(booking.id, selectedDriver)
+      onAssign(booking.id, selectedTruck)
       onClose()
     } catch (error) {
-      console.error('Error assigning driver:', error)
+      console.error('Error assigning truck:', error)
     } finally {
       setLoading(false)
     }
   }
 
+  const isLoading = loadingFleet || loadingDrivers
+
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-xl">
-        <div className="sticky top-0 bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-blue-200 flex items-center justify-between">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+      <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
+        {/* Sticky Header */}
+        <div className="sticky top-0 bg-gradient-to-r from-slate-900 to-indigo-950 px-6 py-5 text-white flex items-center justify-between z-10">
           <div>
-            <h3 className="text-lg font-semibold text-gray-900">Assign Driver</h3>
-            <p className="text-sm text-gray-600">Booking: {booking.trackingNumber || booking.id}</p>
+            <h3 className="text-xl font-bold tracking-tight">Assign Vehicle</h3>
+            <p className="text-sm text-slate-300 mt-1">
+              Select an approved truck to assign to Booking ID: <span className="font-semibold text-sky-400">{booking.trackingNumber || booking.id}</span>
+            </p>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
-            <X className="w-6 h-6" />
+          <button 
+            onClick={onClose} 
+            className="p-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-slate-300 hover:text-white transition-colors"
+          >
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-180px)]">
-          <div className="bg-gray-50 rounded-lg p-4 mb-6">
-            <h4 className="font-semibold text-gray-900 mb-3">Booking Details</h4>
-            <div className="grid grid-cols-2 gap-3 text-sm">
+        {/* Content Body */}
+        <div className="p-6 overflow-y-auto flex-1 bg-slate-50/50">
+          {/* Booking Summary Section */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-5 mb-6 shadow-sm">
+            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3.5 flex items-center gap-1.5">
+              <Truck className="w-4 h-4 text-indigo-500" />
+              <span>Shipment Overview</span>
+            </h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <p className="text-gray-600">Customer</p>
-                <p className="font-semibold">{booking.customerName}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Customer</p>
+                <p className="font-bold text-slate-800 mt-0.5 truncate">{booking.customerName}</p>
               </div>
               <div>
-                <p className="text-gray-600">Route</p>
-                <p className="font-semibold">{booking.pickupCity} → {booking.deliveryCity}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Route</p>
+                <p className="font-bold text-slate-800 mt-0.5 truncate">{booking.pickupCity} → {booking.deliveryCity}</p>
               </div>
               <div>
-                <p className="text-gray-600">Weight</p>
-                <p className="font-semibold">{booking.weight} kg</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Weight</p>
+                <p className="font-bold text-slate-800 mt-0.5">{booking.weight} kg</p>
               </div>
               <div>
-                <p className="text-gray-600">Service</p>
-                <p className="font-semibold capitalize">{booking.serviceType}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Requested Vehicle</p>
+                <p className="font-bold text-indigo-600 capitalize mt-0.5 truncate">{booking.serviceType}</p>
               </div>
             </div>
           </div>
 
-          <h4 className="font-semibold text-gray-900 mb-4 flex items-center justify-between">
-            Available Drivers
-            {loadingDrivers && <RefreshCcw className="w-4 h-4 animate-spin text-blue-600" />}
+          {/* Truck Selection Header */}
+          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center justify-between">
+            <span>Approved Vehicles Available</span>
+            {isLoading && <RefreshCcw className="w-4 h-4 animate-spin text-indigo-600" />}
           </h4>
 
-          {loadingDrivers ? (
-            <div className="flex justify-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center py-16 bg-white border border-slate-100 rounded-2xl">
+              <RefreshCcw className="w-8 h-8 text-indigo-600 animate-spin mb-3" />
+              <p className="text-sm font-medium text-slate-500">Retrieving available fleet details...</p>
             </div>
-          ) : isError ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <AlertTriangle className="w-12 h-12 text-red-500 mb-4" />
-              <p className="text-gray-600 mb-4">Failed to load active drivers</p>
-              <button onClick={() => fetchDrivers()} className="text-blue-600 font-semibold underline">
-                Try again
+          ) : fleetError ? (
+            <div className="flex flex-col items-center justify-center py-16 bg-white border border-slate-100 rounded-2xl text-center">
+              <AlertTriangle className="w-12 h-12 text-rose-500 mb-3" />
+              <p className="text-sm font-semibold text-slate-800 mb-4">Unable to load fleet details</p>
+              <button 
+                onClick={() => { fetchFleet() }} 
+                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-semibold text-xs transition-colors"
+              >
+                Retry Request
               </button>
             </div>
           ) : (
-            <div className="space-y-3">
-              {drivers.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 border-2 border-dashed border-gray-100 rounded-xl">
-                  No active drivers found
+            <div className="space-y-3.5">
+              {trucks.length === 0 ? (
+                <div className="text-center py-12 text-slate-400 border border-dashed border-slate-200 bg-white rounded-2xl font-medium">
+                  No approved/available vehicles found in the fleet.
                 </div>
               ) : (
-                drivers.map(driver => (
-                  <div
-                    key={driver.id}
-                    onClick={() => setSelectedDriver(driver)}
-                    className={`border-2 rounded-xl p-4 cursor-pointer transition-all ${selectedDriver?.id === driver.id
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300 bg-white'
+                trucks.map(truck => {
+                  const driverObj = typeof truck.driver === 'object' && truck.driver
+                    ? truck.driver
+                    : (driverMap[truck.driverId || truck.driver] || null)
+                  
+                  const isSelected = selectedTruck?.id === truck.id
+                  const driverName = driverObj
+                    ? `${driverObj.firstName || driverObj.first_name || ''} ${driverObj.lastName || driverObj.last_name || ''}`.trim() || driverObj.name
+                    : 'Unassigned Driver'
+
+                  return (
+                    <div
+                      key={truck.id}
+                      onClick={() => setSelectedTruck(truck)}
+                      className={`border-2 rounded-2xl p-5 cursor-pointer transition-all duration-200 ${
+                        isSelected
+                          ? 'border-indigo-600 bg-indigo-50/45 shadow-sm'
+                          : 'border-slate-100 hover:border-slate-200 bg-white hover:shadow-sm'
                       }`}
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg overflow-hidden">
-                          {driver.passportPhotoUrl ? (
-                            <img src={driver.passportPhotoUrl} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            <span>{driver.name ? driver.name[0] : '?'}</span>
-                          )}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">{driver.name}</p>
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <div className="flex items-center gap-1">
-                              <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
-                              <span>{driver.rating || '4.5'}</span>
+                    >
+                      {/* Truck details header */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-center gap-3.5">
+                          <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${
+                            isSelected ? 'bg-indigo-600 text-white' : 'bg-slate-100 text-slate-500'
+                          } transition-colors`}>
+                            <Truck className="w-5.5 h-5.5" />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <p className="font-bold text-slate-900">{truck.plateNumber || 'N/A'}</p>
+                              <span className="px-2 py-0.5 bg-indigo-50 border border-indigo-150 text-[10px] font-bold text-indigo-700 rounded-full uppercase tracking-wider">
+                                {truck.vehicleType}
+                              </span>
                             </div>
-                            <span>•</span>
-                            <span>{driver.totalDeliveries || '0'} deliveries</span>
+                            <p className="text-xs text-slate-500 font-medium mt-0.5">{truck.make} {truck.model} ({truck.truckCapacity || 'N/A'})</p>
                           </div>
                         </div>
+                        {isSelected && (
+                          <div className="w-6 h-6 bg-indigo-600 rounded-full flex items-center justify-center shadow-md">
+                            <UserCheck className="w-3.5 h-3.5 text-white" />
+                          </div>
+                        )}
                       </div>
-                      {selectedDriver?.id === driver.id && (
-                        <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                          <UserCheck className="w-4 h-4 text-white" />
-                        </div>
-                      )}
-                    </div>
 
-                    <div className="grid grid-cols-2 gap-3 text-sm">
-                      <div className="flex items-center gap-2">
-                        <Truck className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-600 truncate">
-                          {driver.assignedTruck || 'No Truck Assigned'}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-600 capitalize">{driver.status}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Phone className="w-4 h-4 text-gray-400" />
-                        <span className="text-gray-600">{driver.phone || 'N/A'}</span>
-                      </div>
-                      <div className="flex justify-end">
-                        <span className={`px-2 py-1 ${driver.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'} rounded-full text-xs font-semibold`}>
-                          {driver.status}
-                        </span>
+                      {/* Driver Details inside truck card */}
+                      <div className="border-t border-slate-100 pt-3.5 mt-3.5 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 bg-violet-100 text-violet-700 rounded-full flex items-center justify-center font-bold text-[10px]">
+                            {driverName[0]?.toUpperCase()}
+                          </div>
+                          <div>
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Driver</span>
+                            <span className="font-semibold text-slate-700">{driverName}</span>
+                          </div>
+                        </div>
+                        
+                        {driverObj?.phone || driverObj?.phoneNumber ? (
+                          <div className="flex items-center gap-2">
+                            <Phone className="w-4 h-4 text-slate-400" />
+                            <div>
+                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Phone</span>
+                              <span className="font-semibold text-slate-700">{driverObj.phone || driverObj.phoneNumber}</span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 text-slate-400">
+                            <AlertTriangle className="w-4 h-4 text-amber-500 animate-pulse" />
+                            <span className="font-semibold italic">Requires driver assignment</span>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  </div>
-                ))
+                  )
+                })
               )}
             </div>
           )}
         </div>
 
-        <div className="sticky bottom-0 bg-white px-6 py-4 border-t border-gray-200 flex gap-3">
+        {/* Sticky Footer Actions */}
+        <div className="sticky bottom-0 bg-white px-6 py-4.5 border-t border-slate-100 flex gap-4 shrink-0">
           <button
             onClick={onClose}
-            className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+            className="flex-1 px-5 py-3 border border-slate-200 hover:border-slate-350 text-slate-600 font-bold text-sm uppercase tracking-wider rounded-xl hover:bg-slate-50 transition-all active:scale-98"
           >
             Cancel
           </button>
           <button
             onClick={handleAssign}
-            disabled={!selectedDriver || loading}
-            className="flex-1 px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-semibold disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg"
+            disabled={!selectedTruck || loading}
+            className="flex-1 px-5 py-3 bg-gradient-to-r from-indigo-600 to-indigo-700 text-white font-bold text-sm uppercase tracking-wider rounded-xl hover:from-indigo-700 hover:to-indigo-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-indigo-100 active:scale-98"
           >
             {loading && <RefreshCcw className="w-4 h-4 animate-spin" />}
-            {loading ? 'Assigning...' : 'Assign Driver'}
+            {loading ? 'Assigning...' : 'Assign Vehicle'}
           </button>
         </div>
       </div>

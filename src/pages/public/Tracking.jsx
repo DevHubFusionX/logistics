@@ -147,7 +147,7 @@ export default function Tracking() {
                     <Package className="w-6 h-6 text-[#0056B8]" />
                   </div>
                   <h3 className="font-heading-unique font-bold text-slate-800 text-lg mb-2">No active shipment query</h3>
-                  <p className="font-body-unique text-slate-400 text-xs sm:text-sm max-w-xs leading-relaxed">
+                  <p className="font-body-unique text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
                     Provide a valid cold chain booking ID above to access live status and sensor readings.
                   </p>
                 </motion.div>
@@ -236,6 +236,31 @@ export default function Tracking() {
 
                   {/* Right Column: Telemetry & Timeline (col-span-7) */}
                   <div className="lg:col-span-7 space-y-6">
+
+                    {/* Live GPS Transit Map */}
+                    {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
+                      <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left overflow-hidden">
+                        <div className="flex items-center gap-2.5 mb-4">
+                          <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <MapPin className="w-4 h-4 text-[#0056B8]" />
+                          </div>
+                          <div>
+                            <p className="text-slate-400 text-[9px] font-bold tracking-widest uppercase">Live Transit Map</p>
+                            <h3 className="font-heading-unique font-bold text-slate-800 text-sm">Real-time GPS Tracking</h3>
+                          </div>
+                        </div>
+                        <div className="w-full h-[400px] rounded-2xl overflow-hidden border border-slate-100 shadow-inner">
+                          <iframe
+                            title="Live GPS Location"
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
+                            allowFullScreen
+                          />
+                        </div>
+                      </div>
+                    )}
 
                     {/* Live Temperature Telemetry widget */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left">

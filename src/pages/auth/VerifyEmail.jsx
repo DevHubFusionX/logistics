@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Mail, RefreshCw, ArrowRight, CheckCircle } from 'lucide-react'
+import { RefreshCw, ArrowRight, CheckCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+import { AuthLayout } from '@/features/auth'
 import authService from '@/features/auth/services/authService'
 import toast from 'react-hot-toast'
 
@@ -32,86 +34,87 @@ export default function VerifyEmail() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-8 max-w-md w-full text-center space-y-6">
-
-        {/* Icon */}
-        <div className="w-16 h-16 bg-sky-50 rounded-2xl flex items-center justify-center mx-auto">
-          <Mail className="w-8 h-8 text-sky-700" />
-        </div>
-
-        {/* Heading */}
-        <div>
-          <h1 className="font-heading font-bold text-xl text-gray-900">Check your email</h1>
-          <p className="text-sm text-gray-500 mt-2 leading-relaxed">
+    <AuthLayout
+      title="Verify Your Email"
+      subtitle="Complete account setup to access real-time dispatch, cold chain logistics tools, and delivery tracking."
+    >
+      <motion.div
+        className="max-w-md w-full"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <div className="text-center lg:text-left mb-8">
+          <h2 className="text-3xl font-bold text-gray-900 mb-2">Check your email</h2>
+          <p className="text-gray-600 text-sm leading-relaxed">
             We sent a verification link to{' '}
-            {email
-              ? <span className="font-semibold text-gray-800">{email}</span>
-              : 'your email address'
-            }.
-            {' '}Click the link to activate your account.
+            {email ? (
+              <span className="font-semibold text-gray-900 break-all">{email}</span>
+            ) : (
+              'your registered email'
+            )}
+            . Please click the link to activate your account.
           </p>
         </div>
 
         {/* Steps */}
-        <div className="bg-gray-50 rounded-xl p-4 text-left space-y-3">
+        <div className="bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-4 mb-6">
+          <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Next Steps</h4>
           {[
             'Open your email inbox',
-            'Find the email from Dara Express',
-            'Click the verification link in the email',
-            'Come back here and sign in',
+            'Find the verification email from Dara Logistics',
+            'Click the activation link inside the email',
+            'Return here to sign in and begin shipping'
           ].map((step, i) => (
-            <div key={i} className="flex items-center gap-3">
-              <div className="w-5 h-5 rounded-full bg-sky-700 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+            <div key={i} className="flex gap-3.5">
+              <div className="w-6 h-6 rounded-full bg-sky-100 text-sky-700 text-xs font-bold flex items-center justify-center flex-shrink-0 mt-0.5">
                 {i + 1}
               </div>
-              <p className="text-xs text-gray-600">{step}</p>
+              <p className="text-sm font-medium text-slate-600 leading-relaxed">{step}</p>
             </div>
           ))}
         </div>
 
         {/* Resent confirmation */}
         {resent && (
-          <div className="flex items-center gap-2 justify-center text-emerald-600 text-sm font-medium">
-            <CheckCircle className="w-4 h-4" />
-            Verification link resent successfully
+          <div className="mb-6 flex items-center gap-2.5 px-4 py-3 bg-emerald-50 border border-emerald-100 rounded-xl text-left">
+            <CheckCircle className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+            <p className="text-xs font-semibold text-emerald-700">Verification link resent successfully</p>
           </div>
         )}
 
         {/* Actions */}
-        <div className="space-y-3">
-          <p className="text-xs text-gray-400">
-            Didn't receive it? Check your spam folder or request a new link.
-          </p>
+        <div className="space-y-4">
+          <Link
+            to="/auth/login"
+            className="w-full bg-gradient-to-r from-sky-600 to-blue-700 text-white py-4 rounded-xl font-bold text-lg hover:from-sky-500 hover:to-blue-600 transition-all shadow-lg shadow-sky-100 flex items-center justify-center gap-2"
+          >
+            Go to Sign In <ArrowRight className="w-5 h-5" />
+          </Link>
+
           <button
             onClick={handleResend}
             disabled={resending || countdown > 0 || !email}
-            className="w-full flex items-center justify-center gap-2 py-2.5 border border-gray-200 rounded-xl text-sm font-semibold text-gray-600 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 py-3.5 border border-slate-200 hover:border-slate-300 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-4 h-4 ${resending ? 'animate-spin' : ''}`} />
             {resending
-              ? 'Sending…'
+              ? 'Sending...'
               : countdown > 0
                 ? `Resend in ${countdown}s`
                 : 'Resend verification link'
             }
           </button>
 
-          <Link
-            to="/auth/login"
-            className="w-full flex items-center justify-center gap-2 py-2.5 bg-sky-700 hover:bg-sky-600 text-white text-sm font-semibold rounded-xl transition-colors"
-          >
-            Go to sign in <ArrowRight className="w-4 h-4" />
-          </Link>
+          <div className="text-center mt-6">
+            <p className="text-xs text-gray-500">
+              Wrong email address?{' '}
+              <Link to="/auth/signup" className="text-sky-600 font-bold hover:underline">
+                Register again
+              </Link>
+            </p>
+          </div>
         </div>
-
-        <p className="text-xs text-gray-400">
-          Wrong email?{' '}
-          <Link to="/auth/signup" className="text-sky-700 font-semibold hover:underline">
-            Register again
-          </Link>
-        </p>
-      </div>
-    </div>
+      </motion.div>
+    </AuthLayout>
   )
 }

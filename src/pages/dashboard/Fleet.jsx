@@ -20,6 +20,11 @@ function Fleet() {
 
   const { data: fleetResponse, isLoading, isError, refetch } = useFleetQuery(filters)
   const fleetData = useMemo(() => fleetResponse?.records || [], [fleetResponse])
+
+  if (import.meta.env.DEV) {
+    console.log('====== FLEET/TRUCKS LIST ======', fleetData)
+  }
+
   const totalFleetCount = useMemo(() => fleetResponse?.total || 0, [fleetResponse])
   const { data: drivers = [] } = useDriversQuery()
 
@@ -73,6 +78,7 @@ function Fleet() {
       total: totalFleetCount,
       approved: fleetData.filter(t => t.status === 'approved').length,
       pending: fleetData.filter(t => t.status === 'pending').length,
+      rejected: fleetData.filter(t => t.status === 'rejected').length,
       gpsEnabled: fleetData.filter(t => t.gpsTrackingInstalled).length
     }
   }, [totalFleetCount, fleetData])
@@ -81,6 +87,7 @@ function Fleet() {
     switch (status) {
       case 'approved': return 'bg-green-100 text-green-700'
       case 'pending': return 'bg-yellow-100 text-yellow-700'
+      case 'rejected': return 'bg-red-100 text-red-700'
       default: return 'bg-gray-100 text-gray-700'
     }
   }

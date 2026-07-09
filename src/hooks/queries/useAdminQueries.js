@@ -79,36 +79,61 @@ export function useClientShipmentsQuery(clientId, params = {}) {
     })
 }
 
+const safeFormatDate = (dateVal) => {
+    if (!dateVal) return 'N/A'
+    const date = new Date(dateVal)
+    return isNaN(date.getTime()) ? 'N/A' : date.toLocaleDateString()
+}
+
 /**
  * Normalizes driver data from the API to match the frontend expectations
  */
-const normalizeDriver = (driver) => ({
-    ...driver,
-    id: driver._id,
-    name: `${driver.firstName || ''} ${driver.lastName || ''}`.trim() || 'Unnamed Driver',
-    email: driver.email || '',
-    phone: driver.phoneNumber || '',
-    address: driver.residentialAddress || 'Not specified',
-    emergencyContact: driver.nextOfKin || 'Not specified',
-    joinDate: driver.createdAt ? new Date(driver.createdAt).toLocaleDateString() : 'N/A',
+const normalizeDriver = (driver) => {
+    if (!driver) return null
+    const isRejected = driver.status === 'rejected' || driver.isRejected || driver.rejectionReason || driver.reason
+    const status = driver.status || (isRejected ? 'rejected' : driver.isActive ? 'active' : 'inactive')
+    const verificationStatus = driver.verificationStatus || (isRejected ? 'rejected' : driver.isVerified ? 'verified' : 'unverified')
 
-    // Document URLs
-    ninSlipUrl: driver.ninSlip?.url,
-    driversLicenseUrl: driver.driversLicense?.url,
-    passportPhotoUrl: driver.passportPhoto?.url,
-    medicalCertUrl: driver.medicalFitnessCertificate?.url,
+    const displayName = driver.name || `${driver.firstName || ''} ${driver.lastName || ''}`.trim() || driver.email || 'Unnamed Driver'
+    const licenseNumber = driver.licenseNumber || driver.nin || 'N/A'
+    const phoneNumber = driver.phone || driver.phoneNumber || driver.profile?.phone || ''
 
-    // UI Fallbacks for missing fields in API
-    performanceScore: driver.performanceScore || 90, // Default to 90
-    rating: driver.rating || 4.5,
-    totalDeliveries: driver.totalDeliveries || 0,
-    onTimeRate: driver.onTimeRate || 95,
-    assignedTruck: driver.assignedTruck || 'None',
-    licenseNumber: driver.licenseNumber || 'N/A',
-    licenseExpiry: driver.licenseExpiry || 'N/A',
+    return {
+        ...driver,
+        id: driver._id || driver.id,
+        name: displayName,
+        email: driver.email || driver.profile?.email || '',
+        phone: phoneNumber,
+        address: driver.address || driver.residentialAddress || 'Not specified',
+        emergencyContact: driver.emergencyContact || driver.nextOfKin || 'Not specified',
+        joinDate: safeFormatDate(driver.createdAt),
 
-    status: driver.isActive ? 'active' : 'inactive'
-})
+        // Document URLs
+        ninSlipUrl: driver.ninSlip?.url,
+        driversLicenseUrl: driver.driversLicense?.url,
+        passportPhotoUrl: driver.passportPhoto?.url,
+        medicalCertUrl: driver.medicalFitnessCertificate?.url,
+        truckDrivingCertUrl: driver.truckDrivingCertification?.url,
+        drugTestReportUrl: driver.drugTestReport?.url,
+
+        // UI Fallbacks for missing fields in API
+        performanceScore: driver.performanceScore || 90,
+        rating: driver.rating || 4.5,
+        totalDeliveries: driver.totalDeliveries || 0,
+        onTimeRate: driver.onTimeRate || 95,
+        assignedTruck: driver.assignedTruck || 'None',
+        licenseNumber,
+        licenseExpiry: driver.licenseExpiry || 'N/A',
+        emailVerified: driver.emailVerified || false,
+
+        // Verification status
+        isVerified: driver.isVerified || false,
+        isRejected: !!isRejected,
+        rejectionReason: driver.rejectionReason || driver.reason || '',
+        verificationStatus,
+        status
+    }
+}
 
 /**
  * Hook for fetching all drivers/staff
@@ -121,7 +146,14 @@ export function useDriversQuery(params = {}) {
             // httpClient returns { data: { error, message, data: { records } }, status }
             const apiBody = response.data
             const rawDrivers = apiBody?.data?.records || []
-            return rawDrivers.map(normalizeDriver)
+            if (import.meta.env.DEV) {
+                console.log('[useDriversQuery] Raw response:', response)
+            }
+            const normalized = rawDrivers.filter(Boolean).map(normalizeDriver).filter(Boolean)
+            if (import.meta.env.DEV) {
+                console.log('[useDriversQuery] Normalized output:', normalized)
+            }
+            return normalized
         },
         staleTime: 5 * 60 * 1000,
     })
@@ -137,7 +169,7 @@ export function useManagersQuery(params = {}) {
             const response = await adminService.getManagers(params)
             const apiBody = response.data?.data || response.data
             const records = apiBody?.records || apiBody || []
-            
+
             return records.map(manager => ({
                 ...manager,
                 id: manager._id || manager.id,
@@ -192,51 +224,70 @@ export function useDriverTripsQuery(driverId, params = {}) {
 /**
  * Normalizes truck data from the API to match the frontend expectations
  */
-const normalizeTruck = (truck) => ({
-    ...truck,
-    id: truck._id,
-    plateNumber: (truck.plateNumber || '').trim(),
-    make: (truck.make || '').trim(),
-    model: (truck.model || '').trim(),
-    vehicleType: (truck.vehicleType || '').trim(),
-    chassisNumber: (truck.chassisNumber || '').trim(),
-    engineNumber: (truck.engineNumber || '').trim(),
-    truckCapacity: (truck.truckCapacity || '').trim(),
-    yearOfManufacture: truck.yearOfManufacture || 'N/A',
-    insuranceType: truck.insuranceType || 'N/A',
-    temperatureRange: (truck.temperatureRange || '').trim(),
-    reeferUnitBrand: (truck.reeferUnitBrand || '').trim(),
-    reeferUnitModel: (truck.reeferUnitModel || '').trim(),
-    lastMaintenanceDate: truck.lastMaintenanceDate ? new Date(truck.lastMaintenanceDate).toLocaleDateString() : 'N/A',
-    telematicsProvider: (truck.telematicsProvider || '').trim(),
-    trackerSimNumber: truck.trackerSimNumber || '',
-    status: truck.isApproved ? 'approved' : 'pending',
-    createdAt: truck.createdAt,
-    driverId: truck.driver || null,
+const normalizeTruck = (truck) => {
+    if (!truck) return null
 
-    // Document URLs
-    vehicleRegistrationUrl: truck.vehicleRegistration?.url,
-    proofOfOwnershipUrl: truck.proofOfOwnership?.url,
-    insuranceDocumentUrl: truck.insuranceDocument?.url,
-    temperatureCalibrationCertificateUrl: truck.temperatureCalibrationCertificate?.url,
+    // Derive status from multiple possible backend fields
+    const rejectionReason = truck.rejectionReason || truck.reason || ''
+    const isRejected = !!(truck.isRejected || rejectionReason)
 
-    // Photo URLs
-    frontPhotoUrl: truck.front?.url,
-    backPhotoUrl: truck.back?.url,
-    interiorPhotoUrl: truck.interior?.url,
-    tiresPhotoUrl: truck.tires?.url,
+    let status = 'pending'
+    if (isRejected) status = 'rejected'
+    else if (truck.isApproved) status = 'approved'
+    // Also check if the backend sends a status string directly
+    if (truck.status && typeof truck.status === 'string') status = truck.status
 
-    // Safety
-    fireExtinguisherAvailable: truck.fireExtinguisherAvailable || false,
-    reflectiveSafetyGear: truck.reflectiveSafetyGear || false,
-    emergencyKit: truck.emergencyKit || false,
-    spareTire: truck.spareTire || false,
+    if (import.meta.env.DEV) {
+        console.debug('[normalizeTruck]', { _id: truck._id, isApproved: truck.isApproved, isRejected: truck.isRejected, rawStatus: truck.status, derivedStatus: status })
+    }
 
-    // Tracking
-    gpsTrackingInstalled: truck.gpsTrackingInstalled || false,
-    realTimeTrackingEnabled: truck.realTimeTrackingEnabled || false,
-    coldChainComplianceStatus: truck.coldChainComplianceStatus || false,
-})
+    return {
+        ...truck,
+        id: truck._id,
+        plateNumber: String(truck.plateNumber || '').trim(),
+        make: String(truck.make || '').trim(),
+        model: String(truck.model || '').trim(),
+        vehicleType: String(truck.vehicleType || '').trim(),
+        chassisNumber: String(truck.chassisNumber || '').trim(),
+        engineNumber: String(truck.engineNumber || '').trim(),
+        truckCapacity: String(truck.truckCapacity || '').trim(),
+        yearOfManufacture: truck.yearOfManufacture || 'N/A',
+        insuranceType: truck.insuranceType || 'N/A',
+        temperatureRange: String(truck.temperatureRange || '').trim(),
+        reeferUnitBrand: String(truck.reeferUnitBrand || '').trim(),
+        reeferUnitModel: String(truck.reeferUnitModel || '').trim(),
+        lastMaintenanceDate: safeFormatDate(truck.lastMaintenanceDate),
+        telematicsProvider: String(truck.telematicsProvider || '').trim(),
+        trackerSimNumber: truck.trackerSimNumber || '',
+        status,
+        rejectionReason: truck.rejectionReason || truck.reason || '',
+        createdAt: truck.createdAt,
+        driverId: truck.driver || null,
+
+        // Document URLs
+        vehicleRegistrationUrl: truck.vehicleRegistration?.url,
+        proofOfOwnershipUrl: truck.proofOfOwnership?.url,
+        insuranceDocumentUrl: truck.insuranceDocument?.url,
+        temperatureCalibrationCertificateUrl: truck.temperatureCalibrationCertificate?.url,
+
+        // Photo URLs
+        frontPhotoUrl: truck.front?.url,
+        backPhotoUrl: truck.back?.url,
+        interiorPhotoUrl: truck.interior?.url,
+        tiresPhotoUrl: truck.tires?.url,
+
+        // Safety
+        fireExtinguisherAvailable: truck.fireExtinguisherAvailable || false,
+        reflectiveSafetyGear: truck.reflectiveSafetyGear || false,
+        emergencyKit: truck.emergencyKit || false,
+        spareTire: truck.spareTire || false,
+
+        // Tracking
+        gpsTrackingInstalled: truck.gpsTrackingInstalled || false,
+        realTimeTrackingEnabled: truck.realTimeTrackingEnabled || false,
+        coldChainComplianceStatus: truck.coldChainComplianceStatus || false,
+    }
+}
 
 /**
  * Hook for fetching fleet/trucks
@@ -250,9 +301,9 @@ export function useFleetQuery(params = {}) {
             const apiBody = response.data
             const rawTrucks = apiBody?.data?.records || []
             const pagination = apiBody?.data?.pagination || {}
-            
+
             return {
-                records: rawTrucks.map(normalizeTruck),
+                records: rawTrucks.filter(Boolean).map(normalizeTruck).filter(Boolean),
                 total: pagination.totalRecords || 0,
                 pagination
             }
@@ -409,10 +460,67 @@ export function useAdminMutations() {
     })
 
     const updateVehicleMutation = useMutation({
-        mutationFn: ({ id, data }) => fleetService.updateVehicle(id, data),
+        mutationFn: ({ id, data }) => fleetService.updateTruck(id, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
             toast.success('Vehicle updated successfully')
+        }
+    })
+
+    const approveTruckMutation = useMutation({
+        mutationFn: (id) => fleetService.approveTruck(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
+            toast.success('Truck approved successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Failed to approve truck')
+        }
+    })
+
+    const rejectTruckMutation = useMutation({
+        mutationFn: ({ id, reason }) => {
+            console.log('[rejectTruck] Sending:', { id, reason })
+            return fleetService.rejectTruck(id, reason)
+        },
+        onSuccess: (response) => {
+            console.log('[rejectTruck] Full response:', JSON.stringify(response, null, 2))
+            queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
+            toast.success('Truck rejected successfully')
+        },
+        onError: (error) => {
+            console.error('[rejectTruck] Error:', error)
+            toast.error(error.message || 'Failed to reject truck')
+        }
+    })
+
+    const verifyDriverMutation = useMutation({
+        mutationFn: (id) => driverService.verifyDriver(id),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'drivers'], exact: false })
+            toast.success('Driver verified successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Failed to verify driver')
+        }
+    })
+
+    const rejectDriverMutation = useMutation({
+        mutationFn: ({ id, reason }) => driverService.rejectDriver(id, reason),
+        onSuccess: (_, { id, reason }) => {
+            queryClient.setQueriesData({ queryKey: ['admin', 'drivers'], exact: false }, (old) => {
+                if (!Array.isArray(old)) return old
+                return old.map(d =>
+                    (d._id === id || d.id === id)
+                        ? { ...d, isRejected: true, rejectionReason: reason, status: 'rejected', verificationStatus: 'rejected' }
+                        : d
+                )
+            })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'drivers'], exact: false })
+            toast.success('Driver rejected successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Failed to reject driver')
         }
     })
 
@@ -427,7 +535,7 @@ export function useAdminMutations() {
     const manageClientOverrideMutation = useMutation({
         mutationFn: ({ action, id, data }) => {
             switch (action) {
-                case 'add':    return pricingService.addClientOverride(data)
+                case 'add': return pricingService.addClientOverride(data)
                 case 'update': return pricingService.updateClientOverride(id, data)
                 case 'delete': return pricingService.deleteClientOverride(id)
                 default: throw new Error(`Unknown action: ${action}`)
@@ -471,6 +579,10 @@ export function useAdminMutations() {
         updateDriver: updateDriverMutation,
         createVehicle: createVehicleMutation,
         updateVehicle: updateVehicleMutation,
+        approveTruck: approveTruckMutation,
+        rejectTruck: rejectTruckMutation,
+        verifyDriver: verifyDriverMutation,
+        rejectDriver: rejectDriverMutation,
         updatePricingRules: updatePricingRulesMutation,
         manageClientOverride: manageClientOverrideMutation,
         createManager: createManagerMutation,

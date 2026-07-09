@@ -26,6 +26,10 @@ export default function Drivers() {
   const { data: fleetResponse, isLoading: isLoadingFleet, refetch: refetchFleet } = useFleetQuery()
   const fleet = useMemo(() => fleetResponse?.records || [], [fleetResponse])
 
+  if (import.meta.env.DEV) {
+    console.log('====== DRIVERS LIST ======', drivers)
+  }
+
   const isLoading = isLoadingDrivers || isLoadingFleet
   const isError = isErrorDrivers
   const refetch = () => {
@@ -52,11 +56,18 @@ export default function Drivers() {
 
   const filteredDrivers = useMemo(() => {
     console.log('[Drivers Page] Input drivers:', drivers)
-    const sanitizedSearch = sanitizeInput(searchTerm)
+    const sanitizedSearch = sanitizeInput(searchTerm || '').trim().toLowerCase()
     const filtered = drivers.filter(driver => {
-      const matchesSearch = (driver.name || '').toLowerCase().includes(sanitizedSearch.toLowerCase()) ||
-        (driver.licenseNumber || '').toLowerCase().includes(sanitizedSearch.toLowerCase())
-      const matchesStatus = filterStatus === 'all' || driver.status === filterStatus
+      const searchableText = [
+        driver.name,
+        driver.licenseNumber,
+        driver.email,
+        driver.phone,
+        driver.assignedTruck
+      ].filter(Boolean).join(' ').toLowerCase()
+
+      const matchesSearch = !sanitizedSearch || searchableText.includes(sanitizedSearch)
+      const matchesStatus = filterStatus === 'all' || (driver.status || '').toLowerCase() === filterStatus.toLowerCase()
       return matchesSearch && matchesStatus
     })
     console.log('[Drivers Page] Filtered output:', filtered)

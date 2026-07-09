@@ -19,6 +19,7 @@ export default function FleetFilters({ filters, onFilterChange, onClear, onAddTr
           <option value="">All Status</option>
           <option value="approved">Approved</option>
           <option value="pending">Pending</option>
+          <option value="rejected">Rejected</option>
         </select>
         <button
           onClick={onClear}

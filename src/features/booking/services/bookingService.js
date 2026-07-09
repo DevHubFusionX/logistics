@@ -54,6 +54,18 @@ const bookingService = {
   deleteBooking: (id) =>
     httpClient.request(`/bookings/${id}`, {
       method: 'DELETE'
+    }),
+
+  assignTruck: (bookingId, truckId) =>
+    httpClient.request(`/admin/bookings/truck/${bookingId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ truckId })
+    }),
+
+  removeTruck: (bookingId) =>
+    httpClient.request(`/admin/bookings/truck/remove/${bookingId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({})
     })
 }
 

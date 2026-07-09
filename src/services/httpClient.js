@@ -5,7 +5,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 const ALLOWED_ENDPOINTS = [
   '/auth', '/user', '/users', '/addresses', '/shipments',
-  '/drivers', '/driver', '/truck', '/fleet', '/trips',
+  '/drivers', '/driver', '/truck', '/trucks', '/fleet', '/trips',
   '/bookings', '/analytics', '/payments', '/payment',
   '/pricing', '/tracking', '/admin'
 ]

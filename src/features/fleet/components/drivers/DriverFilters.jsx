@@ -13,7 +13,7 @@ export default function DriverFilters({
       <div className="flex flex-wrap gap-3">
         <input
           type="search"
-          placeholder="Search by name or license..."
+          placeholder="Search by name, email, phone, or license..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           className="flex-1 min-w-[250px] px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
@@ -24,9 +24,9 @@ export default function DriverFilters({
           className="px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-50"
         >
           <option value="all">All Status</option>
-          <option value="available">Available</option>
-          <option value="on_trip">On Trip</option>
+          <option value="active">Active</option>
           <option value="inactive">Inactive</option>
+          <option value="rejected">Rejected</option>
         </select>
         <button
           onClick={onClear}

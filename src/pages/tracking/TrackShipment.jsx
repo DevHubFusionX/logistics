@@ -155,6 +155,26 @@ export default function TrackShipment() {
               )}
             </div>
 
+            {/* Live GPS Map */}
+            {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
+              <div className="bg-white rounded-2xl border border-gray-100 p-5 overflow-hidden">
+                <div className="flex items-center gap-2 mb-4">
+                  <MapPin className="w-4 h-4 text-sky-700" />
+                  <h2 className="font-heading font-bold text-sm text-gray-900">Live GPS Location</h2>
+                </div>
+                <div className="w-full h-[400px] rounded-xl overflow-hidden border border-gray-100 shadow-inner">
+                  <iframe
+                    title="Live Location Map"
+                    width="100%"
+                    height="100%"
+                    style={{ border: 0 }}
+                    src={`https://maps.google.com/maps?saddr=${encodeURIComponent(shipment.origin)}&daddr=${encodeURIComponent(shipment.destination)}&t=&z=6&ie=UTF8&iwloc=&output=embed`}
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            )}
+
             {/* Timeline */}
             <div className="bg-white rounded-2xl border border-gray-100 p-5">
               <h2 className="font-heading font-bold text-sm text-gray-900 mb-5">Shipment timeline</h2>

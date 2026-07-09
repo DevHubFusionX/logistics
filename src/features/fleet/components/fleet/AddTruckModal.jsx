@@ -66,7 +66,7 @@ export default function AddTruckModal({ isOpen, onClose, onRefresh, assignedDriv
   const [files, setFiles] = useState(initialFileData)
   const { showToast, ToastContainer } = useToast()
   const { createVehicle } = useAdminMutations()
-  const isSubmitting = createVehicle.isLoading
+  const isSubmitting = createVehicle.isPending
 
   const { data: drivers = [] } = useDriversQuery()
 

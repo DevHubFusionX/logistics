@@ -33,7 +33,7 @@ function Section({ icon: Icon, title, children }) {
   )
 }
 
-export default function BookingDetailsModal({ booking, onClose, getStatusBadge, getStatusText }) {
+export default function BookingDetailsModal({ booking, onClose, getStatusBadge, getStatusText, onAssignDriver, onRemoveTruck }) {
   if (!booking) return null
 
   const currentIdx  = STATUSES.findIndex(s => s.id === booking.status)
@@ -49,6 +49,9 @@ export default function BookingDetailsModal({ booking, onClose, getStatusBadge, 
 
   const amount    = booking.amount || booking.price || 0
   const trackingId = booking.trackingNumber || booking.tracking_number || booking._id
+
+  const canAssign = !!onAssignDriver && ['pending', 'pending_assignment'].includes(booking.status)
+  const canReassign = !!onAssignDriver && ['confirmed', 'driver_assigned'].includes(booking.status)
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
@@ -169,6 +172,33 @@ export default function BookingDetailsModal({ booking, onClose, getStatusBadge, 
             )}
           </Section>
 
+          {/* Assigned Transportation */}
+          {(booking.truckPlateNumber || booking.driverName) && (
+            <Section icon={Truck} title="Assigned Transportation">
+              <div className="grid grid-cols-2 gap-4">
+                {booking.truckPlateNumber && (
+                  <div>
+                    <Field label="Plate Number" value={booking.truckPlateNumber} />
+                    {booking.truckMakeModel && (
+                      <p className="text-xs text-gray-500 mt-1 font-semibold">{booking.truckMakeModel}</p>
+                    )}
+                  </div>
+                )}
+                {booking.driverName && (
+                  <div>
+                    <Field label="Driver" value={booking.driverName} />
+                    {booking.driverPhone && (
+                      <p className="text-xs text-gray-500 mt-1 font-mono font-semibold">{booking.driverPhone}</p>
+                    )}
+                    {booking.driverEmail && (
+                      <p className="text-xs text-gray-400 font-medium truncate mt-0.5">{booking.driverEmail}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </Section>
+          )}
+
           {/* Dates */}
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center gap-2.5">
@@ -191,13 +221,50 @@ export default function BookingDetailsModal({ booking, onClose, getStatusBadge, 
         </div>
 
         {/* Footer */}
-        <div className="flex-shrink-0 px-5 py-4 border-t border-gray-100">
+        <div className="flex-shrink-0 px-5 py-4 border-t border-gray-100 flex gap-3">
           <button
             onClick={onClose}
-            className="w-full py-3 bg-gray-900 hover:bg-gray-800 text-white text-sm font-semibold rounded-xl transition-colors"
+            className="flex-1 py-3 bg-gray-100 hover:bg-gray-200 text-gray-600 text-sm font-semibold rounded-xl transition-colors"
           >
             Close
           </button>
+
+          {canAssign && (
+            <button
+              onClick={() => {
+                onClose()
+                onAssignDriver(booking)
+              }}
+              className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-md shadow-indigo-100"
+            >
+              <Truck className="w-4 h-4" /> Assign Truck
+            </button>
+          )}
+
+          {canReassign && (
+            <>
+              <button
+                onClick={() => {
+                  onClose()
+                  onAssignDriver(booking)
+                }}
+                className="flex-1 py-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-150 text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-1.5"
+              >
+                Reassign
+              </button>
+              {onRemoveTruck && (
+                <button
+                  onClick={() => {
+                    onClose()
+                    onRemoveTruck(booking)
+                  }}
+                  className="py-3 px-4 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-150 text-sm font-semibold rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                >
+                  Unassign
+                </button>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

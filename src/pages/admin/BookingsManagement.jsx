@@ -8,7 +8,8 @@ import {
   BookingDetailsModal, 
   getStatusBadge, 
   getStatusText, 
-  useAllBookingsQuery 
+  useAllBookingsQuery,
+  useBookingMutations
 } from '@/features/booking'
 
 export default function BookingsManagement() {
@@ -20,6 +21,8 @@ export default function BookingsManagement() {
   const [showDetailsModal, setShowDetailsModal] = useState(false)
   const [selectedBooking, setSelectedBooking] = useState(null)
   const { showToast, ToastContainer } = useToast()
+  
+  const { removeTruck } = useBookingMutations()
 
   // Debounce search term
   useEffect(() => {
@@ -43,26 +46,44 @@ export default function BookingsManagement() {
 
   const mappedBookings = useMemo(() => {
     const records = Array.isArray(rawBookings) ? rawBookings : []
-    return records.map(b => ({
-      ...b,
-      id: b._id || b.id,
-      trackingNumber: b.tracking_number || b._id,
-      customerName: b.fullNameOrBusiness || b.name || (b.sender ? `${b.sender.first_name} ${b.sender.last_name}` : (b.receiver_name || 'Guest')),
-      customerEmail: b.email || b.sender?.email || b.receiver_email,
-      customerPhone: b.contactPhone || b.sender?.phone || b.receiver_phone,
-      pickupCity: b.pickupLocation?.city || b.origin?.split(',').pop()?.trim() || 'N/A',
-      deliveryCity: b.dropoffLocation?.city || b.destination?.split(',').pop()?.trim() || 'N/A',
-      weight: b.cargoWeightKg || b.weight,
-      cargoType: b.goodsType || b.package_type,
-      serviceType: b.vehicleType || b.service_type,
-      status: b.status,
-      amount: b.price || b.shipping_fee,
-      createdAt: b.createdAt || b.created_at,
-      pickupDate: b.estimatedPickupDate || b.pickupDate || b.estimated_delivery,
-      deliveryDate: b.estimatedDeliveryDate || b.deliveryDate,
-      driverId: b.driver?.id || b.driverId,
-      driverName: b.driver?.profile ? `${b.driver.profile.first_name} ${b.driver.profile.last_name}` : (b.driverName || null)
-    }))
+    return records.map(b => {
+      const truckObj = typeof b.truck === 'object' ? b.truck : null
+      const driverObj = truckObj?.driver || b.driver || null
+      
+      const driverName = driverObj
+        ? `${driverObj.firstName || driverObj.first_name || ''} ${driverObj.lastName || driverObj.last_name || ''}`.trim() || driverObj.name
+        : (b.driverName || null)
+
+      return {
+        ...b,
+        id: b._id || b.id,
+        trackingNumber: b.tracking_number || b._id,
+        customerName: b.fullNameOrBusiness || b.name || (b.sender ? `${b.sender.first_name} ${b.sender.last_name}` : (b.receiver_name || 'Guest')),
+        customerEmail: b.email || b.sender?.email || b.receiver_email,
+        customerPhone: b.contactPhone || b.sender?.phone || b.receiver_phone,
+        pickupCity: b.pickupLocation?.city || b.origin?.split(',').pop()?.trim() || 'N/A',
+        deliveryCity: b.dropoffLocation?.city || b.destination?.split(',').pop()?.trim() || 'N/A',
+        weight: b.cargoWeightKg || b.weight,
+        cargoType: b.goodsType || b.package_type,
+        serviceType: b.vehicleType || b.service_type,
+        status: b.status,
+        amount: b.price || b.shipping_fee,
+        createdAt: b.createdAt || b.created_at,
+        pickupDate: b.estimatedPickupDate || b.pickupDate || b.estimated_delivery,
+        deliveryDate: b.estimatedDeliveryDate || b.deliveryDate,
+        
+        // Assigned Truck Details
+        truckId: truckObj?._id || (typeof b.truck === 'string' ? b.truck : null) || b.truckId,
+        truckPlateNumber: truckObj?.plateNumber || b.truckPlateNumber || null,
+        truckMakeModel: truckObj ? `${truckObj.make || ''} ${truckObj.model || ''}`.trim() : (b.truckMakeModel || null),
+        
+        // Assigned Driver Details
+        driverId: driverObj?._id || driverObj?.id || b.driverId,
+        driverName: driverName,
+        driverPhone: driverObj?.phoneNumber || driverObj?.phone || null,
+        driverEmail: driverObj?.email || null
+      }
+    })
   }, [rawBookings])
 
   const stats = useMemo(() => {
@@ -79,6 +100,18 @@ export default function BookingsManagement() {
     setShowAssignModal(true)
   }
 
+  const handleRemoveTruck = async (booking) => {
+    if (window.confirm('Are you sure you want to remove the assigned vehicle from this shipment?')) {
+      try {
+        await removeTruck.mutateAsync(booking.id)
+        showToast.success('Success', 'Vehicle has been unassigned')
+        refetch()
+      } catch (error) {
+        showToast.error('Error', error.message || 'Failed to unassign vehicle')
+      }
+    }
+  }
+
   const handleViewDetails = (booking) => {
     setSelectedBooking(booking)
     setShowDetailsModal(true)
@@ -87,7 +120,7 @@ export default function BookingsManagement() {
   const handleDriverAssigned = () => {
     setShowAssignModal(false)
     refetch()
-    showToast.success('Success', 'Driver has been assigned to the shipment')
+    showToast.success('Success', 'Vehicle has been assigned to the shipment')
   }
 
   return (
@@ -206,6 +239,7 @@ export default function BookingsManagement() {
                 booking={booking}
                 onViewDetails={() => handleViewDetails(booking)}
                 onAssignDriver={() => handleAssignDriver(booking)}
+                onRemoveTruck={() => handleRemoveTruck(booking)}
               />
             ))}
           </div>
@@ -283,6 +317,8 @@ export default function BookingsManagement() {
           onClose={() => setShowDetailsModal(false)}
           getStatusBadge={getStatusBadge}
           getStatusText={getStatusText}
+          onAssignDriver={handleAssignDriver}
+          onRemoveTruck={handleRemoveTruck}
         />
       )}
 

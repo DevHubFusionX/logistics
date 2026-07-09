@@ -1,4 +1,4 @@
-import { ArrowRight, CreditCard, MapPin, Calendar, Package } from 'lucide-react'
+import { ArrowRight, CreditCard, MapPin, Calendar, Package, Truck, Trash2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { getStatusText } from '../../utils/bookingUtils'
 
@@ -11,7 +11,7 @@ const STATUS_CONFIG = {
   cancelled:  { dot: 'bg-red-400',     pill: 'bg-red-50 text-red-600'        },
 }
 
-export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, onAssignDriver }) {
+export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, onAssignDriver, onRemoveTruck }) {
   const navigate = useNavigate()
 
   const id          = booking._id || booking.tracking_number || booking.trackingNumber || booking.id || 'N/A'
@@ -31,6 +31,10 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
 
   const eta       = formatDate(booking.estimatedDeliveryDate || booking.estimated_delivery || booking.pickupDate)
   const cfg       = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending
+
+  const hasAssignment = !!(booking.driverName || booking.truckPlateNumber || booking.driverId || booking.truckId)
+  const canAssign = !!onAssignDriver && ['pending', 'pending_assignment'].includes(booking.status)
+  const canReassign = !!onAssignDriver && ['confirmed', 'driver_assigned'].includes(booking.status)
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden">
@@ -66,6 +70,24 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
         </div>
       </div>
 
+      {/* Driver/Truck Info if assigned */}
+      {(booking.driverName || booking.truckPlateNumber) && (
+        <div className="px-4 pb-3 flex flex-wrap gap-2">
+          {booking.truckPlateNumber && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-50 border border-slate-150 rounded-xl text-[11px] font-semibold text-slate-700 shadow-sm">
+              <Truck className="w-3.5 h-3.5 text-slate-400" />
+              <span>{booking.truckPlateNumber}</span>
+            </span>
+          )}
+          {booking.driverName && (
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-violet-50 border border-violet-150 rounded-xl text-[11px] font-semibold text-violet-700 shadow-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse" />
+              <span>{booking.driverName}</span>
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Meta row */}
       <div className="px-4 pb-4 flex items-center gap-3 text-xs text-gray-400">
         <span className="flex items-center gap-1">
@@ -91,6 +113,36 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
         >
           Details
         </button>
+
+        {canAssign && (
+          <button
+            onClick={() => onAssignDriver(booking)}
+            className="flex-1 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-sm shadow-indigo-100"
+          >
+            <Truck className="w-3.5 h-3.5" /> Assign Truck
+          </button>
+        )}
+
+        {canReassign && (
+          <>
+            <button
+              onClick={() => onAssignDriver(booking)}
+              className="flex-1 py-2 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors border border-indigo-150 flex items-center justify-center gap-1.5"
+            >
+              Reassign
+            </button>
+            {onRemoveTruck && (
+              <button
+                onClick={() => onRemoveTruck(booking)}
+                className="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-xl transition-all"
+                title="Remove Truck"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
+          </>
+        )}
+
         {canPayNow && (
           <button
             onClick={() => onPayNow(booking)}

@@ -3,9 +3,9 @@ import { VirtualizedTable } from '../../../../components/ui'
 
 const getStatusColor = (status) => {
   switch (status) {
-    case 'available': return 'bg-green-100 text-green-700'
-    case 'on_trip': return 'bg-blue-100 text-blue-700'
+    case 'active': return 'bg-green-100 text-green-700'
     case 'inactive': return 'bg-gray-100 text-gray-700'
+    case 'rejected': return 'bg-red-100 text-red-700'
     default: return 'bg-gray-100 text-gray-700'
   }
 }
@@ -19,7 +19,14 @@ const getPerformanceColor = (score) => {
 
 export default function DriverTable({ drivers, onView, onEdit, onDelete, onExport, onSaveView }) {
   const columns = [
-    { key: 'name', label: 'Driver Name', width: '180px' },
+    {
+      key: 'name',
+      label: 'Driver Name',
+      width: '180px',
+      render: (value, row) => (
+        <span>{value && value !== 'Unnamed Driver' ? value : row.email || 'Unnamed Driver'}</span>
+      )
+    },
     {
       key: 'phone',
       label: 'Contact Info',
@@ -69,8 +76,8 @@ export default function DriverTable({ drivers, onView, onEdit, onDelete, onExpor
       label: 'Status',
       width: '120px',
       render: (value) => (
-        <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(value)}`}>
-          {value === 'active' ? 'Active' : 'Inactive'}
+        <span className={`px-2.5 py-1 rounded-full text-xs font-semibold capitalize ${getStatusColor(value)}`}>
+          {value || 'N/A'}
         </span>
       )
     },
@@ -81,7 +88,7 @@ export default function DriverTable({ drivers, onView, onEdit, onDelete, onExpor
       render: (_, row) => (
         <div className="flex items-center gap-2">
           <button
-            onClick={() => onView(row.id)}
+            onClick={() => onView(row.id || row._id)}
             className="text-blue-600 hover:text-blue-700 text-sm font-medium"
           >
             View
