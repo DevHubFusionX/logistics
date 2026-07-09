@@ -8,6 +8,32 @@ import { getUserFriendlyMessage } from '@/utils/errorCodes'
 import { normalizePhone } from '@/utils/validation'
 import toast from 'react-hot-toast'
 
+const buildPickupLocation = (location = {}) => (
+  [location.address, location.city, location.state]
+    .filter(Boolean)
+    .join(', ')
+)
+
+const CITY_COORDINATES = {
+  Lagos: { lat: 6.5244, lng: 3.3792 },
+  Abuja: { lat: 9.0765, lng: 7.3986 },
+  Warri: { lat: 5.5167, lng: 5.75 },
+  'Benin City': { lat: 6.335, lng: 5.6037 },
+  Enugu: { lat: 6.5244, lng: 7.5086 },
+  'Port Harcourt': { lat: 4.8156, lng: 7.0498 }
+}
+
+const getDropOffCoordinates = (location = {}) => {
+  const lat = Number(location.lat ?? location.latitude)
+  const lng = Number(location.lng ?? location.longitude)
+
+  if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    return { lat, lng }
+  }
+
+  return CITY_COORDINATES[location.city] || CITY_COORDINATES.Abuja
+}
+
 export const useBookingFlow = () => {
   const auth = useAuth()
   const user = auth?.user || null
@@ -92,16 +118,13 @@ export const useBookingFlow = () => {
           phone: normalizePhone(formData.receiverPerson?.phone || ''),
           email: formData.receiverPerson?.email || ''
         },
-        pickupLocation: {
-          address: formData.pickupLocation?.address || '',
-          city: formData.pickupLocation?.city || 'Lagos',
-          state: formData.pickupLocation?.state || 'Nigeria'
-        },
+        pickupLocation: buildPickupLocation(formData.pickupLocation),
         dropoffLocation: {
           address: formData.dropoffLocation?.address || '',
           city: formData.dropoffLocation?.city || '',
           state: formData.dropoffLocation?.state || 'Nigeria'
         },
+        dropOffCoordinates: getDropOffCoordinates(formData.dropoffLocation),
         goodsType: formData.goodsType,
         cargoWeightKg: Number(formData.cargoWeightKg),
         quantity: parseInt(formData.quantity, 10) || 1,
@@ -111,7 +134,8 @@ export const useBookingFlow = () => {
         vehicleType: formData.vehicleType || 'Van',
         estimatedPickupDate: formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : new Date().toISOString(),
         estimatedDeliveryDate: formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-        notes: formData.notes || ''
+        notes: formData.notes || '',
+        truckSize: Number(formData.truckSize) || undefined
       }
 
       const response = await createBookingMutation.mutateAsync(bookingPayload)
@@ -142,11 +166,11 @@ export const useBookingFlow = () => {
     resetBooking()
   }, [resetBooking])
 
-  const handlePaymentSuccess = useCallback(async (reference) => {
+  const handlePaymentSuccess = useCallback(async () => {
     try {
       await verifyPaymentMutation.mutateAsync(bookingId)
       setStep(6)
-    } catch (error) {
+    } catch {
       // Error handled by mutation toast
     }
   }, [bookingId, verifyPaymentMutation, setStep])
