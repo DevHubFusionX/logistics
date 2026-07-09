@@ -1,4 +1,4 @@
-import { PaystackPayment, BankTransferComplete, CashPaymentConfirm, WalletPayment } from '@/features/billing/components/payments'
+import { PaystackPayment, BankTransferComplete, WalletPayment } from '@/features/billing/components/payments'
 import { PAYMENT_METHODS } from '@/utils/paymentValidation'
 import { Shield, Clock } from 'lucide-react'
 import toast from 'react-hot-toast'
@@ -8,11 +8,9 @@ export default function PaymentMethodContent({
   estimatedCost,
   email,
   bookingId,
-  loading,
   onPaystackSuccess,
   onPaystackClose,
   onPaymentTimeout,
-  onCashConfirm,
   onPayLater,
   onWalletError
 }) {
@@ -60,20 +58,6 @@ export default function PaymentMethodContent({
             toast.success('Bank transfer submitted!')
             onPayLater()
           }}
-        />
-      </div>
-    )
-  }
-
-  if (paymentMethod === PAYMENT_METHODS.CASH) {
-    return (
-      <div className="pt-4 border-t border-gray-100">
-        <CashPaymentConfirm
-          bookingId={bookingId}
-          amount={estimatedCost}
-          onConfirm={onCashConfirm}
-          onCancel={() => {}}
-          loading={loading}
         />
       </div>
     )

@@ -85,7 +85,6 @@ export default function PaymentSelection({
   onPayLater,
   onBack
 }) {
-  const [loading, setLoading]           = useState(false)
   const [paymentRef, setPaymentRef]     = useState(null)
   const [status, setStatus]             = useState(null) // null | 'processing' | 'success' | 'failed' | 'cancelled' | 'timeout'
   const [showRecovery, setShowRecovery] = useState(false)
@@ -142,18 +141,6 @@ export default function PaymentSelection({
     onPaymentClose()
   }
 
-  const handleCashConfirm = async () => {
-    setLoading(true)
-    try {
-      toast.success('Cash payment confirmed!')
-      onPayLater()
-    } catch {
-      toast.error('Failed to confirm cash payment')
-    } finally {
-      setLoading(false)
-    }
-  }
-
   // Show inline status screen when payment is in progress
   if (status) {
     return (
@@ -182,11 +169,9 @@ export default function PaymentSelection({
         estimatedCost={estimatedCost}
         email={email}
         bookingId={bookingId}
-        loading={loading}
         onPaystackSuccess={handlePaystackSuccess}
         onPaystackClose={() => setStatus('cancelled')}
         onPaymentTimeout={() => setStatus('timeout')}
-        onCashConfirm={handleCashConfirm}
         onPayLater={onPayLater}
         onWalletError={(err) => {
           toast.error(err.message || 'Wallet payment failed')
