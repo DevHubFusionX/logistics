@@ -134,7 +134,7 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     distanceRemaining: 0,
     eta: 'Calculating...',
     locationName: 'Lagos',
-    temperature: shipment.temperature || '4.2°C',
+    temperature: shipment.temperature || '-10.5°C',
     status: shipment.status || 'in_transit'
   })
 
@@ -287,7 +287,7 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
         distanceRemaining: 0,
         eta: 'Arrived',
         locationName: destinationText,
-        temperature: shipment.temperature || '4.2°C',
+        temperature: shipment.temperature || '-10.5°C',
         status: 'delivered'
       })
       if (onLocationUpdate) {
