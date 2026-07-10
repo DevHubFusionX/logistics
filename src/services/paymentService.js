@@ -3,7 +3,6 @@ import httpClient from './httpClient'
 const paymentService = {
   // Initialize payment with backend - returns Paystack authorization URL
   initializePayment: (bookingId) => {
-    console.log('Initializing payment for booking:', bookingId)
     return httpClient.request(`/payment/initialize/${bookingId}`, {
       method: 'GET'
     })

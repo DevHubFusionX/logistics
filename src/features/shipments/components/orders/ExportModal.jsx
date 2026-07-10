@@ -6,7 +6,6 @@ export default function ExportModal({ isOpen, onClose, orderId, type }) {
   const handleExport = (format) => {
     // Simulate export functionality
     const filename = `${type}-${orderId}.${format}`
-    console.log(`Exporting ${filename}`)
     
     // Create mock download
     const element = document.createElement('a')

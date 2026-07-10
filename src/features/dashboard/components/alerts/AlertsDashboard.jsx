@@ -22,11 +22,9 @@ export default function AlertsDashboard({ onCreateRule }) {
   })
 
   const handleAssign = (alertId) => {
-    console.log('Assign alert:', alertId)
   }
 
   const handleResolve = (alertId) => {
-    console.log('Resolve alert:', alertId)
   }
 
   return (

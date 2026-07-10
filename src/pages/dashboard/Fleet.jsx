@@ -22,7 +22,6 @@ function Fleet() {
   const fleetData = useMemo(() => fleetResponse?.records || [], [fleetResponse])
 
   if (import.meta.env.DEV) {
-    console.log('====== FLEET/TRUCKS LIST ======', fleetData)
   }
 
   const totalFleetCount = useMemo(() => fleetResponse?.total || 0, [fleetResponse])

@@ -25,7 +25,6 @@ export default function CreateShipmentModal({ isOpen, onClose }) {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
     onClose()
   }
 

@@ -11,7 +11,6 @@ export default function KanbanBoard({ onAssignDriver, onCreateTask }) {
   }
 
   const handleUpdateStatus = (taskId) => {
-    console.log('Update task status:', taskId)
   }
 
   return (

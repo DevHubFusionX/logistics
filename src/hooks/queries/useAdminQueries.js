@@ -147,11 +147,9 @@ export function useDriversQuery(params = {}) {
             const apiBody = response.data
             const rawDrivers = apiBody?.data?.records || []
             if (import.meta.env.DEV) {
-                console.log('[useDriversQuery] Raw response:', response)
             }
             const normalized = rawDrivers.filter(Boolean).map(normalizeDriver).filter(Boolean)
             if (import.meta.env.DEV) {
-                console.log('[useDriversQuery] Normalized output:', normalized)
             }
             return normalized
         },
@@ -480,11 +478,9 @@ export function useAdminMutations() {
 
     const rejectTruckMutation = useMutation({
         mutationFn: ({ id, reason }) => {
-            console.log('[rejectTruck] Sending:', { id, reason })
             return fleetService.rejectTruck(id, reason)
         },
         onSuccess: (response) => {
-            console.log('[rejectTruck] Full response:', JSON.stringify(response, null, 2))
             queryClient.invalidateQueries({ queryKey: queryKeys.admin.fleet() })
             toast.success('Truck rejected successfully')
         },

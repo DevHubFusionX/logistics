@@ -13,7 +13,6 @@ export default function PaystackPayment({ amount, email, bookingId, onSuccess, o
     setInitError(null)
 
     try {
-      console.log('Initializing payment for booking:', bookingId)
       const response = await paymentService.initializePayment(bookingId)
       // response is { data: { error, message, data: { authorization_url, access_code, reference } }, status }
       const apiBody = response.data
@@ -24,8 +23,6 @@ export default function PaystackPayment({ amount, email, bookingId, onSuccess, o
       }
 
       const { authorization_url, reference } = paymentData
-      console.log('Payment reference:', reference)
-      console.log('Redirecting to:', authorization_url)
 
       // Redirect to Paystack payment page
       window.location.href = authorization_url

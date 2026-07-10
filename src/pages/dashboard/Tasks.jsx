@@ -21,22 +21,18 @@ export default function Tasks() {
   })
 
   const handleAssignDriver = (taskId) => {
-    console.log('Assign driver to task:', taskId)
     showToast.success('Driver assigned successfully')
   }
 
   const handleCreateTask = () => {
-    console.log('Create new task')
     showToast.info('Task creation dialog opened')
   }
 
   const handleCreateShift = () => {
-    console.log('Create new shift')
     showToast.info('Shift creation dialog opened')
   }
 
   const handleSendTask = (taskId, message) => {
-    console.log('Send task to mobile:', taskId, message)
     showToast.success('Task sent to mobile app')
   }
 

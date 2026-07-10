@@ -43,7 +43,6 @@ export default function VirtualizedTable({
 
   const handleCellEdit = useCallback((rowIndex, columnKey, value) => {
     // Implement cell editing logic
-    console.log('Edit cell:', rowIndex, columnKey, value)
     setEditingCell(null)
   }, [])
 

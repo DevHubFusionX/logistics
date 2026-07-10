@@ -14,7 +14,6 @@ if (import.meta.env.DEV) {
     }
     localStorage.setItem('user', JSON.stringify(mockUser))
     localStorage.setItem('token', 'mock-token')
-    console.log(`Mock user set with role: ${role}`)
     window.location.reload()
   }
 
@@ -22,7 +21,6 @@ if (import.meta.env.DEV) {
   const clearAuth = () => {
     localStorage.removeItem('user')
     localStorage.removeItem('token')
-    console.log('Auth data cleared')
     window.location.reload()
   }
 
@@ -33,7 +31,4 @@ if (import.meta.env.DEV) {
     setRole: (role) => setMockUser(role)
   }
 
-  console.log('🛠️ Dev Tools Available:')
-  console.log('- devTools.setMockUser(role) - Set mock user with role')
-  console.log('- devTools.clearAuth() - Clear all auth data')
 }

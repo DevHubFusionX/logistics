@@ -35,7 +35,6 @@ export default function TopHeader({ onToggleSidebar }) {
   const handleSearch = (e) => {
     e.preventDefault()
     if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery)
     }
   }
 

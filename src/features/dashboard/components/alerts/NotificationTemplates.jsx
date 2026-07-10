@@ -43,7 +43,6 @@ export default function NotificationTemplates() {
   }
 
   const handleDelete = (templateId) => {
-    console.log('Delete template:', templateId)
   }
 
   return (

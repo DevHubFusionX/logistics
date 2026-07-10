@@ -19,7 +19,6 @@ export default function Alerts() {
   })
 
   const handleSaveRule = (rule) => {
-    console.log('Save rule:', rule)
     showToast.success('Alert rule created successfully', 'Rule Active')
     setShowRuleForm(false)
   }

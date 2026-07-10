@@ -27,7 +27,6 @@ export default function Drivers() {
   const fleet = useMemo(() => fleetResponse?.records || [], [fleetResponse])
 
   if (import.meta.env.DEV) {
-    console.log('====== DRIVERS LIST ======', drivers)
   }
 
   const isLoading = isLoadingDrivers || isLoadingFleet
@@ -55,7 +54,6 @@ export default function Drivers() {
   })
 
   const filteredDrivers = useMemo(() => {
-    console.log('[Drivers Page] Input drivers:', drivers)
     const sanitizedSearch = sanitizeInput(searchTerm || '').trim().toLowerCase()
     const filtered = drivers.filter(driver => {
       const searchableText = [
@@ -70,7 +68,6 @@ export default function Drivers() {
       const matchesStatus = filterStatus === 'all' || (driver.status || '').toLowerCase() === filterStatus.toLowerCase()
       return matchesSearch && matchesStatus
     })
-    console.log('[Drivers Page] Filtered output:', filtered)
     return filtered
   }, [drivers, searchTerm, filterStatus])
 
