@@ -250,7 +250,7 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
       // Add Truck Marker
       const truckIcon = L.divIcon({
         className: 'custom-truck-marker',
-        html: '<div style="font-size: 32px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transition: transform 0.1s linear;" class="animate-bounce-subtle">🚚</div>',
+        html: '<div style="font-size: 32px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transform: scaleX(-1); transition: transform 0.1s linear;" class="animate-bounce-subtle">🚚</div>',
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       })

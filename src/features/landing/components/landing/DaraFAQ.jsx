@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 
 const faqData = [
   {
-    question: "What makes Darafortdifferent from other transport companies?",
+    question: "What makes Darafort different from other transport companies?",
     answer: "Unlike regular transport companies, we specialize in moving items that need to stay cold. We have over 120 cold trucks, live temperature tracking, and full insurance to protect your goods if anything goes wrong."
   },
   {
