@@ -34,9 +34,8 @@ export function useTrackingQuery(trackingId, options = {}) {
             await delay(800)
             const normalizedId = trackingId?.trim().toUpperCase()
             if (normalizedId === 'DARA-BK100190726') {
-                const step = getDemoStep() % (demoLocations.length - 1)
-                const loc = demoLocations[step]
-                const status = 'in_transit'
+                const loc = demoLocations[demoLocations.length - 1]
+                const status = 'delivered'
 
                 const result = {
                     id: normalizedId,
@@ -44,7 +43,7 @@ export function useTrackingQuery(trackingId, options = {}) {
                     origin: 'Lagos (Ketu)',
                     destination: 'Abuja (Garki)',
                     currentLocation: `${loc.city}, ${loc.state}`,
-                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
+                    estimatedDelivery: new Date(Date.now() - 18000000).toLocaleString(),
                     driver: 'Alhaji Musa Ibrahim',
                     vehicle: 'LSD-849XX (Reefer Truck)',
                     temperature: '-10°C',
@@ -66,8 +65,8 @@ export function useTrackingQuery(trackingId, options = {}) {
                         },
                         {
                             status: 'Delivered',
-                            date: 'Pending (Est. 5 hours)',
-                            completed: false
+                            date: new Date(Date.now() - 18000000).toLocaleString(),
+                            completed: true
                         }
                     ]
                 }
@@ -75,9 +74,8 @@ export function useTrackingQuery(trackingId, options = {}) {
             }
 
             if (normalizedId === 'DARA-BK300390726') {
-                const step = getDemoStep() % (kanoLocations.length - 1)
-                const loc = kanoLocations[step]
-                const status = 'in_transit'
+                const loc = kanoLocations[kanoLocations.length - 1]
+                const status = 'delivered'
 
                 const result = {
                     id: normalizedId,
@@ -85,7 +83,7 @@ export function useTrackingQuery(trackingId, options = {}) {
                     origin: 'Lagos (Ketu)',
                     destination: 'Kano (Fagge)',
                     currentLocation: `${loc.city}, ${loc.state}`,
-                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
+                    estimatedDelivery: new Date(Date.now() - 18000000).toLocaleString(),
                     driver: 'Haruna Yusuf',
                     vehicle: 'KND-912YY (Reefer Truck)',
                     temperature: '-10.5°C',
@@ -107,8 +105,8 @@ export function useTrackingQuery(trackingId, options = {}) {
                         },
                         {
                             status: 'Delivered',
-                            date: 'Pending (Est. 5 hours)',
-                            completed: false
+                            date: new Date(Date.now() - 18000000).toLocaleString(),
+                            completed: true
                         }
                     ]
                 }
@@ -189,9 +187,8 @@ export function useShipmentDetailsQuery(shipmentId) {
             await delay(800)
             const normalizedId = shipmentId?.trim().toUpperCase()
             if (normalizedId === 'DARA-BK100190726') {
-                const step = getDemoStep() % (demoLocations.length - 1)
-                const loc = demoLocations[step]
-                const status = 'in_transit'
+                const loc = demoLocations[demoLocations.length - 1]
+                const status = 'delivered'
 
                 const result = {
                     id: normalizedId,
@@ -208,7 +205,7 @@ export function useShipmentDetailsQuery(shipmentId) {
                     serviceType: 'REEFER CONTAINER',
                     createdAt: new Date(Date.now() - 172800000).toLocaleString(),
                     pickupDate: new Date(Date.now() - 129600000).toLocaleString(),
-                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
+                    estimatedDelivery: new Date(Date.now() - 18000000).toLocaleString(),
                     driver: {
                         name: 'Alhaji Musa Ibrahim',
                         phone: '+234 811 555 0199',
@@ -226,17 +223,16 @@ export function useShipmentDetailsQuery(shipmentId) {
                         { status: 'booking_created', label: 'Booking Created', timestamp: new Date(Date.now() - 172800000).toLocaleString(), completed: true, current: false },
                         { status: 'pending', label: 'Pending Review', timestamp: new Date(Date.now() - 151200000).toLocaleString(), completed: true, current: false },
                         { status: 'confirmed', label: 'Confirmed', timestamp: new Date(Date.now() - 129600000).toLocaleString(), completed: true, current: false },
-                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: true },
-                        { status: 'delivered', label: 'Delivered', timestamp: null, completed: false, current: false }
+                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: false },
+                        { status: 'delivered', label: 'Delivered', timestamp: new Date(Date.now() - 18000000).toLocaleString(), completed: true, current: true }
                     ]
                 }
                 return result
             }
 
             if (normalizedId === 'DARA-BK300390726') {
-                const step = getDemoStep() % (kanoLocations.length - 1)
-                const loc = kanoLocations[step]
-                const status = 'in_transit'
+                const loc = kanoLocations[kanoLocations.length - 1]
+                const status = 'delivered'
 
                 const result = {
                     id: normalizedId,
@@ -253,7 +249,7 @@ export function useShipmentDetailsQuery(shipmentId) {
                     serviceType: 'REEFER CONTAINER',
                     createdAt: new Date(Date.now() - 172800000).toLocaleString(),
                     pickupDate: new Date(Date.now() - 129600000).toLocaleString(),
-                    estimatedDelivery: new Date(Date.now() + 5 * 3600000).toLocaleString(),
+                    estimatedDelivery: new Date(Date.now() - 18000000).toLocaleString(),
                     driver: {
                         name: 'Haruna Yusuf',
                         phone: '+234 802 555 0122',
@@ -271,8 +267,8 @@ export function useShipmentDetailsQuery(shipmentId) {
                         { status: 'booking_created', label: 'Booking Created', timestamp: new Date(Date.now() - 172800000).toLocaleString(), completed: true, current: false },
                         { status: 'pending', label: 'Pending Review', timestamp: new Date(Date.now() - 151200000).toLocaleString(), completed: true, current: false },
                         { status: 'confirmed', label: 'Confirmed', timestamp: new Date(Date.now() - 129600000).toLocaleString(), completed: true, current: false },
-                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: true },
-                        { status: 'delivered', label: 'Delivered', timestamp: null, completed: false, current: false }
+                        { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 43200000).toLocaleString(), completed: true, current: false },
+                        { status: 'delivered', label: 'Delivered', timestamp: new Date(Date.now() - 18000000).toLocaleString(), completed: true, current: true }
                     ]
                 }
                 return result
