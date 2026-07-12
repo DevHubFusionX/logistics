@@ -1,0 +1,21 @@
+{
+  "common": {
+    "allLocations": "Tous les emplacements",
+    "allTime": "Tout le temps",
+    "allWarehouses": "Tous les entrepôts",
+    "refresh": "Actualiser",
+    "today": "Aujourd'hui",
+    "thisWeek": "Cette semaine",
+    "thisMonth": "Ce mois-ci",
+    "thisQuarter": "Ce trimestre",
+    "mainWarehouse": "Entrepôt principal",
+    "northHub": "Hub Nord",
+    "southHub": "Hub Sud"
+  },
+  "locations": {
+    "lagos": "Lagos",
+    "abuja": "Abuja",
+    "kano": "Kano",
+    "portHarcourt": "Port Harcourt"
+  }
+}

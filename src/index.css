@@ -153,3 +153,62 @@ button,
 .animate-fadeIn {
   animation: fadeIn 0.4s ease-out;
 }
+
+/* ─── Google Translate UI Overrides (completely suppress all artefacts) ─── */
+
+/* Hide the widget container, banner iframe, and tooltip */
+.skiptranslate,
+#google_translate_element,
+.goog-te-banner-frame,
+.goog-te-menu-value,
+.goog-tooltip,
+.goog-tooltip-content,
+/* Balloon popup that appears on hover */
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-te-balloon-frame *,
+/* The translation done / close bar */
+.goog-te-ftab-float,
+.goog-te-spinner {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Prevent GT from pushing body down by adding top offset */
+body {
+  top: 0px !important;
+  position: static !important;
+}
+
+/* Remove the yellow/orange hover highlight on translated text */
+.goog-text-highlight,
+font[id^="goog-"] {
+  background: none !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+  outline: none !important;
+}
+
+/* Kill cursor change and hover colour on GT-wrapped font elements */
+font[id^="goog-"]:hover,
+.goog-text-highlight:hover {
+  background: none !important;
+  background-color: transparent !important;
+  cursor: inherit !important;
+}
+
+/* Nuclear option: <font> is an obsolete HTML tag — only Google Translate uses it.
+   Targeting all <font> elements is safe and catches any highlight the JS observer misses. */
+font {
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+font:hover {
+  background: none !important;
+  background-color: transparent !important;
+  cursor: inherit !important;
+}

@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { LogOut, LayoutDashboard, ArrowRight, Phone, Mail, MapPin, Linkedin, Instagram } from 'lucide-react'
+import { LogOut, LayoutDashboard, ArrowRight, Phone, Mail, MapPin, Linkedin, Instagram, Globe } from 'lucide-react'
 import { useAuth } from '../../hooks'
 import AnimatedLogo from './AnimatedLogo'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ScheduleDemoModal } from '../../features/landing/components/landing/demo'
+import { useTranslation } from '../../i18n'
 
 const navLinks = [
   { label: 'About us', path: '/about' },
@@ -36,6 +37,49 @@ const mobileItemVariants = {
       damping: 26
     }
   }
+}
+
+function LanguageToggle({ isMobile = false, isDarkLogoText = false }) {
+  const { locale, setLocale } = useTranslation()
+  const isFrench = locale === 'fr'
+
+  const toggleLanguage = () => {
+    setLocale(isFrench ? 'en' : 'fr')
+  }
+
+  if (isMobile) {
+    return (
+      <div className="flex items-center justify-between px-4 py-3 rounded-md bg-slate-50 border border-slate-200">
+        <span className="text-xs font-bold text-slate-550 uppercase tracking-[0.12em] font-body-unique">Language / Langue</span>
+        <button
+          onClick={toggleLanguage}
+          className="flex items-center gap-1.5 text-xs font-bold font-body-unique cursor-pointer"
+        >
+          <span className={!isFrench ? 'text-[#0056B8]' : 'text-slate-400 hover:text-slate-600'}>EN</span>
+          <span className="text-slate-300">|</span>
+          <span className={isFrench ? 'text-[#0056B8]' : 'text-slate-400'}>FR</span>
+        </button>
+      </div>
+    )
+  }
+
+  const inactiveColor = isDarkLogoText 
+    ? 'text-slate-650 hover:text-slate-900' 
+    : 'text-white/75 hover:text-white'
+  
+  const separatorColor = isDarkLogoText ? 'text-slate-300' : 'text-white/30'
+
+  return (
+    <button
+      onClick={toggleLanguage}
+      className="flex items-center gap-1 text-[11px] font-semibold font-body-unique tracking-[0.12em] cursor-pointer select-none py-1 transition-colors"
+      title={isFrench ? "Switch to English" : "Traduire en Français"}
+    >
+      <span className={!isFrench ? 'text-[#0056B8] font-bold' : inactiveColor}>EN</span>
+      <span className={separatorColor}>|</span>
+      <span className={isFrench ? 'text-[#0056B8] font-bold' : inactiveColor}>FR</span>
+    </button>
+  )
 }
 
 export default function Navbar() {
@@ -157,66 +201,71 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Navigation & Actions */}
-            <div className="hidden lg:flex items-center bg-[#f1f3f4]/95 backdrop-blur-md border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-sm p-1.5 pl-7 gap-6">
+            <div className="hidden lg:flex items-center gap-6">
+              <div className="flex items-center bg-[#f1f3f4]/95 backdrop-blur-md border border-white/20 shadow-[0_8px_30px_rgb(0,0,0,0.06)] rounded-sm p-1.5 pl-7 gap-6">
 
-              {/* Navigation Links */}
-              <div className="flex items-center gap-5">
-                {navLinks.map(({ label, path }) => {
-                  const isActive = location.pathname === path
-                  return (
-                    <Link
-                      key={path}
-                      to={path}
-                      className={`font-body-unique text-[11px] font-semibold tracking-[0.12em] uppercase transition-colors duration-200 ${isActive
-                          ? 'text-[#0056B8]'
-                          : 'text-slate-650 hover:text-slate-900'
-                        }`}
-                    >
-                      {label}
-                    </Link>
-                  )
-                })}
+                {/* Navigation Links */}
+                <div className="flex items-center gap-5">
+                  {navLinks.map(({ label, path }) => {
+                    const isActive = location.pathname === path
+                    return (
+                      <Link
+                        key={path}
+                        to={path}
+                        className={`font-body-unique text-[11px] font-semibold tracking-[0.12em] uppercase transition-colors duration-200 ${isActive
+                            ? 'text-[#0056B8]'
+                            : 'text-slate-650 hover:text-slate-900'
+                          }`}
+                      >
+                        {label}
+                      </Link>
+                    )
+                  })}
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-2 pr-0.5">
+                  {user ? (
+                    <>
+                      <Link
+                        to="/my-bookings"
+                        className="px-5 py-2.5 bg-[#1b2327] hover:bg-black text-white font-body-unique text-[11px] font-semibold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-sm flex items-center gap-2"
+                      >
+                        <LayoutDashboard className="w-3.5 h-3.5" />
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="px-4 py-2 hover:bg-red-50 hover:text-red-650 text-slate-700 font-body-unique text-[11px] font-semibold tracking-[0.12em] uppercase rounded-sm transition-all cursor-pointer flex items-center gap-1.5"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        to="/auth/login"
+                        className="px-4.5 py-2.5 border border-slate-300 hover:border-slate-800 hover:bg-white text-slate-800 font-body-unique text-[11px] font-bold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-sm"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/booking/request"
+                        className="px-6 py-2.5 bg-[#0056B8] hover:bg-[#004cba] text-white font-body-unique text-[11px] font-bold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-md hover:shadow-lg border border-[#0056B8] flex items-center gap-2 group cursor-pointer"
+                      >
+                        <span>Book a Shipment</span>
+                        <span className="flex-shrink-0 bg-white text-[#0056B8] rounded-full p-1 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+                          <ArrowRight className="w-2.5 h-2.5" />
+                        </span>
+                      </Link>
+                    </>
+                  )}
+                </div>
               </div>
 
-              {/* Action Buttons */}
-              <div className="flex items-center gap-2 pr-0.5">
-                {user ? (
-                  <>
-                    <Link
-                      to="/my-bookings"
-                      className="px-5 py-2.5 bg-[#1b2327] hover:bg-black text-white font-body-unique text-[11px] font-semibold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-sm flex items-center gap-2"
-                    >
-                      <LayoutDashboard className="w-3.5 h-3.5" />
-                      Dashboard
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="px-4 py-2 hover:bg-red-50 hover:text-red-650 text-slate-700 font-body-unique text-[11px] font-semibold tracking-[0.12em] uppercase rounded-sm transition-all cursor-pointer flex items-center gap-1.5"
-                    >
-                      <LogOut className="w-3.5 h-3.5" />
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <Link
-                      to="/auth/login"
-                      className="px-4.5 py-2.5 border border-slate-300 hover:border-slate-800 hover:bg-white text-slate-800 font-body-unique text-[11px] font-bold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-sm"
-                    >
-                      Login
-                    </Link>
-                    <Link
-                      to="/booking/request"
-                      className="px-6 py-2.5 bg-[#0056B8] hover:bg-[#004cba] text-white font-body-unique text-[11px] font-bold tracking-[0.12em] uppercase rounded-sm transition-all active:scale-97 shadow-md hover:shadow-lg border border-[#0056B8] flex items-center gap-2 group cursor-pointer"
-                    >
-                      <span>Book a Shipment</span>
-                      <span className="flex-shrink-0 bg-white text-[#0056B8] rounded-full p-1 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-                        <ArrowRight className="w-2.5 h-2.5" />
-                      </span>
-                    </Link>
-                  </>
-                )}
-              </div>
+              {/* Language Selector standalone outside the container */}
+              <LanguageToggle isDarkLogoText={isDarkLogoText} />
             </div>
 
             {/* Mobile Hamburger menu */}
@@ -377,7 +426,8 @@ export default function Navbar() {
               </div>
 
               {/* Sticky Actions Area */}
-              <div className="p-6 border-t border-slate-100 bg-slate-50/50">
+              <div className="p-6 border-t border-slate-100 bg-slate-50/50 space-y-3">
+                <LanguageToggle isMobile />
                 {mobileActions}
               </div>
             </motion.div>

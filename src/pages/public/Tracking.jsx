@@ -6,6 +6,7 @@ import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import toast from 'react-hot-toast'
 import SEO from '../../components/common/SEO'
 import TrackingMap from '../../features/tracking/components/tracking/TrackingMap'
+import { formatDate } from '../../i18n'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -184,7 +185,7 @@ export default function Tracking() {
                         <div className="flex items-center gap-3">
                           <div className="text-right hidden sm:block">
                             <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">Tracking ID</p>
-                            <p className="font-body-unique font-bold text-slate-800 text-xs">{shipment.id}</p>
+                            <p className="notranslate font-body-unique font-bold text-slate-800 text-xs">{shipment.id}</p>
                           </div>
                           <button
                             onClick={handleRefresh}
@@ -254,7 +255,7 @@ export default function Tracking() {
                                   {event.status}
                                 </p>
                                 <p className={`font-body-unique text-xs mt-0.5 ${event.completed ? 'text-slate-400' : 'text-slate-300'}`}>
-                                  {event.date}
+                                  {formatDate(event.date)}
                                 </p>
                               </div>
                             </motion.div>
@@ -266,17 +267,17 @@ export default function Tracking() {
                     {/* Metadata list */}
                     <div className="bg-white border border-slate-100 rounded-3xl p-6 shadow-[0_15px_35px_rgba(0,0,0,0.015)] text-left space-y-4">
                       {[
-                        { label: 'Estimated Delivery', value: shipment.estimatedDelivery, icon: Clock },
-                        { label: 'Driver Assignee', value: shipment.driver, icon: Truck },
-                        { label: 'Reefer Truck License', value: shipment.vehicle, icon: Package },
-                      ].map(({ label, value, icon: Icon }) => (
+                        { label: 'Estimated Delivery', value: formatDate(shipment.estimatedDelivery), icon: Clock, protect: false },
+                        { label: 'Driver Assignee', value: shipment.driver, icon: Truck, protect: false },
+                        { label: 'Reefer Truck License', value: shipment.vehicle, icon: Package, protect: true },
+                      ].map(({ label, value, icon: Icon, protect }) => (
                         <div key={label} className="flex items-start gap-3 pb-3 border-b border-slate-50 last:border-0 last:pb-0">
                           <div className="w-7 h-7 rounded-lg bg-blue-50/60 flex items-center justify-center flex-shrink-0 mt-0.5">
                             <Icon className="w-3.5 h-3.5 text-[#0056B8]" />
                           </div>
                           <div className="min-w-0">
                             <p className="text-slate-400 text-[8px] font-bold tracking-widest uppercase mb-0.5">{label}</p>
-                            <p className="font-body-unique font-bold text-slate-800 text-xs truncate">{value}</p>
+                            <p className={`font-body-unique font-bold text-slate-800 text-xs truncate${protect ? ' notranslate' : ''}`}>{value}</p>
                           </div>
                         </div>
                       ))}

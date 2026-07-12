@@ -1,7 +1,29 @@
 import { useState, useEffect, useRef } from 'react'
-import { Search, Bell, Plus, Menu, User, Settings, LogOut, Package, Truck, Home } from 'lucide-react'
+import { Search, Bell, Plus, Menu, User, Settings, LogOut, Package, Truck, Home, Globe } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from '@/i18n'
+
+function LanguageToggle() {
+  const { locale, setLocale } = useTranslation()
+  const isFrench = locale === 'fr'
+
+  const toggleLanguage = () => {
+    setLocale(isFrench ? 'en' : 'fr')
+  }
+
+  return (
+    <button
+      onClick={toggleLanguage}
+      className="flex items-center gap-1 text-xs font-bold font-body-unique tracking-wider cursor-pointer select-none px-2.5 py-1 transition-colors mr-2 hover:opacity-85 active:scale-97"
+      title={isFrench ? "Switch to English" : "Traduire en Français"}
+    >
+      <span className={!isFrench ? 'text-sky-700 font-extrabold' : 'text-gray-400 hover:text-gray-600'}>EN</span>
+      <span className="text-gray-300">|</span>
+      <span className={isFrench ? 'text-sky-700 font-extrabold' : 'text-gray-400 hover:text-gray-600'}>FR</span>
+    </button>
+  )
+}
 
 export default function TopHeader({ onToggleSidebar }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
@@ -140,6 +162,9 @@ export default function TopHeader({ onToggleSidebar }) {
             )}
           </div>
         )}
+
+        {/* Language Selector */}
+        <LanguageToggle />
 
         {/* Notifications */}
         <div className="relative" ref={notificationsRef}>

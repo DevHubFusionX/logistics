@@ -9,6 +9,10 @@
   <!-- Preconnect to critical origins (order matters: fonts first for FCP) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Preconnect to Google Translate origins to eliminate cold-start SSL delay -->
+  <link rel="preconnect" href="https://translate.google.com" crossorigin />
+  <link rel="preconnect" href="https://translate.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://translate-pa.googleapis.com" crossorigin />
   <!-- Non-blocking Google Fonts: media="print" trick loads without render-blocking -->
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Outfit:wght@300;400;500;600;700;800&family=Mulish:wght@300;400;600;700&display=swap"
@@ -22,6 +26,10 @@
   <link rel="dns-prefetch" href="https://wp.allylogistics.com" />
   <link rel="dns-prefetch" href="https://cdn.botpress.cloud" />
   <link rel="dns-prefetch" href="https://files.bpcontent.cloud" />
+  <!-- DNS prefetch for Google Translate (fallback for browsers that ignore preconnect) -->
+  <link rel="dns-prefetch" href="https://translate.google.com" />
+  <link rel="dns-prefetch" href="https://translate.googleapis.com" />
+  <link rel="dns-prefetch" href="https://translate-pa.googleapis.com" />
   <!-- Preload LCP hero poster image (shows instantly before video loads) -->
   <link rel="preload" as="image"
     href="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1280&q=75"

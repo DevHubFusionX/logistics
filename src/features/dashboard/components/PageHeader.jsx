@@ -1,5 +1,5 @@
 import { Calendar, MapPin, Filter, RefreshCw } from 'lucide-react'
-import { t } from '@/i18n'
+import { useTranslation } from '@/i18n'
 
 export default function PageHeader({ 
   title, 
@@ -8,6 +8,7 @@ export default function PageHeader({
   filters = {},
   onFilterChange = () => {} 
 }) {
+  const { t } = useTranslation()
   const handleRefresh = () => window.location.reload()
   return (
     <div>
