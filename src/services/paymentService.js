@@ -1,85 +1,30 @@
 import httpClient from './httpClient'
 
+/**
+ * Payment Service
+ *
+ * Backend only exposes three payment endpoints (all under /api/v1/payment/):
+ *   GET  /payment/initialize/:bookingId       — get Paystack authorization URL
+ *   GET  /payment/booking/verify/:bookingId   — verify payment status for a booking
+ *   POST /payment/webhook                     — Paystack webhook (internal, not called by frontend)
+ *
+ * All other payment features (wallet, bank transfer, cash, receipts, invoices,
+ * refunds, payment history) are NOT implemented on the backend.
+ */
 const paymentService = {
-  // Initialize payment with backend - returns Paystack authorization URL
-  initializePayment: (bookingId) => {
-    return httpClient.request(`/payment/initialize/${bookingId}`, {
-      method: 'GET'
-    })
-  },
-
-  initiatePayment: (paymentData) => 
-    httpClient.request('/payments/initiate', {
-      method: 'POST',
-      body: JSON.stringify(paymentData)
-    }),
-
-
-  verifyPayment: (bookingId) => 
-    httpClient.request(`/payment/booking/verify/${bookingId}`, {
+  // GET /payment/initialize/:bookingId
+  // Returns { authorizationUrl, reference } to redirect user to Paystack
+  initializePayment: (bookingId) =>
+    httpClient.request(`/payment/initialize/${encodeURIComponent(bookingId)}`, {
       method: 'GET'
     }),
 
-  submitBankTransfer: (transferData) => 
-    httpClient.request('/payments/bank-transfer', {
-      method: 'POST',
-      body: JSON.stringify(transferData)
+  // GET /payment/booking/verify/:bookingId
+  // Returns payment status for a booking
+  verifyPayment: (bookingId) =>
+    httpClient.request(`/payment/booking/verify/${encodeURIComponent(bookingId)}`, {
+      method: 'GET'
     }),
-
-  confirmCashPayment: (bookingId) => 
-    httpClient.request('/payments/cash', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId })
-    }),
-
-  payWithWallet: (bookingId, amount) => 
-    httpClient.request('/payments/wallet', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId, amount })
-    }),
-
-  getWalletBalance: () => 
-    httpClient.request('/user/wallet'),
-
-  // Receipt & Invoice
-  downloadReceipt: (paymentId) => 
-    httpClient.request(`/payments/${paymentId}/receipt`, {
-      responseType: 'blob'
-    }),
-
-  emailReceipt: (paymentId, email) => 
-    httpClient.request(`/payments/${paymentId}/receipt/email`, {
-      method: 'POST',
-      body: JSON.stringify({ email })
-    }),
-
-  generateInvoice: (bookingId) => 
-    httpClient.request(`/payments/invoice/${bookingId}`, {
-      responseType: 'blob'
-    }),
-
-  emailInvoice: (bookingId, email) => 
-    httpClient.request(`/payments/invoice/${bookingId}/email`, {
-      method: 'POST',
-      body: JSON.stringify({ email })
-    }),
-
-  // Refunds
-  requestRefund: (paymentId, reason) => 
-    httpClient.request('/payments/refund/request', {
-      method: 'POST',
-      body: JSON.stringify({ paymentId, reason })
-    }),
-
-  getRefundStatus: (refundId) => 
-    httpClient.request(`/payments/refund/${refundId}`),
-
-  // Payment History
-  getPaymentHistory: (params = { limit: 50, page: 1 }) => 
-    httpClient.request('/payments/history', {}, params),
-
-  getPaymentDetails: (paymentId) => 
-    httpClient.request(`/payments/${paymentId}`)
 }
 
 export default paymentService

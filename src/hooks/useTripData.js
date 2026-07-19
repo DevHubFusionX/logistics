@@ -3,10 +3,12 @@ import { useMemo } from 'react'
 export const useTripData = (trips, filters) => {
   const filteredTrips = useMemo(() => {
     return trips.filter(trip => {
+      const id = trip._id || trip.id || ''
+      const driverName = trip.driverName || ''
       if (
         filters.search &&
-        !trip.id.toLowerCase().includes(filters.search.toLowerCase()) &&
-        !trip.driverName.toLowerCase().includes(filters.search.toLowerCase())
+        !id.toLowerCase().includes(filters.search.toLowerCase()) &&
+        !driverName.toLowerCase().includes(filters.search.toLowerCase())
       ) {
         return false
       }

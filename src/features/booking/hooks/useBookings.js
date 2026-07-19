@@ -8,7 +8,7 @@ export const useBookings = (filters = { limit: 10, page: 1 }) => {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ['bookings', filters],
     queryFn: () => bookingService.getBookings(filters),
-    select: (response) => response.data?.shipments || [],
+    select: (response) => response.data?.records || [],
     staleTime: 2 * 60 * 1000, // 2 minutes
   })
 

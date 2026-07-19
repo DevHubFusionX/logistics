@@ -59,7 +59,7 @@ const bookingService = {
   assignTruck: (bookingId, truckId) =>
     httpClient.request(`/admin/bookings/truck/${bookingId}`, {
       method: 'PATCH',
-      body: JSON.stringify({ truckId })
+      body: JSON.stringify({ truckId, status: 'processing' })
     }),
 
   removeTruck: (bookingId) =>

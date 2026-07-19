@@ -1,7 +1,7 @@
 import {
   Package, Truck, Users, UserCheck, BarChart3, Settings, 
   Thermometer, CreditCard, MapPin, DollarSign, ClipboardList, 
-  Navigation, Info, BookOpen, MessageSquare, TrendingUp, Home
+  Navigation, Info, BookOpen, MessageSquare, TrendingUp, Home, Route
 } from 'lucide-react'
 
 export const NAVIGATION_SECTIONS = [
@@ -85,6 +85,15 @@ export const NAVIGATION_SECTIONS = [
         description: 'View bookings by user',
         color: 'indigo',
         roles: ['Super Admin', 'Fleet Officer', 'Dispatcher']
+      },
+      {
+        id: 'admin-trips',
+        label: 'Trips',
+        icon: Route,
+        path: '/admin/trips',
+        description: 'View and manage all trips',
+        color: 'indigo',
+        roles: ['Super Admin', 'Dispatcher']
       },
       {
         id: 'orders-list',

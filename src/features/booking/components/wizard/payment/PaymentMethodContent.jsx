@@ -1,4 +1,4 @@
-import { PaystackPayment, BankTransferComplete, WalletPayment } from '@/features/billing/components/payments'
+import { PaystackPayment, BankTransferComplete, WalletPayment } from '@/features/admin/components/payments'
 import { PAYMENT_METHODS } from '@/utils/paymentValidation'
 import { Shield, Clock } from 'lucide-react'
 import toast from 'react-hot-toast'

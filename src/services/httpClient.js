@@ -25,9 +25,12 @@ const processQueue = (error) => {
 // Endpoints where a 401 should NOT trigger an automatic logout.
 // The payment flow has its own error UI — we don't want users booted
 // mid-payment just because the payment API returned a 401.
+// Trips endpoints are admin-only and may return 401 for permission reasons
+// unrelated to the user's session being expired.
 const NO_AUTO_LOGOUT_ENDPOINTS = [
   '/payment',
   '/payments',
+  '/trips',
 ]
 
 class HttpClient {

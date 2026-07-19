@@ -1,11 +1,12 @@
-import { X, MapPin, Package, Calendar, Clock, UserCheck, Truck, CheckCircle, AlertCircle, Info } from 'lucide-react'
+import { X, MapPin, Package, Calendar, Clock, Truck, CheckCircle, AlertCircle, Info } from 'lucide-react'
+import { getStatusBadge, getStatusText } from '@/features/booking/utils/bookingUtils'
 
 const STATUSES = [
-  { id: 'pending',    label: 'Requested', icon: Clock },
-  { id: 'confirmed',  label: 'Assigned',  icon: UserCheck },
-  { id: 'processing', label: 'Processing',icon: Package },
-  { id: 'in_transit', label: 'In Transit',icon: Truck },
-  { id: 'delivered',  label: 'Delivered', icon: CheckCircle },
+  { id: 'pending',    label: 'Pending',    icon: Clock },
+  { id: 'confirmed',  label: 'Confirmed',  icon: CheckCircle },
+  { id: 'processing', label: 'Processing', icon: Package },
+  { id: 'in_transit', label: 'In Transit', icon: Truck },
+  { id: 'delivered',  label: 'Delivered',  icon: CheckCircle },
 ]
 
 function Field({ label, value }) {
@@ -33,7 +34,7 @@ function Section({ icon: Icon, title, children }) {
   )
 }
 
-export default function BookingDetailsModal({ booking, onClose, getStatusBadge, getStatusText, onAssignDriver, onRemoveTruck }) {
+export default function BookingDetailsModal({ booking, onClose, onAssignDriver, onRemoveTruck }) {
   if (!booking) return null
 
   const currentIdx  = STATUSES.findIndex(s => s.id === booking.status)
@@ -50,8 +51,9 @@ export default function BookingDetailsModal({ booking, onClose, getStatusBadge, 
   const amount    = booking.amount || booking.price || 0
   const trackingId = booking.trackingNumber || booking.tracking_number || booking._id
 
-  const canAssign = !!onAssignDriver && ['pending', 'pending_assignment'].includes(booking.status)
-  const canReassign = !!onAssignDriver && ['confirmed', 'driver_assigned'].includes(booking.status)
+  const hasAssignment = !!(booking.driverName || booking.truckPlateNumber || booking.driverId || booking.truckId)
+  const canAssign   = !!onAssignDriver && booking.status === 'pending' && !hasAssignment
+  const canReassign = !!onAssignDriver && !isCancelled && booking.status !== 'delivered' && (booking.status === 'processing' || hasAssignment)
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">

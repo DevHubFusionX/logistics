@@ -5,10 +5,12 @@ import { getStatusText } from '../../utils/bookingUtils'
 const STATUS_CONFIG = {
   pending:    { dot: 'bg-amber-400',   pill: 'bg-amber-50 text-amber-700'    },
   confirmed:  { dot: 'bg-sky-500',     pill: 'bg-sky-50 text-sky-700'        },
-  processing: { dot: 'bg-sky-500',     pill: 'bg-sky-50 text-sky-700'        },
+  processing: { dot: 'bg-indigo-500',  pill: 'bg-indigo-50 text-indigo-700'  },
   in_transit: { dot: 'bg-emerald-500', pill: 'bg-emerald-50 text-emerald-700'},
   delivered:  { dot: 'bg-gray-400',    pill: 'bg-gray-100 text-gray-600'     },
   cancelled:  { dot: 'bg-red-400',     pill: 'bg-red-50 text-red-600'        },
+  on_hold:    { dot: 'bg-orange-400',  pill: 'bg-orange-50 text-orange-700'  },
+  failed:     { dot: 'bg-red-500',     pill: 'bg-red-50 text-red-700'        },
 }
 
 export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, onAssignDriver, onRemoveTruck }) {
@@ -33,8 +35,8 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
   const cfg       = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending
 
   const hasAssignment = !!(booking.driverName || booking.truckPlateNumber || booking.driverId || booking.truckId)
-  const canAssign = !!onAssignDriver && ['pending', 'pending_assignment'].includes(booking.status)
-  const canReassign = !!onAssignDriver && ['confirmed', 'driver_assigned'].includes(booking.status)
+  const canAssign   = !!onAssignDriver && booking.status === 'pending' && !hasAssignment
+  const canReassign = !!onAssignDriver && booking.status !== 'cancelled' && booking.status !== 'delivered' && (booking.status === 'confirmed' || booking.status === 'processing' || hasAssignment)
 
   return (
     <div className="bg-white rounded-2xl border border-gray-100 hover:border-gray-200 hover:shadow-md transition-all duration-200 flex flex-col overflow-hidden">

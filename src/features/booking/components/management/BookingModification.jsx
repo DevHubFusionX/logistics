@@ -72,6 +72,7 @@ export default function BookingModification({ booking, onSuccess, onClose }) {
       tempControlCelsius:   booking.tempControlCelsius || 20,
       notes:                booking.notes || booking.special_instructions || '',
       receiverPerson:       normPerson(booking.receiverPerson),
+      status:               booking.status || 'pending',
     })
   }, [booking])
 
@@ -100,7 +101,7 @@ export default function BookingModification({ booking, onSuccess, onClose }) {
         estimatedPickupDate:  formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : null,
         estimatedDeliveryDate:formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : null,
         notes:                formData.notes,
-        status:               booking.status || 'pending',
+        status:               formData.status,
       })
       toast.success('Booking updated!')
       onSuccess?.()
@@ -202,6 +203,16 @@ export default function BookingModification({ booking, onSuccess, onClose }) {
               <div className="space-y-3">
                 <div><Label>Receiver name</Label><Input value={formData.receiverPerson.name} onChange={e => setNested('receiverPerson', 'name', e.target.value)} /></div>
                 <div><Label>Receiver phone</Label><Input value={formData.receiverPerson.phone} onChange={e => setNested('receiverPerson', 'phone', e.target.value)} /></div>
+                <div>
+                  <Label>Status</Label>
+                  <Select value={formData.status} onChange={e => set('status', e.target.value)}>
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="in_transit">In Transit</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                  </Select>
+                </div>
                 <div>
                   <Label>Notes</Label>
                   <textarea

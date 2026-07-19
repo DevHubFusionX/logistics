@@ -1,25 +1,29 @@
 export const getStatusBadge = (status) => {
   const badges = {
-    pending: 'bg-yellow-100 text-yellow-700',
-    confirmed: 'bg-blue-100 text-blue-700',
-    processing: 'bg-blue-100 text-blue-700',
+    pending:    'bg-yellow-100 text-yellow-700',
+    confirmed:  'bg-sky-50 text-sky-700 border-sky-100',
+    processing: 'bg-indigo-100 text-indigo-700',
     in_transit: 'bg-green-100 text-green-700',
-    delivered: 'bg-gray-100 text-gray-700',
-    cancelled: 'bg-red-100 text-red-700'
+    delivered:  'bg-gray-100 text-gray-700',
+    cancelled:  'bg-red-100 text-red-700',
+    on_hold:    'bg-orange-100 text-orange-700',
+    failed:     'bg-red-100 text-red-700',
   }
   return badges[status] || 'bg-gray-100 text-gray-700'
 }
 
 export const getStatusText = (status) => {
   const texts = {
-    pending: 'Pending Pickup',
-    confirmed: 'Driver Assigned',
+    pending:    'Pending',
+    confirmed:  'Confirmed',
     processing: 'Processing',
     in_transit: 'In Transit',
-    delivered: 'Delivered',
-    cancelled: 'Cancelled'
+    delivered:  'Delivered',
+    cancelled:  'Cancelled',
+    on_hold:    'On Hold',
+    failed:     'Failed',
   }
-  return texts[status] || status
+  return texts[status] || (status ? status.charAt(0).toUpperCase() + status.slice(1) : '')
 }
 
 export const calculateBookingPrice = (booking) => {
@@ -42,7 +46,7 @@ export const calculateBookingPrice = (booking) => {
 
 export const getBookingStats = (bookings) => ({
   pendingCount: bookings.filter(b => b.status === 'pending').length,
-  activeCount: bookings.filter(b => b.status === 'in_transit' || b.status === 'confirmed' || b.status === 'processing').length,
+  activeCount: bookings.filter(b => b.status === 'in_transit' || b.status === 'processing').length,
   deliveredThisMonth: bookings.filter(b => b.status === 'delivered').length,
   outstandingInvoices: bookings.filter(b => (b.paymentStatus || b.payment_status) === 'unpaid').length
 })

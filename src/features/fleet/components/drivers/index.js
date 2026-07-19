@@ -1,7 +1,0 @@
-export { default as AddDriverModal } from './AddDriverModal'
-export { default as DriverCard } from './DriverCard'
-export { default as DriverFilters } from './DriverFilters'
-export { default as DriverStats } from './DriverStats'
-export { default as DriverTable } from './DriverTable'
-export { default as DriverModal } from './DriverModal'
-export * from './driversData'
