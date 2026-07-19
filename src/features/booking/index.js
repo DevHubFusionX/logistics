@@ -24,7 +24,8 @@ export {
   getStatusBadge,
   getStatusText,
   calculateBookingPrice,
-  getBookingStats
+  getBookingStats,
+  BOOKING_STATUS_CONFIG
 } from './utils/bookingUtils'
 
 export {

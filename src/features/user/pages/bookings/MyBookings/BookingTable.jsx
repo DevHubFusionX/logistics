@@ -1,48 +1,5 @@
 import { Phone, CreditCard, ArrowRight, User, Package, Calendar } from 'lucide-react'
-import { getStatusText, calculateBookingPrice } from '@/features/booking'
-
-const STATUS_STYLES = {
-  pending: {
-    text: 'text-amber-700 bg-amber-50 border-amber-200/50',
-    dot: 'bg-amber-500 animate-pulse',
-    label: 'Pending'
-  },
-  confirmed: {
-    text: 'text-sky-700 bg-sky-50 border-sky-200/50',
-    dot: 'bg-sky-500',
-    label: 'Confirmed'
-  },
-  processing: {
-    text: 'text-indigo-700 bg-indigo-50 border-indigo-200/50',
-    dot: 'bg-indigo-500 animate-pulse',
-    label: 'Processing'
-  },
-  in_transit: {
-    text: 'text-blue-700 bg-blue-50 border-blue-200/50',
-    dot: 'bg-blue-600 animate-ping',
-    label: 'In Transit'
-  },
-  delivered: {
-    text: 'text-emerald-700 bg-emerald-50 border-emerald-200/50',
-    dot: 'bg-emerald-500',
-    label: 'Delivered'
-  },
-  cancelled: {
-    text: 'text-rose-700 bg-rose-50 border-rose-200/50',
-    dot: 'bg-rose-500',
-    label: 'Cancelled'
-  },
-  on_hold: {
-    text: 'text-orange-700 bg-orange-50 border-orange-200/50',
-    dot: 'bg-orange-500',
-    label: 'On Hold'
-  },
-  failed: {
-    text: 'text-red-700 bg-red-50 border-red-200/50',
-    dot: 'bg-red-500',
-    label: 'Failed'
-  }
-}
+import { getStatusText, calculateBookingPrice, BOOKING_STATUS_CONFIG } from '@/features/booking'
 
 function SkeletonRow() {
   return (
@@ -126,7 +83,7 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                 const amount = booking.price || booking.shipping_fee || booking.amount || calculateBookingPrice(booking) || 0
                 const payStatus = booking.paymentStatus || booking.payment_status || 'unpaid'
                 
-                const sc = STATUS_STYLES[booking.status] || STATUS_STYLES.pending
+                const sc = BOOKING_STATUS_CONFIG[booking.status] || BOOKING_STATUS_CONFIG.pending
                 const canPayNow = booking.status !== 'cancelled' && (payStatus === 'unpaid' || payStatus === 'failed')
                 const riderName = booking.driver?.name || booking.driverName || 'Rider unassigned'
                 const riderPhone = booking.driver?.phone || booking.driverPhone
@@ -226,7 +183,7 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                       )}
                     </td>
                     <td className="px-6 py-4.5">
-                      <span className={`inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 border rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.01)] ${sc.text}`}>
+                      <span className={`inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1 border rounded-full shadow-[0_1px_2px_rgba(0,0,0,0.01)] ${sc.pill}`}>
                         {booking.status === 'in_transit' ? (
                           <span className="relative flex h-1.5 w-1.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>

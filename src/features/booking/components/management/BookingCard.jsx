@@ -1,17 +1,6 @@
 import { ArrowRight, CreditCard, MapPin, Calendar, Package, Truck, Trash2 } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import { getStatusText } from '../../utils/bookingUtils'
-
-const STATUS_CONFIG = {
-  pending:    { dot: 'bg-amber-400',   pill: 'bg-amber-50 text-amber-700'    },
-  confirmed:  { dot: 'bg-sky-500',     pill: 'bg-sky-50 text-sky-700'        },
-  processing: { dot: 'bg-indigo-500',  pill: 'bg-indigo-50 text-indigo-700'  },
-  in_transit: { dot: 'bg-emerald-500', pill: 'bg-emerald-50 text-emerald-700'},
-  delivered:  { dot: 'bg-gray-400',    pill: 'bg-gray-100 text-gray-600'     },
-  cancelled:  { dot: 'bg-red-400',     pill: 'bg-red-50 text-red-600'        },
-  on_hold:    { dot: 'bg-orange-400',  pill: 'bg-orange-50 text-orange-700'  },
-  failed:     { dot: 'bg-red-500',     pill: 'bg-red-50 text-red-700'        },
-}
+import { getStatusText, BOOKING_STATUS_CONFIG } from '../../utils/bookingUtils'
 
 export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, onAssignDriver, onRemoveTruck }) {
   const navigate = useNavigate()
@@ -32,7 +21,7 @@ export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, 
   }
 
   const eta       = formatDate(booking.estimatedDeliveryDate || booking.estimated_delivery || booking.pickupDate)
-  const cfg       = STATUS_CONFIG[booking.status] || STATUS_CONFIG.pending
+  const cfg       = BOOKING_STATUS_CONFIG[booking.status] || BOOKING_STATUS_CONFIG.pending
 
   const hasAssignment = !!(booking.driverName || booking.truckPlateNumber || booking.driverId || booking.truckId)
   const canAssign   = !!onAssignDriver && booking.status === 'pending' && !hasAssignment
