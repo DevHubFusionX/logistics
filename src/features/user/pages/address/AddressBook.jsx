@@ -11,6 +11,7 @@ import {
 } from '@/features/user/hooks/queries/useAddressQueries'
 import { AddressCardSkeleton } from '@/components/common/SkeletonLoaders'
 import ConfirmDialog from '@/components/common/ConfirmDialog'
+import ComingSoonOverlay from '@/components/common/ComingSoonOverlay'
 import toast from 'react-hot-toast'
 
 export default function AddressBook() {
@@ -161,7 +162,11 @@ export default function AddressBook() {
   }
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-6 relative min-h-[500px]">
+      <ComingSoonOverlay
+        title="Address Book"
+        description="The saved addresses system is under development. You can still type any pickup and delivery locations directly in the booking form."
+      />
       <div className="flex items-end justify-between">
         <PageHeader
           title="Address Book"

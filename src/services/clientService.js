@@ -1,18 +1,30 @@
 import httpClient from './httpClient'
 
+/**
+ * Client Service
+ *
+ * The backend has no dedicated /users or /clients management endpoints.
+ * Client data is derived from the bookings endpoint.
+ *
+ * Real endpoints used:
+ *   GET /admin/bookings/          — extract unique customers from bookings
+ *   GET /admin/bookings/users/:id — get all bookings for a specific user
+ *
+ * Removed (no backend endpoint):
+ *   createClient, updateClient, getClientPayments, getClientAnalytics,
+ *   updateClientCreditLimit, suspendClient, getClientDocuments, uploadClientDocument
+ */
 export default {
+  /**
+   * Derive a unique client list from all bookings.
+   * Extracts distinct customers by their createdBy ID or email.
+   */
   getClients: async (params = {}) => {
-    console.debug('[CLIENT_SERVICE] Fetching clients via admin bookings with params:', params)
-    const requestParams = { ...params }
-    if (!requestParams.limit) requestParams.limit = 50
-    if (!requestParams.page) requestParams.page = 1
-    console.debug('[CLIENT_SERVICE] Final request params:', requestParams)
-    // Use /admin/bookings/ to get all bookings, then extract unique users
+    const requestParams = { limit: 50, page: 1, ...params }
     const response = await httpClient.request('/admin/bookings/', { method: 'GET' }, requestParams)
     const apiData = response.data?.data || response.data
     const records = apiData?.records || []
 
-    // Extract unique customers from booking records by createdBy or email
     const customerMap = new Map()
     records.forEach(booking => {
       const id = booking.createdBy || booking.email
@@ -24,16 +36,11 @@ export default {
           contactPhone: booking.contactPhone || '',
           customerType: booking.customerType || 'individual',
           createdAt: booking.createdAt,
-          stats: {
-            shipments: 0,
-            volume: 0,
-          },
+          stats: { shipments: 0, volume: 0 },
         })
       }
-      // Increment stats for each booking by this customer
       if (id && customerMap.has(id)) {
-        const customer = customerMap.get(id)
-        customer.stats.shipments += 1
+        customerMap.get(id).stats.shipments += 1
       }
     })
 
@@ -45,57 +52,22 @@ export default {
       status: response.status,
     }
   },
+
+  /**
+   * GET /admin/bookings/users/:id
+   * Returns all bookings for a specific user (not a client profile).
+   */
   getClient: (clientId) => {
     if (!clientId) throw new Error('clientId is required')
     return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}`)
   },
-  createClient: (clientData) => httpClient.request('/admin/bookings/users', {
-    method: 'POST',
-    body: JSON.stringify(clientData)
-  }),
-  updateClient: (clientId, clientData) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}`, {
-      method: 'PUT',
-      body: JSON.stringify(clientData)
-    })
-  },
+
+  /**
+   * GET /admin/bookings/users/:id
+   * Returns paginated booking records for a user — used as their "shipment history".
+   */
   getClientShipments: (clientId, params = {}) => {
     if (!clientId) throw new Error('clientId is required')
     return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}`, {}, params)
   },
-  getClientPayments: (clientId, params = {}) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/payments`, {}, params)
-  },
-  getClientAnalytics: (clientId, params = {}) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/analytics`, {}, params)
-  },
-  updateClientCreditLimit: (clientId, creditData) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/credit-limit`, {
-      method: 'PATCH',
-      body: JSON.stringify(creditData)
-    })
-  },
-  suspendClient: (clientId, suspendData) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/suspend`, {
-      method: 'POST',
-      body: JSON.stringify(suspendData)
-    })
-  },
-  getClientDocuments: (clientId) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/documents`)
-  },
-  uploadClientDocument: (clientId, formData) => {
-    if (!clientId) throw new Error('clientId is required')
-    return httpClient.request(`/admin/bookings/users/${encodeURIComponent(clientId)}/documents`, {
-      method: 'POST',
-      body: formData,
-      headers: {}
-    })
-  }
 }

@@ -24,17 +24,6 @@ export default {
     })
   },
 
-  // PATCH /admin/trucks/:id — update a truck (admin)
-  updateTruck: (truckId, data) => {
-    if (!truckId) throw new Error('truckId is required')
-    const isFormData = data instanceof FormData
-    return httpClient.request(`/admin/trucks/${encodeURIComponent(truckId)}`, {
-      method: 'PATCH',
-      body: isFormData ? data : JSON.stringify(data),
-      ...(isFormData ? { headers: {} } : {})
-    })
-  },
-
   // PATCH /admin/trucks/approve/:id — approve a truck
   approveTruck: (truckId) => {
     if (!truckId) throw new Error('truckId is required')
@@ -52,11 +41,7 @@ export default {
     })
   },
 
-  // DELETE /trucks/:id — delete a truck
-  deleteTruck: (truckId) => {
-    if (!truckId) throw new Error('truckId is required')
-    return httpClient.request(`/trucks/${encodeURIComponent(truckId)}`, {
-      method: 'DELETE'
-    })
-  }
+  // NOTE: There is no PATCH /admin/trucks/:id (general update) endpoint on the backend.
+  // NOTE: There is no DELETE truck endpoint on the admin backend.
+  //       The driver-scoped DELETE /trucks/:truckId requires DRIVER JWT.
 }

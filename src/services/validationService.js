@@ -1,40 +1,23 @@
-import httpClient from './httpClient'
+/**
+ * validationService — STUB
+ *
+ * The backend does NOT have any /validation/ routes.
+ * Address validation, geocoding, and distance calculation are done client-side
+ * or deferred to booking-time server validation.
+ *
+ * All methods below are stubs that log a warning and resolve silently.
+ */
+const noOp = (name) => (...args) => {
+  console.warn(`validationService.${name}() called — no backend endpoint exists.`)
+  return Promise.resolve({ data: null, valid: true, message: 'Not implemented — validation skipped' })
+}
 
 const validationService = {
-  // Address validation
-  validateAddress: (address) =>
-    httpClient.request('/validation/address', {
-      method: 'POST',
-      body: JSON.stringify({ address })
-    }),
-
-  // Geocode address
-  geocodeAddress: (address) =>
-    httpClient.request('/validation/geocode', {
-      method: 'POST',
-      body: JSON.stringify({ address })
-    }),
-
-  // Calculate distance
-  calculateDistance: (origin, destination) =>
-    httpClient.request('/validation/distance', {
-      method: 'POST',
-      body: JSON.stringify({ origin, destination })
-    }),
-
-  // Phone number validation
-  validatePhone: (phone, country = 'NG') =>
-    httpClient.request('/validation/phone', {
-      method: 'POST',
-      body: JSON.stringify({ phone, country })
-    }),
-
-  // Email validation
-  validateEmail: (email) =>
-    httpClient.request('/validation/email', {
-      method: 'POST',
-      body: JSON.stringify({ email })
-    })
+  validateAddress: noOp('validateAddress'),
+  geocodeAddress: noOp('geocodeAddress'),
+  calculateDistance: noOp('calculateDistance'),
+  validatePhone: noOp('validatePhone'),
+  validateEmail: noOp('validateEmail'),
 }
 
 export default validationService

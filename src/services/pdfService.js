@@ -1,38 +1,28 @@
-import httpClient from './httpClient'
+/**
+ * pdfService — STUB
+ *
+ * The backend does NOT have any /pdf/ routes.
+ * All methods below are stubs that log a warning and resolve silently.
+ * The downloadPDF helper is kept functional for any local blob downloads.
+ */
+const noOp = (name) => (...args) => {
+  console.warn(`pdfService.${name}() called — no backend endpoint exists.`)
+  return Promise.resolve(null)
+}
 
 const pdfService = {
-  // Generate receipt PDF
-  generateReceipt: (paymentId) =>
-    httpClient.request(`/pdf/receipt/${paymentId}`, {
-      responseType: 'blob'
-    }),
+  generateReceipt: noOp('generateReceipt'),
+  generateInvoice: noOp('generateInvoice'),
+  generateBookingConfirmation: noOp('generateBookingConfirmation'),
+  generateDeliveryNote: noOp('generateDeliveryNote'),
+  generateManifest: noOp('generateManifest'),
 
-  // Generate invoice PDF
-  generateInvoice: (bookingId) =>
-    httpClient.request(`/pdf/invoice/${bookingId}`, {
-      responseType: 'blob'
-    }),
-
-  // Generate booking confirmation PDF
-  generateBookingConfirmation: (bookingId) =>
-    httpClient.request(`/pdf/booking-confirmation/${bookingId}`, {
-      responseType: 'blob'
-    }),
-
-  // Generate delivery note PDF
-  generateDeliveryNote: (bookingId) =>
-    httpClient.request(`/pdf/delivery-note/${bookingId}`, {
-      responseType: 'blob'
-    }),
-
-  // Generate manifest PDF
-  generateManifest: (tripId) =>
-    httpClient.request(`/pdf/manifest/${tripId}`, {
-      responseType: 'blob'
-    }),
-
-  // Download helper
+  // Local-only helper — still functional
   downloadPDF: (blob, filename) => {
+    if (!blob) {
+      console.warn('pdfService.downloadPDF called with no blob — skipping.')
+      return
+    }
     const url = window.URL.createObjectURL(blob)
     const link = document.createElement('a')
     link.href = url

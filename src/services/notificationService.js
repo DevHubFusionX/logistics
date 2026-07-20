@@ -1,53 +1,26 @@
-import httpClient from './httpClient'
+/**
+ * notificationService — STUB
+ *
+ * The backend does NOT have any /notifications/ routes.
+ * Email and SMS notifications are handled server-side automatically
+ * when bookings are created/updated.
+ *
+ * All methods below are stubs that log a warning and resolve silently.
+ */
+const noOp = (name) => (...args) => {
+  console.warn(`notificationService.${name}() called — no backend endpoint exists. This is a no-op.`)
+  return Promise.resolve({ data: null, message: 'Not implemented' })
+}
 
 const notificationService = {
-  // Email notifications
-  sendBookingConfirmation: (bookingId, email) =>
-    httpClient.request('/notifications/email/booking-confirmation', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId, email })
-    }),
-
-  sendPaymentConfirmation: (paymentId, email) =>
-    httpClient.request('/notifications/email/payment-confirmation', {
-      method: 'POST',
-      body: JSON.stringify({ paymentId, email })
-    }),
-
-  sendDeliveryNotification: (bookingId, email) =>
-    httpClient.request('/notifications/email/delivery-notification', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId, email })
-    }),
-
-  // SMS notifications
-  sendBookingSMS: (bookingId, phone) =>
-    httpClient.request('/notifications/sms/booking', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId, phone })
-    }),
-
-  sendDeliverySMS: (bookingId, phone) =>
-    httpClient.request('/notifications/sms/delivery', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId, phone })
-    }),
-
-  sendDriverAssignedSMS: (bookingId, phone) =>
-    httpClient.request('/notifications/sms/driver-assigned', {
-      method: 'POST',
-      body: JSON.stringify({ bookingId, phone })
-    }),
-
-  // Notification preferences
-  getPreferences: () =>
-    httpClient.request('/notifications/preferences'),
-
-  updatePreferences: (preferences) =>
-    httpClient.request('/notifications/preferences', {
-      method: 'PATCH',
-      body: JSON.stringify(preferences)
-    })
+  sendBookingConfirmation: noOp('sendBookingConfirmation'),
+  sendPaymentConfirmation: noOp('sendPaymentConfirmation'),
+  sendDeliveryNotification: noOp('sendDeliveryNotification'),
+  sendBookingSMS: noOp('sendBookingSMS'),
+  sendDeliverySMS: noOp('sendDeliverySMS'),
+  sendDriverAssignedSMS: noOp('sendDriverAssignedSMS'),
+  getPreferences: noOp('getPreferences'),
+  updatePreferences: noOp('updatePreferences'),
 }
 
 export default notificationService

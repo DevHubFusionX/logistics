@@ -4,6 +4,7 @@ import { PageHeader } from '@/features/dashboard'
 import { ArrowLeft, Send, Clock, CheckCircle, AlertCircle, RefreshCw, MessageCircle, Tag, Info } from 'lucide-react'
 import { useTicketQuery, useAddTicketMessageMutation, useResolveTicketMutation } from '@/features/user/hooks/queries/useSupportQueries'
 import { useAuthState } from '@/features/auth'
+import ComingSoonOverlay from '@/components/common/ComingSoonOverlay'
 
 const statusStyles = {
     open: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'Open' },
@@ -91,7 +92,11 @@ export default function TicketDetail() {
     const isClosed = ticket.status === 'resolved' || ticket.status === 'closed'
 
     return (
-        <div className="space-y-6 pb-6">
+        <div className="space-y-6 pb-6 relative min-h-[500px]">
+            <ComingSoonOverlay
+                title="Support Tickets"
+                description="The ticket conversation system is under development. Please check back soon."
+            />
             {/* Back button */}
             <button
                 onClick={() => navigate('/support')}

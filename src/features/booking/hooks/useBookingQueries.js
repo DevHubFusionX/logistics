@@ -46,7 +46,7 @@ export function useBookingsQuery(params = {}) {
         return records
       }
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }
 
@@ -95,7 +95,7 @@ export function useAllBookingsQuery(params = {}) {
         return { records, pagination }
       }
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0,
   })
 }
 

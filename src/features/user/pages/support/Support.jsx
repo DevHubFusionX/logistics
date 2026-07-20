@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { useTicketsQuery, useCreateTicketMutation } from '@/features/user/hooks/queries/useSupportQueries'
 import { TicketSkeleton, StatCardSkeleton } from '@/components/common/SkeletonLoaders'
+import ComingSoonOverlay from '@/components/common/ComingSoonOverlay'
 
 const statusConfig = {
   open: { icon: AlertCircle, color: 'yellow', label: 'Open' },
@@ -94,7 +95,11 @@ export default function Support() {
   }
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-6 relative min-h-[500px]">
+      <ComingSoonOverlay
+        title="Support Center"
+        description="Our support ticket system is under development. In the meantime, please contact us directly via email or phone for assistance."
+      />
       <div className="flex items-end justify-between">
         <PageHeader title="Support Center" subtitle="Get help and track your support tickets" />
         <button

@@ -30,57 +30,12 @@ export default {
   // GET /trips/token/admins — get admin streaming token for real-time trip updates
   getAdminToken: () => httpClient.request('/trips/token/admins'),
 
-  // PUT /trips/:id — update trip
-  updateTrip: (tripId, tripData) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/`, {
-      method: 'PUT',
-      body: JSON.stringify(tripData)
-    })
-  },
-
-  startTrip: (tripId, startData) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/start`, {
-      method: 'POST',
-      body: JSON.stringify(startData)
-    })
-  },
-
-  completeTrip: (tripId, completionData) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/complete`, {
-      method: 'POST',
-      body: JSON.stringify(completionData)
-    })
-  },
-
-  cancelTrip: (tripId, cancelData) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/cancel`, {
-      method: 'POST',
-      body: JSON.stringify(cancelData)
-    })
-  },
-
-  trackTrip: (tripId) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/track`)
-  },
-
-  getTripTimeline: (tripId) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/timeline`)
-  },
-
-  uploadTripDocument: (tripId, formData) => {
-    if (!tripId) throw new Error('tripId is required')
-    return httpClient.request(`/trips/${encodeURIComponent(tripId)}/documents`, {
-      method: 'POST',
-      body: formData,
-      headers: {}
-    })
-  },
-
-  getTripAnalytics: (params = {}) => httpClient.request('/trips/analytics', {}, params)
+  // NOTE: The following endpoints exist on the backend but are DRIVER-only:
+  //   PATCH /trips/start/:tripId  — verifyJWT(["DRIVER"])
+  //   PATCH /trips/end/:tripId    — verifyJWT(["DRIVER"])
+  // They cannot be called from the admin frontend.
+  //
+  // The following features have no backend implementation yet:
+  //   updateTrip, cancelTrip, trackTrip, getTripTimeline,
+  //   uploadTripDocument, getTripAnalytics
 }

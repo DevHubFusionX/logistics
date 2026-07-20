@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '../../lib/queryClient'
 import { bookingService } from '@/features/booking'
+import httpClient from '@/services/httpClient'
 import toast from 'react-hot-toast'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
@@ -149,6 +150,88 @@ export function useTrackingQuery(trackingId, options = {}) {
                 }
             }
 
+            if (/^[0-9a-fA-F]{24}$/.test(trackingId?.trim())) {
+                let booking = null
+                
+                // Try direct call
+                try {
+                    const response = await bookingService.getBookingById(trackingId.trim())
+                    const extracted = httpClient.extractData(response)
+                    if (extracted && extracted._id) {
+                        booking = extracted
+                    }
+                } catch (err) {
+                    console.warn('getBookingById failed with error:', err)
+                }
+
+                // Fallback to user bookings list if direct call failed
+                if (!booking) {
+                    try {
+                        const listResponse = await bookingService.getBookings({ limit: 100 })
+                        const { records } = httpClient.extractList(listResponse)
+                        booking = records.find(b => b._id === trackingId.trim())
+                    } catch (listErr) {
+                        console.warn('Failed to fetch user bookings list fallback:', listErr)
+                    }
+                }
+
+                // Fallback to admin bookings list if still not found
+                if (!booking) {
+                    try {
+                        const adminListResponse = await bookingService.getAdminBookings({ limit: 100 })
+                        const { records } = httpClient.extractList(adminListResponse)
+                        booking = records.find(b => b._id === trackingId.trim())
+                    } catch (adminErr) {
+                        console.warn('Failed to fetch admin bookings list fallback:', adminErr)
+                    }
+                }
+
+                if (booking) {
+                    const status = booking.status || 'pending'
+                    const timeline = [
+                        {
+                            status: 'Booked',
+                            date: new Date(booking.createdAt).toLocaleString(),
+                            completed: true
+                        },
+                        {
+                            status: 'Confirmed',
+                            date: booking.status !== 'pending' ? new Date(booking.updatedAt).toLocaleString() : '---',
+                            completed: booking.status !== 'pending'
+                        },
+                        {
+                            status: 'In Transit',
+                            date: ['in_transit', 'delivered'].includes(booking.status) ? new Date(booking.updatedAt).toLocaleString() : '---',
+                            completed: ['in_transit', 'delivered'].includes(booking.status)
+                        },
+                        {
+                            status: 'Delivered',
+                            date: booking.status === 'delivered' ? new Date(booking.updatedAt).toLocaleString() : '---',
+                            completed: booking.status === 'delivered'
+                        }
+                    ]
+                    
+                    const loc = booking.dropoffLocation
+                    const destString = loc ? (typeof loc === 'string' ? loc : `${loc.city || ''} ${loc.address || ''}`.trim()) : ''
+                    
+                    const driverObj = booking.truck?.driver
+                    const truckObj = booking.truck
+                    
+                    return {
+                        id: booking._id,
+                        status: status,
+                        origin: booking.pickupLocation || 'Lagos',
+                        destination: destString || 'Destination',
+                        currentLocation: booking.status === 'delivered' ? destString : (booking.pickupLocation || 'In Transit'),
+                        estimatedDelivery: booking.estimatedDeliveryDate ? new Date(booking.estimatedDeliveryDate).toLocaleDateString() : 'TBD',
+                        driver: driverObj?.name || 'Assigning Driver...',
+                        vehicle: truckObj ? `${truckObj.color || ''} ${truckObj.make || ''} ${truckObj.model || ''} (${truckObj.plateNumber || ''})`.trim() : 'Assigning Vehicle...',
+                        temperature: booking.tempControlCelsius ? `${booking.tempControlCelsius}°C` : 'N/A',
+                        timeline: timeline
+                    }
+                }
+            }
+
             throw new Error("Shipment not found. Please verify the tracking number.")
         },
         enabled: !!trackingId, // Only run if trackingId exists
@@ -171,7 +254,7 @@ export function useShipmentsQuery(filters = {}) {
         queryKey: queryKeys.shipments.list(filters),
         queryFn: async () => {
             const response = await bookingService.getBookings(filters)
-            return response.data?.shipments || []
+            return httpClient.extractList(response).records
         },
         staleTime: 2 * 60 * 1000, // 2 minutes
     })
@@ -311,6 +394,91 @@ export function useShipmentDetailsQuery(shipmentId) {
                         { status: 'in_transit', label: 'In Transit', timestamp: new Date(Date.now() - 129600000).toLocaleString(), completed: true, current: false },
                         { status: 'delivered', label: 'Delivered', timestamp: new Date(Date.now() - 18000000).toLocaleString(), completed: true, current: true }
                     ]
+                }
+            }
+
+            if (/^[0-9a-fA-F]{24}$/.test(shipmentId?.trim())) {
+                let booking = null
+                
+                // Try direct call
+                 try {
+                     const response = await bookingService.getBookingById(shipmentId.trim())
+                     const extracted = httpClient.extractData(response)
+                     if (extracted && extracted._id) {
+                         booking = extracted
+                     }
+                 } catch (err) {
+                     console.warn('getBookingById details failed with error:', err)
+                 }
+
+                // Fallback to user bookings list if direct call failed
+                if (!booking) {
+                    try {
+                        const listResponse = await bookingService.getBookings({ limit: 100 })
+                        const { records } = httpClient.extractList(listResponse)
+                        booking = records.find(b => b._id === shipmentId.trim())
+                    } catch (listErr) {
+                        console.warn('Failed to fetch user bookings list details fallback:', listErr)
+                    }
+                }
+
+                // Fallback to admin bookings list if still not found
+                if (!booking) {
+                    try {
+                        const adminListResponse = await bookingService.getAdminBookings({ limit: 100 })
+                        const { records } = httpClient.extractList(adminListResponse)
+                        booking = records.find(b => b._id === shipmentId.trim())
+                    } catch (adminErr) {
+                        console.warn('Failed to fetch admin bookings list details fallback:', adminErr)
+                    }
+                }
+
+                if (booking) {
+                    const loc = booking.dropoffLocation
+                    const destString = loc ? (typeof loc === 'string' ? loc : `${loc.city || ''} ${loc.address || ''}`.trim()) : ''
+                    
+                    const driverObj = booking.truck?.driver
+                    const truckObj = booking.truck
+
+                    const timeline = [
+                        { status: 'booking_created', label: 'Booking Created', timestamp: new Date(booking.createdAt).toLocaleString(), completed: true, current: booking.status === 'pending' },
+                        { status: 'pending', label: 'Pending Review', timestamp: booking.status !== 'pending' ? new Date(booking.updatedAt).toLocaleString() : '---', completed: booking.status !== 'pending', current: booking.status === 'pending' },
+                        { status: 'confirmed', label: 'Confirmed', timestamp: ['processing', 'in_transit', 'delivered'].includes(booking.status) ? new Date(booking.updatedAt).toLocaleString() : '---', completed: ['processing', 'in_transit', 'delivered'].includes(booking.status), current: booking.status === 'processing' },
+                        { status: 'in_transit', label: 'In Transit', timestamp: ['in_transit', 'delivered'].includes(booking.status) ? new Date(booking.updatedAt).toLocaleString() : '---', completed: ['in_transit', 'delivered'].includes(booking.status), current: booking.status === 'in_transit' },
+                        { status: 'delivered', label: 'Delivered', timestamp: booking.status === 'delivered' ? new Date(booking.updatedAt).toLocaleString() : '---', completed: booking.status === 'delivered', current: booking.status === 'delivered' }
+                    ]
+
+                    return {
+                        id: booking._id,
+                        status: booking.status || 'pending',
+                        customerName: booking.fullNameOrBusiness || 'Client',
+                        customerEmail: booking.email || '',
+                        customerPhone: booking.contactPhone || '',
+                        pickupAddress: booking.pickupLocation || '',
+                        deliveryAddress: destString,
+                        pickupCity: booking.pickupLocation || '',
+                        deliveryCity: loc?.city || '',
+                        weight: booking.cargoWeightKg || 0,
+                        cargoType: booking.goodsType || 'General Cargo',
+                        serviceType: booking.vehicleType || 'Standard Truck',
+                        createdAt: new Date(booking.createdAt).toLocaleString(),
+                        pickupDate: booking.estimatedPickupDate ? new Date(booking.estimatedPickupDate).toLocaleString() : 'TBD',
+                        estimatedDelivery: booking.estimatedDeliveryDate ? new Date(booking.estimatedDeliveryDate).toLocaleString() : 'TBD',
+                        driver: driverObj ? {
+                            name: driverObj.name || 'Driver',
+                            phone: driverObj.phoneNumber || '',
+                            vehicle: truckObj ? `${truckObj.make || ''} ${truckObj.model || ''}`.trim() : 'Truck',
+                            plate: truckObj?.plateNumber || '',
+                            photo: driverObj.passportPhoto?.url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256'
+                        } : null,
+                        currentLocation: {
+                            city: booking.status === 'delivered' ? (loc?.city || 'Destination') : (booking.pickupLocation || 'Origin'),
+                            lat: booking.status === 'delivered' ? (booking.dropOffCoordinates?.lat || 0) : 0,
+                            lng: booking.status === 'delivered' ? (booking.dropOffCoordinates?.lng || 0) : 0,
+                            timestamp: new Date().toLocaleString()
+                        },
+                        timeline: timeline
+                    }
                 }
             }
 

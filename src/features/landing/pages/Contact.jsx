@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { ArrowUpRight, Check, MapPin } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import SEO from '@/components/common/SEO'
+import httpClient from '@/services/httpClient'
 
 const ease = [0.16, 1, 0.3, 1]
 
@@ -48,10 +49,48 @@ export default function Contact() {
     consent: false
   })
   const [sent, setSent] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    setSent(true)
+    setSubmitting(true)
+    setError('')
+
+    try {
+      // Map frontend form fields to backend Contact model:
+      // { name (required), email (required), phone (optional), subject (required), message (required) }
+      const requirementLabels = {
+        pharma: 'Pharmaceuticals & Vaccines Logistics',
+        frozen: 'Frozen Foods & Cold Storage Transport',
+        perishable: 'Fresh Fruits, Veggies & Perishables',
+        haulage: 'Dedicated Fleet Refrigerated Haulage',
+      }
+
+      const payload = {
+        name: `${form.firstName} ${form.lastName}`.trim(),
+        email: form.email,
+        phone: form.phone || undefined,
+        subject: requirementLabels[form.requirement] || form.requirement || 'General Enquiry',
+        message: [
+          `Origin: ${form.origin || 'Not specified'}`,
+          `Expected Volume: ${form.volume || 'Not specified'}`,
+          `Website: ${form.website || 'Not provided'}`,
+        ].join('\n'),
+      }
+
+      await httpClient.request('/contact/', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      })
+
+      setSent(true)
+    } catch (err) {
+      console.error('Contact form submission failed:', err)
+      setError(err?.message || 'Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -300,13 +339,27 @@ export default function Contact() {
                   </label>
                 </div>
 
+                {/* Error Message */}
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm font-medium">
+                    {error}
+                  </div>
+                )}
+
                 {/* Submit Button */}
                 <div className="pt-2">
                   <button
                     type="submit"
-                    className="px-8 py-3 bg-[#0056B8] hover:bg-[#004bb0] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.98] shadow-md"
+                    disabled={submitting}
+                    className="px-8 py-3 bg-[#0056B8] hover:bg-[#004bb0] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.98] shadow-md disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    Submit
+                    {submitting && (
+                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                      </svg>
+                    )}
+                    {submitting ? 'Sending…' : 'Submit'}
                   </button>
                 </div>
 

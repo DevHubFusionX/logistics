@@ -1,30 +1,21 @@
-import httpClient from './httpClient'
+/**
+ * temperatureService — STUB
+ *
+ * The backend does NOT have any /temperature/ routes.
+ * All methods below are stubs that log a warning and resolve with empty data.
+ */
+const noOp = (name) => (...args) => {
+  console.warn(`temperatureService.${name}() called — no backend endpoint exists.`)
+  return Promise.resolve({ data: [], message: 'Not implemented' })
+}
 
 export default {
-  getMonitoring: (params = {}) => httpClient.request('/temperature/monitoring', {}, params),
-  getHistory: (truckId, params = {}) => {
-    if (!truckId) throw new Error('truckId is required')
-    return httpClient.request(`/temperature/history/${encodeURIComponent(truckId)}`, {}, params)
-  },
-  getAlerts: (params = {}) => httpClient.request('/temperature/alerts', {}, params),
-  acknowledgeAlert: (alertId, acknowledgeData) => {
-    if (!alertId) throw new Error('alertId is required')
-    return httpClient.request(`/temperature/alerts/${encodeURIComponent(alertId)}/acknowledge`, {
-      method: 'POST',
-      body: JSON.stringify(acknowledgeData)
-    })
-  },
-  resolveAlert: (alertId, resolutionData) => {
-    if (!alertId) throw new Error('alertId is required')
-    return httpClient.request(`/temperature/alerts/${encodeURIComponent(alertId)}/resolve`, {
-      method: 'POST',
-      body: JSON.stringify(resolutionData)
-    })
-  },
-  getComplianceReport: (params = {}) => httpClient.request('/temperature/compliance', {}, params),
-  updateThresholds: (thresholdData) => httpClient.request('/temperature/thresholds', {
-    method: 'PUT',
-    body: JSON.stringify(thresholdData)
-  }),
-  getAnalytics: (params = {}) => httpClient.request('/temperature/analytics', {}, params)
+  getMonitoring: noOp('getMonitoring'),
+  getHistory: noOp('getHistory'),
+  getAlerts: noOp('getAlerts'),
+  acknowledgeAlert: noOp('acknowledgeAlert'),
+  resolveAlert: noOp('resolveAlert'),
+  getComplianceReport: noOp('getComplianceReport'),
+  updateThresholds: noOp('updateThresholds'),
+  getAnalytics: noOp('getAnalytics'),
 }

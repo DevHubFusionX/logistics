@@ -107,7 +107,7 @@ export const validateField = (name, value, formData = {}) => {
     case 'pickupPersonEmail':
     case 'receiverPersonEmail':
       return validateEmail(value) ? '' : 'Invalid email format'
-    
+    estimatedDeliveryDate
     case 'contactPhone':
     case 'pickupPersonPhone':
     case 'receiverPersonPhone':

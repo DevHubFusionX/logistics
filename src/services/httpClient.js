@@ -7,7 +7,7 @@ const ALLOWED_ENDPOINTS = [
   '/auth', '/user', '/users', '/addresses', '/shipments',
   '/drivers', '/driver', '/truck', '/trucks', '/fleet', '/trips',
   '/bookings', '/analytics', '/payments', '/payment',
-  '/pricing', '/tracking', '/admin'
+  '/pricing', '/tracking', '/admin', '/contact'
 ]
 
 // Queue of pending requests waiting for a token refresh

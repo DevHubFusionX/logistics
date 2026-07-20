@@ -10,12 +10,12 @@ import toast from 'react-hot-toast'
 import TrackingMap from '../../features/tracking/components/tracking/TrackingMap'
 
 const STATUS_CONFIG = {
-  pending:    { label: 'Pending',    pill: 'bg-amber-50 text-amber-700 border-amber-200'   },
-  confirmed:  { label: 'Confirmed',  pill: 'bg-sky-50 text-sky-700 border-sky-200'         },
-  processing: { label: 'Processing', pill: 'bg-sky-50 text-sky-700 border-sky-200'         },
+  pending: { label: 'Pending', pill: 'bg-amber-50 text-amber-700 border-amber-200' },
+  confirmed: { label: 'Confirmed', pill: 'bg-sky-50 text-sky-700 border-sky-200' },
+  processing: { label: 'Processing', pill: 'bg-sky-50 text-sky-700 border-sky-200' },
   in_transit: { label: 'In Transit', pill: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  delivered:  { label: 'Delivered',  pill: 'bg-gray-100 text-gray-600 border-gray-200'     },
-  cancelled:  { label: 'Cancelled',  pill: 'bg-red-50 text-red-600 border-red-200'         },
+  delivered: { label: 'Delivered', pill: 'bg-gray-100 text-gray-600 border-gray-200' },
+  cancelled: { label: 'Cancelled', pill: 'bg-red-50 text-red-600 border-red-200' },
 }
 
 function InfoTile({ icon: Icon, label, value }) {
@@ -32,7 +32,7 @@ function InfoTile({ icon: Icon, label, value }) {
 
 export default function TrackShipment() {
   const [trackingId, setTrackingId] = useState('')
-  const [searchId, setSearchId]     = useState('')
+  const [searchId, setSearchId] = useState('')
 
   const { data: shipment, isLoading, error, refetch } = useTrackingQuery(searchId, {
     enabled: !!searchId
@@ -174,17 +174,16 @@ export default function TrackShipment() {
               <h2 className="font-heading font-bold text-sm text-gray-900 mb-5">Shipment timeline</h2>
               <div className="space-y-0">
                 {shipment.timeline.map((event, i) => {
-                  const isLast    = i === shipment.timeline.length - 1
+                  const isLast = i === shipment.timeline.length - 1
                   const isCurrent = !event.completed && shipment.timeline[i - 1]?.completed
                   return (
                     <div key={i} className="flex gap-4">
                       {/* Dot + line */}
                       <div className="flex flex-col items-center flex-shrink-0">
-                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center z-10 ${
-                          event.completed ? 'bg-sky-700' :
-                          isCurrent       ? 'bg-white border-2 border-sky-700' :
-                                            'bg-gray-100'
-                        }`}>
+                        <div className={`w-8 h-8 rounded-xl flex items-center justify-center z-10 ${event.completed ? 'bg-sky-700' :
+                            isCurrent ? 'bg-white border-2 border-sky-700' :
+                              'bg-gray-100'
+                          }`}>
                           {event.completed
                             ? <CheckCircle className="w-4 h-4 text-white" />
                             : isCurrent
@@ -218,8 +217,8 @@ export default function TrackShipment() {
               <h2 className="font-heading font-bold text-sm text-gray-900 mb-4">Shipment details</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 <InfoTile icon={Calendar} label="Est. delivery" value={shipment.estimatedDelivery} />
-                <InfoTile icon={Truck}    label="Driver"        value={shipment.driver !== 'Not assigned' ? shipment.driver : null} />
-                <InfoTile icon={Package}  label="Vehicle"       value={shipment.vehicle !== 'Not assigned' ? shipment.vehicle : null} />
+                <InfoTile icon={Truck} label="Driver" value={shipment.driver !== 'Not assigned' ? shipment.driver : null} />
+                <InfoTile icon={Package} label="Vehicle" value={shipment.vehicle !== 'Not assigned' ? shipment.vehicle : null} />
               </div>
             </div>
 

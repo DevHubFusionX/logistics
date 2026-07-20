@@ -4,6 +4,7 @@ import { PageHeader } from '@/features/dashboard'
 import { CreditCard, CheckCircle, Clock, Download, RefreshCw, AlertCircle, TrendingUp, Search, Calendar } from 'lucide-react'
 import { usePaymentHistoryQuery } from '@/features/user/hooks/queries/usePaymentHistoryQuery'
 import { TableSkeleton, StatCardSkeleton } from '@/components/common/SkeletonLoaders'
+import ComingSoonOverlay from '@/components/common/ComingSoonOverlay'
 
 const DATE_RANGES = [
   { label: 'All Time', value: 'all' },
@@ -94,7 +95,11 @@ export default function PaymentHistory() {
   }
 
   return (
-    <div className="space-y-6 pb-6">
+    <div className="space-y-6 pb-6 relative min-h-[500px]">
+      <ComingSoonOverlay
+        title="Financial History"
+        description="The transaction history system is under development. In the meantime, you can track individual booking statuses and payment receipts directly from your booking list."
+      />
       <div className="flex items-center justify-between">
         <PageHeader title="Financial History" subtitle="Consolidated view of all completed transactions" />
         <button

@@ -4,45 +4,50 @@ import { MapPin, Gauge, ShieldCheck, Thermometer, Clock, Navigation } from 'luci
 // Coordinate lookup for Nigerian cities to plot OSRM routes
 const CITY_COORDS = {
   'LAGOS': { lat: 6.5244, lng: 3.3792 },
+  'WARRI': { lat: 5.5184, lng: 5.7512 },
+  'BENIN': { lat: 6.3350, lng: 5.6037 },
+  'ENUGU': { lat: 6.4584, lng: 7.5464 },
+  'PORT HARCOURT': { lat: 4.8156, lng: 7.0498 },
+  'ABUJA': { lat: 9.0765, lng: 7.3986 },
   'IBADAN': { lat: 7.3775, lng: 3.9470 },
   'LOKOJA': { lat: 7.8024, lng: 6.7333 },
-  'ABUJA': { lat: 9.0765, lng: 7.3986 },
   'ILORIN': { lat: 8.4799, lng: 4.5418 },
   'KADUNA': { lat: 10.5105, lng: 7.4165 },
-  'KANO': { lat: 12.0022, lng: 8.5920 },
-  'PORT HARCOURT': { lat: 4.8156, lng: 7.0498 }
+  'KANO': { lat: 12.0022, lng: 8.5920 }
 }
-
-const CHECKPOINTS_LAGOS_ABUJA = [
-  { city: 'Lagos (Ketu)', lat: 6.5976, lng: 3.3853 },
-  { city: 'Sagamu Interchange', lat: 6.8402, lng: 3.6428 },
-  { city: 'Ibadan Bypass', lat: 7.3775, lng: 3.9470 },
-  { city: 'Akure Junction', lat: 7.2571, lng: 5.2058 },
-  { city: 'Okene Bypass', lat: 7.5489, lng: 6.2367 },
-  { city: 'Lokoja Bypass', lat: 7.8024, lng: 6.7333 },
-  { city: 'Gwagwalada', lat: 8.9515, lng: 7.0754 },
-  { city: 'Abuja (Garki)', lat: 9.0192, lng: 7.4184 }
-]
-
-const CHECKPOINTS_LAGOS_KANO = [
-  { city: 'Lagos (Ketu)', lat: 6.5976, lng: 3.3853 },
-  { city: 'Ilorin Bypass', lat: 8.4799, lng: 4.5418 },
-  { city: 'Kaduna Bypass', lat: 10.5105, lng: 7.4165 },
-  { city: 'Kano (Fagge)', lat: 12.0022, lng: 8.5920 }
-]
 
 function resolveCityCoords(cityText, defaultCoords) {
   if (!cityText) return defaultCoords
   const upper = cityText.toUpperCase()
+  const matches = []
   for (const [key, value] of Object.entries(CITY_COORDS)) {
-    if (upper.includes(key)) {
-      return value
+    const idx = upper.indexOf(key)
+    if (idx !== -1) {
+      matches.push({ key, value, idx })
     }
+  }
+  if (matches.length > 0) {
+    matches.sort((a, b) => a.idx - b.idx)
+    return matches[0].value
   }
   return defaultCoords
 }
 
+function getClosestCityName(lat, lng) {
+  let closestName = 'In Transit'
+  let minDist = Infinity
+  for (const [name, coords] of Object.entries(CITY_COORDS)) {
+    const dist = Math.pow(coords.lat - lat, 2) + Math.pow(coords.lng - lng, 2)
+    if (dist < minDist) {
+      minDist = dist
+      closestName = name.charAt(0) + name.slice(1).toLowerCase()
+    }
+  }
+  return closestName
+}
+
 function getNearestCheckpoint(lat, lng, checkpoints) {
+  if (!checkpoints || checkpoints.length === 0) return 'In Transit'
   let nearest = checkpoints[0].city
   let minDist = Infinity
   for (const cp of checkpoints) {
@@ -63,11 +68,28 @@ const loadLeaflet = () => {
       return
     }
 
+    let cssLoaded = false
+    let jsLoaded = false
+
+    const checkLoaded = () => {
+      if (cssLoaded && jsLoaded) {
+        resolve(window.L)
+      }
+    }
+
     const link = document.createElement('link')
     link.rel = 'stylesheet'
     link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
     link.integrity = 'sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY='
     link.crossOrigin = ''
+    link.onload = () => {
+      cssLoaded = true
+      checkLoaded()
+    }
+    link.onerror = () => {
+      cssLoaded = true
+      checkLoaded()
+    }
     document.head.appendChild(link)
 
     const script = document.createElement('script')
@@ -75,7 +97,12 @@ const loadLeaflet = () => {
     script.integrity = 'sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo='
     script.crossOrigin = ''
     script.onload = () => {
-      resolve(window.L)
+      jsLoaded = true
+      checkLoaded()
+    }
+    script.onerror = () => {
+      jsLoaded = true
+      checkLoaded()
     }
     document.body.appendChild(script)
   })
@@ -95,33 +122,24 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     const storageKey = `tracking_index_${shipment.id}`
     const stored = sessionStorage.getItem(storageKey)
     let startIdx = 0
-    if (stored !== null) {
-      const parsed = parseInt(stored, 10)
-      if (!isNaN(parsed) && parsed < routeCoordinates.length) {
-        startIdx = parsed
-      } else {
-        if (shipment.id === 'DARA-BK100190726') {
-          startIdx = Math.floor(routeCoordinates.length * 0.46)
-        } else if (shipment.id === 'DARA-BK300390726') {
-          startIdx = Math.floor(routeCoordinates.length * 0.60)
+
+    if (shipment.status !== 'in_transit' && shipment.status !== 'delivered') {
+      startIdx = 0
+    } else if (shipment.status === 'delivered') {
+      startIdx = routeCoordinates.length - 1
+    } else {
+      if (stored !== null) {
+        const parsed = parseInt(stored, 10)
+        if (!isNaN(parsed) && parsed < routeCoordinates.length) {
+          startIdx = parsed
         } else {
           const randomPct = 0.25 + Math.random() * 0.5
           startIdx = Math.floor(routeCoordinates.length * randomPct)
         }
-      }
-    } else {
-      if (shipment.id === 'DARA-BK100190726') {
-        startIdx = Math.floor(routeCoordinates.length * 0.46)
-      } else if (shipment.id === 'DARA-BK300390726') {
-        startIdx = Math.floor(routeCoordinates.length * 0.60)
       } else {
         const randomPct = 0.25 + Math.random() * 0.5
         startIdx = Math.floor(routeCoordinates.length * randomPct)
       }
-    }
-
-    if (shipment.status === 'delivered') {
-      startIdx = routeCoordinates.length - 1
     }
 
     sessionStorage.setItem(storageKey, startIdx.toString())
@@ -143,10 +161,36 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
 
   const startCoords = resolveCityCoords(originText, CITY_COORDS.LAGOS)
   const endCoords = resolveCityCoords(destinationText, CITY_COORDS.ABUJA)
-  const isKano = destinationText.toUpperCase().includes('KANO')
-  const checkpoints = isKano ? CHECKPOINTS_LAGOS_KANO : CHECKPOINTS_LAGOS_ABUJA
 
-  const totalDistance = isKano ? 990 : 740 // km
+  // Calculate dynamic driving distance estimation (Haversine * 1.3 winding factor)
+  const getDistanceKm = (c1, c2) => {
+    const R = 6371
+    const dLat = (c2.lat - c1.lat) * Math.PI / 180
+    const dLng = (c2.lng - c1.lng) * Math.PI / 180
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(c1.lat * Math.PI / 180) * Math.cos(c2.lat * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2)
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    return Math.max(10, Math.round(R * c * 1.3))
+  }
+
+  const totalDistance = getDistanceKm(startCoords, endCoords)
+
+  const checkpoints = routeCoordinates.length > 0
+    ? [0, 0.2, 0.4, 0.6, 0.8, 1].map((pct) => {
+        const idx = Math.floor((routeCoordinates.length - 1) * pct)
+        const pt = routeCoordinates[idx]
+        const cityName = getClosestCityName(pt.lat, pt.lng)
+        return {
+          city: pct === 0 ? originText : pct === 1 ? destinationText : `Near ${cityName}`,
+          lat: pt.lat,
+          lng: pt.lng
+        }
+      })
+    : [
+        { city: originText, ...startCoords },
+        { city: destinationText, ...endCoords }
+      ]
 
   // Fetch OSRM route
   useEffect(() => {
@@ -247,10 +291,10 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
       })
       L.marker([endCoords.lat, endCoords.lng], { icon: endIcon }).addTo(mapInstance)
 
-      // Add Truck Marker
+      const isMoving = shipment.status === 'in_transit'
       const truckIcon = L.divIcon({
         className: 'custom-truck-marker',
-        html: '<div style="font-size: 32px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transform: scaleX(-1); transition: transform 0.1s linear;" class="animate-bounce-subtle">🚚</div>',
+        html: `<div style="font-size: 32px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); transform: scaleX(-1); transition: transform 0.1s linear;" class="${isMoving ? 'animate-bounce-subtle' : ''}">🚚</div>`,
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       })
@@ -265,6 +309,12 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
       })
 
       setMapLoaded(true)
+
+      setTimeout(() => {
+        if (mapInstanceRef.current) {
+          mapInstanceRef.current.invalidateSize()
+        }
+      }, 250)
     })
 
     return () => {
@@ -277,6 +327,26 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
   // Animation Engine
   useEffect(() => {
     if (!mapLoaded || routeCoordinates.length === 0 || startIdxRef.current === -1) return
+
+    // If not in transit or delivered (e.g. pending, confirmed, processing), show scheduled status and do not animate
+    if (shipment.status !== 'in_transit' && shipment.status !== 'delivered') {
+      setCurrentPointIndex(0)
+      setTelemetry({
+        speed: 0,
+        distanceRemaining: totalDistance,
+        eta: shipment.estimatedDelivery || 'Scheduled',
+        locationName: originText,
+        temperature: shipment.temperature || 'N/A',
+        status: shipment.status || 'confirmed'
+      })
+      if (truckMarkerRef.current) {
+        truckMarkerRef.current.setLatLng([routeCoordinates[0].lat, routeCoordinates[0].lng])
+      }
+      if (onLocationUpdate) {
+        onLocationUpdate(originText)
+      }
+      return
+    }
 
     // If already delivered, pin to destination and finish
     if (shipment.status === 'delivered') {
@@ -394,11 +464,17 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live Telemetry</span>
               </div>
               <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase ${
-                telemetry.status === 'delivered' 
-                  ? 'bg-emerald-100 text-emerald-700' 
-                  : 'bg-blue-100 text-blue-700'
+                telemetry.status === 'delivered'
+                  ? 'bg-emerald-100 text-emerald-700'
+                  : telemetry.status === 'in_transit'
+                    ? 'bg-blue-100 text-blue-700'
+                    : 'bg-amber-100 text-amber-700'
               }`}>
-                {telemetry.status === 'delivered' ? 'Arrived' : 'In Transit'}
+                {telemetry.status === 'delivered'
+                  ? 'Arrived'
+                  : telemetry.status === 'in_transit'
+                    ? 'In Transit'
+                    : telemetry.status.replace('_', ' ')}
               </span>
             </div>
 

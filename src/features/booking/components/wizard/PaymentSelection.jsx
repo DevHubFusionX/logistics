@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PaymentRecovery } from '@/features/admin/components/payments'
 import { PaymentSummary, PaymentMethodGrid, PaymentMethodContent } from './payment'
 import { validatePaymentMethod } from '@/utils/paymentValidation'
 import { usePaymentStatus } from '@/hooks/usePaymentStatus'
 import { usePaymentVerification } from '@/hooks/usePaymentVerification'
-import { CheckCircle, XCircle, Loader2, RefreshCw, ArrowLeft } from 'lucide-react'
+import { CheckCircle, XCircle, Loader2, RefreshCw, ArrowLeft, ArrowRight } from 'lucide-react'
 import toast from 'react-hot-toast'
 
 // Inline status screen — replaces the nested PaymentStatusModal
@@ -85,6 +86,7 @@ export default function PaymentSelection({
   onPayLater,
   onBack
 }) {
+  const navigate = useNavigate()
   const [paymentRef, setPaymentRef]     = useState(null)
   const [status, setStatus]             = useState(null) // null | 'processing' | 'success' | 'failed' | 'cancelled' | 'timeout'
   const [showRecovery, setShowRecovery] = useState(false)
@@ -180,14 +182,24 @@ export default function PaymentSelection({
         }}
       />
 
-      {!paymentMethod && onBack && (
+      <div className="pt-4 border-t border-gray-100 flex items-center justify-between gap-3">
+        {!paymentMethod && onBack ? (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+          >
+            <ArrowLeft className="w-4 h-4" /> Back
+          </button>
+        ) : <div />}
+
         <button
-          onClick={onBack}
-          className="flex items-center gap-1.5 text-sm font-semibold text-gray-400 hover:text-gray-600 transition-colors"
+          type="button"
+          onClick={() => navigate('/my-bookings')}
+          className="px-4 py-2.5 border border-gray-200 text-gray-600 hover:bg-gray-50 text-xs font-bold rounded-xl transition-colors cursor-pointer flex items-center gap-1"
         >
-          <ArrowLeft className="w-4 h-4" /> Back
+          Pay later / View bookings <ArrowRight className="w-3.5 h-3.5" />
         </button>
-      )}
+      </div>
 
       {showRecovery && (
         <PaymentRecovery

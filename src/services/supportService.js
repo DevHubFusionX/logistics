@@ -1,36 +1,20 @@
-import httpClient from './httpClient'
+/**
+ * supportService — STUB
+ *
+ * The backend does NOT have any /support/ routes.
+ * All methods below are stubs that log a warning and resolve with empty data.
+ */
+const noOp = (name) => (...args) => {
+  console.warn(`supportService.${name}() called — no backend endpoint exists. This is a no-op.`)
+  return Promise.resolve({ data: [], message: 'Not implemented' })
+}
 
 const supportService = {
-    getTickets: (params = {}) => {
-        return httpClient.request('/support/tickets', {}, params)
-    },
-
-    getTicket: (ticketId) => {
-        if (!ticketId) throw new Error('ticketId is required')
-        return httpClient.request(`/support/tickets/${encodeURIComponent(ticketId)}`)
-    },
-
-    createTicket: (ticketData) => {
-        return httpClient.request('/support/tickets', {
-            method: 'POST',
-            body: JSON.stringify(ticketData)
-        })
-    },
-
-    addTicketMessage: (ticketId, message) => {
-        if (!ticketId) throw new Error('ticketId is required')
-        return httpClient.request(`/support/tickets/${encodeURIComponent(ticketId)}/messages`, {
-            method: 'POST',
-            body: JSON.stringify({ message })
-        })
-    },
-
-    resolveTicket: (ticketId) => {
-        if (!ticketId) throw new Error('ticketId is required')
-        return httpClient.request(`/support/tickets/${encodeURIComponent(ticketId)}/resolve`, {
-            method: 'POST'
-        })
-    }
+  getTickets: noOp('getTickets'),
+  getTicket: noOp('getTicket'),
+  createTicket: noOp('createTicket'),
+  addTicketMessage: noOp('addTicketMessage'),
+  resolveTicket: noOp('resolveTicket'),
 }
 
 export default supportService

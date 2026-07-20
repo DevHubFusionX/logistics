@@ -5,6 +5,8 @@ import { useUserAnalyticsSummaryQuery } from '@/features/user/hooks/queries/useA
 import { useShipmentsQuery } from '@/hooks/queries/useTrackingQueries'
 import { MetricSkeleton } from '@/components/common/SkeletonLoaders'
 import { MetricCard } from '@/components/ui'
+import ComingSoonOverlay from '@/components/common/ComingSoonOverlay'
+import { Calendar, DollarSign, Package, TrendingUp, BarChart3, PieChart, Map as MapIcon, Clock } from 'lucide-react'
 
 function MyAnalytics() {
     const [period, setPeriod] = useState('month')
@@ -121,7 +123,11 @@ function MyAnalytics() {
     }
 
     return (
-        <div className="space-y-6 pb-6">
+        <div className="space-y-6 pb-6 relative min-h-[500px]">
+            <ComingSoonOverlay
+                title="Logistics Insights"
+                description="Advanced analytics and reporting features are under development. Stay tuned for comprehensive performance metrics."
+            />
             <PageHeader
                 title="Logistics Insights"
                 subtitle="Performance metrics and financial overview"

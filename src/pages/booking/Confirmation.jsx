@@ -2,23 +2,11 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { CheckCircle, MapPin, Package, Calendar, FileText, Home } from 'lucide-react'
 import { ReceiptDownload, InvoiceGenerator } from '@/features/admin/components/payments'
-import notificationService from '../../services/notificationService'
 
 export default function Confirmation() {
   const location = useLocation()
   const navigate = useNavigate()
   const { bookingData, quote, bookingId, paymentId } = location.state || {}
-
-  useEffect(() => {
-    if (bookingId && bookingData?.email) {
-      notificationService.sendBookingConfirmation(bookingId, bookingData.email)
-        .catch(err => console.error('Failed to send confirmation email:', err))
-      if (bookingData?.contactPhone) {
-        notificationService.sendBookingSMS(bookingId, bookingData.contactPhone)
-          .catch(err => console.error('Failed to send SMS:', err))
-      }
-    }
-  }, [bookingId, bookingData])
 
   if (!bookingData) {
     navigate('/booking/request')

@@ -92,6 +92,12 @@ export const getErrorCode = (error) => {
 }
 
 export const getUserFriendlyMessage = (error) => {
+  if (error) {
+    const rawMsg = error.message || error.response?.data?.message || (typeof error === 'string' ? error : '')
+    if (rawMsg && !rawMsg.toLowerCase().includes('something went wrong') && !rawMsg.toLowerCase().includes('apierror') && !rawMsg.toLowerCase().includes('httperror')) {
+      return rawMsg
+    }
+  }
   const code = getErrorCode(error)
   return ERROR_MESSAGES[code] || ERROR_MESSAGES[ERROR_CODES.UNKNOWN_ERROR]
 }
