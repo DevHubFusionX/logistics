@@ -3,6 +3,7 @@ import { queryKeys } from '../../lib/queryClient'
 import { bookingService } from '@/features/booking'
 import httpClient from '@/services/httpClient'
 import toast from 'react-hot-toast'
+import { useAuthStore } from '../../stores/authStore'
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -151,43 +152,107 @@ export function useTrackingQuery(trackingId, options = {}) {
             }
 
             if (/^[0-9a-fA-F]{24}$/.test(trackingId?.trim())) {
+                if (!httpClient.getToken()) {
+                    throw new Error("Shipment not found. Please verify the tracking number.")
+                }
                 let booking = null
-                
-                // Try direct call
+                const tid = trackingId.trim()
+                console.log('[TRACK] Searching for booking ID:', tid)
+
+                // 1. Try user's own bookings list (no populate, reliable)
                 try {
-                    const response = await bookingService.getBookingById(trackingId.trim())
-                    const extracted = httpClient.extractData(response)
-                    if (extracted && extracted._id) {
-                        booking = extracted
-                    }
-                } catch (err) {
-                    console.warn('getBookingById failed with error:', err)
+                    const listResponse = await bookingService.getBookings({ limit: 200 })
+                    const { records } = httpClient.extractList(listResponse)
+                    console.log('[TRACK] Step 1 - user bookings list records count:', records.length, 'IDs:', records.map(b => b._id))
+                    booking = records.find(b => b._id === tid)
+                    console.log('[TRACK] Step 1 result:', booking ? 'FOUND' : 'not found')
+                } catch (listErr) {
+                    console.warn('[TRACK] Step 1 failed:', listErr.message)
                 }
 
-                // Fallback to user bookings list if direct call failed
+                // 2. Try all-bookings list endpoint (no populate, reliable)
                 if (!booking) {
                     try {
-                        const listResponse = await bookingService.getBookings({ limit: 100 })
-                        const { records } = httpClient.extractList(listResponse)
-                        booking = records.find(b => b._id === trackingId.trim())
-                    } catch (listErr) {
-                        console.warn('Failed to fetch user bookings list fallback:', listErr)
+                        const allResponse = await httpClient.request('/bookings/', {}, { limit: 200 })
+                        console.log('[TRACK] Step 2 - all bookings raw response:', allResponse)
+                        const { records } = httpClient.extractList(allResponse)
+                        console.log('[TRACK] Step 2 - all bookings records count:', records.length)
+                        booking = records.find(b => b._id === tid)
+                        console.log('[TRACK] Step 2 result:', booking ? 'FOUND' : 'not found')
+                    } catch (allErr) {
+                        console.warn('[TRACK] Step 2 failed:', allErr.message)
                     }
                 }
 
-                // Fallback to admin bookings list if still not found
+                // 3. Try admin bookings list
                 if (!booking) {
                     try {
-                        const adminListResponse = await bookingService.getAdminBookings({ limit: 100 })
+                        const adminListResponse = await bookingService.getAdminBookings({ limit: 200 })
                         const { records } = httpClient.extractList(adminListResponse)
-                        booking = records.find(b => b._id === trackingId.trim())
+                        console.log('[TRACK] Step 3 - admin bookings records count:', records.length)
+                        booking = records.find(b => b._id === tid)
+                        console.log('[TRACK] Step 3 result:', booking ? 'FOUND' : 'not found')
                     } catch (adminErr) {
-                        console.warn('Failed to fetch admin bookings list fallback:', adminErr)
+                        console.warn('[TRACK] Step 3 failed:', adminErr.message)
                     }
                 }
+
+                // 4. Last resort: direct by-ID call (may fail due to populate)
+                if (!booking) {
+                    try {
+                        const response = await bookingService.getBookingById(tid)
+                        console.log('[TRACK] Step 4 - direct by-ID raw response:', response)
+                        const extracted = httpClient.extractData(response)
+                        if (extracted && extracted._id) {
+                            booking = extracted
+                        }
+                        console.log('[TRACK] Step 4 result:', booking ? 'FOUND' : 'not found')
+                    } catch (err) {
+                        console.warn('[TRACK] Step 4 failed:', err.message)
+                    }
+                }
+
+                console.log('[TRACK] Final booking object:', booking)
 
                 if (booking) {
-                    const status = booking.status || 'pending'
+                    let status = booking.status || 'pending'
+                    let driverObj = booking.truck?.driver
+                    let truckObj = booking.truck
+                    let trip = null
+
+                    try {
+                        const isAdmin = useAuthStore.getState().getIsAdmin()
+                        const tripsResponse = isAdmin
+                            ? await httpClient.request('/trips/admins', {}, { limit: 100 })
+                            : await httpClient.request('/trips', {}, { limit: 100 })
+                        console.log('[TRACK] Trips raw response:', tripsResponse)
+                        const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
+                        const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
+                        console.log('[TRACK] Trips count:', trips.length)
+
+                        const bId = booking._id || booking.id
+                        trip = trips.find(t => {
+                            const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
+                            return tBookingId === bId
+                        })
+                        console.log('[TRACK] Matched trip:', trip)
+
+                        if (trip) {
+                            if (trip.status === 'active') {
+                                status = 'in_transit'
+                            } else if (trip.status === 'completed') {
+                                status = 'delivered'
+                            } else if (trip.status === 'canceled') {
+                                status = 'cancelled'
+                            }
+                            if (trip.driver) {
+                                driverObj = trip.driver
+                            }
+                        }
+                    } catch (tripErr) {
+                        console.warn('[TRACK] Failed to fetch trips:', tripErr.message)
+                    }
+
                     const timeline = [
                         {
                             status: 'Booked',
@@ -196,36 +261,38 @@ export function useTrackingQuery(trackingId, options = {}) {
                         },
                         {
                             status: 'Confirmed',
-                            date: booking.status !== 'pending' ? new Date(booking.updatedAt).toLocaleString() : '---',
-                            completed: booking.status !== 'pending'
+                            date: status !== 'pending' ? new Date(booking.updatedAt).toLocaleString() : '---',
+                            completed: status !== 'pending'
                         },
                         {
                             status: 'In Transit',
-                            date: ['in_transit', 'delivered'].includes(booking.status) ? new Date(booking.updatedAt).toLocaleString() : '---',
-                            completed: ['in_transit', 'delivered'].includes(booking.status)
+                            date: ['in_transit', 'delivered'].includes(status) ? new Date(booking.updatedAt).toLocaleString() : '---',
+                            completed: ['in_transit', 'delivered'].includes(status)
                         },
                         {
                             status: 'Delivered',
-                            date: booking.status === 'delivered' ? new Date(booking.updatedAt).toLocaleString() : '---',
-                            completed: booking.status === 'delivered'
+                            date: status === 'delivered' ? new Date(booking.updatedAt).toLocaleString() : '---',
+                            completed: status === 'delivered'
                         }
                     ]
                     
                     const loc = booking.dropoffLocation
                     const destString = loc ? (typeof loc === 'string' ? loc : `${loc.city || ''} ${loc.address || ''}`.trim()) : ''
-                    
-                    const driverObj = booking.truck?.driver
-                    const truckObj = booking.truck
+                    const pickupLoc = booking.pickupLocation
+                    const originString = pickupLoc ? (typeof pickupLoc === 'string' ? pickupLoc : `${pickupLoc.city || ''} ${pickupLoc.address || ''}`.trim()) : ''
                     
                     return {
                         id: booking._id,
+                        tripId: trip?._id || trip?.id,
                         status: status,
-                        origin: booking.pickupLocation || 'Lagos',
+                        origin: originString || 'Lagos',
                         destination: destString || 'Destination',
-                        currentLocation: booking.status === 'delivered' ? destString : (booking.pickupLocation || 'In Transit'),
+                        pickupCoordinates: booking.pickupCoordinates || null,
+                        dropOffCoordinates: booking.dropOffCoordinates || null,
+                        currentLocation: status === 'delivered' ? destString : (originString || 'In Transit'),
                         estimatedDelivery: booking.estimatedDeliveryDate ? new Date(booking.estimatedDeliveryDate).toLocaleDateString() : 'TBD',
                         driver: driverObj?.name || 'Assigning Driver...',
-                        vehicle: truckObj ? `${truckObj.color || ''} ${truckObj.make || ''} ${truckObj.model || ''} (${truckObj.plateNumber || ''})`.trim() : 'Assigning Vehicle...',
+                        vehicle: truckObj && typeof truckObj === 'object' ? `${truckObj.color || ''} ${truckObj.make || ''} ${truckObj.model || ''} (${truckObj.plateNumber || ''})`.trim() : 'Assigning Vehicle...',
                         temperature: booking.tempControlCelsius ? `${booking.tempControlCelsius}°C` : 'N/A',
                         timeline: timeline
                     }
@@ -398,65 +465,117 @@ export function useShipmentDetailsQuery(shipmentId) {
             }
 
             if (/^[0-9a-fA-F]{24}$/.test(shipmentId?.trim())) {
+                if (!httpClient.getToken()) {
+                    throw new Error("Shipment not found. Please verify the tracking number.")
+                }
                 let booking = null
+                const sid = shipmentId.trim()
                 
-                // Try direct call
-                 try {
-                     const response = await bookingService.getBookingById(shipmentId.trim())
-                     const extracted = httpClient.extractData(response)
-                     if (extracted && extracted._id) {
-                         booking = extracted
-                     }
-                 } catch (err) {
-                     console.warn('getBookingById details failed with error:', err)
-                 }
+                // 1. Try user's own bookings list (no populate, reliable)
+                try {
+                    const listResponse = await bookingService.getBookings({ limit: 200 })
+                    const { records } = httpClient.extractList(listResponse)
+                    booking = records.find(b => b._id === sid)
+                } catch (listErr) {
+                    console.warn('Failed to fetch user bookings list:', listErr)
+                }
 
-                // Fallback to user bookings list if direct call failed
+                // 2. Try all-bookings list endpoint (no populate, reliable)
                 if (!booking) {
                     try {
-                        const listResponse = await bookingService.getBookings({ limit: 100 })
-                        const { records } = httpClient.extractList(listResponse)
-                        booking = records.find(b => b._id === shipmentId.trim())
-                    } catch (listErr) {
-                        console.warn('Failed to fetch user bookings list details fallback:', listErr)
+                        const allResponse = await httpClient.request('/bookings/', {}, { limit: 200 })
+                        const { records } = httpClient.extractList(allResponse)
+                        booking = records.find(b => b._id === sid)
+                    } catch (allErr) {
+                        console.warn('Failed to fetch all bookings list:', allErr)
                     }
                 }
 
-                // Fallback to admin bookings list if still not found
+                // 3. Try admin bookings list
                 if (!booking) {
                     try {
-                        const adminListResponse = await bookingService.getAdminBookings({ limit: 100 })
+                        const adminListResponse = await bookingService.getAdminBookings({ limit: 200 })
                         const { records } = httpClient.extractList(adminListResponse)
-                        booking = records.find(b => b._id === shipmentId.trim())
+                        booking = records.find(b => b._id === sid)
                     } catch (adminErr) {
-                        console.warn('Failed to fetch admin bookings list details fallback:', adminErr)
+                        console.warn('Failed to fetch admin bookings list:', adminErr)
+                    }
+                }
+
+                // 4. Last resort: direct by-ID call (may fail due to populate)
+                if (!booking) {
+                    try {
+                        const response = await bookingService.getBookingById(sid)
+                        const extracted = httpClient.extractData(response)
+                        if (extracted && extracted._id) {
+                            booking = extracted
+                        }
+                    } catch (err) {
+                        console.warn('getBookingById details failed:', err)
                     }
                 }
 
                 if (booking) {
+                    let status = booking.status || 'pending'
+                    let driverObj = booking.truck?.driver
+                    let truckObj = booking.truck
+
+                    try {
+                        const isAdmin = useAuthStore.getState().getIsAdmin()
+                        const tripsResponse = isAdmin
+                            ? await httpClient.request('/trips/admins', {}, { limit: 100 })
+                            : await httpClient.request('/trips', {}, { limit: 100 })
+                        const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
+                        const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
+                        
+                        const bId = booking._id || booking.id
+                        const trip = trips.find(t => {
+                            const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
+                            return tBookingId === bId
+                        })
+
+                        if (trip) {
+                            if (trip.status === 'active') {
+                                status = 'in_transit'
+                            } else if (trip.status === 'completed') {
+                                status = 'delivered'
+                            } else if (trip.status === 'canceled') {
+                                status = 'cancelled'
+                            }
+                            if (trip.driver) {
+                                driverObj = trip.driver
+                            }
+                        }
+                    } catch (tripErr) {
+                        console.warn('Failed to fetch trips for details tracking query:', tripErr)
+                    }
+
                     const loc = booking.dropoffLocation
                     const destString = loc ? (typeof loc === 'string' ? loc : `${loc.city || ''} ${loc.address || ''}`.trim()) : ''
+                    const pickupLoc = booking.pickupLocation
+                    const originString = pickupLoc ? (typeof pickupLoc === 'string' ? pickupLoc : `${pickupLoc.city || ''} ${pickupLoc.address || ''}`.trim()) : ''
+                    const originCity = pickupLoc ? (typeof pickupLoc === 'string' ? pickupLoc : (pickupLoc.city || '')) : ''
                     
-                    const driverObj = booking.truck?.driver
-                    const truckObj = booking.truck
-
                     const timeline = [
-                        { status: 'booking_created', label: 'Booking Created', timestamp: new Date(booking.createdAt).toLocaleString(), completed: true, current: booking.status === 'pending' },
-                        { status: 'pending', label: 'Pending Review', timestamp: booking.status !== 'pending' ? new Date(booking.updatedAt).toLocaleString() : '---', completed: booking.status !== 'pending', current: booking.status === 'pending' },
-                        { status: 'confirmed', label: 'Confirmed', timestamp: ['processing', 'in_transit', 'delivered'].includes(booking.status) ? new Date(booking.updatedAt).toLocaleString() : '---', completed: ['processing', 'in_transit', 'delivered'].includes(booking.status), current: booking.status === 'processing' },
-                        { status: 'in_transit', label: 'In Transit', timestamp: ['in_transit', 'delivered'].includes(booking.status) ? new Date(booking.updatedAt).toLocaleString() : '---', completed: ['in_transit', 'delivered'].includes(booking.status), current: booking.status === 'in_transit' },
-                        { status: 'delivered', label: 'Delivered', timestamp: booking.status === 'delivered' ? new Date(booking.updatedAt).toLocaleString() : '---', completed: booking.status === 'delivered', current: booking.status === 'delivered' }
+                        { status: 'booking_created', label: 'Booking Created', timestamp: new Date(booking.createdAt).toLocaleString(), completed: true, current: status === 'pending' },
+                        { status: 'pending', label: 'Pending Review', timestamp: status !== 'pending' ? new Date(booking.updatedAt).toLocaleString() : '---', completed: status !== 'pending', current: status === 'pending' },
+                        { status: 'confirmed', label: 'Confirmed', timestamp: ['confirmed', 'processing', 'in_transit', 'delivered'].includes(status) ? new Date(booking.updatedAt).toLocaleString() : '---', completed: ['confirmed', 'processing', 'in_transit', 'delivered'].includes(status), current: status === 'confirmed' || status === 'processing' },
+                        { status: 'in_transit', label: 'In Transit', timestamp: ['in_transit', 'delivered'].includes(status) ? new Date(booking.updatedAt).toLocaleString() : '---', completed: ['in_transit', 'delivered'].includes(status), current: status === 'in_transit' },
+                        { status: 'delivered', label: 'Delivered', timestamp: status === 'delivered' ? new Date(booking.updatedAt).toLocaleString() : '---', completed: status === 'delivered', current: status === 'delivered' }
                     ]
 
                     return {
                         id: booking._id,
-                        status: booking.status || 'pending',
+                        tripId: trip?._id || trip?.id,
+                        status: status,
                         customerName: booking.fullNameOrBusiness || 'Client',
                         customerEmail: booking.email || '',
                         customerPhone: booking.contactPhone || '',
-                        pickupAddress: booking.pickupLocation || '',
+                        pickupAddress: originString,
                         deliveryAddress: destString,
-                        pickupCity: booking.pickupLocation || '',
+                        pickupCoordinates: booking.pickupCoordinates || null,
+                        dropOffCoordinates: booking.dropOffCoordinates || null,
+                        pickupCity: originCity || 'Lagos',
                         deliveryCity: loc?.city || '',
                         weight: booking.cargoWeightKg || 0,
                         cargoType: booking.goodsType || 'General Cargo',
@@ -467,14 +586,14 @@ export function useShipmentDetailsQuery(shipmentId) {
                         driver: driverObj ? {
                             name: driverObj.name || 'Driver',
                             phone: driverObj.phoneNumber || '',
-                            vehicle: truckObj ? `${truckObj.make || ''} ${truckObj.model || ''}`.trim() : 'Truck',
-                            plate: truckObj?.plateNumber || '',
+                            vehicle: truckObj && typeof truckObj === 'object' ? `${truckObj.make || ''} ${truckObj.model || ''}`.trim() : 'Truck',
+                            plate: truckObj && typeof truckObj === 'object' ? truckObj.plateNumber || '' : '',
                             photo: driverObj.passportPhoto?.url || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=256'
                         } : null,
                         currentLocation: {
-                            city: booking.status === 'delivered' ? (loc?.city || 'Destination') : (booking.pickupLocation || 'Origin'),
-                            lat: booking.status === 'delivered' ? (booking.dropOffCoordinates?.lat || 0) : 0,
-                            lng: booking.status === 'delivered' ? (booking.dropOffCoordinates?.lng || 0) : 0,
+                            city: status === 'delivered' ? (loc?.city || 'Destination') : (originCity || 'Origin'),
+                            lat: status === 'delivered' ? (booking.dropOffCoordinates?.lat || 0) : 0,
+                            lng: status === 'delivered' ? (booking.dropOffCoordinates?.lng || 0) : 0,
                             timestamp: new Date().toLocaleString()
                         },
                         timeline: timeline
@@ -491,5 +610,96 @@ export function useShipmentDetailsQuery(shipmentId) {
         retry: false,
         refetchInterval: (data) =>
             data?.status !== 'delivered' && data?.status !== 'cancelled' ? 30000 : false
+    })
+}
+
+/**
+ * Fetch trips for the logged-in user context
+ */
+export function useTripsQuery(filters = {}) {
+    const { user } = useAuthStore()
+    
+    return useQuery({
+        queryKey: ['trips', 'list', filters],
+        queryFn: async () => {
+            const isAdmin = ['Super Admin', 'Dispatcher', 'Admin Manager'].includes(user?.role)
+            const endpoint = isAdmin ? '/trips/admins' : '/trips'
+            const response = await httpClient.request(endpoint, {}, filters)
+            return httpClient.extractList(response)
+        },
+        enabled: !!user,
+        staleTime: 30000,
+    })
+}
+
+/**
+ * Mutation to start a trip (Driver only)
+ */
+export function useStartTripMutation() {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (tripId) => {
+            const response = await httpClient.request(`/trips/start/${tripId}`, {
+                method: 'PATCH'
+            })
+            return httpClient.extractData(response)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['trips'] })
+            queryClient.invalidateQueries({ queryKey: ['bookings'] })
+            queryClient.invalidateQueries({ queryKey: ['shipments'] })
+        }
+    })
+}
+
+/**
+ * Mutation to end a trip (Driver only)
+ */
+export function useEndTripMutation() {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async (tripId) => {
+            const response = await httpClient.request(`/trips/end/${tripId}`, {
+                method: 'PATCH'
+            })
+            return httpClient.extractData(response)
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['trips'] })
+            queryClient.invalidateQueries({ queryKey: ['bookings'] })
+            queryClient.invalidateQueries({ queryKey: ['shipments'] })
+        }
+    })
+}
+
+/**
+ * Fetch a customer Firebase custom token for a trip
+ */
+export function useTripUserTokenQuery(tripId, options = {}) {
+    return useQuery({
+        queryKey: ['trips', 'token', 'user', tripId],
+        queryFn: async () => {
+            const response = await httpClient.request(`/trips/token/users/${tripId}`)
+            return httpClient.extractData(response)
+        },
+        enabled: !!tripId,
+        staleTime: 5 * 60 * 1000, // 5 minutes cache
+        ...options
+    })
+}
+
+/**
+ * Fetch a driver Firebase custom token for a trip
+ */
+export function useTripDriverTokenQuery(tripId, options = {}) {
+    return useQuery({
+        queryKey: ['trips', 'token', 'driver', tripId],
+        queryFn: async () => {
+            const response = await httpClient.request(`/trips/token/drivers/${tripId}`)
+            return httpClient.extractData(response)
+        },
+        enabled: !!tripId,
+        staleTime: 5 * 60 * 1000, // 5 minutes cache
+        ...options
     })
 }

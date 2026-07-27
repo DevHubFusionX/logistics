@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { MapPin, Gauge, ShieldCheck, Thermometer, Clock, Navigation } from 'lucide-react'
+import { auth, database, signInWithCustomToken, ref, onValue } from '@/lib/firebase'
+import { useTripUserTokenQuery } from '@/hooks/queries/useTrackingQueries'
 
 // Coordinate lookup for Nigerian cities to plot OSRM routes
 const CITY_COORDS = {
@@ -116,6 +118,20 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [currentPointIndex, setCurrentPointIndex] = useState(0)
+  const [showTelemetry, setShowTelemetry] = useState(true)
+  const userMarkerRef = useRef(null)
+
+  const updateMapRouteAndMarker = (lat, lng) => {
+    // 1. Update truck marker position
+    if (truckMarkerRef.current) {
+      truckMarkerRef.current.setLatLng([lat, lng])
+    }
+
+    // 2. Center map on the driver's location smoothly
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.panTo([lat, lng], { animate: true, duration: 0.5 })
+    }
+  }
 
   // Initialize start index persistently from sessionStorage or randomly
   if (startIdxRef.current === -1 && routeCoordinates.length > 0) {
@@ -159,8 +175,13 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
   const originText = shipment.origin || shipment.pickupCity || 'Lagos'
   const destinationText = shipment.destination || shipment.deliveryCity || 'Abuja'
 
-  const startCoords = resolveCityCoords(originText, CITY_COORDS.LAGOS)
-  const endCoords = resolveCityCoords(destinationText, CITY_COORDS.ABUJA)
+  const startCoords = shipment.pickupCoordinates && shipment.pickupCoordinates.lat
+    ? { lat: Number(shipment.pickupCoordinates.lat), lng: Number(shipment.pickupCoordinates.lng) }
+    : resolveCityCoords(originText, CITY_COORDS.LAGOS)
+
+  const endCoords = shipment.dropOffCoordinates && shipment.dropOffCoordinates.lat
+    ? { lat: Number(shipment.dropOffCoordinates.lat), lng: Number(shipment.dropOffCoordinates.lng) }
+    : resolveCityCoords(destinationText, CITY_COORDS.ABUJA)
 
   // Calculate dynamic driving distance estimation (Haversine * 1.3 winding factor)
   const getDistanceKm = (c1, c2) => {
@@ -235,7 +256,7 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     return () => {
       active = false
     }
-  }, [originText, destinationText])
+  }, [startCoords.lat, startCoords.lng, endCoords.lat, endCoords.lng])
 
   // Initialize Map
   useEffect(() => {
@@ -260,37 +281,12 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
 
       mapInstanceRef.current = mapInstance
 
-      // Add Tile Layer (modern, sleek grayscale map to make markers stand out)
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+      // Add Tile Layer (OpenStreetMap with high-detail roads and labels for Nigeria)
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19
       }).addTo(mapInstance)
-
-      // Add Route Polyline
-      const latlngs = routeCoordinates.map((c) => [c.lat, c.lng])
-      L.polyline(latlngs, {
-        color: '#0056B8',
-        weight: 4,
-        opacity: 0.8,
-        dashArray: '2, 6'
-      }).addTo(mapInstance)
-
-      // Add Custom Markers
-      const startIcon = L.divIcon({
-        className: 'custom-start-marker',
-        html: '<div style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));">🟢</div>',
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-      })
-      L.marker([startCoords.lat, startCoords.lng], { icon: startIcon }).addTo(mapInstance)
-
-      const endIcon = L.divIcon({
-        className: 'custom-end-marker',
-        html: '<div style="font-size: 24px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.25));">🏁</div>',
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
-      })
-      L.marker([endCoords.lat, endCoords.lng], { icon: endIcon }).addTo(mapInstance)
-
+      // No polylines or start/end markers in simplified tracking mode
+ 
       const isMoving = shipment.status === 'in_transit'
       const truckIcon = L.divIcon({
         className: 'custom-truck-marker',
@@ -298,15 +294,54 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
         iconSize: [32, 32],
         iconAnchor: [16, 16]
       })
-
+ 
       const initialPt = routeCoordinates[startIdxRef.current]
-      const truckMarker = L.marker([initialPt.lat, initialPt.lng], { icon: truckIcon }).addTo(mapInstance)
+      const truckMarker = L.marker([initialPt.lat, initialPt.lng], { icon: truckIcon })
+        .bindPopup('<b>Delivery Vehicle</b>')
+        .addTo(mapInstance)
       truckMarkerRef.current = truckMarker
 
-      // Fit Bounds
-      mapInstance.fitBounds(L.polyline(latlngs).getBounds(), {
-        padding: [40, 40]
-      })
+      // Get User's Current Location (Customer)
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords
+            
+            // Create user location marker (pulsing blue dot using Tailwind)
+            const userIcon = L.divIcon({
+              className: 'custom-user-marker',
+              html: `
+                <div class="relative w-5 h-5">
+                  <div class="absolute w-4 h-4 bg-blue-500 border-2 border-white rounded-full top-0.5 left-0.5 shadow-md z-10"></div>
+                  <div class="absolute w-6 h-6 bg-blue-500/40 rounded-full -top-0.5 -left-0.5 animate-ping z-0"></div>
+                </div>
+              `,
+              iconSize: [24, 24],
+              iconAnchor: [12, 12]
+            })
+
+            const userMarker = L.marker([latitude, longitude], { icon: userIcon })
+              .bindPopup('<b>Your Location</b>')
+              .addTo(mapInstance)
+            
+            userMarkerRef.current = userMarker
+
+            // Auto fit bounds to show both user and truck
+            const bounds = L.latLngBounds([
+              [latitude, longitude],
+              [initialPt.lat, initialPt.lng]
+            ])
+            mapInstance.fitBounds(bounds, { padding: [50, 50] })
+          },
+          (err) => {
+            console.warn('Could not retrieve user location:', err.message)
+          },
+          { enableHighAccuracy: true, timeout: 5000 }
+        )
+      }
+
+      // Center map initially on truck
+      mapInstance.setView([initialPt.lat, initialPt.lng], 12)
 
       setMapLoaded(true)
 
@@ -324,9 +359,87 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     }
   }, [routeCoordinates])
 
+  const tripId = shipment.tripId
+  const isTripActive = shipment.status === 'in_transit' && !!tripId
+
+  // Fetch Firebase token for the user
+  const { data: tokenData } = useTripUserTokenQuery(tripId, {
+    enabled: !!isTripActive
+  })
+  const firebaseUserToken = tokenData?.token
+
+  // Firebase Real-time Subscription Effect
+  useEffect(() => {
+    if (!mapLoaded || !isTripActive || !firebaseUserToken) return
+
+    let firebaseDbUnsubscribe = null
+
+    const connectFirebase = async () => {
+      try {
+        await signInWithCustomToken(auth, firebaseUserToken)
+        const locationRef = ref(database, `/tracking/${tripId}/location`)
+        
+        firebaseDbUnsubscribe = onValue(locationRef, (snapshot) => {
+          const val = snapshot.val()
+          if (!val || typeof val !== 'object') return
+          
+          const { lat, lng } = val
+          
+          // Update Leaflet marker position, route path, and center map
+          updateMapRouteAndMarker(lat, lng)
+          
+          // Calculate distance remaining
+          const currentPt = { lat, lng }
+          const distanceRemaining = getDistanceKm(currentPt, endCoords)
+          
+          // Speed
+          const speed = distanceRemaining === 0 ? 0 : Math.floor(75 + Math.sin(Date.now() / 10000) * 5 + Math.random() * 2)
+          
+          // ETA
+          let etaStr = 'Arrived'
+          if (distanceRemaining > 0) {
+            const hoursLeft = distanceRemaining / (speed || 80)
+            const hrs = Math.floor(hoursLeft)
+            const mins = Math.round((hoursLeft - hrs) * 60)
+            etaStr = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`
+          }
+          
+          // Nearest Town Checkpoint
+          const locationName = getNearestCheckpoint(lat, lng, checkpoints)
+          
+          setTelemetry((prev) => ({
+            ...prev,
+            speed,
+            distanceRemaining,
+            eta: etaStr,
+            locationName,
+            status: 'in_transit'
+          }))
+          
+          if (onLocationUpdate) {
+            onLocationUpdate(locationName)
+          }
+        }, (error) => {
+          console.error("Firebase database onValue error:", error)
+        })
+      } catch (err) {
+        console.error("Firebase custom sign in failed:", err)
+      }
+    }
+
+    connectFirebase()
+
+    return () => {
+      if (firebaseDbUnsubscribe) {
+        firebaseDbUnsubscribe()
+      }
+    }
+  }, [mapLoaded, isTripActive, firebaseUserToken, tripId])
+
   // Animation Engine
   useEffect(() => {
     if (!mapLoaded || routeCoordinates.length === 0 || startIdxRef.current === -1) return
+    if (isTripActive && firebaseUserToken) return
 
     // If not in transit or delivered (e.g. pending, confirmed, processing), show scheduled status and do not animate
     if (shipment.status !== 'in_transit' && shipment.status !== 'delivered') {
@@ -339,9 +452,7 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
         temperature: shipment.temperature || 'N/A',
         status: shipment.status || 'confirmed'
       })
-      if (truckMarkerRef.current) {
-        truckMarkerRef.current.setLatLng([routeCoordinates[0].lat, routeCoordinates[0].lng])
-      }
+      updateMapRouteAndMarker(routeCoordinates[0].lat, routeCoordinates[0].lng)
       if (onLocationUpdate) {
         onLocationUpdate(originText)
       }
@@ -352,6 +463,8 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     if (shipment.status === 'delivered') {
       const finalIdx = routeCoordinates.length - 1
       setCurrentPointIndex(finalIdx)
+      const storageKey = `tracking_index_${shipment.id}`
+      sessionStorage.setItem(storageKey, finalIdx.toString())
       setTelemetry({
         speed: 0,
         distanceRemaining: 0,
@@ -360,6 +473,8 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
         temperature: shipment.temperature || '-10.5°C',
         status: 'delivered'
       })
+      const finalPt = routeCoordinates[finalIdx]
+      updateMapRouteAndMarker(finalPt.lat, finalPt.lng)
       if (onLocationUpdate) {
         onLocationUpdate(destinationText)
       }
@@ -387,10 +502,8 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
       setCurrentPointIndex(index)
       sessionStorage.setItem(storageKey, index.toString())
 
-      // Update Leaflet marker position
-      if (truckMarkerRef.current) {
-        truckMarkerRef.current.setLatLng([point.lat, point.lng])
-      }
+      // Update Leaflet marker position, route path, and center map
+      updateMapRouteAndMarker(point.lat, point.lng)
 
       // Calculate dynamic telemetry
       const pct = index / routeCoordinates.length
@@ -436,29 +549,47 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     <div className="bg-white rounded-3xl border border-slate-100 overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.015)] relative">
       <div className="bg-gradient-to-r from-blue-50/50 to-indigo-50/50 px-6 py-4 border-b border-slate-100 flex items-center justify-between">
         <h3 className="font-heading-unique font-bold text-slate-800 text-sm flex items-center gap-2.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#0056B8] animate-ping" />
-          Live Route Simulator
+          <span className={`w-2.5 h-2.5 rounded-full ${isTripActive && firebaseUserToken ? 'bg-green-500' : 'bg-[#0056B8]'} animate-ping`} />
+          {isTripActive && firebaseUserToken ? 'Live GPS Tracking' : 'Live Route Simulator'}
         </h3>
-        <div className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
-          OSRM Driving Route
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              setShowTelemetry(!showTelemetry)
+              setTimeout(() => {
+                if (mapInstanceRef.current) {
+                  mapInstanceRef.current.invalidateSize()
+                }
+              }, 100)
+            }}
+            className="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 border border-blue-100"
+          >
+            <Gauge className="w-3.5 h-3.5" />
+            {showTelemetry ? 'Hide Details' : 'Show Details'}
+          </button>
+          <div className="text-[10px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wider">
+            {isTripActive && firebaseUserToken ? 'Firebase RTDB Sync' : 'OSRM Driving Route'}
+          </div>
         </div>
       </div>
 
-      <div className="h-[480px] relative bg-slate-50">
+      <div className="flex flex-col lg:flex-row h-auto lg:h-[480px] bg-slate-50 relative">
         {/* Leaflet Map Div Container */}
-        <div ref={containerRef} className="w-full h-full z-10" />
+        <div className="flex-1 h-[380px] lg:h-full relative">
+          <div ref={containerRef} className="w-full h-full z-10" />
+          {!mapLoaded && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/90 z-20 gap-3">
+              <div className="w-10 h-10 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
+              <p className="text-xs font-semibold text-slate-500">Loading live telemetry map...</p>
+            </div>
+          )}
+        </div>
 
-        {!mapLoaded && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/90 z-20 gap-3">
-            <div className="w-10 h-10 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
-            <p className="text-xs font-semibold text-slate-500">Loading live telemetry map...</p>
-          </div>
-        )}
-
-        {/* Floating Telemetry Glassmorphic Card */}
-        {mapLoaded && (
-          <div className="absolute top-4 left-4 z-[1000] bg-white/90 backdrop-blur-md p-5 rounded-2xl border border-white/50 shadow-[0_12px_32px_rgba(0,0,0,0.08)] w-[280px]">
-            <div className="flex items-center justify-between mb-4">
+        {/* Telemetry Sidebar Details */}
+        {mapLoaded && showTelemetry && (
+          <div className="w-full lg:w-[320px] bg-white border-t lg:border-t-0 lg:border-l border-slate-100 p-5 flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <Navigation className="w-4 h-4 text-[#0056B8] animate-pulse" />
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live Telemetry</span>
@@ -478,28 +609,28 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
               </span>
             </div>
 
-            <div className="space-y-3">
+            <div className="space-y-4 flex-1 overflow-y-auto pr-1">
               {/* Near / Current Checkpoint */}
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-3 bg-slate-50 p-3 rounded-xl">
                 <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0">
                   <MapPin className="w-4 h-4 text-blue-600" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-[9px] font-bold text-slate-400 uppercase tracking-wider">Current Location</p>
-                  <p className="text-xs font-bold text-slate-800 truncate">{telemetry.locationName}</p>
+                  <p className="text-xs font-bold text-slate-800 break-words">{telemetry.locationName}</p>
                 </div>
               </div>
 
               {/* Speedometer & Temperature */}
-              <div className="grid grid-cols-2 gap-3 pt-2.5 border-t border-slate-100/50">
-                <div className="flex items-start gap-2">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex items-start gap-3 bg-slate-50 p-3 rounded-xl">
                   <Gauge className="w-4 h-4 text-blue-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Speed</p>
                     <p className="text-xs font-bold text-slate-800 font-mono">{telemetry.speed} km/h</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-3 bg-slate-50 p-3 rounded-xl">
                   <Thermometer className="w-4 h-4 text-rose-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Reefer Temp</p>
@@ -509,15 +640,15 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
               </div>
 
               {/* Remaining Distance & ETA */}
-              <div className="grid grid-cols-2 gap-3 pt-2.5 border-t border-slate-100/50">
-                <div className="flex items-start gap-2">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex items-start gap-3 bg-slate-50 p-3 rounded-xl">
                   <Clock className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">ETA</p>
                     <p className="text-xs font-bold text-blue-600">{telemetry.eta}</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-3 bg-slate-50 p-3 rounded-xl">
                   <ShieldCheck className="w-4 h-4 text-emerald-500 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="text-[8px] font-bold text-slate-400 uppercase tracking-wider">Distance</p>

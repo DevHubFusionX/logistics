@@ -42,8 +42,7 @@ export const NAVIGATION_SECTIONS = [
         path: '/driver-app',
         description: 'Manage deliveries',
         color: 'purple',
-        comingSoon: true,
-        roles: ['Super Admin', 'Dispatcher', 'Admin Manager']
+        roles: ['Super Admin', 'Dispatcher', 'Admin Manager', 'Driver']
       }
     ]
   },

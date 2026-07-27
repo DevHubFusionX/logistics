@@ -31,6 +31,8 @@ const NO_AUTO_LOGOUT_ENDPOINTS = [
   '/payment',
   '/payments',
   '/trips',
+  '/bookings',
+  '/admin/bookings',
 ]
 
 class HttpClient {

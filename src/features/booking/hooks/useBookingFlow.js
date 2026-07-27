@@ -34,6 +34,17 @@ const getDropOffCoordinates = (location = {}) => {
   return CITY_COORDINATES[location.city] || CITY_COORDINATES.Abuja
 }
 
+const getPickupCoordinates = (location = {}) => {
+  const lat = Number(location.lat ?? location.latitude)
+  const lng = Number(location.lng ?? location.longitude)
+
+  if (Number.isFinite(lat) && Number.isFinite(lng)) {
+    return { lat, lng }
+  }
+
+  return CITY_COORDINATES[location.city] || CITY_COORDINATES.Lagos
+}
+
 export const useBookingFlow = () => {
   const auth = useAuth()
   const user = auth?.user || null
@@ -119,6 +130,7 @@ export const useBookingFlow = () => {
           email: formData.receiverPerson?.email || ''
         },
         pickupLocation: buildPickupLocation(formData.pickupLocation),
+        pickupCoordinates: getPickupCoordinates(formData.pickupLocation),
         dropoffLocation: {
           address: formData.dropoffLocation?.address || '',
           city: formData.dropoffLocation?.city || '',
