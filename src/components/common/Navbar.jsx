@@ -10,6 +10,7 @@ import { useTranslation } from '../../i18n'
 const navLinks = [
   { label: 'About us', path: '/about' },
   { label: 'Services', path: '/services' },
+  { label: 'Resources', path: '/blog' },
   { label: 'Tracking', path: '/tracking' },
   { label: 'Contact', path: '/contact' },
 ]

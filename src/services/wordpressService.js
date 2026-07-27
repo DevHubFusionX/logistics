@@ -1,13 +1,12 @@
-// WordPress.com Public API Configuration for daraexpress.wordpress.com
-// Uses the WordPress.com REST API v1.1 (public, no auth needed for published posts)
+// WordPress Self-Hosted REST API v2 for resources.daraexpress.com
+// Public endpoint — no authentication required for published posts
 
-const SITE_DOMAIN = 'daraexpress.wordpress.com'
-const API_BASE = `https://public-api.wordpress.com/rest/v1.1/sites/${SITE_DOMAIN}`
+const API_BASE = 'https://resources.daraexpress.com/wp-json/wp/v2'
 
 // Simple in-memory cache
 const cache = new Map()
 const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
-const CACHE_MAX_SIZE = 100            // max entries before LRU eviction
+const CACHE_MAX_SIZE = 100
 
 function getCached(key) {
   const entry = cache.get(key)
@@ -19,7 +18,6 @@ function getCached(key) {
 }
 
 function setCache(key, data) {
-  // Evict oldest entry when cap is reached
   if (cache.size >= CACHE_MAX_SIZE) {
     const oldestKey = cache.keys().next().value
     cache.delete(oldestKey)
@@ -28,39 +26,36 @@ function setCache(key, data) {
 }
 
 /**
- * Transform a WordPress.com API post object into our normalized format.
- * The WP.com v1.1 API returns a different structure than the self-hosted WP REST API v2.
+ * Transform a WP REST API v2 post object into our normalized format.
  */
-function transformPost(post) {
-  // Extract category names from the categories object
-  const categories = post.categories
-    ? Object.keys(post.categories)
-    : ['Uncategorized']
-
-  // Extract tag names
-  const tags = post.tags
-    ? Object.keys(post.tags)
-    : []
+function transformPost(post, categoriesMap = {}) {
+  const categoryNames = (post.categories || []).map(
+    (id) => categoriesMap[id] || 'News'
+  )
 
   return {
-    id: post.ID,
-    title: post.title || '',
-    excerpt: post.excerpt || '',
-    content: post.content || '',
-    featured_image: post.featured_image || post.post_thumbnail?.URL || '',
+    id: post.id,
+    title: post.title?.rendered || '',
+    excerpt: post.excerpt?.rendered || '',
+    content: post.content?.rendered || '',
+    featured_image:
+      post._embedded?.['wp:featuredmedia']?.[0]?.source_url ||
+      post.jetpack_featured_media_url ||
+      '',
     date: post.date,
     slug: post.slug,
-    url: post.URL,
+    url: post.link,
     author: {
-      name: post.author?.name || 'Dara Express',
-      avatar: post.author?.avatar_URL || '',
-      firstName: post.author?.first_name || '',
-      lastName: post.author?.last_name || '',
+      name:
+        post._embedded?.author?.[0]?.name ||
+        'Dara Express',
+      avatar:
+        post._embedded?.author?.[0]?.avatar_urls?.['96'] || '',
     },
-    categories,
-    tags,
-    likeCount: post.like_count || 0,
-    commentCount: post.discussion?.comment_count || 0,
+    categories: categoryNames.length ? categoryNames : ['News'],
+    tags: [],
+    likeCount: 0,
+    commentCount: post.comment_count || 0,
   }
 }
 
@@ -94,56 +89,74 @@ export function formatDate(dateString) {
   })
 }
 
-// WordPress.com API service
+// Fetch and cache category map: { id → name }
+async function getCategoryMap() {
+  const cacheKey = 'category-map'
+  const cached = getCached(cacheKey)
+  if (cached) return cached
+
+  const res = await fetch(`${API_BASE}/categories?per_page=100`)
+  if (!res.ok) return {}
+  const data = await res.json()
+  const map = {}
+  for (const cat of data) {
+    map[cat.id] = cat.name
+  }
+  setCache(cacheKey, map)
+  return map
+}
+
+// WordPress API service
 export const wordpressApi = {
 
   /**
    * Fetch published posts.
-   * @param {Object} options
-   * @param {number} options.number - Number of posts to fetch (default 6)
-   * @param {number} options.page - Page number for pagination (default 1)
-   * @param {string} options.category - Filter by category slug
-   * @param {string} options.tag - Filter by tag slug
-   * @param {string} options.search - Search term
-   * @param {string} options.order_by - Order by field (default 'date')
-   * @returns {Promise<{ posts: Array, total: number, hasMore: boolean }>}
    */
   async getPosts({
     number = 6,
     page = 1,
     category,
-    tag,
     search,
-    order_by = 'date',
   } = {}) {
     const params = new URLSearchParams({
-      number: String(number),
+      per_page: String(number),
       page: String(page),
-      order_by,
       status: 'publish',
+      _embed: '1',
     })
 
-    if (category) params.set('category', category)
-    if (tag) params.set('tag', tag)
     if (search) params.set('search', search)
+
+    // If filtering by category name, look up its ID first
+    if (category && category !== 'All') {
+      try {
+        const catMap = await getCategoryMap()
+        const catId = Object.entries(catMap).find(
+          ([, name]) => name.toLowerCase() === category.toLowerCase()
+        )?.[0]
+        if (catId) params.set('categories', catId)
+      } catch { /* ignore */ }
+    }
 
     const cacheKey = `posts:${params.toString()}`
     const cached = getCached(cacheKey)
     if (cached) return cached
 
-    const url = `${API_BASE}/posts/?${params.toString()}`
+    const catMap = await getCategoryMap()
+    const url = `${API_BASE}/posts?${params.toString()}`
     const response = await fetch(url)
 
     if (!response.ok) {
       throw new Error(`WordPress API error: ${response.status} ${response.statusText}`)
     }
 
+    const totalPosts = parseInt(response.headers.get('X-WP-Total') || '0', 10)
     const data = await response.json()
 
     const result = {
-      posts: (data.posts || []).map(transformPost),
-      total: data.found || 0,
-      hasMore: (data.found || 0) > page * number,
+      posts: (data || []).map((p) => transformPost(p, catMap)),
+      total: totalPosts,
+      hasMore: totalPosts > page * number,
     }
 
     setCache(cacheKey, result)
@@ -152,15 +165,14 @@ export const wordpressApi = {
 
   /**
    * Fetch a single post by slug.
-   * @param {string} slug
-   * @returns {Promise<Object|null>}
    */
   async getPostBySlug(slug) {
     const cacheKey = `post:${slug}`
     const cached = getCached(cacheKey)
     if (cached) return cached
 
-    const url = `${API_BASE}/posts/slug:${encodeURIComponent(slug)}`
+    const catMap = await getCategoryMap()
+    const url = `${API_BASE}/posts?slug=${encodeURIComponent(slug)}&_embed=1`
     const response = await fetch(url)
 
     if (!response.ok) {
@@ -169,22 +181,22 @@ export const wordpressApi = {
     }
 
     const data = await response.json()
-    const post = transformPost(data)
+    if (!data || data.length === 0) return null
 
+    const post = transformPost(data[0], catMap)
     setCache(cacheKey, post)
     return post
   },
 
   /**
-   * Fetch all categories for the site.
-   * @returns {Promise<Array<{ id: number, name: string, slug: string, postCount: number }>>}
+   * Fetch all categories.
    */
   async getCategories() {
     const cacheKey = 'categories'
     const cached = getCached(cacheKey)
     if (cached) return cached
 
-    const url = `${API_BASE}/categories/?number=100`
+    const url = `${API_BASE}/categories?per_page=100`
     const response = await fetch(url)
 
     if (!response.ok) {
@@ -192,21 +204,17 @@ export const wordpressApi = {
     }
 
     const data = await response.json()
-
-    const categories = (data.categories || []).map(cat => ({
-      id: cat.ID,
+    const categories = (data || []).map((cat) => ({
+      id: cat.id,
       name: cat.name,
       slug: cat.slug,
-      postCount: cat.post_count || 0,
+      postCount: cat.count || 0,
     }))
 
     setCache(cacheKey, categories)
     return categories
   },
 
-  /**
-   * Clear all cached data.
-   */
   clearCache() {
     cache.clear()
   },

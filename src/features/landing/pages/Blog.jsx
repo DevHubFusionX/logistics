@@ -42,6 +42,66 @@ const fallbackPosts = [
   },
 ]
 
+function NewsletterForm() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState('idle')
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!email.trim()) return
+    setStatus('loading')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          subject: 'New Newsletter Subscriber — Dara Resources',
+          from_name: 'Dara Resources Newsletter',
+          message: `New subscriber: ${email}`,
+        }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error('Failed')
+      setStatus('success')
+      setEmail('')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <p className="font-body-unique text-white/80 text-sm font-semibold">
+        ✓ You're subscribed. Expect your first edition soon.
+      </p>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md">
+      <input
+        type="email"
+        required
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        placeholder="Enter your email"
+        className="font-body-unique flex-1 px-5 py-3 rounded-sm bg-white text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-white/50"
+      />
+      <button
+        type="submit"
+        disabled={status === 'loading'}
+        className="font-body-unique px-6 py-3 bg-white/15 hover:bg-white/25 border border-white/30 text-white text-sm font-bold rounded-sm transition-all disabled:opacity-60 disabled:cursor-not-allowed whitespace-nowrap cursor-pointer"
+      >
+        {status === 'loading' ? 'Sending…' : 'Subscribe'}
+      </button>
+      {status === 'error' && (
+        <p className="font-body-unique text-white/60 text-xs mt-1">Something went wrong. Try again.</p>
+      )}
+    </form>
+  )
+}
+
 export default function Blog() {
   const [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true)
@@ -130,11 +190,11 @@ export default function Blog() {
   return (
     <div className="min-h-screen bg-slate-50">
       <SEO
-        title="Cold Chain Logistics Blog — Nigeria Freight & Pharma Insights"
+        title="Dara Resources — Cold Chain Logistics Insights Nigeria"
         description="Expert insights on cold chain logistics Nigeria, pharma transport, frozen food haulage, and refrigerated trucking from Darafort— Nigeria's #1 reefer truck company."
         keywords="cold chain logistics blog Nigeria, pharma logistics insights, frozen food transport blog, reefer trucks Nigeria news, logistics company Nigeria articles, cold chain best practices"
         canonical="/blog"
-        breadcrumbs={[{ name: 'Blog', url: '/blog' }]}
+        breadcrumbs={[{ name: 'Resources', url: '/blog' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Blog',
@@ -165,7 +225,7 @@ export default function Blog() {
             transition={{ delay: 0.1 }}
             className="text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6"
           >
-            Cold Chain
+            Resources
             <span className="block mt-2 bg-gradient-to-r from-[#0056B8] to-cyan-600 bg-clip-text text-transparent">
               Knowledge Hub
             </span>
@@ -473,26 +533,32 @@ export default function Blog() {
 
       {/* Newsletter CTA */}
       <section className="py-20 px-6">
-        <div className="container mx-auto max-w-4xl">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="bg-gradient-to-r from-[#0056B8] to-cyan-600 rounded-3xl p-12 text-center text-white shadow-2xl"
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            className="bg-[#0056B8] rounded-3xl p-8 sm:p-12 lg:p-14 text-white text-left relative overflow-hidden shadow-xl"
           >
-            <h2 className="text-4xl font-bold mb-4">Stay Updated</h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Subscribe to our newsletter for the latest insights on cold chain logistics and pharmaceutical distribution.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 px-6 py-4 rounded-sm text-slate-900 focus:outline-none focus:ring-4 focus:ring-white/30"
-              />
-              <button className="px-8 py-4 bg-white text-[#0056B8] rounded-sm font-bold hover:bg-blue-50 transition-all shadow-lg hover:shadow-xl whitespace-nowrap cursor-pointer">
-                Subscribe
-              </button>
+            <div className="max-w-xl">
+              <p className="font-body-unique text-blue-300 font-bold text-xs tracking-[0.2em] uppercase mb-4">Newsletter</p>
+              <h2 className="font-heading-unique font-extrabold text-white text-2xl sm:text-3xl mb-3 leading-tight">
+                Stay ahead of the cold chain.
+              </h2>
+              <p className="font-body-unique text-white/70 text-sm leading-relaxed mb-8">
+                Expert insights on pharma transport, reefer tech, and cold chain best practices — straight to your inbox.
+              </p>
+              <NewsletterForm />
+            </div>
+
+            {/* Decorative circle */}
+            <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none scale-110 translate-x-12 translate-y-12">
+              <svg className="w-80 h-80 text-white" viewBox="0 0 100 100" fill="none">
+                <circle cx="50" cy="50" r="40" stroke="currentColor" strokeWidth="1" strokeDasharray="3 3" />
+                <circle cx="50" cy="50" r="28" stroke="currentColor" strokeWidth="1" />
+                <circle cx="50" cy="50" r="16" stroke="currentColor" strokeWidth="1" strokeDasharray="5 5" />
+              </svg>
             </div>
           </motion.div>
         </div>
