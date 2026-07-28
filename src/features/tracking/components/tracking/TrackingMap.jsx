@@ -33,6 +33,17 @@ function resolveCityCoords(cityText, defaultCoords) {
   return defaultCoords
 }
 
+function calculateBearing(lat1, lon1, lat2, lon2) {
+  const dLon = (lon2 - lon1) * Math.PI / 180
+  const lat1Rad = lat1 * Math.PI / 180
+  const lat2Rad = lat2 * Math.PI / 180
+  const y = Math.sin(dLon) * Math.cos(lat2Rad)
+  const x = Math.cos(lat1Rad) * Math.sin(lat2Rad) -
+            Math.sin(lat1Rad) * Math.cos(lat2Rad) * Math.cos(dLon)
+  const brng = Math.atan2(y, x) * 180 / Math.PI
+  return (brng + 360) % 360
+}
+
 
 // Dynamically load Leaflet from CDN
 const loadLeaflet = () => {
@@ -70,6 +81,7 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
   const [mapLoaded, setMapLoaded] = useState(false)
   const [routeCoordinates, setRouteCoordinates] = useState([])
   const [showTelemetry, setShowTelemetry] = useState(true)
+  const [userHasInteracted, setUserHasInteracted] = useState(false)
 
   const originText = shipment.origin || shipment.pickupCity || 'Lagos'
   const destinationText = shipment.destination || shipment.deliveryCity || 'Abuja'
@@ -103,6 +115,27 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
     ? (shipment.currentTripCoordinates?.lat ? { lat: Number(shipment.currentTripCoordinates.lat), lng: Number(shipment.currentTripCoordinates.lng) } : endCoords)
     : startCoords
 
+  // Interpolation & Orientation Refs
+  const currentPosRef = useRef(staticTruckCoords)
+  const targetPosRef = useRef(staticTruckCoords)
+  const headingRef = useRef(
+    startCoords && endCoords
+      ? calculateBearing(startCoords.lat, startCoords.lng, endCoords.lat, endCoords.lng)
+      : 90
+  )
+  const userHasInteractedRef = useRef(false)
+
+  // Reset positions if shipment changes
+  useEffect(() => {
+    currentPosRef.current = staticTruckCoords
+    targetPosRef.current = staticTruckCoords
+    headingRef.current = startCoords && endCoords
+      ? calculateBearing(startCoords.lat, startCoords.lng, endCoords.lat, endCoords.lng)
+      : 90
+    userHasInteractedRef.current = false
+    setUserHasInteracted(false)
+  }, [staticTruckCoords.lat, staticTruckCoords.lng])
+
   // Telemetry state — static for non-Firebase, updated live for Firebase
   const [telemetry, setTelemetry] = useState(() => ({
     speed: 0,
@@ -114,8 +147,16 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
   }))
 
   const updateTruckMarker = (lat, lng) => {
-    if (truckMarkerRef.current) truckMarkerRef.current.setLatLng([lat, lng])
-    if (mapInstanceRef.current) mapInstanceRef.current.panTo([lat, lng], { animate: true, duration: 0.5 })
+    const prevTarget = targetPosRef.current
+    if (prevTarget && (prevTarget.lat !== lat || prevTarget.lng !== lng)) {
+      headingRef.current = calculateBearing(prevTarget.lat, prevTarget.lng, lat, lng)
+    }
+
+    targetPosRef.current = { lat, lng }
+
+    if (mapInstanceRef.current && !userHasInteractedRef.current) {
+      mapInstanceRef.current.panTo([lat, lng], { animate: true, duration: 1.0 })
+    }
   }
 
   // Fetch OSRM route for the visual path only (not for simulation)
@@ -167,7 +208,17 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
       })
       mapInstanceRef.current = mapInstance
 
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapInstance)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        maxZoom: 20,
+        subdomains: 'abcd',
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+      }).addTo(mapInstance)
+
+      // Bind drag and zoom events to allow manual panning
+      mapInstance.on('dragstart zoomstart', () => {
+        userHasInteractedRef.current = true
+        setUserHasInteracted(true)
+      })
 
       // Route polyline — solid for delivered, dashed for active/pending
       L.polyline(routeCoordinates.map(c => [c.lat, c.lng]), {
@@ -179,32 +230,64 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
         lineJoin: 'round'
       }).addTo(mapInstance)
 
-      // Origin pin
+      // Origin pin (Secondary - Elegant small dot with subtle label)
       const originIcon = L.divIcon({
-        className: '',
-        html: `<div style="background:#10b981;color:white;font-size:10px;font-weight:700;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.25);border:2px solid white;">📦 ${originText.length > 22 ? originText.slice(0, 20) + '…' : originText}</div>`,
-        iconAnchor: [0, 28]
+        className: 'secondary-map-marker',
+        html: `
+          <div class="flex flex-col items-center" style="transform: translate(-50%, -50%);">
+            <div style="background:#10b981; width:12px; height:12px; border-radius:50%; border:2.5px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>
+            <span style="font-size:9px; font-weight:750; color:#475569; background:rgba(255,255,255,0.9); padding:2px 6px; border-radius:4px; margin-top:4px; border:1px solid #e2e8f0; white-space:nowrap; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+              📦 ${originText.length > 15 ? originText.slice(0, 13) + '…' : originText}
+            </span>
+          </div>
+        `,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0]
       })
       L.marker([startCoords.lat, startCoords.lng], { icon: originIcon })
         .bindPopup(`<b>Origin</b><br>${originText}`)
         .addTo(mapInstance)
 
-      // Destination pin
+      // Destination pin (Secondary - Elegant small dot with subtle label)
       const destIcon = L.divIcon({
-        className: '',
-        html: `<div style="background:#ef4444;color:white;font-size:10px;font-weight:700;padding:4px 8px;border-radius:20px;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,0.25);border:2px solid white;">🏁 ${destinationText.length > 22 ? destinationText.slice(0, 20) + '…' : destinationText}</div>`,
-        iconAnchor: [0, 28]
+        className: 'secondary-map-marker',
+        html: `
+          <div class="flex flex-col items-center" style="transform: translate(-50%, -50%);">
+            <div style="background:#ef4444; width:12px; height:12px; border-radius:50%; border:2.5px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.3);"></div>
+            <span style="font-size:9px; font-weight:750; color:#475569; background:rgba(255,255,255,0.9); padding:2px 6px; border-radius:4px; margin-top:4px; border:1px solid #e2e8f0; white-space:nowrap; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+              🏁 ${destinationText.length > 15 ? destinationText.slice(0, 13) + '…' : destinationText}
+            </span>
+          </div>
+        `,
+        iconSize: [0, 0],
+        iconAnchor: [0, 0]
       })
       L.marker([endCoords.lat, endCoords.lng], { icon: destIcon })
         .bindPopup(`<b>Destination</b><br>${destinationText}`)
         .addTo(mapInstance)
 
-      // Truck marker — pinned statically at correct position
+      // Primary Truck Marker (Enhanced with pulsing radar and direction alignment)
+      const initialRotation = startCoords && endCoords
+        ? calculateBearing(startCoords.lat, startCoords.lng, endCoords.lat, endCoords.lng)
+        : 90
+
       const truckIcon = L.divIcon({
-        className: '',
-        html: `<div style="font-size:32px;filter:drop-shadow(0 4px 8px rgba(0,0,0,0.3));transform:scaleX(-1);">🚚</div>`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        className: 'primary-truck-marker-container',
+        html: `
+          <div class="relative flex items-center justify-center animate-fade-in" style="width: 54px; height: 54px;">
+            <!-- Pulsing radar rings for live context -->
+            <div class="absolute inset-0 bg-blue-500/20 rounded-full animate-ping" style="animation-duration: 2s; z-index: 1;"></div>
+            <div class="absolute w-10 h-10 bg-blue-500/20 rounded-full z-2"></div>
+            <!-- Glow shadow background -->
+            <div class="absolute w-9 h-9 bg-blue-600/30 rounded-full border border-blue-400/50 shadow-[0_0_12px_rgba(37,99,235,0.5)] z-3"></div>
+            <!-- Truck element rotated towards travel direction -->
+            <div class="truck-rotated-element flex items-center justify-center z-10" style="font-size: 32px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.25)); transform-origin: center; transform: rotate(${initialRotation - 270}deg); transition: transform 0.2s ease-out;">
+              🚚
+            </div>
+          </div>
+        `,
+        iconSize: [54, 54],
+        iconAnchor: [27, 27]
       })
       const truckMarker = L.marker([staticTruckCoords.lat, staticTruckCoords.lng], { icon: truckIcon })
         .bindPopup('<b>Delivery Vehicle</b>')
@@ -234,9 +317,8 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
         )
       }
 
-      // Fit bounds to show full route
-      const bounds = L.latLngBounds([[startCoords.lat, startCoords.lng], [endCoords.lat, endCoords.lng]])
-      mapInstance.fitBounds(bounds, { padding: [60, 60] })
+      // Center on truck at street-level zoom so labels and POIs are visible
+      mapInstance.setView([staticTruckCoords.lat, staticTruckCoords.lng], 13)
 
       setMapLoaded(true)
       setTimeout(() => mapInstanceRef.current?.invalidateSize(), 250)
@@ -244,6 +326,52 @@ export default function TrackingMap({ shipment, onLocationUpdate }) {
 
     return () => { if (mapInstance) mapInstance.remove() }
   }, [routeCoordinates])
+
+  // Linear Interpolation loop for smooth truck rendering
+  useEffect(() => {
+    if (!mapLoaded) return
+
+    let animFrameId
+    const animate = () => {
+      if (truckMarkerRef.current && currentPosRef.current && targetPosRef.current) {
+        const curr = currentPosRef.current
+        const target = targetPosRef.current
+
+        const dLat = target.lat - curr.lat
+        const dLng = target.lng - curr.lng
+
+        // If we are extremely close, snap to prevent micro-movements
+        if (Math.abs(dLat) < 0.000005 && Math.abs(dLng) < 0.000005) {
+          curr.lat = target.lat
+          curr.lng = target.lng
+        } else {
+          // Lerp factor (higher = faster snap, lower = smoother slide)
+          const lerpFactor = 0.05
+          curr.lat += dLat * lerpFactor
+          curr.lng += dLng * lerpFactor
+        }
+
+        // Set interpolated position
+        truckMarkerRef.current.setLatLng([curr.lat, curr.lng])
+
+        // Rotate the 🚚 element towards bearing
+        const markerElement = truckMarkerRef.current.getElement()
+        if (markerElement) {
+          const rotatedDiv = markerElement.querySelector('.truck-rotated-element')
+          if (rotatedDiv) {
+            // Since 🚚 points West (270deg) by default, rotate by (bearing - 270)
+            rotatedDiv.style.transform = `rotate(${headingRef.current - 270}deg)`
+          }
+        }
+      }
+      animFrameId = requestAnimationFrame(animate)
+    }
+
+    animFrameId = requestAnimationFrame(animate)
+    return () => {
+      cancelAnimationFrame(animFrameId)
+    }
+  }, [mapLoaded])
 
   // Firebase — token enabled for both active (live) and delivered (last known position)
   const tripId = shipment.tripId
