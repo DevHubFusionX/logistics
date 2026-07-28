@@ -280,6 +280,25 @@ export function useTrackingQuery(trackingId, options = {}) {
                     const destString = loc ? (typeof loc === 'string' ? loc : `${loc.city || ''} ${loc.address || ''}`.trim()) : ''
                     const pickupLoc = booking.pickupLocation
                     const originString = pickupLoc ? (typeof pickupLoc === 'string' ? pickupLoc : `${pickupLoc.city || ''} ${pickupLoc.address || ''}`.trim()) : ''
+
+                    // Resolve coordinates: prefer booking fields, fall back to trip fields
+                    const pickupCoords = booking.pickupCoordinates
+                        || (trip?.origin && typeof trip.origin === 'object' && trip.origin.lat ? trip.origin : null)
+                        || null
+                    const dropOffCoords = booking.dropOffCoordinates
+                        || (trip?.destination && typeof trip.destination === 'object' && trip.destination.lat ? trip.destination : null)
+                        || null
+
+                    // Current truck position from trip (live location or last known)
+                    const tripCurrentLocation = trip?.currentLocation && typeof trip.currentLocation === 'object' && trip.currentLocation.lat
+                        ? trip.currentLocation
+                        : null
+
+                    const currentLocationText = status === 'delivered'
+                        ? (destString || 'Destination')
+                        : (originString || 'In Transit')
+
+                    console.log('[TRACK] Resolved pickupCoords:', pickupCoords, 'dropOffCoords:', dropOffCoords)
                     
                     return {
                         id: booking._id,
@@ -287,9 +306,10 @@ export function useTrackingQuery(trackingId, options = {}) {
                         status: status,
                         origin: originString || 'Lagos',
                         destination: destString || 'Destination',
-                        pickupCoordinates: booking.pickupCoordinates || null,
-                        dropOffCoordinates: booking.dropOffCoordinates || null,
-                        currentLocation: status === 'delivered' ? destString : (originString || 'In Transit'),
+                        pickupCoordinates: pickupCoords,
+                        dropOffCoordinates: dropOffCoords,
+                        currentTripCoordinates: tripCurrentLocation,
+                        currentLocation: currentLocationText,
                         estimatedDelivery: booking.estimatedDeliveryDate ? new Date(booking.estimatedDeliveryDate).toLocaleDateString() : 'TBD',
                         driver: driverObj?.name || 'Assigning Driver...',
                         vehicle: truckObj && typeof truckObj === 'object' ? `${truckObj.color || ''} ${truckObj.make || ''} ${truckObj.model || ''} (${truckObj.plateNumber || ''})`.trim() : 'Assigning Vehicle...',

@@ -213,8 +213,8 @@ export default function Tracking() {
                       </div>
                     </div>
 
-                    {/* Live GPS Transit Map */}
-                    {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (
+                    {/* Live GPS Transit Map — show for all meaningful statuses */}
+                    {shipment && shipment.status !== 'cancelled' && shipment.status !== 'pending' && (
                       <TrackingMap shipment={shipment} onLocationUpdate={setLiveLocation} />
                     )}
 
