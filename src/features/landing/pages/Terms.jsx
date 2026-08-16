@@ -41,8 +41,8 @@ export default function Terms() {
   return (
     <>
       <SEO
-        title="Terms of Service — Dara Express"
-        description="Read the terms and conditions for booking shipments, logistics services, payments, and cargo rules with Dara Express."
+        title="Terms of Service — Darafort"
+        description="Read the terms and conditions for booking shipments, logistics services, payments, and cargo rules with Darafort."
         keywords="terms of service, Darafortterms, logistics conditions Nigeria, cold chain terms"
         canonical="/terms"
         breadcrumbs={[{ name: 'Terms of Service', url: '/terms' }]}
@@ -86,7 +86,7 @@ export default function Terms() {
             className="bg-white border border-slate-100 rounded-3xl p-6 sm:p-8 shadow-[0_15px_30px_rgba(0,0,0,0.01)] mb-12"
           >
             <p className="font-body-unique text-slate-600 text-sm sm:text-base leading-relaxed">
-              These Terms of Service govern your use of the cold chain and haulage logistics services provided by Dara Express. By requesting a quote, booking a truck, or using our live telemetry portals, you agree to comply with and be bound by these provisions.
+              These Terms of Service govern your use of the cold chain and haulage logistics services provided by Darafort. By requesting a quote, booking a truck, or using our live telemetry portals, you agree to comply with and be bound by these provisions.
             </p>
           </motion.div>
 

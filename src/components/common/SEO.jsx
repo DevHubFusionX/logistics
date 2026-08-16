@@ -19,9 +19,9 @@ export default function SEO({
 }) {
   const { locale } = useTranslation()
   const siteUrl = 'https://daraexpress.com'
-  const siteName = 'Dara Express'
+  const siteName = 'Darafort'
   const fullTitle = title
-    ? `${title} | Dara Express`
+    ? `${title} | Darafort`
     : 'Darafort— Cold Chain Logistics & Haulage Company in Nigeria'
 
   const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl

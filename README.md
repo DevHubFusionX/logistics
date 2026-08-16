@@ -1,6 +1,6 @@
 # Dara Logistics Platform
 
-A full-featured cold-chain logistics management web application built for **Dara Express**. The platform handles end-to-end logistics operations — from customer bookings and real-time shipment tracking to fleet management, temperature monitoring, payments, and admin reporting.
+A full-featured cold-chain logistics management web application built for **Darafort**. The platform handles end-to-end logistics operations — from customer bookings and real-time shipment tracking to fleet management, temperature monitoring, payments, and admin reporting.
 
 ---
 

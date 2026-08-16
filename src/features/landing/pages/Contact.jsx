@@ -98,18 +98,18 @@ export default function Contact() {
       <SEO
         title="Contact Darafort— Get a Cold Chain Logistics Quote Nigeria"
         description="Get a free cold chain logistics quote from Darafort— Nigeria's #1 reefer truck company. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Lagos, Abuja and all 36 states."
-        keywords="contact Dara Express, cold chain quote Nigeria, logistics quote Lagos, freight quote Nigeria, refrigerated transport quote, reefer truck hire Nigeria, logistics inquiry Nigeria"
+        keywords="contact Darafort, cold chain quote Nigeria, logistics quote Lagos, freight quote Nigeria, refrigerated transport quote, reefer truck hire Nigeria, logistics inquiry Nigeria"
         canonical="/contact"
         breadcrumbs={[{ name: 'Contact', url: '/contact' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'ContactPage',
-          'name': 'Contact Dara Express',
-          'description': 'Get a free cold chain logistics quote from Dara Express. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Nigeria.',
+          'name': 'Contact Darafort',
+          'description': 'Get a free cold chain logistics quote from Darafort. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Nigeria.',
           'url': 'https://daraexpress.com/contact',
           'mainEntity': {
             '@type': 'LocalBusiness',
-            'name': 'Dara Express',
+            'name': 'Darafort',
             'telephone': '+2349054610119',
             'email': 'hello@daraexpress.com',
             'address': {

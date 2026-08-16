@@ -128,7 +128,7 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                       </span>
                     </td>
                     <td className="px-6 py-4.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                      Dara Express
+                      Darafort
                     </td>
                     <td className="px-6 py-4.5">
                       <div className="font-bold text-slate-800 text-[13px]">

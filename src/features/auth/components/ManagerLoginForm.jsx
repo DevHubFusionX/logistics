@@ -157,7 +157,7 @@ export default function ManagerLoginForm() {
           >
             <img
               src="/assets/img/Dara.svg"
-              alt="Dara Express"
+              alt="Darafort"
               className="w-28 h-28 xl:w-36 xl:h-36 object-contain filter brightness-0 invert"
             />
           </motion.div>
@@ -265,7 +265,7 @@ export default function ManagerLoginForm() {
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
-            <img src="/assets/img/Dara.svg" alt="Dara Express" className="w-24 h-24 object-contain" />
+            <img src="/assets/img/Dara.svg" alt="Darafort" className="w-24 h-24 object-contain" />
           </div>
 
           {/* Header */}

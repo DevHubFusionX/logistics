@@ -6,4 +6,4 @@ export { default as DaraServices } from './DaraServices'
 export { default as DaraCTA } from './DaraCTA'
 export { default as DaraBlog } from './DaraBlog'
 export { default as DaraFAQ } from './DaraFAQ'
-
+export { default as DaraAppShowcase } from './DaraAppShowcase'

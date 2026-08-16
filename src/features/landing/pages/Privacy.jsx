@@ -54,7 +54,7 @@ export default function Privacy() {
   return (
     <>
       <SEO
-        title="Privacy Policy — Dara Express"
+        title="Privacy Policy — Darafort"
         description="Learn how Darafortcollects, protects, and uses your personal and shipment information. Our commitment to privacy, cold chain transparency, and data security."
         keywords="privacy policy, Darafortprivacy, data security logistics Nigeria, cold chain privacy"
         canonical="/privacy"

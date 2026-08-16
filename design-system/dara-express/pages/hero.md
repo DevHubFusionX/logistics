@@ -1,6 +1,6 @@
 # Hero Page Overrides
 
-> **PROJECT:** Dara Express
+> **PROJECT:** Darafort
 > **Generated:** 2026-06-15 10:33:34
 > **Page Type:** Landing / Marketing
 

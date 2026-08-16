@@ -203,7 +203,7 @@ export default function Blog() {
           'url': 'https://daraexpress.com/blog',
           'publisher': {
             '@type': 'Organization',
-            'name': 'Dara Express',
+            'name': 'Darafort',
             'logo': { '@type': 'ImageObject', 'url': 'https://daraexpress.com/og-image.png?v=2' }
           }
         }}

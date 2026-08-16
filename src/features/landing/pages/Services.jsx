@@ -137,19 +137,19 @@ export default function Services() {
           'itemListElement': [
             {
               '@type': 'ListItem', 'position': 1,
-              'item': { '@type': 'Service', 'name': 'Pharma Logistics Nigeria', 'description': 'Hospital-grade cold chain for vaccines, insulin, biologics and temperature-sensitive medicines. IoT-monitored with full compliance documentation. Same-day available in Lagos & Abuja.', 'provider': { '@type': 'LocalBusiness', 'name': 'Dara Express' } }
+              'item': { '@type': 'Service', 'name': 'Pharma Logistics Nigeria', 'description': 'Hospital-grade cold chain for vaccines, insulin, biologics and temperature-sensitive medicines. IoT-monitored with full compliance documentation. Same-day available in Lagos & Abuja.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             },
             {
               '@type': 'ListItem', 'position': 2,
-              'item': { '@type': 'Service', 'name': 'Frozen Food Transport Lagos', 'description': 'Sub-zero reefer trucking maintaining -18°C for seafood, meat, poultry and frozen goods. Nationwide frozen haulage network with 24/7 driver support.', 'provider': { '@type': 'LocalBusiness', 'name': 'Dara Express' } }
+              'item': { '@type': 'Service', 'name': 'Frozen Food Transport Lagos', 'description': 'Sub-zero reefer trucking maintaining -18°C for seafood, meat, poultry and frozen goods. Nationwide frozen haulage network with 24/7 driver support.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             },
             {
               '@type': 'ListItem', 'position': 3,
-              'item': { '@type': 'Service', 'name': 'Refrigerated Transport Lagos', 'description': 'Farm-to-market cold chain keeping fruits, vegetables and dairy fresh. Advanced reefer trucks covering all 36 states with optimised routing.', 'provider': { '@type': 'LocalBusiness', 'name': 'Dara Express' } }
+              'item': { '@type': 'Service', 'name': 'Refrigerated Transport Lagos', 'description': 'Farm-to-market cold chain keeping fruits, vegetables and dairy fresh. Advanced reefer trucks covering all 36 states with optimised routing.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             },
             {
               '@type': 'ListItem', 'position': 4,
-              'item': { '@type': 'Service', 'name': 'Enterprise Haulage Services Nigeria', 'description': 'Scalable freight contracts for enterprises — port-to-warehouse, long-haul trucking, and custom logistics agreements for dry and temperature-controlled cargo.', 'provider': { '@type': 'LocalBusiness', 'name': 'Dara Express' } }
+              'item': { '@type': 'Service', 'name': 'Enterprise Haulage Services Nigeria', 'description': 'Scalable freight contracts for enterprises — port-to-warehouse, long-haul trucking, and custom logistics agreements for dry and temperature-controlled cargo.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             }
           ]
         }}

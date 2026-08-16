@@ -60,13 +60,13 @@ export default function About() {
       <SEO
         title="About Darafort— Nigeria's Cold Chain Logistics Company"
         description="Darafortis Nigeria's leading cold chain logistics company, built in Lagos to move pharma, frozen food, and perishables safely across all 36 states. Learn how we're building Nigeria's cold chain backbone."
-        keywords="about Dara Express, cold chain logistics company Nigeria, logistics company Lagos, transport company Abuja, reefer trucks history Nigeria, cold chain Nigeria, logistics company Nigeria"
+        keywords="about Darafort, cold chain logistics company Nigeria, logistics company Lagos, transport company Abuja, reefer trucks history Nigeria, cold chain Nigeria, logistics company Nigeria"
         canonical="/about"
         breadcrumbs={[{ name: 'About', url: '/about' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
-          'name': 'Dara Express',
+          'name': 'Darafort',
           'alternateName': 'Dara Cold Chain Logistics',
           'url': 'https://daraexpress.com',
           'logo': 'https://daraexpress.com/og-image.png?v=2',

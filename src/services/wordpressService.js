@@ -48,7 +48,7 @@ function transformPost(post, categoriesMap = {}) {
     author: {
       name:
         post._embedded?.author?.[0]?.name ||
-        'Dara Express',
+        'Darafort',
       avatar:
         post._embedded?.author?.[0]?.avatar_urls?.['96'] || '',
     },
