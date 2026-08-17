@@ -306,7 +306,7 @@ export default function DaraTrustedBy() {
             to="/booking/request"
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#0056B8] hover:text-blue-750 transition-colors group cursor-pointer"
           >
-            Join thousands of businesses who trust Darafort
+            Join Global Businesses That Trust Darafort
             <span className="group-hover:translate-x-0.5 transition-transform">→</span>
           </Link>
         </motion.div>
