@@ -88,40 +88,40 @@ export default function DaraHero() {
         </h1>
 
         {/* Subtitle / Description (Outfit) using info from Data.jsx */}
-        <motion.div
+          <motion.div
           variants={itemVariants}
           className="font-body-unique text-slate-200 text-sm sm:text-base leading-relaxed max-w-2xl mb-8 space-y-4"
         >
           {heroData.description.split('\n\n').map((para, i) => (
             <p key={i}>{para}</p>
           ))}
-        </motion.div>
+            </motion.div>
 
         {/* Action Buttons using info from Data.jsx */}
         <motion.div
-          variants={itemVariants}
+              variants={itemVariants}
           className="flex flex-row items-center gap-4 w-full sm:w-auto mb-12"
         >
-          {/* Start shipping (Brand Blue Button) */}
-          <Link
-            to={heroData.buttons.primary.link}
-            className="font-body-unique px-6 py-3 bg-[#0056B8] hover:bg-blue-750 text-white font-bold rounded-sm text-sm transition-all active:scale-97 shadow-lg shadow-black/10"
-          >
-            {heroData.buttons.primary.text}
-          </Link>
-
-          {/* Book a demo (Outline Glass Button) */}
+          {/* Book a Demo (Brand Blue Button) */}
           <button
             onClick={() => setIsDemoOpen(true)}
-            className="font-body-unique px-6 py-3 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-sm transition-all active:scale-97 backdrop-blur-sm shadow-md"
+            className="font-body-unique px-6 py-3 bg-[#0056B8] hover:bg-[#004494] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] shadow-lg shadow-black/10 cursor-pointer"
+          >
+            {heroData.buttons.primary.text}
+          </button>
+
+          {/* Explore Our Technology (Outline Glass Button) */}
+          <Link
+            to={heroData.buttons.secondary.link}
+            className="font-body-unique px-6 py-3 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] backdrop-blur-sm shadow-md"
           >
             {heroData.buttons.secondary.text}
-          </button>
+          </Link>
         </motion.div>
 
 
 
-      </motion.div>
+          </motion.div>
 
       <ScheduleDemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>

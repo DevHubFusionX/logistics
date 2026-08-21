@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import DaraHero from '../components/landing/DaraHero'
+import DaraProofBar from '../components/landing/DaraProofBar'
 import SectionDivider from '@/components/common/SectionDivider'
 import SEO from '@/components/common/SEO'
 
@@ -39,6 +40,7 @@ export default function Home() {
       />
 
       <DaraHero />
+      <DaraProofBar />
 
       <LazyViewportRender placeholderHeight="600px">
         <DaraHowItWorks />

@@ -33,6 +33,7 @@ const SuspenseLayout = () => (
 
 // --- Public Pages ---
 const Home = lazy(() => import('../features/landing/pages/Home'))
+const Platform = lazy(() => import('../features/landing/pages/platform'))
 const Services = lazy(() => import('../features/landing/pages/Services'))
 const About = lazy(() => import('../features/landing/pages/About'))
 const NotFound = lazy(() => import('../features/landing/pages/NotFound'))
@@ -45,6 +46,10 @@ const BlogPost = lazy(() => import('../features/landing/pages/BlogPost'))
 const Contact = lazy(() => import('../features/landing/pages/Contact'))
 const Privacy = lazy(() => import('../features/landing/pages/Privacy'))
 const Terms = lazy(() => import('../features/landing/pages/Terms'))
+const ProductDemo = lazy(() => import('../features/landing/pages/ProductDemo'))
+const Technology = lazy(() => import('../features/landing/pages/technology'))
+const Solutions = lazy(() => import('../features/landing/pages/solutions'))
+const Network = lazy(() => import('../features/landing/pages/Network'))
 
 // --- Auth Pages ---
 const SignUp = lazy(() => import('../pages/auth/SignUp'))
@@ -111,17 +116,22 @@ const routesConfig = [
     element: <Suspense fallback={<PageLoader />}><PublicLayout /></Suspense>,
     children: [
       { path: '/', element: <Home /> },
+      { path: '/platform', element: <Platform /> },
       { path: '/services', element: <Services /> },
       { path: '/about', element: <About /> },
       { path: '/portfolio', element: <Portfolio /> },
-      { path: '/team', element: <Team /> },
+      // { path: '/team', element: <Team /> },
       { path: '/blog', element: <Blog /> },
       { path: '/blog/:slug', element: <BlogPost /> },
       { path: '/contact', element: <Contact /> },
       { path: '/tracking', element: <Tracking /> },
       { path: '/booking-calculator', element: <BookingCalculatorPage /> },
       { path: '/privacy', element: <Privacy /> },
-      { path: '/terms', element: <Terms /> }
+      { path: '/terms', element: <Terms /> },
+      { path: '/demo', element: <ProductDemo /> },
+      { path: '/technology', element: <Technology /> },
+      { path: '/solutions', element: <Solutions /> },
+      { path: '/network', element: <Network /> }
     ]
   },
 

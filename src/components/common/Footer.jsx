@@ -6,8 +6,7 @@ import { ScheduleDemoModal } from '../../features/landing/components/landing/dem
 
 const quickLinks = [
   { label: 'Home', to: '/' },
-  { label: 'The Problem', to: '#why-us' },
-  { label: 'How it works', to: '#how-it-works' },
+  { label: 'Platform', to: '/platform' },
   { label: 'Services', to: '/services' },
   { label: 'Contact', to: '/contact' },
 ]

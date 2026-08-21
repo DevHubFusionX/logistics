@@ -1,4 +1,5 @@
 export { default as DaraHero } from './DaraHero'
+export { default as DaraProofBar } from './DaraProofBar'
 export { default as DaraHowItWorks } from './DaraHowItWorks'
 export { default as DaraTrustedBy } from './DaraTrustedBy'
 export { default as DaraJourney } from './DaraJourney'

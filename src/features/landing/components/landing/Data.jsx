@@ -10,11 +10,11 @@ import {
 // Hero Data
 export const heroData = {
     title: {
-        prefix: "Nigeria's Fastest-Growing",
-        highlight: "Dry Haulage & Cold Chain",
-        suffix: "Logistics Company"
+        prefix: "The Digital Infrastructure Powering",
+        highlight: "Africa’s Cold Chain",
+        suffix: ""
     },
-    description: "From dry freight to temperature-sensitive cargo, Dara delivers reliable, technology-enabled logistics solutions with nationwide coverage, real-time shipment visibility, and exceptional service delivery.",
+    description: "Dara combines technology, real-time visibility and temperature-controlled logistics to help businesses safely move temperature-sensitive goods across Nigeria.",
     features: [
         'Premium Cold Chain Logistics Nigeria: Real-time reefer monitoring',
         'Nationwide Haulage Services Nigeria: Dedicated refrigerated fleet',
@@ -29,8 +29,8 @@ export const heroData = {
         { icon: 'Clock', value: '137', label: 'Cold Chain Trips Completed' }
     ],
     buttons: {
-        primary: { text: "Book a Shipment", link: "/booking/request" },
-        secondary: { text: "Schedule a Consultation", link: "/tracking" }
+        primary: { text: "Book a Demo", link: "#" },
+        secondary: { text: "Explore Our Technology", link: "/technology" }
     }
 }
 
