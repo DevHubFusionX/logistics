@@ -14,11 +14,7 @@ export default function MobileMenuButton({ isOpen, scrolled, onToggle }) {
       <button
         onClick={onToggle}
         aria-label="Toggle Menu"
-        className={`w-10 h-10 rounded-lg flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer border ${
-          scrolled
-            ? 'bg-white border-slate-200 text-slate-700'
-            : 'bg-white/10 backdrop-blur-sm border-white/20 text-white'
-        }`}
+        className="w-10 h-10 rounded-lg flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer border bg-slate-50 border-slate-200/60 text-slate-700 hover:bg-slate-100"
       >
         <motion.span
           animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
