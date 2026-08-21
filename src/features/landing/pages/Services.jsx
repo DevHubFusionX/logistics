@@ -221,6 +221,7 @@ export default function Services() {
           {services.map((service) => (
             <motion.div
               key={service.num}
+              id={service.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}
               variants={cardVariants}
               className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-[0_15px_35px_rgba(0,0,0,0.015)] flex flex-col group"
             >
@@ -283,7 +284,7 @@ export default function Services() {
                 <div className="flex flex-wrap items-center justify-between gap-4 pt-5 border-t border-slate-50 w-full">
                   <Link
                     to="/booking/request"
-                    className={`inline-flex items-center gap-2 px-5 py-2.5 ${service.accent} text-white font-bold rounded-sm text-xs sm:text-sm transition-all active:scale-[0.98] shadow-sm`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0056B8] hover:bg-[#004aad] text-white font-bold rounded-sm text-xs sm:text-sm transition-all active:scale-[0.98] shadow-sm"
                   >
                     Request Quote
                     <ArrowUpRight className="w-4 h-4" />

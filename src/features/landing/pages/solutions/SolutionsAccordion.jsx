@@ -78,8 +78,10 @@ function SectorCard({ sector, index, total }) {
   const isLast = index === total - 1
   const { icon: Icon, num, title, desc, image, bg } = sector
 
+  const cardId = title.toLowerCase().replace(/[^a-z0-9]/g, '-')
+
   return (
-    <div ref={ref} className="sticky" style={{ top: `${80 + index * 16}px` }}>
+    <div id={cardId} ref={ref} className="sticky" style={{ top: `${80 + index * 16}px` }}>
       <motion.div
         style={{
           scale: isLast ? entryScale : exitScale,

@@ -1,19 +1,24 @@
 import { Link } from 'react-router-dom'
-import { Wifi, Navigation, Activity, Eye, BarChart2, Plug } from 'lucide-react'
+import { Cpu, Navigation, Activity, Eye, BarChart2, Plug } from 'lucide-react'
 
 const items = [
-  { icon: Wifi,       label: 'IoT & Sensors', desc: 'Connected sensors for real-time environmental data.',   path: '/technology', color: 'bg-slate-900 text-white' },
-  { icon: Navigation, label: 'GPS Tracking',  desc: 'Live vehicle tracking with geofencing alerts.',         path: '/technology', color: 'bg-[#0056B8] text-white' },
-  { icon: Activity,   label: 'Telemetry',     desc: 'Continuous data streams from vehicles and facilities.', path: '/technology', color: 'bg-slate-100 text-slate-900' },
-  { icon: Eye,        label: 'Visibility',    desc: 'Full shipment transparency, pickup to delivery.',       path: '/technology', color: 'bg-slate-100 text-slate-900' },
-  { icon: BarChart2,  label: 'Analytics',     desc: 'Dashboards to optimise performance over time.',         path: '/technology', color: 'bg-[#0056B8] text-white' },
-  { icon: Plug,       label: 'Integrations',  desc: 'Open APIs for your ERP, WMS, and TMS.',                path: '/technology', color: 'bg-slate-900 text-white' },
+  { icon: Cpu,        label: 'Technology Overview', desc: 'Enterprise telemetry & cold-chain tech.',        path: '/technology#hero',        color: 'bg-slate-900 text-white' },
+  { icon: Navigation, label: 'GPS Tracking',  desc: 'Live vehicle tracking with geofencing alerts.',         path: '/technology#fleet', color: 'bg-[#0056B8] text-white' },
+  { icon: Activity,   label: 'Telemetry',     desc: 'Continuous data streams from vehicles and facilities.', path: '/technology#architecture', color: 'bg-slate-100 text-slate-900' },
+  { icon: Eye,        label: 'Visibility',    desc: 'Full shipment transparency, pickup to delivery.',       path: '/technology#visibility', color: 'bg-slate-100 text-slate-900' },
+  { icon: BarChart2,  label: 'Analytics',     desc: 'Dashboards to optimise performance over time.',         path: '/technology#analytics', color: 'bg-[#0056B8] text-white' },
+  { icon: Plug,       label: 'Integrations',  desc: 'Open APIs for your ERP, WMS, and TMS.',                path: '/technology#architecture', color: 'bg-slate-900 text-white' },
 ]
 
 function TechnologyMenu({ onClose }) {
   return (
     <div>
-      <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-5">Technology</p>
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Technology</p>
+        <Link to="/technology" onClick={onClose} className="text-[11px] font-bold text-[#0056B8] hover:underline transition-colors">
+          Go to Technology Page →
+        </Link>
+      </div>
       <div className="grid grid-cols-3 gap-3">
         {items.map(({ icon: Icon, label, desc, path, color }) => {
           const isLight = color.includes('slate-100')

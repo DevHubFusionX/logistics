@@ -1,9 +1,9 @@
 export const navLinks = [
   { label: 'Platform',   path: '/platform',    megaMenu: 'platform' },
+  { label: 'Services',   path: '/services' },
   { label: 'Solutions',  path: '/solutions',   megaMenu: 'solutions' },
   { label: 'Network',    path: '/network',     megaMenu: 'network' },
   { label: 'Technology', path: '/technology',  megaMenu: 'technology' },
-  { label: 'Resources',  path: '/blog',        megaMenu: 'resources' },
   { label: 'Company',    path: '/about',       megaMenu: 'company' },
 ]
 

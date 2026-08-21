@@ -1,17 +1,24 @@
 import { Link } from 'react-router-dom'
-import { Snowflake, Warehouse, Map } from 'lucide-react'
+import { LayoutDashboard, Truck, Warehouse, Map, Handshake, Activity } from 'lucide-react'
 
 const items = [
-  { icon: Snowflake, label: 'Reefer Capacity', desc: 'Temperature-controlled vehicles for every cargo type.', path: '/network', color: 'bg-[#0056B8] text-white' },
-  { icon: Warehouse, label: 'Cold Storage',    desc: 'Multi-chamber facilities with live monitoring.',        path: '/network', color: 'bg-slate-900 text-white' },
-  { icon: Map,       label: 'Coverage',        desc: 'Pan-Nigeria distribution across all 36 states.',       path: '/network', color: 'bg-slate-100 text-slate-900' },
-  // { icon: Handshake, label: 'Partners', desc: 'Strategic 3PL and carrier partnerships.', path: '/network', color: 'bg-slate-900 text-white' },
+  { icon: LayoutDashboard, label: 'Network Overview', desc: 'Pan-Nigeria cold chain at a glance.',       path: '/network#hero',     color: 'bg-[#0056B8] text-white' },
+  { icon: Truck,           label: 'Reefer Capacity',   desc: 'Refrigerated vehicles for every cargo type.', path: '/network#reefer',   color: 'bg-slate-900 text-white' },
+  { icon: Warehouse,       label: 'Cold Storage',      desc: 'Multi-chamber hubs with live monitoring.',   path: '/network#storage',  color: 'bg-slate-100 text-slate-900' },
+  { icon: Map,             label: 'Coverage Map',      desc: 'Pan-Nigeria transit routes & hubs.',          path: '/network#coverage', color: 'bg-slate-100 text-slate-900' },
+  { icon: Handshake,       label: 'Partners',          desc: 'Strategic 3PL and carrier integrations.',     path: '/network#partners', color: 'bg-slate-900 text-white' },
+  { icon: Activity,        label: 'Network Operations',desc: 'Live telemetry and uptime statistics.',       path: '/network#glance',   color: 'bg-[#0056B8] text-white' },
 ]
 
 function NetworkMenu({ onClose }) {
   return (
     <div>
-      <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-5">Network</p>
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Network</p>
+        <Link to="/network" onClick={onClose} className="text-[11px] font-bold text-[#0056B8] hover:underline transition-colors">
+          Go to Network Page →
+        </Link>
+      </div>
       <div className="grid grid-cols-3 gap-3">
         {items.map(({ icon: Icon, label, desc, path, color }) => {
           const isLight = color.includes('slate-100')
@@ -32,5 +39,5 @@ function NetworkMenu({ onClose }) {
   )
 }
 
-NetworkMenu.menuWidth = 'max-w-xl'
+NetworkMenu.menuWidth = 'max-w-2xl'
 export default NetworkMenu

@@ -134,7 +134,7 @@ export default function NotFound() {
         <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
           <Link
             to="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg transition-all active:scale-97 cursor-pointer"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0056B8] hover:bg-[#004aad] text-white font-bold rounded-xl text-sm shadow-md hover:shadow-lg transition-all active:scale-97 cursor-pointer"
           >
             <Home className="w-4 h-4" />
             <span>Go Home</span>

@@ -11,7 +11,12 @@ const items = [
 function ResourcesMenu({ onClose }) {
   return (
     <div>
-      <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase mb-5">Resources</p>
+      <div className="flex items-center justify-between mb-5">
+        <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Resources</p>
+        <Link to="/blog" onClick={onClose} className="text-[11px] font-bold text-[#0056B8] hover:underline transition-colors">
+          Go to Resources Page →
+        </Link>
+      </div>
       <div className="grid grid-cols-4 gap-3">
         {items.map(({ icon: Icon, label, desc, path, color }) => {
           const isLight = color.includes('slate-100')

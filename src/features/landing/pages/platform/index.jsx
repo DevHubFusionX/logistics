@@ -4,9 +4,11 @@ import { ScheduleDemoModal } from '@/features/landing/components/landing/demo'
 
 // Import modular components
 import PlatformHero from './PlatformHero'
-import PlatformProofBar from './PlatformProofBar'
+import PlatformOverview from './PlatformOverview'
 import PlatformCapabilities from './PlatformCapabilities'
-import PlatformCTA from './PlatformCTA'
+import PlatformTemperature from './PlatformTemperature'
+import PlatformHowItWorks from './PlatformHowItWorks'
+import PlatformOnboarding from './PlatformOnboarding'
 
 export default function Platform() {
   const [isDemoOpen, setIsDemoOpen] = useState(false)
@@ -21,24 +23,17 @@ export default function Platform() {
         breadcrumbs={[{ name: 'Platform', url: '/platform' }]}
       />
 
-      {/* Redesigned split-screen hero section */}
-      <PlatformHero
-        onBookDemo={() => setIsDemoOpen(true)}
-      />
-
-      {/* Immediate proof statistics bar */}
-      <PlatformProofBar />
-
-      {/* Actual platform capabilities section (Stacker layout) */}
-      <PlatformCapabilities />
-
-      {/* Bottom CTA block */}
-      <PlatformCTA onBookDemo={() => setIsDemoOpen(true)} />
+      <div className="bg-white min-h-screen text-left">
+        <div id="hero"><PlatformHero onBookDemo={() => setIsDemoOpen(true)} /></div>
+        <div id="overview"><PlatformOverview onBookDemo={() => setIsDemoOpen(true)} /></div>
+        <div id="capabilities"><PlatformCapabilities /></div>
+        <div id="temperature"><PlatformTemperature /></div>
+        <div id="how-it-works"><PlatformHowItWorks /></div>
+        <div id="onboarding"><PlatformOnboarding /></div>
+      </div>
 
       {/* Global schedule demo modal */}
       <ScheduleDemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </>
   )
 }
-
-

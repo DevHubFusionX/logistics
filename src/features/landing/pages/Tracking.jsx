@@ -115,7 +115,7 @@ export default function Tracking() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0056B8] hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.98] flex-shrink-0"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-[#0056B8] hover:bg-[#004aad] disabled:opacity-50 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.98] flex-shrink-0"
                 >
                   {loading ? (
                     <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />

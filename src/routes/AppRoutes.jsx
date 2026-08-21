@@ -49,7 +49,7 @@ const Terms = lazy(() => import('../features/landing/pages/Terms'))
 const ProductDemo = lazy(() => import('../features/landing/pages/ProductDemo'))
 const Technology = lazy(() => import('../features/landing/pages/technology'))
 const Solutions = lazy(() => import('../features/landing/pages/solutions'))
-const Network = lazy(() => import('../features/landing/pages/Network'))
+const Network = lazy(() => import('../features/landing/pages/network'))
 
 // --- Auth Pages ---
 const SignUp = lazy(() => import('../pages/auth/SignUp'))

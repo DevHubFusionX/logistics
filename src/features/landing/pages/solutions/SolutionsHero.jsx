@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function SolutionsHero() {
+export default function SolutionsHero({ onBookDemo }) {
   return (
     <section className="min-h-screen flex flex-col pt-28" style={{ backgroundColor: '#0056B8' }}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 w-full flex-1 flex flex-col">
@@ -10,7 +10,7 @@ export default function SolutionsHero() {
           className="font-heading-unique font-extrabold text-white leading-[1.05] tracking-tight pt-10 pb-14"
           style={{ fontSize: 'clamp(2.8rem, 6vw, 5.2rem)' }}
         >
-          The decision layer<br />for cold‑chain logistics.
+          Cold-chain solutions<br />built for your industry.
         </h1>
 
         {/* Two columns */}
@@ -19,20 +19,28 @@ export default function SolutionsHero() {
           {/* Left: text + CTA */}
           <div className="flex flex-col gap-6 max-w-sm">
             <p className="font-body-unique text-blue-100 text-sm leading-relaxed">
-              One platform that unifies temperature telemetry, fleet operations, and compliance reporting.
+              From GDP-compliant pharma logistics to farm-to-shelf food distribution — Dara delivers purpose-built cold-chain solutions across every temperature-sensitive industry.
             </p>
             <p className="font-body-unique text-blue-100 text-sm leading-relaxed">
-              Built for enterprise cold-chain — so your team moves faster with full visibility.
+              Real-time visibility, temperature monitoring and verified compliance — from booking to proof of delivery.
             </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#0056B8] text-sm font-bold font-body-unique hover:bg-blue-50 transition-colors w-fit mt-2"
-            >
-              Request a Demo
-              <svg viewBox="0 0 16 16" className="w-3.5 h-3.5" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
+            <div className="flex flex-wrap gap-3 mt-2">
+              <button
+                onClick={onBookDemo}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white text-[#0056B8] text-sm font-bold font-body-unique hover:bg-blue-50 transition-colors cursor-pointer"
+              >
+                Book a Demo
+                <svg viewBox="0 0 16 16" className="w-3.5 h-3.5" fill="none">
+                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+              <Link
+                to="/contact"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-full border border-white/30 text-white text-sm font-bold font-body-unique hover:bg-white/10 transition-colors"
+              >
+                Speak to Dara
+              </Link>
+            </div>
           </div>
 
           {/* Right: image */}
