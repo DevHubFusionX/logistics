@@ -1,9 +1,14 @@
 export default function NetworkGlance() {
   const stats = [
     {
-      value: '120+',
-      label: 'Partner Reefer Assets',
+      value: '300',
+      label: 'Reefer Trucks',
       desc: 'Active, IoT-monitored refrigerated trucks coordinated across Nigeria.'
+    },
+    {
+      value: '500',
+      label: 'Dry Trucks',
+      desc: 'Dry cargo and standard haulage assets across our distribution network.'
     },
     {
       value: '12',
@@ -13,7 +18,7 @@ export default function NetworkGlance() {
     {
       value: '36',
       label: 'States Covered',
-      desc: 'Seamless cold-chain distribution across every state and route.'
+      desc: 'Seamless distribution across every state and route.'
     },
     {
       value: '99.4%',
@@ -37,7 +42,7 @@ export default function NetworkGlance() {
         </div>
 
         {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
           {stats.map((stat, idx) => (
             <div 
               key={idx} 

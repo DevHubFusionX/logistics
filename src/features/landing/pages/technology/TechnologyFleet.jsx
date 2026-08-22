@@ -8,7 +8,7 @@ const features = [
   },
   {
     icon: Gauge,
-    title: '120+ Connected Reefer Trucks',
+    title: '300+ Reefer & 500+ Dry Trucks',
     desc: 'Full fleet visibility in one dashboard — speed, heading, fuel, and availability at a glance.',
   },
   {

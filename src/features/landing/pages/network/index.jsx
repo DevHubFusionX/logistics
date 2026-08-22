@@ -18,7 +18,7 @@ export default function Network() {
     <>
       <SEO
         title="Dara Cold-Chain Network — Reefer Capacity, Cold Storage & 36-State Coverage"
-        description="Explore Dara's connected cold-chain logistics network. 120+ partner reefer assets, distributed cold storage depots, and 36-state route coverage — all orchestrated through DaraOS."
+        description="Explore Dara's connected logistics network. 300 reefer trucks, 500 dry trucks, distributed cold storage depots, and 36-state route coverage — all orchestrated through DaraOS."
         keywords="cold chain network Nigeria, reefer trucks Nigeria, cold storage depots, logistics network coverage, 36 states logistics"
         canonical="/network"
         breadcrumbs={[{ name: 'Network', url: '/network' }]}

@@ -11,7 +11,7 @@ import {
 export const heroData = {
     title: {
         prefix: "The Digital Infrastructure Powering",
-        highlight: "Africa’s Cold Chain",
+        highlight: "Nigeria’s Logistics & Cold Chain",
         suffix: ""
     },
     description: "Dara combines technology, real-time visibility and temperature-controlled logistics to help businesses safely move temperature-sensitive goods across Nigeria.",
@@ -25,7 +25,7 @@ export const heroData = {
 
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
-        { icon: 'Truck', value: '120+', label: 'Trucks on Network via partner model' },
+        { icon: 'Truck', value: '300 / 500', label: 'Reefer / Dry Trucks on Network' },
         { icon: 'Clock', value: '137', label: 'Cold Chain Trips Completed' }
     ],
     buttons: {
@@ -73,7 +73,7 @@ export const aboutData = {
     },
     stats: [
         { value: "TrendingUp", label: "Growing number of happy businesses", color: "blue" },
-        { value: "120+", label: "Trucks on Network via partner model", color: "green" },
+        { value: "300 / 500", label: "Reefer / Dry Trucks on Network", color: "green" },
         { value: "137", label: "Cold Chain Trips Completed", color: "blue" }
     ]
 }
@@ -272,7 +272,7 @@ export const testimonialsData = {
     },
     stats: [
         { number: 'TrendingUp', label: 'Growing number of happy businesses' },
-        { number: '120+', label: 'Trucks on Network via partner model' },
+        { number: '300 / 500', label: 'Reefer / Dry Trucks on Network' },
         { number: '137', label: 'Cold Chain Trips Completed' }
     ],
     featured: [
