@@ -61,8 +61,8 @@ export default function ContactInfo({ itemVariants }) {
             <Mail className="w-5 h-5 text-sky-400" />
           </motion.div>
           <div>
-            <p className="text-white font-medium">hello@daraexpress.com</p>
-            <p className="text-white font-medium">contact@daraexpress.com</p>
+            <p className="text-white font-medium">hello@darafort.com</p>
+            <p className="text-white font-medium">contact@darfort.com</p>
             <p className="text-gray-400 text-sm">General Inquiries</p>
           </div>
         </motion.div>

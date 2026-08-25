@@ -111,7 +111,7 @@ export default function Contact() {
             '@type': 'LocalBusiness',
             'name': 'Darafort',
             'telephone': '+2349054610119',
-            'email': 'hello@daraexpress.com',
+            'email': 'hello@darafort.com',
             'address': {
               '@type': 'PostalAddress',
               'streetAddress': 'MJS House, 366 Murtala Muhammed Road, Yaba',

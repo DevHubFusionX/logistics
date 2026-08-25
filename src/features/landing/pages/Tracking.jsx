@@ -322,7 +322,7 @@ export default function Tracking() {
                         <a href="tel:+2348115779007" className="flex-1 font-body-unique text-center py-2 border border-white/20 hover:bg-white/10 text-white text-xs font-bold rounded-sm transition-all">
                           Call
                         </a>
-                        <a href="mailto:hello@daraexpress.com" className="flex-1 font-body-unique text-center py-2 bg-white text-[#0056B8] hover:bg-blue-50 text-xs font-bold rounded-sm transition-all shadow-sm">
+                        <a href="mailto:hello@darafort.com" className="flex-1 font-body-unique text-center py-2 bg-white text-[#0056B8] hover:bg-blue-50 text-xs font-bold rounded-sm transition-all shadow-sm">
                           Email
                         </a>
                       </div>

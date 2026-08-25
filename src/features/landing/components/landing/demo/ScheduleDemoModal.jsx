@@ -51,7 +51,7 @@ export default function ScheduleDemoModal({ isOpen, onClose }) {
                     access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
                     subject: `New Demo Request from ${formData.fullName}`,
                     from_name: 'DarafortDemo Form',
-                    to: 'contact@daraexpress.com',
+                    to: 'contact@darfort.com',
                     ...formData,
                     productsOfInterest: productsString,
                     message: `

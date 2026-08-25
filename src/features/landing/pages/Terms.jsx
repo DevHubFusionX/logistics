@@ -121,8 +121,8 @@ export default function Terms() {
           >
             <p className="font-body-unique text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
               If you have any questions or require specific transit insurance endorsements for high-value cargo, please contact our logistics compliance desk at{' '}
-              <a href="mailto:legal@daraexpress.com" className="text-[#0056B8] font-bold hover:underline">
-                legal@daraexpress.com
+              <a href="mailto:contact@darfort.com" className="text-[#0056B8] font-bold hover:underline">
+                contact@darfort.com
               </a>
               .
             </p>

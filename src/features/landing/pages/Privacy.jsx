@@ -45,7 +45,7 @@ export default function Privacy() {
     {
       title: '6. Contact Us',
       content: `If you have any questions or concerns about this Privacy Policy or our data practices, please reach out to us:
-      • Email: privacy@daraexpress.com
+      • Email: contact@darfort.com
       • Phone: +234 811 577 9007
       • Address: MJS House, 366 Murtala Muhammed Road, Yaba, Lagos, Nigeria.`,
     },

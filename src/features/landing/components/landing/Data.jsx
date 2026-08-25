@@ -337,7 +337,7 @@ export const contactData = {
         {
             icon: Mail,
             title: "Email Us",
-            content: "hello@daraexpress.com\ncontact@daraexpress.com",
+            content: "hello@darafort.com\ncontact@darfort.com",
             color: "bg-red-600"
         },
         {

@@ -109,7 +109,7 @@ export default function Footer() {
             <ul className="space-y-4 font-body-unique">
               {[
                 { icon: Phone, lines: ['+234 811 577 9007', '+234 912 116 8485'] },
-                { icon: Mail, lines: ['hello@daraexpress.com'] },
+                { icon: Mail, lines: ['hello@darafort.com', 'contact@darfort.com'] },
                 { icon: MapPin, lines: ['MJS House, 366 Murtala Muhammed Road, Yaba, Lagos'] },
               ].map(({ icon: Icon, lines }, i) => (
                 <li key={i} className="flex items-start gap-3">

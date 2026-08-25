@@ -22,7 +22,7 @@ export default function SystemSettings({ onSave }) {
             <label className="block text-sm font-medium text-gray-700 mb-2">Contact Email</label>
             <input
               type="email"
-              defaultValue="info@daraexpress.com"
+              defaultValue="hello@darafort.com"
               className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
             />
           </div>
