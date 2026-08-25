@@ -43,6 +43,12 @@ export default function Home() {
       <DaraProofBar />
 
       <LazyViewportRender placeholderHeight="600px">
+        <DaraAppShowcase />
+      </LazyViewportRender>
+
+      <SectionDivider />
+
+      <LazyViewportRender placeholderHeight="600px">
         <DaraHowItWorks />
       </LazyViewportRender>
 
@@ -62,12 +68,6 @@ export default function Home() {
 
       <LazyViewportRender placeholderHeight="600px">
         <DaraJourney />
-      </LazyViewportRender>
-
-      <SectionDivider />
-
-      <LazyViewportRender placeholderHeight="600px">
-        <DaraAppShowcase />
       </LazyViewportRender>
 
       <SectionDivider />

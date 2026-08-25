@@ -88,9 +88,9 @@ export default function TopHeader({ onToggleSidebar }) {
         {/* Logo */}
         <Link to="/" className="flex-shrink-0 hidden sm:block hover:opacity-85 transition-opacity">
           <img
-            src="/assets/img/Dara.svg"
+            src="/black.svg"
             alt="Darafort"
-            className="h-8 sm:h-10 w-auto object-contain"
+            className="h-5 sm:h-6 w-auto object-contain"
           />
         </Link>
 

@@ -41,9 +41,9 @@ export default function AuthLayout({ children, title, subtitle }) {
             transition={{ delay: 0.2 }}
           >
             <img
-              src="/assets/img/Dara.svg"
+              src="/white.svg"
               alt="Dara Logistics"
-              className="w-32 h-32 lg:w-40 lg:h-40 xl:w-48 xl:h-48 object-contain filter brightness-0 invert"
+              className="h-8 lg:h-10 xl:h-12 w-auto object-contain"
             />
           </motion.div>
 
@@ -122,9 +122,9 @@ export default function AuthLayout({ children, title, subtitle }) {
             animate={{ opacity: 1, y: 0 }}
           >
             <img
-              src="/assets/img/Dara.svg"
+              src="/black.svg"
               alt="Dara Logistics"
-              className="w-24 h-24 sm:w-32 sm:h-32 object-contain"
+              className="h-6 sm:h-7 w-auto object-contain"
             />
           </motion.div>
           {children}

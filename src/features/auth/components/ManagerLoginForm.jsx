@@ -156,9 +156,9 @@ export default function ManagerLoginForm() {
             transition={{ delay: 0.3 }}
           >
             <img
-              src="/assets/img/Dara.svg"
+              src="/white.svg"
               alt="Darafort"
-              className="w-28 h-28 xl:w-36 xl:h-36 object-contain filter brightness-0 invert"
+              className="h-8 xl:h-10 w-auto object-contain"
             />
           </motion.div>
 
@@ -265,7 +265,7 @@ export default function ManagerLoginForm() {
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
-            <img src="/assets/img/Dara.svg" alt="Darafort" className="w-24 h-24 object-contain" />
+            <img src="/black.svg" alt="Darafort" className="h-6 w-auto object-contain" />
           </div>
 
           {/* Header */}

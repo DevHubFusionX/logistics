@@ -65,13 +65,13 @@ export default function DaraHero() {
         {/* Title / Headline (Space Grotesk) using info from Data.jsx with Playful Underline */}
         <h1
           className="font-heading-unique tracking-tight leading-[1.08] text-white mb-6 max-w-4xl"
-          style={{ fontSize: 'clamp(2.0rem, 4.8vw, 3.8rem)' }}
+          style={{ fontSize: 'clamp(1.75rem, 6vw, 3.8rem)' }}
         >
           {heroData.title.prefix}{' '}
-          <span className="relative inline-block whitespace-nowrap">
+          <span className="relative inline-block sm:whitespace-nowrap">
             {heroData.title.highlight}
             <svg
-              className="absolute left-0 bottom-[-8px] w-full h-[8px] text-[#38bdf8]"
+              className="absolute left-0 bottom-[-8px] w-full h-[8px] text-[#38bdf8] hidden sm:block"
               viewBox="0 0 100 10"
               preserveAspectRatio="none"
             >
@@ -99,13 +99,13 @@ export default function DaraHero() {
 
         {/* Action Buttons using info from Data.jsx */}
         <motion.div
-              variants={itemVariants}
-          className="flex flex-row items-center gap-4 w-full sm:w-auto mb-12"
+          variants={itemVariants}
+          className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-12"
         >
           {/* Book a Demo (Brand Blue Button) */}
           <button
             onClick={() => setIsDemoOpen(true)}
-            className="font-body-unique px-6 py-3 bg-[#0056B8] hover:bg-[#004494] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] shadow-lg shadow-black/10 cursor-pointer"
+            className="font-body-unique px-6 py-3 bg-[#0056B8] hover:bg-[#004494] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] shadow-lg shadow-black/10 cursor-pointer text-center w-full sm:w-auto"
           >
             {heroData.buttons.primary.text}
           </button>
@@ -113,7 +113,7 @@ export default function DaraHero() {
           {/* Explore Our Technology (Outline Glass Button) */}
           <Link
             to={heroData.buttons.secondary.link}
-            className="font-body-unique px-6 py-3 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] backdrop-blur-sm shadow-md"
+            className="font-body-unique px-6 py-3 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] backdrop-blur-sm shadow-md text-center w-full sm:w-auto"
           >
             {heroData.buttons.secondary.text}
           </Link>

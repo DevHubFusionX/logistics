@@ -46,7 +46,7 @@ export default function MobileDrawer({ isOpen, user, onClose, onLogout, onDemoOp
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-              <AnimatedLogo className="h-8" isDarkText={true} />
+              <AnimatedLogo className="h-5" isDarkText={true} />
               <button
                 onClick={onClose}
                 aria-label="Close menu"

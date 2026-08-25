@@ -26,6 +26,15 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto">
 
+        {/* Logo Block */}
+        <div className="mb-10 flex justify-start">
+          <img
+            src="/white.svg"
+            alt="Dara Logo"
+            className="h-6 w-auto object-contain"
+          />
+        </div>
+
         {/* ── TOP SECTION: Large Headline & Action ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start pb-10 md:pb-16 border-b border-white/20">
 
