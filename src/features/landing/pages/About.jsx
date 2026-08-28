@@ -6,7 +6,7 @@ import SEO from '@/components/common/SEO'
 const ease = [0.16, 1, 0.3, 1]
 
 const stats = [
-  { value: '120', label: 'Reefer trucks on network' },
+  { value: '300', label: 'Reefer trucks on network' },
   { value: '200+', label: 'Cold chain trips completed' },
   { value: '36', label: 'States covered' },
   { value: '99.8%', label: 'Delivery success rate' },

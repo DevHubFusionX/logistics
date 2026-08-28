@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const faqData = [
   {
     question: "What makes Darafort different from other transport companies?",
-    answer: "Unlike regular transport companies, we specialize in moving items that need to stay cold. We have over 120 cold trucks, live temperature tracking, and full insurance to protect your goods if anything goes wrong."
+    answer: "Unlike regular transport companies, we specialize in moving items that need to stay cold. We coordinate 300 reefer trucks and 500 dry trucks, live temperature tracking, and full insurance to protect your goods if anything goes wrong."
   },
   {
     question: "How do you keep items cold during transport?",

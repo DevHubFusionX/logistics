@@ -4,10 +4,10 @@ import { motion } from 'framer-motion'
 const highlightItems = [
   { icon: Thermometer, text: '±0.1°C Precision' },
   { icon: Shield,      text: 'GIT Insured' },
-  { icon: Truck,       text: '120 Reefer Trucks' },
-  { icon: MapPin,      text: 'All 36 States' },
-  { icon: Shield,      text: 'Pharma Grade' },
-  { icon: Truck,       text: 'Cold Chain Experts' }
+  { icon: Truck,       text: '300 Reefer Trucks' },
+  { icon: Truck,       text: '500 Dry Trucks' },
+  { icon: MapPin,      text: '36-State Coverage' },
+  { icon: Shield,      text: 'Pharma Grade' }
 ]
 
 // Duplicate the items array for infinite looping ticker

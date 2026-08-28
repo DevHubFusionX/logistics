@@ -336,7 +336,7 @@ export default function Services() {
           {/* Quick highlights grid */}
           <div className="lg:col-span-5 grid grid-cols-2 gap-4 relative z-10 w-full">
             {[
-              { value: '120', label: 'Reefer trucks\non network' },
+              { value: '300', label: 'Reefer trucks\non network' },
               { value: '200+', label: 'Cold chain\ntrips completed' },
               { value: '36', label: 'States\ncovered' },
               { value: '±0.1°C', label: 'Temperature\nprecision' },

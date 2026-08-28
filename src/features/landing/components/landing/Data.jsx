@@ -26,7 +26,7 @@ export const heroData = {
     stats: [
         { icon: 'TrendingUp', value: 'TrendingUp', label: 'Growing number of happy businesses' },
         { icon: 'Truck', value: '300 / 500', label: 'Reefer / Dry Trucks on Network' },
-        { icon: 'Clock', value: '137', label: 'Cold Chain Trips Completed' }
+        { icon: 'Clock', value: '200+', label: 'Cold Chain Trips Completed' }
     ],
     buttons: {
         primary: { text: "Book a Demo", link: "#" },
@@ -74,7 +74,7 @@ export const aboutData = {
     stats: [
         { value: "TrendingUp", label: "Growing number of happy businesses", color: "blue" },
         { value: "300 / 500", label: "Reefer / Dry Trucks on Network", color: "green" },
-        { value: "137", label: "Cold Chain Trips Completed", color: "blue" }
+        { value: "200+", label: "Cold Chain Trips Completed", color: "blue" }
     ]
 }
 
@@ -273,7 +273,7 @@ export const testimonialsData = {
     stats: [
         { number: 'TrendingUp', label: 'Growing number of happy businesses' },
         { number: '300 / 500', label: 'Reefer / Dry Trucks on Network' },
-        { number: '137', label: 'Cold Chain Trips Completed' }
+        { number: '200+', label: 'Cold Chain Trips Completed' }
     ],
     featured: [
         {

@@ -30,11 +30,7 @@ The dashboard/product UI should be clearly visible rather than being a decorativ
 3. IMMEDIATE PROOF BAR
 Place directly underneath the hero.
 Display:
-120+ Reefer Assets | Real-Time Visibility | Temperature Monitoring | 36-State Coverage
-Important:
-    • Verify the 120+ figure before publishing.
-    • If 120+ refers to network capacity rather than owned trucks, explicitly label it correctly.
-    • Do not present network capacity as Dara-owned fleet.
+300 Reefer Trucks | 500 Dry Trucks | Real-Time Visibility | Temperature Monitoring | 36-State Coverage
 
 4. NAVIGATION / INFORMATION ARCHITECTURE
 Update the main navigation to include:
@@ -221,7 +217,7 @@ Do not visually present future/roadmap components as live production systems.
 10. TECHNOLOGY METRICS STRIP
 Create a dedicated technology metrics section.
 Potential metrics:
-    • 120+ connected reefer assets
+    • 300 connected reefer trucks & 500 dry trucks
     • 36 states covered
     • 15–30 second GPS telemetry interval
     • ±0.1°C temperature precision
@@ -367,7 +363,7 @@ The redesign is complete only when:
     • At least one accurate product/dashboard visual appears above or near the first major technology section.
     • Customer problems are visibly connected to specific Dara technology capabilities.
     • Dedicated Platform/Technology pages exist.
-    • 120+ reefer assets is accurately described as owned fleet, network or capacity.
+    • 300 reefer trucks & 500 dry trucks accurately described across network.
     • All technology claims are technically accurate and internally verified.
     • Every major commercial page has a demo/consultation CTA.
     • Website demonstrates technology through actual interfaces/data rather than words such as “innovative,” “smart” or “advanced.”
