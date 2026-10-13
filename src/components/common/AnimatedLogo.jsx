@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-export default function AnimatedLogo({ className = "h-5 sm:h-6", isDarkText = false }) {
+export default function AnimatedLogo({ className = "h-3.5 sm:h-4", isDarkText = false }) {
   const logoSrc = isDarkText ? "/black.svg" : "/white.svg"
   return (
     <motion.div

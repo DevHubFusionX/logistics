@@ -21,9 +21,6 @@ function Fleet() {
   const { data: fleetResponse, isLoading, isError, refetch } = useFleetQuery(filters)
   const fleetData = useMemo(() => fleetResponse?.records || [], [fleetResponse])
 
-  if (import.meta.env.DEV) {
-  }
-
   const totalFleetCount = useMemo(() => fleetResponse?.total || 0, [fleetResponse])
   const { data: drivers = [] } = useDriversQuery()
 

@@ -21,7 +21,7 @@ export default function InvoiceGenerator({ bookingId, email }) {
       document.body.removeChild(link)
       window.URL.revokeObjectURL(url)
       toast.success('Invoice downloaded successfully!')
-    } catch (error) {
+    } catch {
       toast.error('Failed to download invoice')
     } finally {
       setDownloading(false)
@@ -38,7 +38,7 @@ export default function InvoiceGenerator({ bookingId, email }) {
     try {
       await paymentService.emailInvoice(bookingId, email)
       toast.success(`Invoice sent to ${email}`)
-    } catch (error) {
+    } catch {
       toast.error('Failed to send invoice')
     } finally {
       setEmailing(false)

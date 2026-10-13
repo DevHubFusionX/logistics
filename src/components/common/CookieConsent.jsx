@@ -21,7 +21,7 @@ export default function CookieConsent() {
           const t = setTimeout(() => setVisible(true), 1500)
           return () => clearTimeout(t)
         }
-      } catch (e) {
+      } catch {
         // Fallback for old simple string or invalid JSON
         localStorage.removeItem(COOKIE_KEY)
         const t = setTimeout(() => setVisible(true), 1500)

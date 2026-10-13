@@ -7,7 +7,7 @@
  *
  * All methods below are stubs that log a warning and resolve silently.
  */
-const noOp = (name) => (...args) => {
+const noOp = (name) => (..._args) => {
   console.warn(`validationService.${name}() called — no backend endpoint exists.`)
   return Promise.resolve({ data: null, valid: true, message: 'Not implemented — validation skipped' })
 }

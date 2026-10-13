@@ -18,7 +18,7 @@ export default function Alerts() {
     onRefresh: () => window.location.reload()
   })
 
-  const handleSaveRule = (rule) => {
+  const handleSaveRule = (_rule) => {
     showToast.success('Alert rule created successfully', 'Rule Active')
     setShowRuleForm(false)
   }

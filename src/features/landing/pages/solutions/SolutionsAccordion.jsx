@@ -74,6 +74,8 @@ function SectorCard({ sector, index, total }) {
   const exitScale   = useTransform(exitProgress, [0.5, 1], [1, 0.93])
   const exitOpacity = useTransform(exitProgress, [0.5, 1], [1, 0.5])
   const exitBlur    = useTransform(exitProgress, [0.5, 1], [0, 7])
+  const overlayBackdropFilter = useTransform(exitBlur, (v) => `blur(${v}px)`)
+  const overlayBackgroundColor = useTransform(exitProgress, [0.5, 1], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.3)'])
 
   const isLast = index === total - 1
   const { icon: Icon, num, title, desc, image, bg } = sector
@@ -95,8 +97,8 @@ function SectorCard({ sector, index, total }) {
           <motion.div
             className="absolute inset-0 z-10 rounded-3xl pointer-events-none"
             style={{
-              backdropFilter: useTransform(exitBlur, (v) => `blur(${v}px)`),
-              backgroundColor: useTransform(exitProgress, [0.5, 1], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.3)']),
+              backdropFilter: overlayBackdropFilter,
+              backgroundColor: overlayBackgroundColor,
             }}
           />
         )}

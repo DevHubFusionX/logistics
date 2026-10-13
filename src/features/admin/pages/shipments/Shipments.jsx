@@ -99,18 +99,11 @@ export default function Shipments() {
     setFilters({})
   }
 
-  const handleViewShipment = (shipmentId) => {
-    const shipment = shipments.find(s => s.id === shipmentId)
+  const handleViewShipment = (shipmentOrId) => {
+    const id = typeof shipmentOrId === 'object' ? shipmentOrId.id : shipmentOrId
+    const shipment = shipments.find(s => s.id === id) || shipmentOrId
     setSelectedShipment(shipment)
     setSidebarOpen(true)
-  }
-
-  const handleReassignDriver = (_shipmentId) => {
-    // Reassign driver logic
-  }
-
-  const handlePrintLabel = (_shipmentId) => {
-    // Print label logic
   }
 
   const handleAssignDriver = (_shipmentId, _driverId, _status) => {
@@ -242,6 +235,7 @@ export default function Shipments() {
           ]}
           height={400}
           enableInlineEdit={true}
+          onRowClick={handleViewShipment}
           onExport={() => showToast.success('Shipments exported successfully')}
           onSaveView={() => showToast.info('View saved')}
         />
@@ -273,7 +267,7 @@ export default function Shipments() {
       {/* Overlay for sidebar */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
           onClick={() => setSidebarOpen(false)}
         />
       )}

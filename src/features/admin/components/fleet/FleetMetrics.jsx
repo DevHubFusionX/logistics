@@ -1,7 +1,7 @@
 import { Truck, CheckCircle, Clock, Wifi } from 'lucide-react'
 import { MetricCard } from '@/components/ui'
 
-export default function FleetMetrics({ data, statusCounts }) {
+export default function FleetMetrics({ _data, statusCounts }) {
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 w-full">
       <MetricCard

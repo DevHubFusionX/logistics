@@ -31,7 +31,7 @@ export default function Footer() {
           <img
             src="/white.svg"
             alt="Dara Logo"
-            className="h-6 w-auto object-contain"
+            className="h-4 sm:h-5 w-auto object-contain"
           />
         </div>
 

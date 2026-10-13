@@ -26,9 +26,6 @@ export default function Drivers() {
   const { data: fleetResponse, isLoading: isLoadingFleet, refetch: refetchFleet } = useFleetQuery()
   const fleet = useMemo(() => fleetResponse?.records || [], [fleetResponse])
 
-  if (import.meta.env.DEV) {
-  }
-
   const isLoading = isLoadingDrivers || isLoadingFleet
   const isError = isErrorDrivers
   const refetch = () => {

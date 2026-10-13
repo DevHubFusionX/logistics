@@ -4,7 +4,7 @@
  * The backend does NOT have any /support/ routes.
  * All methods below are stubs that log a warning and resolve with empty data.
  */
-const noOp = (name) => (...args) => {
+const noOp = (name) => (..._args) => {
   console.warn(`supportService.${name}() called — no backend endpoint exists. This is a no-op.`)
   return Promise.resolve({ data: [], message: 'Not implemented' })
 }

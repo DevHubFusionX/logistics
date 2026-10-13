@@ -1,6 +1,5 @@
 
 import { sanitizeInput } from '../utils/sanitize'
-import { validateAddress } from '../utils/validation'
 
 /** @type {Map<string, { count: number, resetTime: number }>} */
 const rateLimits = new Map()

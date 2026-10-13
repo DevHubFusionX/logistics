@@ -50,8 +50,6 @@ export function usePaymentQuery(paymentId) {
  * Initialize payment mutation
  */
 export function useInitializePaymentMutation() {
-    const queryClient = useQueryClient()
-
     return useMutation({
         mutationFn: async (bookingId) => {
             return await paymentService.initializePayment(bookingId)
@@ -80,7 +78,7 @@ export function useVerifyPaymentMutation() {
             return await paymentService.verifyPayment(reference)
         },
 
-        onSuccess: (response) => {
+        onSuccess: () => {
             toast.success('Payment verified successfully!')
 
             // Invalidate payment and booking queries

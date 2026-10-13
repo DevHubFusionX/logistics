@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Mail, Lock, User, Phone, MapPin, Building, Eye, EyeOff, CheckCircle } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -49,6 +49,12 @@ export default function MobileSignUp() {
     clearFieldError('password')
   }
 
+  const handleRedirect = useCallback(() => {
+    // Append email parameter so the mobile app can prefill the login form
+    const finalRedirectUri = `${redirectUri}${redirectUri.includes('?') ? '&' : '?'}email=${encodeURIComponent(registeredEmail)}`
+    window.location.href = finalRedirectUri
+  }, [redirectUri, registeredEmail])
+
   // Handle countdown and auto-redirection on success step
   useEffect(() => {
     if (step !== 'success') return
@@ -63,13 +69,7 @@ export default function MobileSignUp() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [step, countdown])
-
-  const handleRedirect = () => {
-    // Append email parameter so the mobile app can prefill the login form
-    const finalRedirectUri = `${redirectUri}${redirectUri.includes('?') ? '&' : '?'}email=${encodeURIComponent(registeredEmail)}`
-    window.location.href = finalRedirectUri
-  }
+  }, [step, countdown, handleRedirect])
 
   const handleSubmit = (e) => {
     e.preventDefault()

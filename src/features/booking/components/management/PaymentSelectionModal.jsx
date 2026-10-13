@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { X, Loader2, AlertCircle, CheckCircle, XCircle, RefreshCw, Shield, CreditCard, Building2, Banknote } from 'lucide-react'
 import bookingService from '@/features/booking/services/bookingService'
-import { useInitializePaymentMutation, useVerifyPaymentMutation } from '@/hooks/queries/usePaymentQueries'
+import { useInitializePaymentMutation } from '@/hooks/queries/usePaymentQueries'
 import toast from 'react-hot-toast'
 
 const METHODS = [
@@ -18,7 +18,7 @@ function Row({ label, value }) {
   )
 }
 
-export default function PaymentSelectionModal({ booking, user, onSuccess, onClose }) {
+export default function PaymentSelectionModal({ booking, user, onSuccess: _onSuccess, onClose }) {
   const [fullBooking, setFullBooking]   = useState(null)
   const [fetchError, setFetchError]     = useState(null)
   const [fetching, setFetching]         = useState(true)
@@ -27,7 +27,6 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
   const [showBankModal, setShowBankModal] = useState(false)
 
   const initializePayment = useInitializePaymentMutation()
-  const verifyPayment     = useVerifyPaymentMutation()
 
   const bookingId = booking?._id || booking?.id || booking?.tracking_number
 
@@ -50,7 +49,6 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
   }, [bookingId, booking])
 
   const amount    = fullBooking?.price || fullBooking?.shipping_fee || fullBooking?.amount || booking?.amount || booking?.calculatedPrice || 0
-  const email     = user?.email || fullBooking?.email || booking?.email || ''
   const origin    = fullBooking?.pickupLocation?.city  || booking?.pickupLocation?.city  || '—'
   const dest      = fullBooking?.dropoffLocation?.city || booking?.dropoffLocation?.city || '—'
   const goodsType = fullBooking?.goodsType || fullBooking?.cargoType || booking?.goodsType || '—'
@@ -65,8 +63,9 @@ export default function PaymentSelectionModal({ booking, user, onSuccess, onClos
     setPayStatus('processing')
     try {
       const res        = await initializePayment.mutateAsync(bookingId)
-      const authUrl    = res.data?.data?.authorization_url
-      if (!authUrl) throw new Error(res.data?.message || 'Could not get payment URL')
+      const paymentPayload = res.data?.data || res.data
+      const authUrl    = paymentPayload?.authorization_url || paymentPayload?.authorizationUrl
+      if (!authUrl) throw new Error(res.data?.message || paymentPayload?.message || 'Could not get payment URL')
 
       // Store bookingId for verification on return
       localStorage.setItem('currentBookingId', bookingId)

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { PageHeader } from '@/features/dashboard'
 import { Package, MapPin, CheckCircle, Navigation, Phone, Clock, Play, Power, Compass } from 'lucide-react'
 import { useToast } from '@/components/ui'
@@ -48,7 +48,7 @@ function formatLocation(loc) {
 
 export default function DriverApp() {
   const { data: tripsData, isLoading, refetch } = useTripsQuery()
-  const trips = tripsData?.records || []
+  const trips = useMemo(() => tripsData?.records || [], [tripsData?.records])
 
   const [selectedTrip, setSelectedTrip] = useState(null)
   const [simulateMode, setSimulateMode] = useState(true)
@@ -280,7 +280,8 @@ export default function DriverApp() {
                         <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase ${
                           isCompleted ? 'bg-green-100 text-green-700' :
                           isActive ? 'bg-blue-100 text-blue-700' :
-                          'bg-amber-100 text-amber-700'
+                          isPending ? 'bg-amber-100 text-amber-700' :
+                          'bg-slate-100 text-slate-700'
                         }`}>
                           {trip.status}
                         </span>

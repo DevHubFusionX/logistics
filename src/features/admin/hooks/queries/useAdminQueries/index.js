@@ -17,8 +17,8 @@ export function useAdminMutations() {
     const { updateClient }                               = useClientMutations()
     const { updateDriver, verifyDriver, rejectDriver }   = useDriverMutations()
     const { createVehicle, approveTruck, rejectTruck }   = useFleetMutations()
-    const { createTrip, assignTripDriver, startTripMutation, completeTripMutation, cancelTripMutation } = useTripMutations()
-    const { createManager, deleteManager }               = useManagerMutations()
+    const { createTrip, assignTripDriver, updateTrackingLink, startTripMutation, completeTripMutation, cancelTripMutation } = useTripMutations()
+    const { createManager, createAdmin, deleteManager } = useManagerMutations()
 
     return {
         // Client
@@ -34,11 +34,13 @@ export function useAdminMutations() {
         // Trips
         createTrip,
         assignTripDriver,
+        updateTrackingLink,
         startTripMutation,
         completeTripMutation,
         cancelTripMutation,
         // Admin management
         createManager,
+        createAdmin,
         deleteManager,
     }
 }

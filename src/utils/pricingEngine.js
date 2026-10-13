@@ -120,8 +120,7 @@ export function updateClientOverride(clientId, clientData) {
 
 export function deleteClientOverride(clientId) {
   if (clientOverrides[clientId]) {
-    const { [clientId]: removed, ...remaining } = clientOverrides
-    clientOverrides = remaining
+    delete clientOverrides[clientId]
     return true
   }
   return false

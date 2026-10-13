@@ -9,20 +9,21 @@ export default function WalletPayment({ bookingId, amount, onSuccess, onError })
   const [processing, setProcessing] = useState(false)
 
   useEffect(() => {
-    fetchBalance()
-  }, [])
-
-  const fetchBalance = async () => {
-    try {
-      const response = await paymentService.getWalletBalance()
-      setBalance(response.data.balance)
-    } catch (error) {
-      toast.error('Failed to fetch wallet balance')
-      onError?.(error)
-    } finally {
-      setLoading(false)
+    let isMounted = true
+    const fetchBalance = async () => {
+      try {
+        const response = await paymentService.getWalletBalance()
+        if (isMounted) setBalance(response?.data?.balance ?? 0)
+      } catch (error) {
+        toast.error('Failed to fetch wallet balance')
+        onError?.(error)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
     }
-  }
+    fetchBalance()
+    return () => { isMounted = false }
+  }, [onError])
 
   const handlePayment = async () => {
     if (balance < amount) {

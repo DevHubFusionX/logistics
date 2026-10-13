@@ -1,5 +1,8 @@
 import { useState } from 'react'
-import { X, Loader2 } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { X, Loader2, Link2 } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { getSafeTrackingUrl } from '@/utils'
 
 const inputClass = 'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
 const labelClass = 'block text-sm font-medium text-gray-700 mb-1'
@@ -9,7 +12,8 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
     bookingId: '',
     driverId: '',
     originLat: '',
-    originLng: ''
+    originLng: '',
+    trackingLink: ''
   })
 
   if (!isOpen) return null
@@ -23,6 +27,15 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
     e.preventDefault()
     if (!formData.bookingId) return
 
+    let safeLink = null
+    if (formData.trackingLink.trim()) {
+      safeLink = getSafeTrackingUrl(formData.trackingLink.trim())
+      if (!safeLink) {
+        toast.error('Please enter a valid HTTP or HTTPS tracking URL (e.g. https://gps.example.com)')
+        return
+      }
+    }
+
     const payload = {
       bookingId: formData.bookingId,
       ...(formData.driverId && { driverId: formData.driverId }),
@@ -31,22 +44,22 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
           lat: parseFloat(formData.originLat),
           lng: parseFloat(formData.originLng)
         }
-      })
+      }),
+      ...(safeLink && { trackingLink: safeLink })
     }
     onSubmit(payload)
   }
 
   const handleClose = () => {
-    setFormData({ bookingId: '', driverId: '', originLat: '', originLng: '' })
+    setFormData({ bookingId: '', driverId: '', originLat: '', originLng: '', trackingLink: '' })
     onClose()
   }
 
-  return (
-    <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={handleClose} />
-      <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
-          <div className="p-6">
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={handleClose} />
+      <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-gray-100 overflow-hidden animate-in zoom-in-95 duration-200">
+        <div className="p-6">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-bold text-gray-900">Create New Trip</h2>
               <button onClick={handleClose} className="text-gray-400 hover:text-gray-600">
@@ -61,11 +74,16 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
                 {bookings.length > 0 ? (
                   <select name="bookingId" value={formData.bookingId} onChange={handleChange} className={inputClass} required>
                     <option value="">Select a booking...</option>
-                    {bookings.map(b => (
-                      <option key={b.id} value={b.id}>
-                        {b.trackingNumber || b.id} — {b.origin} → {b.destination}
-                      </option>
-                    ))}
+                    {bookings.map(b => {
+                      const id = b.id || b._id
+                      const origin = typeof b.pickupLocation === 'string' ? b.pickupLocation : (b.pickupLocation?.city || b.pickupCity || b.origin || 'Origin')
+                      const dest = typeof b.dropoffLocation === 'string' ? b.dropoffLocation : (b.dropoffLocation?.city || b.deliveryCity || b.destination || 'Destination')
+                      return (
+                        <option key={id} value={id}>
+                          {b.trackingNumber || id} — {origin} → {dest}
+                        </option>
+                      )
+                    })}
                   </select>
                 ) : (
                   <input
@@ -85,9 +103,15 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
                 <label className={labelClass}>Assign Driver <span className="text-gray-400 font-normal">(optional)</span></label>
                 <select name="driverId" value={formData.driverId} onChange={handleChange} className={inputClass}>
                   <option value="">No driver assigned yet</option>
-                  {drivers.map(d => (
-                    <option key={d.id} value={d.id}>{d.name} — {d.phone}</option>
-                  ))}
+                  {drivers.map(d => {
+                    const id = d.id || d._id
+                    const name = d.name || `${d.firstName || ''} ${d.lastName || ''}`.trim() || 'Driver'
+                    return (
+                      <option key={id} value={id}>
+                        {name}{d.phone ? ` — ${d.phone}` : ''}
+                      </option>
+                    )
+                  })}
                 </select>
               </div>
 
@@ -116,6 +140,23 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
                 </div>
               </div>
 
+              {/* Tracking Link — Trip V2 */}
+              <div>
+                <label className={labelClass}>
+                  <span className="flex items-center gap-1.5"><Link2 className="w-3.5 h-3.5 text-indigo-600" /> Telematics / Live GPS Tracking Link</span>
+                  <span className="text-gray-400 font-normal text-xs ml-1">(optional)</span>
+                </label>
+                <input
+                  type="url"
+                  name="trackingLink"
+                  value={formData.trackingLink}
+                  onChange={handleChange}
+                  placeholder="https://gps.trackingprovider.com/track/..."
+                  className={inputClass}
+                />
+                <p className="text-xs text-gray-400 mt-1">Customers can track their shipment live via this link.</p>
+              </div>
+
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
@@ -137,6 +178,9 @@ export default function TripFormModal({ isOpen, onClose, onSubmit, drivers = [],
           </div>
         </div>
       </div>
-    </>
   )
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent
 }

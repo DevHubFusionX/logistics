@@ -56,7 +56,9 @@ export default function TopHeader({ onToggleSidebar }) {
 
   const handleSearch = (e) => {
     e.preventDefault()
-    if (searchQuery.trim()) {
+    const query = searchQuery.trim()
+    if (query) {
+      navigate(`/tracking/${encodeURIComponent(query)}`)
     }
   }
 
@@ -86,11 +88,11 @@ export default function TopHeader({ onToggleSidebar }) {
         </button>
 
         {/* Logo */}
-        <Link to="/" className="flex-shrink-0 hidden sm:block hover:opacity-85 transition-opacity">
+        <Link to="/" className="flex-shrink-0 hover:opacity-85 transition-opacity">
           <img
             src="/black.svg"
             alt="Darafort"
-            className="h-5 sm:h-6 w-auto object-contain"
+            className="h-3.5 sm:h-4 w-auto object-contain"
           />
         </Link>
 

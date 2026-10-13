@@ -81,14 +81,14 @@ export function useManagerMutations() {
         onError: (error) => toast.error(error.message || 'Failed to create manager')
     })
 
-    // deleteManager — backend has no DELETE /admin/managers/:id endpoint.
-    // Stubbed as a mutation that notifies the user rather than 404-ing silently.
-    const deleteManager = useMutation({
-        mutationFn: async (_id) => {
-            throw new Error('Delete manager is not supported by the backend.')
+    const createAdmin = useMutation({
+        mutationFn: (data) => adminService.createAdmin(data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'managers'] })
+            toast.success('Admin created successfully')
         },
-        onError: () => toast.error('Deleting managers is not available — no backend endpoint exists.'),
+        onError: (error) => toast.error(error.message || 'Failed to create admin')
     })
 
-    return { createManager, deleteManager }
+    return { createManager, createAdmin }
 }

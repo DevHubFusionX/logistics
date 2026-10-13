@@ -2,7 +2,7 @@ import { Calendar, Wrench, Clock } from 'lucide-react'
 import { MAINTENANCE_SCHEDULE, AUTO_SCHEDULE_THRESHOLDS } from '@/constants/logistics'
 import { getPriorityBadgeColor, formatNumber } from '@/utils/helpers'
 
-export default function MaintenanceCalendar({ vehicles }) {
+export default function MaintenanceCalendar({ _vehicles }) {
 
   return (
     <div className="bg-white rounded-lg p-6 border border-gray-200">

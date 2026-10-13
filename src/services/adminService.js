@@ -11,6 +11,15 @@ import httpClient from './httpClient'
  */
 const adminService = {
   /**
+   * Create a new admin.
+   * @param {Object} adminData - { firstName, lastName, email, phone, password }
+   */
+  createAdmin: (adminData) => httpClient.request('/admin/', {
+    method: 'POST',
+    body: JSON.stringify(adminData)
+  }),
+
+  /**
    * Create a new manager.
    * @param {Object} managerData - { firstName, lastName, email, phone, password }
    */

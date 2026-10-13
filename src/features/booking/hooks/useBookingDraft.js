@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { saveDraft, loadDraft, clearDraft, hasDraft, getDraftAge } from '../utils/bookingDraft'
 
-export const useBookingDraft = (initialFormData) => {
+export const useBookingDraft = (_initialFormData) => {
   const [autoSaveEnabled, setAutoSaveEnabled] = useState(true)
   const [lastSaved, setLastSaved] = useState(null)
   const [draftAvailable, setDraftAvailable] = useState(false)

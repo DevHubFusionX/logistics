@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { auth, database, signInWithCustomToken, ref, onValue } from '@/lib/firebase'
 import { nearestCityName, getDistanceKm } from '../utils'
 
@@ -15,6 +15,16 @@ export function useFirebaseLive({
   onTruckMove,
   onTelemetryUpdate,
 }) {
+  const onTruckMoveRef = useRef(onTruckMove)
+  const onTelemetryUpdateRef = useRef(onTelemetryUpdate)
+  const endCoordsRef = useRef(endCoords)
+
+  useEffect(() => {
+    onTruckMoveRef.current = onTruckMove
+    onTelemetryUpdateRef.current = onTelemetryUpdate
+    endCoordsRef.current = endCoords
+  })
+
   useEffect(() => {
     if (!firebaseToken || !tripId || (!isActive && !isDelivered)) return
 
@@ -33,9 +43,9 @@ export function useFirebaseLive({
             if (!val || typeof val.lat !== 'number') return
 
             const { lat, lng } = val
-            onTruckMove?.(lat, lng)
+            onTruckMoveRef.current?.(lat, lng)
 
-            const distanceRemaining = getDistanceKm({ lat, lng }, endCoords)
+            const distanceRemaining = getDistanceKm({ lat, lng }, endCoordsRef.current)
             const speed = distanceRemaining === 0
               ? 0
               : Math.floor(72 + Math.sin(Date.now() / 10000) * 8)
@@ -47,7 +57,7 @@ export function useFirebaseLive({
               eta = hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`
             }
 
-            onTelemetryUpdate?.({
+            onTelemetryUpdateRef.current?.({
               speed,
               distanceRemaining,
               eta,

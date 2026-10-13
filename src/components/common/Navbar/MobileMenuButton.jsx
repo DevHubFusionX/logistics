@@ -8,7 +8,7 @@ import { motion } from 'framer-motion'
  *  - scrolled  {boolean} — controls light/dark icon styling
  *  - onToggle  {() => void}
  */
-export default function MobileMenuButton({ isOpen, scrolled, onToggle }) {
+export default function MobileMenuButton({ isOpen, _scrolled, onToggle }) {
   return (
     <div className="lg:hidden flex items-center justify-end">
       <button

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import {
   ChevronLeft, ChevronRight, RefreshCw,
   Download, Truck, Plus, Search, X,
@@ -42,8 +42,8 @@ export default function OrdersTable() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false)
   const [isFormOpen, setIsFormOpen]       = useState(false)
   const [isExporting, setIsExporting]     = useState(false)
-  const [sortField, setSortField]         = useState('date')
-  const [sortOrder, setSortOrder]         = useState('desc')
+  const [sortField, _setSortField]         = useState('date')
+  const [sortOrder, _setSortOrder]         = useState('desc')
 
   const itemsPerPage = 10
   const { showToast } = useToast()

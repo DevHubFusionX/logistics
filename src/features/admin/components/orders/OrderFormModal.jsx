@@ -22,28 +22,29 @@ function Field({ children }) {
 
 const inputCls = 'w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm font-medium text-gray-900 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 outline-none transition-all'
 
+const getDefaultForm = () => ({
+  company: '', truckSize: TRUCK_SIZES[0], goodsType: GOODS_TYPES[0],
+  pickup: LOCATIONS[0], delivery: LOCATIONS[1], fleet: FLEET_PARTNERS[0],
+  status: 'Fulfilled', revenue: 1500000,
+  date: new Date().toISOString().split('T')[0], reason: '-'
+})
+
 export default function OrderFormModal({ isOpen, onClose, onSubmit, initialData = null, isLoading = false }) {
   const [fleetOpen, setFleetOpen] = useState(false)
   const fleetRef = useRef(null)
 
-  const defaultForm = {
-    company: '', truckSize: TRUCK_SIZES[0], goodsType: GOODS_TYPES[0],
-    pickup: LOCATIONS[0], delivery: LOCATIONS[1], fleet: FLEET_PARTNERS[0],
-    status: 'Fulfilled', revenue: 1500000,
-    date: new Date().toISOString().split('T')[0], reason: '-'
-  }
-
-  const [form, setForm] = useState(defaultForm)
+  const [form, setForm] = useState(getDefaultForm)
 
   useEffect(() => {
     if (!isOpen) return
+    const defaults = getDefaultForm()
     if (initialData) {
       setForm({
         ...initialData,
-        date: initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : defaultForm.date
+        date: initialData.date ? new Date(initialData.date).toISOString().split('T')[0] : defaults.date
       })
     } else {
-      setForm(defaultForm)
+      setForm(defaults)
     }
   }, [initialData, isOpen])
 

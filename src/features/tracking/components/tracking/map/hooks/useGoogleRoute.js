@@ -47,7 +47,7 @@ export function useGoogleRoute(isLoaded, startCoords, endCoords) {
     )
 
     return () => { active = false }
-  }, [isLoaded, startCoords?.lat, startCoords?.lng, endCoords?.lat, endCoords?.lng])
+  }, [isLoaded, startCoords, endCoords])
 
   return { routePath, loading }
 }

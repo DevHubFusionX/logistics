@@ -5,7 +5,7 @@
  * All methods below are stubs that log a warning and resolve silently.
  * The downloadPDF helper is kept functional for any local blob downloads.
  */
-const noOp = (name) => (...args) => {
+const noOp = (name) => (..._args) => {
   console.warn(`pdfService.${name}() called — no backend endpoint exists.`)
   return Promise.resolve(null)
 }

@@ -10,7 +10,7 @@ export default function VirtualizedTable({
   enableInlineEdit = false
 }) {
   const [sortConfig, setSortConfig] = useState([])
-  const [columnWidths, setColumnWidths] = useState({})
+  const [columnWidths, _setColumnWidths] = useState({})
   const [editingCell, setEditingCell] = useState(null)
 
   const sortedData = useMemo(() => {
@@ -41,7 +41,7 @@ export default function VirtualizedTable({
     })
   }, [])
 
-  const handleCellEdit = useCallback((rowIndex, columnKey, value) => {
+  const handleCellEdit = useCallback((_rowIndex, _columnKey, _value) => {
     // Implement cell editing logic
     setEditingCell(null)
   }, [])

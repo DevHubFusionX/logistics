@@ -39,7 +39,7 @@ function SectionTitle({ icon: Icon, title }) {
   )
 }
 
-export default function BookingModification({ booking, onSuccess, onClose }) {
+export default function BookingModification({ booking, onSuccess, onClose, isAdmin = false }) {
   const [formData, setFormData] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -81,28 +81,43 @@ export default function BookingModification({ booking, onSuccess, onClose }) {
 
   const handleSubmit = async () => {
     setLoading(true)
+    const bookingId = booking._id || booking.id
+    const payload = {
+      pickupLocation:       formData.pickupLocation?.address
+        ? `${formData.pickupLocation.address}, ${formData.pickupLocation.city || 'Lagos'}`
+        : formData.pickupLocation?.city || 'Lagos',
+      dropoffLocation: {
+        address: formData.dropoffLocation?.address || '',
+        city: formData.dropoffLocation?.city || ''
+      },
+      dropOffCoordinates:   getCoordinatesForCity(formData.dropoffLocation?.city),
+      goodsType:            formData.goodsType,
+      cargoWeightKg:        Number(formData.cargoWeightKg),
+      quantity:             parseInt(formData.quantity) || 1,
+      isFragile:            Boolean(formData.isFragile),
+      isPerishable:         Boolean(formData.isPerishable),
+      tempControlCelsius:   parseInt(formData.tempControlCelsius) || 20,
+      vehicleType:          formData.vehicleType,
+      estimatedPickupDate:  formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : null,
+      estimatedDeliveryDate:formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : null,
+      notes:                formData.notes,
+      status:               formData.status,
+    }
+
     try {
-      await bookingService.updateBooking(booking._id || booking.id, {
-        pickupLocation:       formData.pickupLocation?.address
-          ? `${formData.pickupLocation.address}, ${formData.pickupLocation.city || 'Lagos'}`
-          : formData.pickupLocation?.city || 'Lagos',
-        dropoffLocation: {
-          address: formData.dropoffLocation?.address || '',
-          city: formData.dropoffLocation?.city || ''
-        },
-        dropOffCoordinates:   getCoordinatesForCity(formData.dropoffLocation?.city),
-        goodsType:            formData.goodsType,
-        cargoWeightKg:        Number(formData.cargoWeightKg),
-        quantity:             parseInt(formData.quantity) || 1,
-        isFragile:            Boolean(formData.isFragile),
-        isPerishable:         Boolean(formData.isPerishable),
-        tempControlCelsius:   parseInt(formData.tempControlCelsius) || 20,
-        vehicleType:          formData.vehicleType,
-        estimatedPickupDate:  formData.estimatedPickupDate ? new Date(formData.estimatedPickupDate).toISOString() : null,
-        estimatedDeliveryDate:formData.estimatedDeliveryDate ? new Date(formData.estimatedDeliveryDate).toISOString() : null,
-        notes:                formData.notes,
-        status:               formData.status,
-      })
+      if (isAdmin) {
+        try {
+          await bookingService.updateAdminBooking(bookingId, payload)
+        } catch {
+          await bookingService.updateBooking(bookingId, payload)
+        }
+      } else {
+        try {
+          await bookingService.updateBooking(bookingId, payload)
+        } catch {
+          await bookingService.updateAdminBooking(bookingId, payload)
+        }
+      }
       toast.success('Booking updated!')
       onSuccess?.()
     } catch (err) {

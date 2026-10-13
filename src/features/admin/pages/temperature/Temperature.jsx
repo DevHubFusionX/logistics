@@ -11,7 +11,7 @@ import { temperatureData, alerts, complianceReports } from '@/features/admin/com
 
 export default function Temperature() {
   const [activeTab, setActiveTab] = useState('monitoring')
-  const { showToast, ToastContainer } = useToast()
+  const { ToastContainer } = useToast()
 
   useLogisticsShortcuts({
     onSearch: () => document.querySelector('input[type="search"]')?.focus(),

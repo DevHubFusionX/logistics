@@ -11,7 +11,7 @@ import { Calendar, DollarSign, Package, TrendingUp, BarChart3, PieChart, Map as 
 function MyAnalytics() {
     const [period, setPeriod] = useState('month')
 
-    const { data: analyticsSummary, isLoading: summaryLoading } = useUserAnalyticsSummaryQuery({ period })
+    const { data: _analyticsSummary, isLoading: summaryLoading } = useUserAnalyticsSummaryQuery({ period })
     const { data: bookings = [], isLoading: bookingsLoading, isError, refetch } = useShipmentsQuery()
 
     const loading = summaryLoading || bookingsLoading

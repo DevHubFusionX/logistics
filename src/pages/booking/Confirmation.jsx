@@ -8,8 +8,13 @@ export default function Confirmation() {
   const navigate = useNavigate()
   const { bookingData, quote, bookingId, paymentId } = location.state || {}
 
+  useEffect(() => {
+    if (!bookingData) {
+      navigate('/booking/request')
+    }
+  }, [bookingData, navigate])
+
   if (!bookingData) {
-    navigate('/booking/request')
     return null
   }
 

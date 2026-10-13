@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Save, RotateCcw, AlertCircle, RefreshCw, CheckCircle } from 'lucide-react'
-import { usePricingRulesQuery, useAdminMutations } from '../../../../hooks/queries/useAdminQueries'
+import { usePricingRulesQuery } from '../../../../hooks/queries/useAdminQueries'
 import pricingService from '../../../../services/pricingService'
 import toast from 'react-hot-toast'
 
-export default function PricingRulesEditor({ canEdit, showToast }) {
+export default function PricingRulesEditor({ canEdit, showToast: _showToast }) {
   const { data: pricingData, isLoading, isError, refetch } = usePricingRulesQuery()
   const [configs, setConfigs] = useState([])
   const [editingId, setEditingId] = useState(null)

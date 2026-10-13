@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { queryKeys } from '../../lib/queryClient'
 import { bookingService } from '@/features/booking'
 import httpClient from '@/services/httpClient'
+import tripService from '@/services/tripService'
 import toast from 'react-hot-toast'
 import { useAuthStore } from '../../stores/authStore'
 
@@ -20,11 +21,6 @@ const kanoLocations = [
     { city: 'Kaduna Bypass', state: 'Kaduna State', lat: '10.5105', lng: '7.4165' },
     { city: 'Kano (Fagge)', state: 'Kano State', lat: '12.0022', lng: '8.5920' }
 ]
-
-function getDemoStep() {
-    // Advance step once every 2 hours (7,200,000 ms)
-    return Math.floor(Date.now() / 7200000) % demoLocations.length
-}
 
 /**
  * Track a shipment by ID or tracking number
@@ -223,8 +219,8 @@ export function useTrackingQuery(trackingId, options = {}) {
                     try {
                         const isAdmin = useAuthStore.getState().getIsAdmin()
                         const tripsResponse = isAdmin
-                            ? await httpClient.request('/trips/admins', {}, { limit: 100 })
-                            : await httpClient.request('/trips', {}, { limit: 100 })
+                            ? await httpClient.request('/tripsV2/admins', {}, { limit: 100 })
+                            : await httpClient.request('/tripsV2/', {}, { limit: 100 })
                         console.log('[TRACK] Trips raw response:', tripsResponse)
                         const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
                         const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
@@ -314,6 +310,7 @@ export function useTrackingQuery(trackingId, options = {}) {
                         driver: driverObj?.name || 'Assigning Driver...',
                         vehicle: truckObj && typeof truckObj === 'object' ? `${truckObj.color || ''} ${truckObj.make || ''} ${truckObj.model || ''} (${truckObj.plateNumber || ''})`.trim() : 'Assigning Vehicle...',
                         temperature: booking.tempControlCelsius ? `${booking.tempControlCelsius}°C` : 'N/A',
+                        trackingLink: trip?.trackingLink || booking?.trackingLink || null,
                         timeline: timeline
                     }
                 }
@@ -539,31 +536,32 @@ export function useShipmentDetailsQuery(shipmentId) {
                     let status = booking.status || 'pending'
                     let driverObj = booking.truck?.driver
                     let truckObj = booking.truck
+                    let matchedTrip = null
 
                     try {
                         const isAdmin = useAuthStore.getState().getIsAdmin()
                         const tripsResponse = isAdmin
-                            ? await httpClient.request('/trips/admins', {}, { limit: 100 })
-                            : await httpClient.request('/trips', {}, { limit: 100 })
+                            ? await httpClient.request('/tripsV2/admins', {}, { limit: 100 })
+                            : await httpClient.request('/tripsV2/', {}, { limit: 100 })
                         const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
                         const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
                         
                         const bId = booking._id || booking.id
-                        const trip = trips.find(t => {
+                        matchedTrip = trips.find(t => {
                             const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
                             return tBookingId === bId
                         })
 
-                        if (trip) {
-                            if (trip.status === 'active') {
+                        if (matchedTrip) {
+                            if (matchedTrip.status === 'active') {
                                 status = 'in_transit'
-                            } else if (trip.status === 'completed') {
+                            } else if (matchedTrip.status === 'completed') {
                                 status = 'delivered'
-                            } else if (trip.status === 'canceled') {
+                            } else if (matchedTrip.status === 'canceled') {
                                 status = 'cancelled'
                             }
-                            if (trip.driver) {
-                                driverObj = trip.driver
+                            if (matchedTrip.driver) {
+                                driverObj = matchedTrip.driver
                             }
                         }
                     } catch (tripErr) {
@@ -586,7 +584,7 @@ export function useShipmentDetailsQuery(shipmentId) {
 
                     return {
                         id: booking._id,
-                        tripId: trip?._id || trip?.id,
+                        tripId: matchedTrip?._id || matchedTrip?.id,
                         status: status,
                         customerName: booking.fullNameOrBusiness || 'Client',
                         customerEmail: booking.email || '',
@@ -616,6 +614,7 @@ export function useShipmentDetailsQuery(shipmentId) {
                             lng: status === 'delivered' ? (booking.dropOffCoordinates?.lng || 0) : 0,
                             timestamp: new Date().toLocaleString()
                         },
+                        trackingLink: matchedTrip?.trackingLink || booking?.trackingLink || null,
                         timeline: timeline
                     }
                 }
@@ -643,7 +642,7 @@ export function useTripsQuery(filters = {}) {
         queryKey: ['trips', 'list', filters],
         queryFn: async () => {
             const isAdmin = ['Super Admin', 'Dispatcher', 'Admin Manager'].includes(user?.role)
-            const endpoint = isAdmin ? '/trips/admins' : '/trips'
+            const endpoint = isAdmin ? '/tripsV2/admins' : '/tripsV2/'
             const response = await httpClient.request(endpoint, {}, filters)
             return httpClient.extractList(response)
         },
@@ -659,7 +658,7 @@ export function useStartTripMutation() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (tripId) => {
-            const response = await httpClient.request(`/trips/start/${tripId}`, {
+            const response = await httpClient.request(`/tripsV2/start/${tripId}`, {
                 method: 'PATCH'
             })
             return httpClient.extractData(response)
@@ -679,7 +678,7 @@ export function useEndTripMutation() {
     const queryClient = useQueryClient()
     return useMutation({
         mutationFn: async (tripId) => {
-            const response = await httpClient.request(`/trips/end/${tripId}`, {
+            const response = await httpClient.request(`/tripsV2/end/${tripId}`, {
                 method: 'PATCH'
             })
             return httpClient.extractData(response)
@@ -693,7 +692,46 @@ export function useEndTripMutation() {
 }
 
 /**
- * Fetch a customer Firebase custom token for a trip
+ * Query to fetch live Trip V2 tracking info and tracking link
+ */
+export function useTripTrackingLinkQuery(tripId, options = {}) {
+    return useQuery({
+        queryKey: ['trips', 'tracking', tripId],
+        queryFn: async () => {
+            const response = await tripService.getTrackingLink(tripId)
+            return httpClient.extractData(response)
+        },
+        enabled: !!tripId,
+        staleTime: 15000,
+        ...options
+    })
+}
+
+/**
+ * Mutation to update trip tracking link (Admin/Manager only)
+ */
+export function useUpdateTripTrackingLinkMutation() {
+    const queryClient = useQueryClient()
+    return useMutation({
+        mutationFn: async ({ tripId, trackingLink }) => {
+            const response = await tripService.updateTrackingLink(tripId, trackingLink)
+            return httpClient.extractData(response)
+        },
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['trips'] })
+            queryClient.invalidateQueries({ queryKey: ['trips', 'tracking', variables.tripId] })
+            queryClient.invalidateQueries({ queryKey: ['bookings'] })
+            queryClient.invalidateQueries({ queryKey: ['shipments'] })
+            toast.success('Tracking link updated successfully')
+        },
+        onError: (err) => {
+            toast.error(err.message || 'Failed to update tracking link')
+        }
+    })
+}
+
+/**
+ * Fetch a customer Firebase custom token for a trip (Legacy V1 fallback)
  */
 export function useTripUserTokenQuery(tripId, options = {}) {
     return useQuery({
@@ -709,7 +747,7 @@ export function useTripUserTokenQuery(tripId, options = {}) {
 }
 
 /**
- * Fetch a driver Firebase custom token for a trip
+ * Fetch a driver Firebase custom token for a trip (Legacy V1 fallback)
  */
 export function useTripDriverTokenQuery(tripId, options = {}) {
     return useQuery({
@@ -719,6 +757,21 @@ export function useTripDriverTokenQuery(tripId, options = {}) {
             return httpClient.extractData(response)
         },
         enabled: !!tripId,
+        staleTime: 5 * 60 * 1000, // 5 minutes cache
+        ...options
+    })
+}
+
+/**
+ * Fetch an admin Firebase custom token (GET /trips/token/admins)
+ */
+export function useTripAdminTokenQuery(options = {}) {
+    return useQuery({
+        queryKey: ['trips', 'token', 'admin'],
+        queryFn: async () => {
+            const response = await httpClient.request('/trips/token/admins')
+            return httpClient.extractData(response)
+        },
         staleTime: 5 * 60 * 1000, // 5 minutes cache
         ...options
     })

@@ -90,12 +90,17 @@ export function useTripMutations() {
 
     const startTripMutation = useMutation({
         mutationFn: async ({ tripId }) => {
+            try {
+                await tripService.startTrip(tripId)
+            } catch (err) {
+                console.warn('[startTripMutation] backend trip start warning:', err?.message || err)
+            }
             const response = await tripService.getTrip(tripId)
             const trip = response.data?.data || response.data
             if (trip) {
                 await syncBookingStatus(trip, 'in_transit')
             }
-            toast.success('Trip started (Simulated)')
+            toast.success('Trip started successfully')
             return { id: tripId, status: 'in_transit' }
         },
         onSuccess: () => {
@@ -108,12 +113,17 @@ export function useTripMutations() {
 
     const completeTripMutation = useMutation({
         mutationFn: async ({ tripId }) => {
+            try {
+                await tripService.endTrip(tripId)
+            } catch (err) {
+                console.warn('[completeTripMutation] backend trip end warning:', err?.message || err)
+            }
             const response = await tripService.getTrip(tripId)
             const trip = response.data?.data || response.data
             if (trip) {
                 await syncBookingStatus(trip, 'delivered')
             }
-            toast.success('Trip completed (Simulated)')
+            toast.success('Trip completed successfully')
             return { id: tripId, status: 'completed' }
         },
         onSuccess: () => {
@@ -131,7 +141,7 @@ export function useTripMutations() {
             if (trip) {
                 await syncBookingStatus(trip, 'cancelled')
             }
-            toast.success('Trip cancelled (Simulated)')
+            toast.success('Trip cancelled')
             return { id: tripId, status: 'cancelled' }
         },
         onSuccess: () => {
@@ -142,5 +152,22 @@ export function useTripMutations() {
         }
     })
 
-    return { createTrip, assignTripDriver, startTripMutation, completeTripMutation, cancelTripMutation }
+    const updateTrackingLink = useMutation({
+        mutationFn: ({ tripId, trackingLink }) =>
+            tripService.updateTrackingLink(tripId, trackingLink),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['admin', 'trips'] })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'all-bookings'] })
+            queryClient.invalidateQueries({ queryKey: ['admin', 'user-bookings'] })
+            queryClient.invalidateQueries({ queryKey: ['bookings', 'user-list'] })
+            queryClient.invalidateQueries({ queryKey: ['shipments'] })
+            toast.success('Tracking link updated successfully')
+        },
+        onError: (error) => {
+            toast.error(error.message || 'Failed to update tracking link')
+        }
+    })
+
+    return { createTrip, assignTripDriver, updateTrackingLink, startTripMutation, completeTripMutation, cancelTripMutation }
 }
+

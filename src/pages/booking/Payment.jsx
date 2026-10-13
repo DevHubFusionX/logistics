@@ -15,33 +15,43 @@ export default function Payment() {
 
   const queryParams = new URLSearchParams(location.search)
   const reference = queryParams.get('reference') || queryParams.get('trxref')
-  const { bookingData, quote, bookingId: stateBookingId, amount, email } = location.state || {}
+  const { bookingData, quote, bookingId: stateBookingId, amount } = location.state || {}
   const bookingId = stateBookingId || localStorage.getItem('currentBookingId')
 
   useEffect(() => {
-    if (reference && bookingId && !paymentStatus) verifyPaymentOnReturn()
-  }, [reference, bookingId])
+    if (!reference || !bookingId || paymentStatus) return
 
-  const verifyPaymentOnReturn = async () => {
-    setProcessing(true)
-    try {
-      await verifyPayment.mutateAsync(bookingId)
-      setPaymentStatus('success')
-      localStorage.removeItem('currentBookingId')
-      setTimeout(() => navigate('/booking/confirmation', { state: { bookingId, paymentId: reference } }), 2000)
-    } catch {
-      setPaymentStatus('failed')
-    } finally {
-      setProcessing(false)
+    let timer
+    const runVerification = async () => {
+      setProcessing(true)
+      try {
+        await verifyPayment.mutateAsync(bookingId)
+        setPaymentStatus('success')
+        localStorage.removeItem('currentBookingId')
+        timer = setTimeout(() => navigate('/booking/confirmation', { state: { bookingId, paymentId: reference } }), 2000)
+      } catch {
+        setPaymentStatus('failed')
+      } finally {
+        setProcessing(false)
+      }
     }
-  }
+
+    runVerification()
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
+  }, [reference, bookingId, paymentStatus, verifyPayment, navigate])
 
   const isExistingBooking = amount && bookingId && !bookingData
   const paymentAmount = isExistingBooking ? amount : quote?.total
-  const userEmail = email || bookingData?.email || localStorage.getItem('userEmail') || 'user@example.com'
+
+  useEffect(() => {
+    if (!reference && !isExistingBooking && (!bookingData || !quote)) {
+      navigate('/booking/request')
+    }
+  }, [reference, isExistingBooking, bookingData, quote, navigate])
 
   if (!reference && !isExistingBooking && (!bookingData || !quote)) {
-    navigate('/booking/request')
     return null
   }
 
@@ -64,22 +74,6 @@ export default function Payment() {
           if (window.confirm('Payment is locked.\n\nGo back to My Bookings?')) navigate('/my-bookings')
         }, 1000)
       }
-      setProcessing(false)
-    }
-  }
-
-  const handlePaymentSuccess = async (ref) => {
-    setProcessing(true)
-    try {
-      await verifyPayment.mutateAsync(bookingId)
-      setPaymentStatus('success')
-      setTimeout(() => {
-        if (isExistingBooking) navigate('/my-bookings', { state: { paymentSuccess: true } })
-        else navigate('/booking/confirmation', { state: { bookingData, quote, bookingId, paymentId: ref.reference } })
-      }, 2000)
-    } catch {
-      setPaymentStatus('failed')
-    } finally {
       setProcessing(false)
     }
   }

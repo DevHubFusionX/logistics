@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo } from 'react'
+/* eslint-disable react-refresh/only-export-components */
+import React, { useEffect } from 'react'
 import { useAuthStore } from '../../../stores/authStore'
 
 /**
@@ -49,7 +50,7 @@ export const useAuth = () => {
  * all consumers read from the Zustand store directly via useAuth().
  */
 export const AuthProvider = ({ children }) => {
-  const { checkSession, logout, isLoading, user } = useAuthStore()
+  const { checkSession, logout, user } = useAuthStore()
 
   useEffect(() => {
     // Initial session validity check

@@ -1,9 +1,7 @@
 import { ArrowRight, CreditCard, MapPin, Calendar, Package, Truck, Trash2 } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
 import { getStatusText, BOOKING_STATUS_CONFIG } from '../../utils/bookingUtils'
 
-export default function BookingCard({ booking, onViewDetails, onEdit, onCancel, onPayNow, onAssignDriver, onRemoveTruck }) {
-  const navigate = useNavigate()
+export default function BookingCard({ booking, onViewDetails, onCancel, onPayNow, onAssignDriver, onRemoveTruck }) {
 
   const id          = booking._id || booking.tracking_number || booking.trackingNumber || booking.id || 'N/A'
   const origin      = typeof booking.pickupLocation === 'string' ? booking.pickupLocation : (booking.pickupLocation?.city || booking.origin || 'N/A')

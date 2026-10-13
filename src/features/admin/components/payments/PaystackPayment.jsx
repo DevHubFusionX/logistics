@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import PropTypes from 'prop-types'
 import paymentService from '../../../../services/paymentService'
 
-export default function PaystackPayment({ amount, email, bookingId, onSuccess, onClose, onTimeout }) {
+export default function PaystackPayment({ amount, email: _email, bookingId, onSuccess: _onSuccess, onClose: _onClose, onTimeout: _onTimeout }) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [initError, setInitError] = useState(null)
 
@@ -22,7 +22,7 @@ export default function PaystackPayment({ amount, email, bookingId, onSuccess, o
         throw new Error(apiBody.message || 'Failed to initialize payment')
       }
 
-      const { authorization_url, reference } = paymentData
+      const { authorization_url } = paymentData
 
       // Redirect to Paystack payment page
       window.location.href = authorization_url

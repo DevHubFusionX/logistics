@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, useLocation } from 'react-router-dom'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import LoadingScreen from './components/common/LoadingScreen'
@@ -9,7 +9,6 @@ import { Toaster } from 'react-hot-toast'
 import { initGoogleTranslate, useTranslationStore } from './i18n'
 
 function AppContent() {
-  const location = useLocation()
   const isTranslating = useTranslationStore((s) => s.isTranslating)
 
   const [isLoading, setIsLoading] = useState(() => {

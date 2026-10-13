@@ -1,6 +1,6 @@
 import { Camera, FileText, Clock } from 'lucide-react'
 
-export default function ProofOfDelivery({ title, proof, type }) {
+export default function ProofOfDelivery({ title, proof }) {
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-4">

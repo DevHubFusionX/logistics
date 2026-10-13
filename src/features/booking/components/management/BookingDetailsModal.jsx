@@ -1,5 +1,8 @@
-import { X, MapPin, Package, Calendar, Clock, Truck, CheckCircle, AlertCircle, Info } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { X, MapPin, Package, Calendar, Clock, Truck, CheckCircle, AlertCircle, Info, ExternalLink, Navigation } from 'lucide-react'
 import { getStatusBadge, getStatusText } from '@/features/booking/utils/bookingUtils'
+import { useNavigate } from 'react-router-dom'
+import { getSafeTrackingUrl } from '@/utils'
 
 const STATUSES = [
   { id: 'pending',    label: 'Pending',    icon: Clock },
@@ -35,10 +38,13 @@ function Section({ icon: Icon, title, children }) {
 }
 
 export default function BookingDetailsModal({ booking, onClose, onAssignDriver, onRemoveTruck }) {
+  const navigate = useNavigate()
   if (!booking) return null
-
   const currentIdx  = STATUSES.findIndex(s => s.id === booking.status)
   const isCancelled = booking.status === 'cancelled'
+  const isActive = ['confirmed', 'processing', 'in_transit'].includes(booking.status)
+
+  const trackingLink = getSafeTrackingUrl(booking.trackingLink || booking.trip?.trackingLink)
 
   const pickupAddr = typeof booking.pickupLocation === 'string'
     ? booking.pickupLocation
@@ -55,8 +61,8 @@ export default function BookingDetailsModal({ booking, onClose, onAssignDriver, 
   const canAssign   = !!onAssignDriver && booking.status === 'pending' && !hasAssignment
   const canReassign = !!onAssignDriver && !isCancelled && booking.status !== 'delivered' && (booking.status === 'processing' || hasAssignment)
 
-  return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+  const modalContent = (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center z-[9999] p-0 sm:p-4">
       <div className="bg-white w-full sm:max-w-2xl sm:rounded-2xl rounded-t-2xl max-h-[92vh] flex flex-col shadow-2xl">
 
         {/* Header */}
@@ -72,6 +78,39 @@ export default function BookingDetailsModal({ booking, onClose, onAssignDriver, 
 
         {/* Body */}
         <div className="flex-1 overflow-y-auto p-5 space-y-5">
+
+          {/* Trip V2 — Track Live Banner */}
+          {isActive && (
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-gradient-to-r from-sky-700 to-indigo-700 rounded-xl px-4 py-3.5">
+              <div className="flex items-center gap-2.5 flex-1">
+                <div className="w-8 h-8 bg-white/15 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Navigation className="w-4 h-4 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">Your shipment is on the move</p>
+                  <p className="text-xs text-sky-200 mt-0.5">Track its real-time progress below</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {trackingLink && (
+                  <a
+                    href={trackingLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white text-sky-800 text-xs font-extrabold rounded-xl hover:bg-sky-50 transition-colors shadow-sm"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" /> Live GPS
+                  </a>
+                )}
+                <button
+                  onClick={() => { onClose(); navigate(`/tracking/${booking._id || booking.id}`) }}
+                  className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white/15 hover:bg-white/25 text-white text-xs font-bold rounded-xl transition-colors border border-white/20"
+                >
+                  <Navigation className="w-3.5 h-3.5" /> Track Shipment
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Status stepper */}
           <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
@@ -271,4 +310,8 @@ export default function BookingDetailsModal({ booking, onClose, onAssignDriver, 
       </div>
     </div>
   )
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent
 }

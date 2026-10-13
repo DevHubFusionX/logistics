@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react'
 import {
   Search, MapPin, Package, Truck, CheckCircle,
   Clock, AlertCircle, ArrowRight, User, Phone,
-  Calendar, RefreshCw, Loader2
+  Calendar, RefreshCw, Loader2, ExternalLink, Navigation
 } from 'lucide-react'
 import { useTrackingQuery } from '../../hooks/queries/useTrackingQueries'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import TrackingMap from '../../features/tracking/components/tracking/TrackingMap'
+import { getSafeTrackingUrl } from '@/utils'
 
 const STATUS_CONFIG = {
   pending: { label: 'Pending', pill: 'bg-amber-50 text-amber-700 border-amber-200' },
@@ -163,6 +164,31 @@ export default function TrackShipment() {
                 </div>
               )}
             </div>
+
+            {/* Trip V2 — Live GPS / Telematics link action bar */}
+            {getSafeTrackingUrl(shipment.trackingLink) && (
+              <a
+                href={getSafeTrackingUrl(shipment.trackingLink)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between gap-4 w-full bg-gradient-to-r from-sky-600 to-indigo-700 rounded-2xl px-5 py-4 hover:from-sky-700 hover:to-indigo-800 transition-all group shadow-lg shadow-indigo-100"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Navigation className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-white">Live GPS Tracking Available</p>
+                    <p className="text-xs text-sky-200 mt-0.5">View real-time location via telematics provider</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-xs font-extrabold text-white bg-white/20 px-3 py-1.5 rounded-xl group-hover:bg-white/30 transition-colors flex items-center gap-1.5">
+                    <ExternalLink className="w-3.5 h-3.5" /> Open Live Feed
+                  </span>
+                </div>
+              </a>
+            )}
 
             {/* Live GPS Map */}
             {shipment.currentLocation && shipment.currentLocation !== 'Tracking will be available once driver is assigned' && (

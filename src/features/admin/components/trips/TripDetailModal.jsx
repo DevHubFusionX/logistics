@@ -12,7 +12,7 @@ const TabButton = ({ active, onClick, label }) => (
   </button>
 )
 
-const TimelineEvent = ({ event, isLast, getStatusColor }) => (
+const TimelineEvent = ({ event, isLast, getStatusColor: _getStatusColor }) => (
   <div className="flex gap-4">
     <div className="flex flex-col items-center">
       <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
@@ -40,7 +40,7 @@ export default function TripDetailModal({ trip, isOpen, onClose, activeTab, setA
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 z-40" onClick={onClose} />
+      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40" onClick={onClose} />
       <div className="fixed inset-y-0 right-0 w-full sm:w-[800px] bg-white shadow-xl z-50 overflow-y-auto">
         <div className="p-6">
           <div className="flex items-center justify-between mb-6">

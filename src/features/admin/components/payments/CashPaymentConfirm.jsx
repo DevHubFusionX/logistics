@@ -1,6 +1,6 @@
 import { Banknote, AlertCircle, CheckCircle } from 'lucide-react'
 
-export default function CashPaymentConfirm({ bookingId, amount, onConfirm, onCancel, loading }) {
+export default function CashPaymentConfirm({ _bookingId, amount, onConfirm, onCancel, loading }) {
   return (
     <div className="space-y-6 animate-fadeIn">
       {/* Hero Section */}

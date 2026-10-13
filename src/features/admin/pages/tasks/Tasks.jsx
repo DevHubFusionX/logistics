@@ -20,7 +20,7 @@ export default function Tasks() {
     onRefresh: () => window.location.reload()
   })
 
-  const handleAssignDriver = (taskId) => {
+  const handleAssignDriver = (_taskId) => {
     showToast.success('Driver assigned successfully')
   }
 
@@ -32,7 +32,7 @@ export default function Tasks() {
     showToast.info('Shift creation dialog opened')
   }
 
-  const handleSendTask = (taskId, message) => {
+  const handleSendTask = (_taskId, _message) => {
     showToast.success('Task sent to mobile app')
   }
 

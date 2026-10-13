@@ -25,7 +25,7 @@ export default function AppLayout({ children }) {
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  }, [setMobileSidebar, setSidebarCollapsed])
 
   const handleToggleSidebar = () => {
     if (isMobile) {

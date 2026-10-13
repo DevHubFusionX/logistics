@@ -21,10 +21,10 @@ export default function AlertsDashboard({ onCreateRule }) {
     return 0
   })
 
-  const handleAssign = (alertId) => {
+  const handleAssign = (_alertId) => {
   }
 
-  const handleResolve = (alertId) => {
+  const handleResolve = (_alertId) => {
   }
 
   return (

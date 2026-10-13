@@ -3,6 +3,8 @@ import { ArrowLeft, ArrowRight, CheckCircle, Package, MapPin, DollarSign, Tag } 
 import { PageHeader } from '@/features/dashboard'
 import { useBookingStore } from '@/features/booking'
 
+import { useEffect } from 'react'
+
 export default function Quotation() {
   const location = useLocation()
   const navigate = useNavigate()
@@ -11,10 +13,14 @@ export default function Quotation() {
   // Use location state or fallback to store
   const bookingData = location.state?.bookingData || store.formData
   const bookingId = location.state?.bookingId || store.bookingId
-  const clientId = location.state?.clientId
+
+  useEffect(() => {
+    if (!bookingData || (!location.state?.bookingData && !store.bookingId)) {
+      navigate('/booking/request')
+    }
+  }, [bookingData, location.state?.bookingData, store.bookingId, navigate])
 
   if (!bookingData || (!location.state?.bookingData && !store.bookingId)) {
-    navigate('/booking/request')
     return null
   }
 

@@ -1,6 +1,6 @@
 import { Clock, AlertTriangle, Package, User, Download } from 'lucide-react'
 
-export default function OrderCard({ order, onStatusChange, onExport }) {
+export default function OrderCard({ order, _onStatusChange, onExport }) {
   const getStatusColor = (status) => {
     switch (status) {
       case 'pending': return 'bg-yellow-100 text-yellow-800'

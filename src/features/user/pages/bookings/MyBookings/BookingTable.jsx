@@ -1,5 +1,7 @@
-import { Phone, CreditCard, ArrowRight, User, Package, Calendar } from 'lucide-react'
+import { Phone, CreditCard, ArrowRight, User, Package, Calendar, Navigation, ExternalLink } from 'lucide-react'
 import { getStatusText, calculateBookingPrice, BOOKING_STATUS_CONFIG } from '@/features/booking'
+import { useNavigate } from 'react-router-dom'
+import { getSafeTrackingUrl } from '@/utils'
 
 function SkeletonRow() {
   return (
@@ -44,6 +46,7 @@ function SkeletonRow() {
 }
 
 export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
+  const navigate = useNavigate()
   return (
     <div className="hidden md:block overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
       <div className="overflow-x-auto">
@@ -85,6 +88,8 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                 
                 const sc = BOOKING_STATUS_CONFIG[booking.status] || BOOKING_STATUS_CONFIG.pending
                 const canPayNow = booking.status !== 'cancelled' && (payStatus === 'unpaid' || payStatus === 'failed')
+                const isActive = ['confirmed', 'processing', 'in_transit'].includes(booking.status)
+                const trackingLink = getSafeTrackingUrl(booking.trackingLink || booking.trip?.trackingLink)
                 const riderName = booking.driver?.name || booking.driverName || 'Rider unassigned'
                 const riderPhone = booking.driver?.phone || booking.driverPhone
                 const initials = riderName !== 'Rider unassigned' ? riderName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'U'
@@ -192,7 +197,7 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                         ) : (
                           <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
                         )}
-                        {sc.label}
+                        {sc.label || getStatusText(booking.status)}
                       </span>
                     </td>
                     <td className="px-6 py-4.5 text-right" onClick={(e) => e.stopPropagation()}>
@@ -203,6 +208,26 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                         >
                           Details
                         </button>
+                        {isActive && (
+                          trackingLink ? (
+                            <a
+                              href={trackingLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-[11px] font-extrabold text-sky-700 bg-sky-50 hover:bg-sky-100 border border-sky-100/50 px-3 py-1.5 rounded-lg shadow-sm transition-all hover:scale-105 active:scale-95"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" /> Track
+                            </a>
+                          ) : (
+                            <button
+                              onClick={(e) => { e.stopPropagation(); navigate(`/tracking/${bookingId}`) }}
+                              className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100/50 px-3 py-1.5 rounded-lg shadow-sm transition-all hover:scale-105 active:scale-95"
+                            >
+                              <Navigation className="w-3.5 h-3.5" /> Track
+                            </button>
+                          )
+                        )}
                         {canPayNow && (
                           <button
                             onClick={() => onPay(booking)}

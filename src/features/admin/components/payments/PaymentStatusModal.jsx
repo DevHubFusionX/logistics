@@ -55,7 +55,7 @@ export default function PaymentStatusModal({ status, onRetry, onCancel, onClose 
   const Icon = config.icon
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl max-w-md w-full p-6 text-center">
         <div className={`w-16 h-16 ${config.bgClass} rounded-full flex items-center justify-center mx-auto mb-4`}>
           <Icon className={`w-8 h-8 ${config.iconClass}`} />

@@ -4,7 +4,7 @@
  * The backend does NOT have any /uploads/ routes.
  * All methods below are stubs that log a warning and resolve silently.
  */
-const noOp = (name) => (...args) => {
+const noOp = (name) => (..._args) => {
   console.warn(`uploadService.${name}() called — no backend endpoint exists.`)
   return Promise.resolve({ data: null, message: 'Not implemented' })
 }

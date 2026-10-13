@@ -37,7 +37,7 @@ const headerColVariants = {
 }
 
 // Slide up animation variants for individual cards
-const cardEntranceVariants = {
+const _cardEntranceVariants = {
   hidden: {
     opacity: 0,
     y: 30

@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Building2, CheckCircle, AlertCircle, Loader } from 'lucide-react'
 import paymentService from '@/services/paymentService'
-import uploadService from '@/services/uploadService'
 import FileUpload from '@/components/common/FileUpload'
 import toast from 'react-hot-toast'
 
@@ -15,7 +14,6 @@ export default function BankTransferComplete({ bookingId, amount, onSuccess }) {
     proofOfPayment: null
   })
   const [loading, setLoading] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState(null)
 
   const bankDetails = {
     bankName: 'United Bank for Africa (UBA)',

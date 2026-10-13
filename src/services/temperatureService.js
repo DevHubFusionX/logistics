@@ -4,7 +4,7 @@
  * The backend does NOT have any /temperature/ routes.
  * All methods below are stubs that log a warning and resolve with empty data.
  */
-const noOp = (name) => (...args) => {
+const noOp = (name) => (..._args) => {
   console.warn(`temperatureService.${name}() called — no backend endpoint exists.`)
   return Promise.resolve({ data: [], message: 'Not implemented' })
 }

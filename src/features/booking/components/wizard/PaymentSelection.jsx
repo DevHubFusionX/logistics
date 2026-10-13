@@ -96,18 +96,22 @@ export default function PaymentSelection({
   const paymentVerification = usePaymentVerification(bookingId, estimatedCost)
 
   useEffect(() => {
+    let timer
     if (paymentStatus.status === 'success') {
       setStatus('success')
-      setTimeout(() => {
+      timer = setTimeout(() => {
         setStatus(null)
-        onPaymentSuccess({ reference: paymentRef })
+        onPaymentSuccess?.({ reference: paymentRef })
       }, 1800)
     } else if (paymentStatus.status === 'failed') {
       setStatus('failed')
     } else if (paymentStatus.status === 'timeout') {
       setStatus('timeout')
     }
-  }, [paymentStatus.status])
+    return () => {
+      if (timer) clearTimeout(timer)
+    }
+  }, [paymentStatus.status, onPaymentSuccess, paymentRef])
 
   const handleMethodChange = (method) => {
     if (!validatePaymentMethod(method)) { toast.error('Invalid payment method'); return }

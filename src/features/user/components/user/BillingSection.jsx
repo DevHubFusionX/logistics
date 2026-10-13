@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { CreditCard, Download, Calendar, RefreshCw, AlertCircle, ShieldCheck, Plus, ExternalLink } from 'lucide-react'
-import { usePaymentHistoryQuery, useInitializePaymentMutation } from '../../../../hooks/queries/usePaymentQueries'
+import { usePaymentHistoryQuery } from '../../../../hooks/queries/usePaymentQueries'
 
 const paymentMethods = [
   { id: 1, type: 'Visa', last4: '4242', expiry: '12/25', isDefault: true, brandColor: 'from-blue-600 to-blue-800' },
@@ -9,7 +9,6 @@ const paymentMethods = [
 
 export default function BillingSection() {
   const { data: payments = [], isLoading, isError, refetch } = usePaymentHistoryQuery()
-  const initializePayment = useInitializePaymentMutation()
 
   const invoices = useMemo(() => {
     return payments.map(p => ({

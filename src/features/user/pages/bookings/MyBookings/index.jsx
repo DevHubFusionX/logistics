@@ -40,7 +40,7 @@ export default function MyBookings() {
   })
 
   const { data: bookingsData = [], isLoading: loading, refetch } = useBookingsQuery({ limit: 100 })
-  const bookings = Array.isArray(bookingsData) ? bookingsData : []
+  const bookings = useMemo(() => (Array.isArray(bookingsData) ? bookingsData : []), [bookingsData])
 
   const totalSpend = useMemo(() =>
     bookings.reduce((sum, b) => sum + (b.price || b.shipping_fee || b.amount || 0), 0)

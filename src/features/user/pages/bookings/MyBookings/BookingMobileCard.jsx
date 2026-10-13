@@ -1,7 +1,10 @@
-import { CreditCard, Phone, ArrowRight, Package, User } from 'lucide-react'
+import { CreditCard, Phone, ArrowRight, Package, User, Navigation, ExternalLink } from 'lucide-react'
 import { getStatusText, calculateBookingPrice, BOOKING_STATUS_CONFIG } from '@/features/booking'
+import { useNavigate } from 'react-router-dom'
+import { getSafeTrackingUrl } from '@/utils'
 
 export default function BookingMobileCard({ booking, onViewDetails, onPay }) {
+  const navigate = useNavigate()
   const bookingId = booking._id || booking.tracking_number || booking.id || 'N/A'
   const displayId = bookingId.slice(-8).toUpperCase()
   const goodsType = booking.goodsType || booking.package_type || booking.cargoType || 'General'
@@ -14,6 +17,8 @@ export default function BookingMobileCard({ booking, onViewDetails, onPay }) {
   
   const sc = BOOKING_STATUS_CONFIG[booking.status] || BOOKING_STATUS_CONFIG.pending
   const canPayNow = booking.status !== 'cancelled' && (payStatus === 'unpaid' || payStatus === 'failed')
+  const isActive = ['confirmed', 'processing', 'in_transit'].includes(booking.status)
+  const trackingLink = getSafeTrackingUrl(booking.trackingLink || booking.trip?.trackingLink)
   const riderName = booking.driver?.name || booking.driverName || 'Rider unassigned'
   const riderPhone = booking.driver?.phone || booking.driverPhone
   const initials = riderName !== 'Rider unassigned' ? riderName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase() : 'U'
@@ -39,7 +44,7 @@ export default function BookingMobileCard({ booking, onViewDetails, onPay }) {
           ) : (
             <span className={`w-1.5 h-1.5 rounded-full ${sc.dot}`} />
           )}
-          {sc.label}
+          {sc.label || getStatusText(booking.status)}
         </span>
       </div>
 
@@ -119,6 +124,25 @@ export default function BookingMobileCard({ booking, onViewDetails, onPay }) {
         >
           Details
         </button>
+        {isActive && (
+          trackingLink ? (
+            <a
+              href={trackingLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-xs font-extrabold text-sky-700 bg-sky-50 hover:bg-sky-100 py-2 rounded-xl transition-all flex items-center justify-center gap-1 border border-sky-100 active:scale-95"
+            >
+              <ExternalLink className="w-3.5 h-3.5" /> Track Live
+            </a>
+          ) : (
+            <button
+              onClick={() => navigate(`/tracking/${bookingId}`)}
+              className="flex-1 text-xs font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 py-2 rounded-xl transition-all flex items-center justify-center gap-1 border border-emerald-100 active:scale-95"
+            >
+              <Navigation className="w-3.5 h-3.5" /> Track
+            </button>
+          )
+        )}
         {canPayNow && (
           <button
             onClick={() => onPay(booking)}

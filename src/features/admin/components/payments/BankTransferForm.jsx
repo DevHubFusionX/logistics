@@ -57,7 +57,7 @@ export default function BankTransferForm({ bookingId, amount, onSubmit, onCancel
         proof: proofBase64
       }
       await onSubmit(submitData)
-    } catch (error) {
+    } catch {
       setErrors({ ...errors, proof: 'Failed to process file' })
     }
   }

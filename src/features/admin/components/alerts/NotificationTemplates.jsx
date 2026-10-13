@@ -42,7 +42,7 @@ export default function NotificationTemplates() {
     setIsEditing(true)
   }
 
-  const handleDelete = (templateId) => {
+  const handleDelete = (_templateId) => {
   }
 
   return (

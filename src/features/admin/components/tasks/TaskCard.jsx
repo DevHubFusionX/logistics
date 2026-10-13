@@ -1,8 +1,6 @@
-import { Clock, User, Truck, MapPin, AlertCircle, Camera, FileText } from 'lucide-react'
-import { taskStatuses } from './tasksData'
+import { Clock, User, Truck, MapPin, Camera, FileText } from 'lucide-react'
 
 export default function TaskCard({ task, onAssignDriver, onUpdateStatus }) {
-  const status = taskStatuses[task.status]
   const priorityColors = {
     critical: 'text-red-600 bg-red-50',
     high: 'text-orange-600 bg-orange-50',

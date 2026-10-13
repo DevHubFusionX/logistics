@@ -1,14 +1,19 @@
 import { useState, useMemo } from 'react'
+import { createPortal } from 'react-dom'
+import toast from 'react-hot-toast'
 import { PageHeader } from '@/features/dashboard'
 import { useToast } from '@/components/ui'
 import {
   Truck, Clock, CheckCircle, XCircle, Navigation,
   RefreshCw, AlertCircle, Search, Plus, Eye,
   User, MapPin, Calendar, ArrowRight, Loader2, X,
-  UserCheck, AlertTriangle
+  UserCheck, AlertTriangle, Link2, ExternalLink, Save
 } from 'lucide-react'
 import { useTripsQuery, useDriversQuery, useAdminMutations } from '@/features/admin/hooks/queries/useAdminQueries'
+import { useAllBookingsQuery } from '@/features/booking'
 import TripFormModal from '@/features/admin/components/trips/TripFormModal'
+import tripService from '@/services/tripService'
+import { getSafeTrackingUrl } from '@/utils'
 
 // ─── Status helpers ───────────────────────────────────────────────────────────
 const STATUS_CONFIG = {
@@ -24,7 +29,10 @@ const getStatus = (s) => STATUS_CONFIG[s] || { label: s || 'Unknown', pill: 'bg-
 function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
   const [selectedDriverId, setSelectedDriverId] = useState('')
   const [isAssigning, setIsAssigning] = useState(false)
-  const { assignTripDriver, startTripMutation, completeTripMutation, cancelTripMutation } = useAdminMutations()
+  const [trackingLinkInput, setTrackingLinkInput] = useState(trip?.trackingLink || '')
+  const [isEditingLink, setIsEditingLink] = useState(false)
+  const [savingLink, setSavingLink] = useState(false)
+  const { assignTripDriver, updateTrackingLink, cancelTripMutation } = useAdminMutations()
 
   if (!trip) return null
 
@@ -33,13 +41,31 @@ function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
 
   const cfg = getStatus(trip.status)
   const tripId = trip._id || trip.id
-  const isActionPending = assignTripDriver.isPending || startTripMutation.isPending || completeTripMutation.isPending || cancelTripMutation.isPending
+  const isActionPending = assignTripDriver.isPending || cancelTripMutation.isPending
 
-  const handleStart = () => startTripMutation.mutate({ tripId }, { onSuccess: () => { onRefresh(); onClose() } })
-  const handleComplete = () => completeTripMutation.mutate({ tripId }, { onSuccess: () => { onRefresh(); onClose() } })
   const handleCancel = () => {
     if (!window.confirm('Cancel this trip?')) return
     cancelTripMutation.mutate({ tripId }, { onSuccess: () => { onRefresh(); onClose() } })
+  }
+
+  const handleSaveTrackingLink = async () => {
+    const raw = trackingLinkInput.trim()
+    if (!raw) return
+    const safeUrl = getSafeTrackingUrl(raw)
+    if (!safeUrl) {
+      toast.error('Please enter a valid HTTP or HTTPS tracking URL (e.g. https://gps.example.com)')
+      return
+    }
+    setSavingLink(true)
+    try {
+      await updateTrackingLink.mutateAsync({ tripId, trackingLink: safeUrl })
+      setIsEditingLink(false)
+      onRefresh()
+    } catch (e) {
+      console.error('[TripDetailModal] save tracking link error:', e)
+    } finally {
+      setSavingLink(false)
+    }
   }
 
   // driver field can be: null | string id | { _id } (unpopulated) | { _id, name, ... } (populated)
@@ -75,9 +101,9 @@ function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
     )
   }
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={onClose} />
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+      <div className="fixed inset-0 bg-gray-900/60 backdrop-blur-sm" onClick={onClose} />
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-100 animate-in zoom-in-95 duration-200">
 
         {/* Header */}
@@ -156,10 +182,13 @@ function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
                   className="flex-1 text-sm border border-slate-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
                   autoFocus
                 >
-                  <option value="">Select a driver...</option>
-                  {drivers.filter(d => d.isVerified).map(d => (
-                    <option key={d.id} value={d.id}>{d.name} — {d.phone}</option>
-                  ))}
+                  {drivers.filter(d => d.isVerified).map(d => {
+                    const id = d.id || d._id
+                    const name = d.name || `${d.firstName || ''} ${d.lastName || ''}`.trim() || 'Driver'
+                    return (
+                      <option key={id} value={id}>{name}{d.phone ? ` — ${d.phone}` : ''}</option>
+                    )
+                  })}
                 </select>
                 <button
                   onClick={handleAssignDriver}
@@ -217,6 +246,72 @@ function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
             </div>
           </div>
 
+          {/* Trip V2: Tracking / Telematics Link section */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Link2 className="w-4 h-4 text-indigo-600" />
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Live GPS / Telematics Link</p>
+              </div>
+              <div className="flex items-center gap-2">
+                {getSafeTrackingUrl(trip.trackingLink) && !isEditingLink && (
+                  <a
+                    href={getSafeTrackingUrl(trip.trackingLink)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-800 border border-indigo-100 px-2.5 py-1 rounded-lg hover:bg-indigo-50 transition-colors"
+                  >
+                    <ExternalLink className="w-3 h-3" /> Open Link
+                  </a>
+                )}
+                {!isEditingLink && (
+                  <button
+                    onClick={() => { setIsEditingLink(true); setTrackingLinkInput(trip.trackingLink || '') }}
+                    className="text-xs font-semibold text-indigo-600 hover:text-indigo-700"
+                  >
+                    {trip.trackingLink ? 'Edit' : 'Add Link'}
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {isEditingLink ? (
+              <div className="space-y-2">
+                <input
+                  type="url"
+                  value={trackingLinkInput}
+                  onChange={(e) => setTrackingLinkInput(e.target.value)}
+                  placeholder="https://gps.trackingprovider.com/track/..."
+                  className="w-full text-sm px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400"
+                  autoFocus
+                />
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleSaveTrackingLink}
+                    disabled={savingLink || !trackingLinkInput.trim()}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 text-white text-xs font-bold rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+                  >
+                    {savingLink ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Save className="w-3.5 h-3.5" />}
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setIsEditingLink(false)}
+                    className="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:bg-slate-100 rounded-lg transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : trip.trackingLink ? (
+              <p className="text-xs font-mono text-indigo-700 bg-indigo-50 px-3 py-2 rounded-lg break-all">{trip.trackingLink}</p>
+            ) : (
+              <div className="flex items-center gap-2 text-slate-400 text-xs">
+                <AlertTriangle className="w-3.5 h-3.5" />
+                <span>No tracking link set. Add one so customers can follow live GPS progress.</span>
+              </div>
+            )}
+          </div>
+
           {/* Dates */}
           <div className="bg-white rounded-xl border border-gray-200 p-4">
             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Timeline</p>
@@ -235,25 +330,12 @@ function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
 
         {/* Footer */}
         <div className="px-6 py-4 bg-white border-t border-gray-100 shrink-0 flex gap-3">
-          {trip.status === 'pending' && (
-            <button
-              onClick={handleStart}
-              disabled={isActionPending}
-              className="flex-1 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {startTripMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Navigation className="w-4 h-4" />}
-              Start Trip
-            </button>
-          )}
-          {trip.status === 'in_transit' && (
-            <button
-              onClick={handleComplete}
-              disabled={isActionPending}
-              className="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
-            >
-              {completeTripMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle className="w-4 h-4" />}
-              Complete Trip
-            </button>
+          {/* Start / Complete are DRIVER-only endpoints — admin cannot call them */}
+          {(trip.status === 'pending' || trip.status === 'in_transit') && (
+            <div className="flex-1 flex items-center gap-2 px-4 py-2.5 bg-amber-50 border border-amber-200 rounded-xl text-amber-700 text-xs font-medium">
+              <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+              <span>Trip start &amp; complete are initiated by the <strong>driver</strong> via the driver app.</span>
+            </div>
           )}
           {(trip.status === 'pending' || trip.status === 'in_transit') && (
             <button
@@ -275,6 +357,10 @@ function TripDetailModal({ trip, drivers, onClose, onRefresh }) {
       </div>
     </div>
   )
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent
 }
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
@@ -282,7 +368,7 @@ export default function AdminTrips() {
   const [filters, setFilters] = useState({ search: '', status: '' })
   const [selectedTrip, setSelectedTrip] = useState(null)
   const [showCreateModal, setShowCreateModal] = useState(false)
-  const { showToast, ToastContainer } = useToast()
+  const { ToastContainer } = useToast()
 
   const { data: tripsData, isLoading, isError, refetch } = useTripsQuery()
   const trips = useMemo(() => tripsData?.records || [], [tripsData])
@@ -302,6 +388,8 @@ export default function AdminTrips() {
     }
   }
   const { data: drivers = [] } = useDriversQuery()
+  const { data: bookingsData } = useAllBookingsQuery({ limit: 100 })
+  const allBookings = useMemo(() => bookingsData?.records || [], [bookingsData])
   const { createTrip } = useAdminMutations()
 
   const verifiedDrivers = useMemo(() => drivers.filter(d => d.isVerified), [drivers])
@@ -332,13 +420,28 @@ export default function AdminTrips() {
     }).length,
   }), [trips, totalRecords])
 
-  const handleCreateTrip = (payload) => {
-    createTrip.mutate(payload, {
-      onSuccess: () => {
-        setShowCreateModal(false)
-        refetch()
+  const handleCreateTrip = async (payload) => {
+    const { trackingLink, ...tripPayload } = payload
+    try {
+      const res = await createTrip.mutateAsync(tripPayload)
+      // If a tracking link was provided, update it on the newly created trip
+      if (trackingLink) {
+        const safeUrl = getSafeTrackingUrl(trackingLink)
+        const tripId = res?.data?.data?._id || res?.data?._id || res?.data?.data?.id || res?.data?.id
+        if (tripId && safeUrl) {
+          try {
+            await tripService.updateTrackingLink(tripId, safeUrl)
+          } catch (e) {
+            console.warn('[handleCreateTrip] tracking link save failed:', e)
+            toast.error('Trip created, but failed to save tracking link. You can add it in trip details.')
+          }
+        }
       }
-    })
+      setShowCreateModal(false)
+      refetch()
+    } catch {
+      // error is handled by mutation's onError toast
+    }
   }
 
   if (isLoading) {
@@ -574,6 +677,7 @@ export default function AdminTrips() {
         onClose={() => setShowCreateModal(false)}
         onSubmit={handleCreateTrip}
         drivers={verifiedDrivers}
+        bookings={allBookings}
         isSubmitting={createTrip.isPending}
       />
 

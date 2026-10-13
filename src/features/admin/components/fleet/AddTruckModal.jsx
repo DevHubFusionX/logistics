@@ -64,7 +64,7 @@ export default function AddTruckModal({ isOpen, onClose, onRefresh, assignedDriv
   const [currentStep, setCurrentStep] = useState(0)
   const [formData, setFormData] = useState(initialFormData)
   const [files, setFiles] = useState(initialFileData)
-  const { showToast, ToastContainer } = useToast()
+  const { ToastContainer } = useToast()
   const { createVehicle } = useAdminMutations()
   const isSubmitting = createVehicle.isPending
 
@@ -107,6 +107,7 @@ export default function AddTruckModal({ isOpen, onClose, onRefresh, assignedDriv
         setFormData(initialFormData)
         setFiles(initialFileData)
         setCurrentStep(0)
+        if (onRefresh) onRefresh()
         onClose()
       }
     })

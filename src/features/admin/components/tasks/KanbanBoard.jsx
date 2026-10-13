@@ -10,7 +10,7 @@ export default function KanbanBoard({ onAssignDriver, onCreateTask }) {
     return tasks.filter(task => task.status === status)
   }
 
-  const handleUpdateStatus = (taskId) => {
+  const handleUpdateStatus = (_taskId) => {
   }
 
   return (

@@ -69,7 +69,7 @@ export default function MapCanvas({
     if (mapRef.current && truckPosition) {
       mapRef.current.panTo(truckPosition)
     }
-  }, [truckPosition?.lat, truckPosition?.lng])
+  }, [truckPosition])
 
   const polylineOptions = {
     strokeColor: isDelivered ? '#10b981' : '#0056B8',

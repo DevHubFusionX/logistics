@@ -70,7 +70,6 @@ const steps = [
 
 export default function ProductDemo() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [isPlaying, setIsPlaying] = useState(false)
 
   const handleNext = () => {
     setCurrentStep(prev => (prev === steps.length - 1 ? 0 : prev + 1))

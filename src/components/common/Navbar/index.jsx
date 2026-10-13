@@ -62,7 +62,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" className="flex-shrink-0">
               <AnimatedLogo
-                className="h-5 sm:h-6 transition-all duration-300"
+                className="h-3.5 sm:h-4 transition-all duration-300"
                 isDarkText={!lightNav}
               />
             </Link>

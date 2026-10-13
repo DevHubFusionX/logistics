@@ -16,7 +16,7 @@ const ToastContainer = ({ toasts, removeToast }) => {
 }
 
 const Toast = ({ 
-  id, 
+  _id, 
   type = 'info', 
   title, 
   message, 
@@ -100,6 +100,7 @@ const Toast = ({
 }
 
 // Toast hook for easy usage
+// eslint-disable-next-line react-refresh/only-export-components
 export const useToast = () => {
   const [toasts, setToasts] = useState([])
   

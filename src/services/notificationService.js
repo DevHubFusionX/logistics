@@ -7,7 +7,7 @@
  *
  * All methods below are stubs that log a warning and resolve silently.
  */
-const noOp = (name) => (...args) => {
+const noOp = (name) => (..._args) => {
   console.warn(`notificationService.${name}() called — no backend endpoint exists. This is a no-op.`)
   return Promise.resolve({ data: null, message: 'Not implemented' })
 }

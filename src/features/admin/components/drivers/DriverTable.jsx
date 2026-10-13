@@ -10,13 +10,6 @@ const getStatusColor = (status) => {
   }
 }
 
-const getPerformanceColor = (score) => {
-  if (score >= 95) return 'text-green-600'
-  if (score >= 90) return 'text-blue-600'
-  if (score >= 85) return 'text-yellow-600'
-  return 'text-orange-600'
-}
-
 export default function DriverTable({ drivers, onView, onEdit, onDelete, onExport, onSaveView }) {
   const columns = [
     {

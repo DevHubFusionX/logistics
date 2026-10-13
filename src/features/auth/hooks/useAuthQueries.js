@@ -12,7 +12,7 @@ export const authKeys = {
  * Hook to fetch current user profile
  */
 export function useProfileQuery() {
-    const { user, logout, getIsAdmin } = useAuthStore()
+    const { user, getIsAdmin } = useAuthStore()
     const isAdmin = getIsAdmin()
 
     return useQuery({

@@ -158,7 +158,7 @@ export default function ManagerLoginForm() {
             <img
               src="/white.svg"
               alt="Darafort"
-              className="h-8 xl:h-10 w-auto object-contain"
+              className="h-6 xl:h-7 w-auto object-contain"
             />
           </motion.div>
 
@@ -265,7 +265,7 @@ export default function ManagerLoginForm() {
         >
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center mb-8">
-            <img src="/black.svg" alt="Darafort" className="h-6 w-auto object-contain" />
+            <img src="/black.svg" alt="Darafort" className="h-4 sm:h-5 w-auto object-contain" />
           </div>
 
           {/* Header */}

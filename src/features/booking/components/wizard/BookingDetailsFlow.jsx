@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { User, ArrowLeft, ArrowRight } from 'lucide-react'
 import StepProgressPills from './details/StepProgressPills'
 import PickupDetailsSubStep from './details/PickupDetailsSubStep'
@@ -9,7 +9,7 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
   const [errors, setErrors] = useState({})
   const [touched, setTouched] = useState({})
 
-  const validateStep = (step) => {
+  const validateStep = useCallback((step) => {
     const e = {}
     if (step === 1) {
       if (!formData.pickupPerson?.name) e.pickupPersonName = 'Required'
@@ -26,12 +26,12 @@ export default function BookingDetailsFlow({ formData, onChange, onNestedChange,
     }
     setErrors(e)
     return Object.keys(e).length === 0
-  }
+  }, [formData])
 
   // Keep validation errors state in sync with form data changes
   useEffect(() => {
     validateStep(subStep)
-  }, [formData, subStep])
+  }, [validateStep, subStep])
 
   const handleBlur = (field) => {
     setTouched(prev => ({ ...prev, [field]: true }))

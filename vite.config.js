@@ -82,10 +82,6 @@ export default defineConfig({
           if (id.includes('node_modules/react-simple-maps/') || id.includes('node_modules/d3')) {
             return 'vendor-maps'
           }
-          // Tour/onboarding libraries — never needed on first load
-          if (id.includes('node_modules/react-joyride/') || id.includes('node_modules/onborda')) {
-            return 'vendor-tours'
-          }
           if (id.includes('node_modules/zustand/') || id.includes('node_modules/prop-types/') || id.includes('node_modules/react-hot-toast/')) {
             return 'vendor-utils'
           }

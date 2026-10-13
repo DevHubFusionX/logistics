@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion'
 import { Truck, Shield, Clock, Users, CheckCircle } from 'lucide-react'
 
-export default function AuthLayout({ children, title, subtitle }) {
+export default function AuthLayout({ children, title: _title, subtitle: _subtitle }) {
   const features = [
     { icon: Truck, title: "Real-Time Tracking", desc: "Monitor every shipment" },
     { icon: Shield, title: "Secure Operations", desc: "Enterprise-grade security" },
@@ -43,7 +43,7 @@ export default function AuthLayout({ children, title, subtitle }) {
             <img
               src="/white.svg"
               alt="Dara Logistics"
-              className="h-8 lg:h-10 xl:h-12 w-auto object-contain"
+              className="h-6 lg:h-7 xl:h-8 w-auto object-contain"
             />
           </motion.div>
 
@@ -124,7 +124,7 @@ export default function AuthLayout({ children, title, subtitle }) {
             <img
               src="/black.svg"
               alt="Dara Logistics"
-              className="h-6 sm:h-7 w-auto object-contain"
+              className="h-4 sm:h-5 w-auto object-contain"
             />
           </motion.div>
           {children}

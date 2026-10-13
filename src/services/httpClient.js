@@ -5,7 +5,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 const ALLOWED_ENDPOINTS = [
   '/auth', '/user', '/users', '/addresses', '/shipments',
-  '/drivers', '/driver', '/truck', '/trucks', '/fleet', '/trips',
+  '/drivers', '/driver', '/truck', '/trucks', '/fleet', '/trips', '/tripsV2',
   '/bookings', '/analytics', '/payments', '/payment',
   '/pricing', '/tracking', '/admin', '/contact'
 ]
@@ -31,6 +31,7 @@ const NO_AUTO_LOGOUT_ENDPOINTS = [
   '/payment',
   '/payments',
   '/trips',
+  '/tripsV2',
   '/bookings',
   '/admin/bookings',
 ]

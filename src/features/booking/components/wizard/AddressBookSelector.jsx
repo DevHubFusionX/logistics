@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { MapPin, Book, Search, X } from 'lucide-react'
 import { useAddressesQuery } from '@/features/user/hooks/queries/useAddressQueries'
 
-export default function AddressBookSelector({ onSelect, type = 'pickup', currentCity }) {
+export default function AddressBookSelector({ onSelect, type: _type = 'pickup', currentCity }) {
     const [isOpen, setIsOpen] = useState(false)
     const [search, setSearch] = useState('')
     const { data: addresses = [], isLoading } = useAddressesQuery()

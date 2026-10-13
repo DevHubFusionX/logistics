@@ -1,13 +1,14 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { PageHeader } from '@/features/dashboard'
-import { MapPin, Package, CheckCircle, Clock, Truck, User, Phone, Camera, FileText, Star } from 'lucide-react'
+import { MapPin, Package, CheckCircle, Clock, Truck, User, Phone, Camera, FileText, Star, ExternalLink, Navigation } from 'lucide-react'
 import TrackingMap from '../../features/tracking/components/tracking/TrackingMap'
 import StatusTimeline from '../../features/tracking/components/tracking/StatusTimeline'
 import DriverInfo from '../../features/tracking/components/tracking/DriverInfo'
 import ProofOfDelivery from '../../features/tracking/components/tracking/ProofOfDelivery'
 import RatingModal from '../../features/tracking/components/tracking/RatingModal'
 import { useShipmentDetailsQuery } from '../../hooks/queries/useTrackingQueries'
+import { getSafeTrackingUrl } from '@/utils'
 
 export default function ShipmentTracking() {
   const { id } = useParams()
@@ -91,6 +92,29 @@ export default function ShipmentTracking() {
         </div>
 
         <div className="space-y-6">
+          {/* Trip V2 — Live GPS Tracking Link card */}
+          {getSafeTrackingUrl(shipment.trackingLink) && (
+            <a
+              href={getSafeTrackingUrl(shipment.trackingLink)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block bg-gradient-to-br from-sky-600 to-indigo-700 rounded-xl p-5 hover:from-sky-700 hover:to-indigo-800 transition-all group shadow-lg shadow-indigo-100"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-9 h-9 bg-white/15 rounded-xl flex items-center justify-center">
+                  <Navigation className="w-4.5 h-4.5 text-white" />
+                </div>
+                <div>
+                  <p className="text-sm font-bold text-white">Live GPS Tracking</p>
+                  <p className="text-xs text-sky-200">Real-time telematics feed</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-extrabold text-white bg-white/20 group-hover:bg-white/30 px-3 py-2 rounded-lg transition-colors w-full justify-center">
+                <ExternalLink className="w-3.5 h-3.5" /> Open Live Feed
+              </div>
+            </a>
+          )}
+
           <DriverInfo driver={shipment.driver} />
 
           <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">

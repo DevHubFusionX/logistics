@@ -19,7 +19,7 @@ const MENUS = {
   company:    CompanyMenu,
 }
 
-export default function NavLinks({ lightNav = false }) {
+export default function NavLinks({ _lightNav = false }) {
   const location = useLocation()
   const [activeMenu, setActiveMenu] = useState(null)
   const navRef = useRef(null)

@@ -19,4 +19,3 @@ const HeroVideo = memo(({ className = 'absolute inset-0 w-full h-full object-cov
 ))
 
 export default HeroVideo
-export { HERO_VIDEO_URL }

@@ -1,19 +1,24 @@
 import { useState, useMemo } from 'react'
-import { X, UserCheck, Truck, Phone, RefreshCcw, AlertTriangle, CheckCircle, Loader2 } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import toast from 'react-hot-toast'
+import { X, UserCheck, Truck, Phone, RefreshCcw, AlertTriangle, CheckCircle, Loader2, Link2 } from 'lucide-react'
 import { useFleetQuery, useDriversQuery, useAdminMutations } from '@/hooks/queries/useAdminQueries'
 import { useBookingMutations } from '@/features/booking'
+import tripService from '@/services/tripService'
+import { getSafeTrackingUrl } from '@/utils'
 
 export default function AssignDriverModal({ booking, onClose, onAssign }) {
   const { data: fleetResponse, isLoading: loadingFleet, isError: fleetError, refetch: fetchFleet } = useFleetQuery({ status: 'approved' })
   const { data: drivers = [], isLoading: loadingDrivers } = useDriversQuery()
   const { assignTruck } = useBookingMutations()
-  const { createTrip } = useAdminMutations()
+  const { createTrip, updateTrackingLink } = useAdminMutations()
 
   const [selectedTruck, setSelectedTruck] = useState(null)
+  const [trackingLink, setTrackingLink] = useState(booking.trackingLink || '')
   const [step, setStep] = useState('select') // 'select' | 'confirm' | 'done'
   const [error, setError] = useState(null)
 
-  const isSubmitting = assignTruck.isPending || createTrip.isPending
+  const isSubmitting = assignTruck.isPending || createTrip.isPending || updateTrackingLink?.isPending
 
   const driverMap = useMemo(() => {
     const map = {}
@@ -38,19 +43,45 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
     if (!selectedTruck) return
     setError(null)
 
+    const rawLink = trackingLink.trim()
+    let safeUrl = null
+    if (rawLink) {
+      safeUrl = getSafeTrackingUrl(rawLink)
+      if (!safeUrl) {
+        setError('Tracking link must be a valid HTTP or HTTPS URL (e.g. https://gps.example.com)')
+        return
+      }
+    }
+
     try {
+      const bookingId = booking.id || booking._id
+      const truckId = selectedTruck.id || selectedTruck._id
+
       // Step 1: assign truck to booking
       await assignTruck.mutateAsync({
-        bookingId: booking.id,
-        truckId: selectedTruck.id
+        bookingId,
+        truckId
       })
 
       // Step 2: create trip — links booking + driver in the system
       const driverId = assignedDriver?._id || assignedDriver?.id || selectedTruck.driverId || null
-      await createTrip.mutateAsync({
-        bookingId: booking.id,
+      const tripRes = await createTrip.mutateAsync({
+        bookingId,
         ...(driverId && { driverId })
       })
+
+      // Step 3 (Trip V2): if trackingLink provided, update tracking link for the trip
+      if (safeUrl) {
+        const tripId = tripRes?.data?.data?._id || tripRes?.data?._id || tripRes?.data?.data?.id || tripRes?.data?.id
+        if (tripId) {
+          try {
+            await tripService.updateTrackingLink(tripId, safeUrl)
+          } catch (linkErr) {
+            console.warn('[AssignDriverModal] Failed to set tracking link:', linkErr)
+            toast.error('Truck assigned and trip created, but failed to save tracking link. You can add it in Trips.')
+          }
+        }
+      }
 
       setStep('done')
     } catch (err) {
@@ -59,14 +90,14 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
   }
 
   const handleDone = () => {
-    onAssign(booking.id, selectedTruck)
+    onAssign(booking.id || booking._id, selectedTruck)
     onClose()
   }
 
   const isLoading = loadingFleet || loadingDrivers
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-200">
+  const modalContent = (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-[9999] p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden shadow-2xl border border-gray-100 flex flex-col">
 
         {/* Header */}
@@ -138,6 +169,27 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
                 <AlertTriangle className="w-4 h-4 text-sky-600 mt-0.5 flex-shrink-0" />
                 <p className="text-xs text-sky-800 font-medium leading-relaxed">
                   Selecting a truck will <strong>assign it to this booking</strong> and <strong>create a trip</strong> — the driver linked to the truck will receive the job.
+                </p>
+              </div>
+
+              {/* Trip V2 Tracking / Telematics Link Input */}
+              <div className="bg-white border border-slate-200 rounded-2xl p-4 mb-5 shadow-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <Link2 className="w-4 h-4 text-indigo-600" />
+                  <label htmlFor="tracking-link-input" className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                    Telematics / Live GPS Tracking Link <span className="text-slate-400 font-normal normal-case">(optional)</span>
+                  </label>
+                </div>
+                <input
+                  id="tracking-link-input"
+                  type="url"
+                  value={trackingLink}
+                  onChange={(e) => setTrackingLink(e.target.value)}
+                  placeholder="https://gps.trackingprovider.com/track/..."
+                  className="w-full text-xs sm:text-sm px-3.5 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-slate-800 placeholder:text-slate-400"
+                />
+                <p className="text-[11px] text-slate-500 mt-1.5">
+                  Customers can view this live GPS link directly in their dashboard to track shipment progress.
                 </p>
               </div>
 
@@ -280,4 +332,8 @@ export default function AssignDriverModal({ booking, onClose, onAssign }) {
       </div>
     </div>
   )
+
+  return typeof document !== 'undefined'
+    ? createPortal(modalContent, document.body)
+    : modalContent
 }

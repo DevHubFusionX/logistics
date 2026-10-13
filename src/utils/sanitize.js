@@ -24,6 +24,25 @@ export const sanitizeUrl = (url) => {
   }
 }
 
+/**
+ * Validates and returns a safe absolute HTTP/HTTPS URL for external tracking feeds.
+ * Returns null if the URL is invalid or uses an unsafe protocol (e.g., javascript:, data:).
+ */
+export const getSafeTrackingUrl = (url) => {
+  if (!url || typeof url !== 'string') return null
+  const trimmed = url.trim()
+  if (!trimmed) return null
+  try {
+    const parsed = new URL(trimmed)
+    if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+      return parsed.href
+    }
+    return null
+  } catch {
+    return null
+  }
+}
+
 export const sanitizeObject = (obj) => {
   if (!obj || typeof obj !== 'object') return obj
   const sanitized = {}

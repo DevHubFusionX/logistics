@@ -47,7 +47,7 @@ export const getDraftAge = () => {
     const minutes = Math.floor((age % (60 * 60 * 1000)) / (60 * 1000))
     
     return { hours, minutes, timestamp: parseInt(timestamp) }
-  } catch (error) {
+  } catch {
     return null
   }
 }

@@ -3,6 +3,37 @@ import bookingService from '../services/bookingService'
 import httpClient from '@/services/httpClient'
 
 /**
+ * Helper to enrich a booking with corresponding Trip V2 data (status, driver, trackingLink)
+ */
+export function mergeTripIntoBooking(booking, trips = []) {
+  if (!booking) return booking
+  const bId = booking._id || booking.id
+  const trip = trips.find(t => {
+    const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
+    return tBookingId === bId
+  })
+
+  if (trip) {
+    let status = booking.status
+    if (trip.status === 'active' || trip.status === 'in_transit') {
+      status = 'in_transit'
+    } else if (trip.status === 'completed' || trip.status === 'delivered') {
+      status = 'delivered'
+    } else if (trip.status === 'cancelled') {
+      status = 'cancelled'
+    }
+    return {
+      ...booking,
+      status,
+      driver: trip.driver,
+      trip,
+      trackingLink: trip.trackingLink || booking.trackingLink
+    }
+  }
+  return booking
+}
+
+/**
  * Hook for fetching current user's bookings
  */
 export function useBookingsQuery(params = {}) {
@@ -12,41 +43,17 @@ export function useBookingsQuery(params = {}) {
       const response = await bookingService.getBookings(params)
       const { records } = httpClient.extractList(response)
       try {
-        const tripsResponse = await httpClient.request('/trips', {}, { limit: 100 })
+        const tripsResponse = await httpClient.request('/tripsV2/', {}, { limit: 100 })
         const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
         const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
         
-        return records.map(b => {
-          const bId = b._id || b.id
-          const trip = trips.find(t => {
-            const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
-            return tBookingId === bId
-          })
-          
-          if (trip) {
-            let status = b.status
-            if (trip.status === 'active') {
-              status = 'in_transit'
-            } else if (trip.status === 'completed') {
-              status = 'delivered'
-            } else if (trip.status === 'cancelled') {
-              status = 'cancelled'
-            }
-            return {
-              ...b,
-              status,
-              driver: trip.driver,
-              trip
-            }
-          }
-          return b
-        })
+        return records.map(b => mergeTripIntoBooking(b, trips))
       } catch (e) {
         console.warn('[useBookingsQuery] failed to merge trips:', e)
         return records
       }
     },
-    staleTime: 0,
+    staleTime: 30000,
   })
 }
 
@@ -60,42 +67,18 @@ export function useAllBookingsQuery(params = {}) {
       const response = await bookingService.getAdminBookings(params)
       const { records, pagination } = httpClient.extractList(response)
       try {
-        const tripsResponse = await httpClient.request('/trips/admins', {}, { limit: 100 })
+        const tripsResponse = await httpClient.request('/tripsV2/admins', {}, { limit: 100 })
         const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
         const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
         
-        const mergedRecords = records.map(b => {
-          const bId = b._id || b.id
-          const trip = trips.find(t => {
-            const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
-            return tBookingId === bId
-          })
-          
-          if (trip) {
-            let status = b.status
-            if (trip.status === 'active') {
-              status = 'in_transit'
-            } else if (trip.status === 'completed') {
-              status = 'delivered'
-            } else if (trip.status === 'cancelled') {
-              status = 'cancelled'
-            }
-            return {
-              ...b,
-              status,
-              driver: trip.driver,
-              trip
-            }
-          }
-          return b
-        })
+        const mergedRecords = records.map(b => mergeTripIntoBooking(b, trips))
         return { records: mergedRecords, pagination }
       } catch (e) {
         console.warn('[useAllBookingsQuery] failed to merge trips:', e)
         return { records, pagination }
       }
     },
-    staleTime: 0,
+    staleTime: 30000,
   })
 }
 
@@ -114,35 +97,11 @@ export function useAdminUserBookingsQuery(userId, params = {}) {
       const response = await bookingService.getUserBookingsForAdmin(userId, params)
       const { records, pagination } = httpClient.extractList(response)
       try {
-        const tripsResponse = await httpClient.request('/trips/admins', {}, { limit: 100 })
+        const tripsResponse = await httpClient.request('/tripsV2/admins', {}, { limit: 100 })
         const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
         const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
         
-        const mergedRecords = records.map(b => {
-          const bId = b._id || b.id
-          const trip = trips.find(t => {
-            const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
-            return tBookingId === bId
-          })
-          
-          if (trip) {
-            let status = b.status
-            if (trip.status === 'active') {
-              status = 'in_transit'
-            } else if (trip.status === 'completed') {
-              status = 'delivered'
-            } else if (trip.status === 'cancelled') {
-              status = 'cancelled'
-            }
-            return {
-              ...b,
-              status,
-              driver: trip.driver,
-              trip
-            }
-          }
-          return b
-        })
+        const mergedRecords = records.map(b => mergeTripIntoBooking(b, trips))
         return { records: mergedRecords, pagination }
       } catch (e) {
         console.warn('[useAdminUserBookingsQuery] failed to merge trips:', e)
@@ -150,7 +109,7 @@ export function useAdminUserBookingsQuery(userId, params = {}) {
       }
     },
     enabled: !!userId,
-    staleTime: 0,
+    staleTime: 30000,
   })
 }
 
@@ -168,33 +127,12 @@ export function useBookingQuery(id, isAdmin = false) {
       if (booking) {
         try {
           const tripsResponse = isAdmin
-            ? await httpClient.request('/trips/admins', {}, { limit: 100 })
-            : await httpClient.request('/trips', {}, { limit: 100 })
+            ? await httpClient.request('/tripsV2/admins', {}, { limit: 100 })
+            : await httpClient.request('/tripsV2/', {}, { limit: 100 })
           const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
           const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
           
-          const bId = booking._id || booking.id
-          const trip = trips.find(t => {
-            const tBookingId = typeof t.booking === 'object' ? (t.booking?._id || t.booking?.id) : t.booking
-            return tBookingId === bId
-          })
-          
-          if (trip) {
-            let status = booking.status
-            if (trip.status === 'active') {
-              status = 'in_transit'
-            } else if (trip.status === 'completed') {
-              status = 'delivered'
-            } else if (trip.status === 'cancelled') {
-              status = 'cancelled'
-            }
-            return {
-              ...booking,
-              status,
-              driver: trip.driver,
-              trip
-            }
-          }
+          return mergeTripIntoBooking(booking, trips)
         } catch (e) {
           console.warn('[useBookingQuery] failed to merge trip info:', e)
         }
