@@ -3,6 +3,7 @@ import { Search, Bell, Plus, Menu, User, Settings, LogOut, Package, Truck, Home,
 import { useAuth } from '@/features/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
+import { TripWorkflowButton } from '@/components/common/TripWorkflowGuide'
 
 function LanguageToggle() {
   const { locale, setLocale } = useTranslation()
@@ -164,6 +165,9 @@ export default function TopHeader({ onToggleSidebar }) {
             )}
           </div>
         )}
+
+        {/* System Workflow Guide */}
+        <TripWorkflowButton variant="header" />
 
         {/* Language Selector */}
         <LanguageToggle />

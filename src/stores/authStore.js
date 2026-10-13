@@ -89,6 +89,11 @@ export const useAuthStore = create(
       logout: () => {
         tokenStorage.clear()
         queryClient.clear() // wipe all cached data from previous session
+        try {
+          sessionStorage.removeItem('dara_cached_user_bookings')
+        } catch {
+          // ignore
+        }
         set({
           user: null,
           isAuthenticated: false,

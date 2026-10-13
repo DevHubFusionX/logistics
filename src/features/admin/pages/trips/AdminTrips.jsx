@@ -14,6 +14,7 @@ import { useAllBookingsQuery } from '@/features/booking'
 import TripFormModal from '@/features/admin/components/trips/TripFormModal'
 import tripService from '@/services/tripService'
 import { getSafeTrackingUrl } from '@/utils'
+import { TripWorkflowButton } from '@/components/common/TripWorkflowGuide'
 
 // ─── Status helpers ───────────────────────────────────────────────────────────
 const STATUS_CONFIG = {
@@ -476,14 +477,15 @@ export default function AdminTrips() {
         <div className="flex items-center gap-2">
           <button
             onClick={() => refetch()}
-            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+            className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all cursor-pointer"
             title="Refresh"
           >
             <RefreshCw className="w-5 h-5" />
           </button>
+          <TripWorkflowButton variant="outline" mode="admin" label="Trip V2 Flow Guide" />
           <button
             onClick={() => setShowCreateModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-semibold shadow-sm"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-semibold shadow-sm cursor-pointer"
           >
             <Plus className="w-4 h-4" /> Create Trip
           </button>
@@ -648,7 +650,7 @@ export default function AdminTrips() {
                       <td className="px-5 py-4">
                         <button
                           onClick={() => setSelectedTrip(trip)}
-                          className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 border border-indigo-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors"
+                          className="flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-800 border border-indigo-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition-colors cursor-pointer"
                         >
                           <Eye className="w-3.5 h-3.5" /> View
                         </button>

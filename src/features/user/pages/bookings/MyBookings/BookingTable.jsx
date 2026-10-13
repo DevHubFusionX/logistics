@@ -222,7 +222,7 @@ export default function BookingTable({ rows, loading, onViewDetails, onPay }) {
                           ) : (
                             <button
                               onClick={(e) => { e.stopPropagation(); navigate(`/tracking/${bookingId}`) }}
-                              className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100/50 px-3 py-1.5 rounded-lg shadow-sm transition-all hover:scale-105 active:scale-95"
+                              className="inline-flex items-center gap-1 text-[11px] font-extrabold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 border border-emerald-100/50 px-3 py-1.5 rounded-lg shadow-sm transition-all hover:scale-105 active:scale-95 cursor-pointer"
                             >
                               <Navigation className="w-3.5 h-3.5" /> Track
                             </button>

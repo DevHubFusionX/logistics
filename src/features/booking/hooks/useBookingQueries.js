@@ -33,25 +33,63 @@ export function mergeTripIntoBooking(booking, trips = []) {
   return booking
 }
 
+const CACHE_KEY = 'dara_cached_user_bookings'
+
 /**
  * Hook for fetching current user's bookings
  */
 export function useBookingsQuery(params = {}) {
   return useQuery({
     queryKey: ['bookings', 'user-list', params],
-    queryFn: async () => {
-      const response = await bookingService.getBookings(params)
-      const { records } = httpClient.extractList(response)
-      try {
-        const tripsResponse = await httpClient.request('/tripsV2/', {}, { limit: 100 })
-        const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
-        const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
-        
-        return records.map(b => mergeTripIntoBooking(b, trips))
-      } catch (e) {
-        console.warn('[useBookingsQuery] failed to merge trips:', e)
-        return records
+    initialData: () => {
+      // Use cached bookings for instant dashboard display on page reload
+      if (Object.keys(params).length <= 1 && (!params.limit || params.limit === 100)) {
+        try {
+          const cached = sessionStorage.getItem(CACHE_KEY)
+          if (cached) {
+            const parsed = JSON.parse(cached)
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed
+          }
+        } catch {
+          // ignore cache read failure
+        }
       }
+      return undefined
+    },
+    queryFn: async () => {
+      // Execute bookings and trips fetch in parallel to eliminate waterfall delay
+      const [bookingsResult, tripsResult] = await Promise.allSettled([
+        bookingService.getBookings(params),
+        httpClient.request('/tripsV2/', {}, { limit: 100 })
+      ])
+
+      const response = bookingsResult.status === 'fulfilled' ? bookingsResult.value : null
+      if (!response) {
+        throw bookingsResult.reason || new Error('Failed to load bookings')
+      }
+
+      const { records } = httpClient.extractList(response)
+
+      let trips = []
+      if (tripsResult.status === 'fulfilled') {
+        const tripsData = tripsResult.value?.data?.data || tripsResult.value?.data || {}
+        trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
+      } else {
+        console.warn('[useBookingsQuery] trips fetch failed or forbidden:', tripsResult.reason)
+      }
+
+      const merged = records.map(b => mergeTripIntoBooking(b, trips))
+
+      // Persist to session storage so reloads render immediately
+      if (Object.keys(params).length <= 1 && (!params.limit || params.limit === 100)) {
+        try {
+          sessionStorage.setItem(CACHE_KEY, JSON.stringify(merged))
+        } catch {
+          // ignore storage quota errors
+        }
+      }
+
+      return merged
     },
     staleTime: 30000,
   })
@@ -64,19 +102,29 @@ export function useAllBookingsQuery(params = {}) {
   return useQuery({
     queryKey: ['admin', 'all-bookings', params],
     queryFn: async () => {
-      const response = await bookingService.getAdminBookings(params)
-      const { records, pagination } = httpClient.extractList(response)
-      try {
-        const tripsResponse = await httpClient.request('/tripsV2/admins', {}, { limit: 100 })
-        const tripsData = tripsResponse.data?.data || tripsResponse.data || {}
-        const trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
-        
-        const mergedRecords = records.map(b => mergeTripIntoBooking(b, trips))
-        return { records: mergedRecords, pagination }
-      } catch (e) {
-        console.warn('[useAllBookingsQuery] failed to merge trips:', e)
-        return { records, pagination }
+      // Execute in parallel
+      const [bookingsResult, tripsResult] = await Promise.allSettled([
+        bookingService.getAdminBookings(params),
+        httpClient.request('/tripsV2/admins', {}, { limit: 100 })
+      ])
+
+      const response = bookingsResult.status === 'fulfilled' ? bookingsResult.value : null
+      if (!response) {
+        throw bookingsResult.reason || new Error('Failed to load admin bookings')
       }
+
+      const { records, pagination } = httpClient.extractList(response)
+
+      let trips = []
+      if (tripsResult.status === 'fulfilled') {
+        const tripsData = tripsResult.value?.data?.data || tripsResult.value?.data || {}
+        trips = tripsData.records || (Array.isArray(tripsData) ? tripsData : [])
+      } else {
+        console.warn('[useAllBookingsQuery] trips fetch failed:', tripsResult.reason)
+      }
+
+      const mergedRecords = records.map(b => mergeTripIntoBooking(b, trips))
+      return { records: mergedRecords, pagination }
     },
     staleTime: 30000,
   })

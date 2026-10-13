@@ -14,6 +14,7 @@ import BookingSearchBar from './BookingSearchBar'
 import BookingTable from './BookingTable'
 import BookingMobileCard from './BookingMobileCard'
 import BookingPagination from './BookingPagination'
+import { TripWorkflowButton } from '@/components/common/TripWorkflowGuide'
 
 const PER_PAGE = 10
 
@@ -190,15 +191,18 @@ export default function MyBookings() {
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Home Dashboard</h1>
           <p className="text-sm text-slate-500 mt-1">Manage, monitor, and place temperature-controlled shipments</p>
         </div>
-        <button
-          onClick={() => navigate('/booking/request')}
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-sky-700 to-sky-800 hover:from-sky-600 hover:to-sky-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md"
-        >
-          <Plus className="w-4 h-4" /> Book a shipment
-        </button>
+        <div className="flex items-center gap-3">
+          <TripWorkflowButton variant="outline" mode="user" label="How It Works" />
+          <button
+            onClick={() => navigate('/booking/request')}
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-gradient-to-r from-sky-700 to-sky-800 hover:from-sky-600 hover:to-sky-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md"
+          >
+            <Plus className="w-4 h-4" /> Book a shipment
+          </button>
+        </div>
       </div>
 
-      <BookingStatsCards bookingStats={bookingStats} totalSpend={totalSpend} loading={loading} />
+      <BookingStatsCards bookingStats={bookingStats} totalSpend={totalSpend} loading={loading} hasData={bookings.length > 0} />
 
       <BookingTabs activeTab={activeTab} stats={stats} onTabChange={handleTabChange} />
 
@@ -214,7 +218,16 @@ export default function MyBookings() {
       />
 
       {/* Table / Empty state */}
-      {searched.length === 0 ? (
+      {loading && searched.length === 0 ? (
+        <div className="bg-white border border-slate-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.015)] overflow-hidden">
+          <BookingTable
+            rows={[]}
+            loading={true}
+            onViewDetails={() => {}}
+            onPay={() => {}}
+          />
+        </div>
+      ) : searched.length === 0 ? (
         <div className="bg-white border border-slate-100 rounded-2xl py-20 px-6 text-center flex flex-col items-center justify-center">
           <div className="w-20 h-20 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 mb-6">
             <Package className="w-10 h-10" />
