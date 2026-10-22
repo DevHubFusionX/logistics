@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types'
 import { useState, memo } from 'react'
 import { useLocation } from 'react-router-dom'
+import { X } from 'lucide-react'
 import { NAVIGATION_SECTIONS } from '@/constants/navigation'
 import { useAuth } from '@/features/auth'
 import SidebarHeader from './sidebar/SidebarHeader'
 import SidebarFooter from './sidebar/SidebarFooter'
 import SidebarSection from './sidebar/SidebarSection'
 
-function Sidebar({ collapsed, isMobile, isOpen }) {
+function Sidebar({ collapsed, isMobile, isOpen, onClose }) {
   const { isManager, hasPermission } = useAuth()
   const [expandedItems, setExpandedItems] = useState({ shipments: true })
   const location = useLocation()
@@ -41,7 +42,20 @@ function Sidebar({ collapsed, isMobile, isOpen }) {
       style={{ height: 'calc(100vh - 4rem)' }}
     >
       <div className="h-full flex flex-col bg-gradient-to-b from-gray-50 to-white">
-        {!collapsed && <SidebarHeader />}
+        {isMobile ? (
+          <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 bg-white">
+            <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Navigation</span>
+            <button
+              onClick={onClose}
+              className="p-1.5 rounded-lg text-gray-500 hover:text-gray-800 hover:bg-gray-100 transition-colors cursor-pointer"
+              aria-label="Close navigation"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ) : (
+          !collapsed && <SidebarHeader />
+        )}
 
         <nav className="flex-1 overflow-y-auto px-2 py-4 space-y-1 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
           {(() => {

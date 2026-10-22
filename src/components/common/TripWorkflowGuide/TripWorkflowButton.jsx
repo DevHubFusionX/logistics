@@ -22,12 +22,13 @@ export default function TripWorkflowButton({
       <>
         <button
           onClick={() => setIsOpen(true)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-sky-100/80 bg-sky-50/60 hover:bg-sky-100/80 text-sky-800 text-xs font-bold transition-all shadow-xs hover:shadow-sm cursor-pointer select-none active:scale-97 ${className}`}
+          className={`flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 rounded-xl border border-sky-100/80 bg-sky-50/60 hover:bg-sky-100/80 text-sky-800 text-xs font-bold transition-all shadow-xs hover:shadow-sm cursor-pointer select-none active:scale-97 ${className}`}
           title="Learn how the Trip V2 cold-chain system works"
+          aria-label="Trip Workflow Guide"
         >
           <Workflow className="w-3.5 h-3.5 text-sky-600 flex-shrink-0" />
-          <span className="hidden sm:inline">{displayLabel}</span>
-          <span className="sm:hidden">Guide</span>
+          <span className="hidden md:inline">{displayLabel}</span>
+          <span className="hidden sm:inline md:hidden">Guide</span>
         </button>
         <TripWorkflowModal
           isOpen={isOpen}

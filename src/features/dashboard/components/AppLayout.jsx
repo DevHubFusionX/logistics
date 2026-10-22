@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { useLocation } from 'react-router-dom'
 import useUiStore from '@/stores/uiStore'
 import TopHeader from './TopHeader'
 import Sidebar from './Sidebar'
@@ -7,31 +8,58 @@ export default function AppLayout({ children }) {
   const {
     sidebarCollapsed,
     setSidebarCollapsed,
+    toggleSidebar,
     sidebarOpen,
-    setMobileSidebar
+    setMobileSidebar,
+    toggleMobileSidebar
   } = useUiStore()
-  const [isMobile, setIsMobile] = useState(false)
+
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 1024)
+  const location = useLocation()
+  const prevPathRef = useRef(location.pathname)
 
   useEffect(() => {
+    let lastWidth = window.innerWidth
     const checkMobile = () => {
-      const mobile = window.innerWidth < 1024
+      const newWidth = window.innerWidth
+      if (newWidth === lastWidth) return
+      lastWidth = newWidth
+      const mobile = newWidth < 1024
       setIsMobile(mobile)
-      if (mobile) {
-        setSidebarCollapsed(false)
+      if (!mobile) {
         setMobileSidebar(false)
       }
     }
 
-    checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
-  }, [setMobileSidebar, setSidebarCollapsed])
+  }, [setMobileSidebar])
+
+  // Automatically close mobile sidebar ONLY when the route actually changes
+  useEffect(() => {
+    if (prevPathRef.current !== location.pathname) {
+      prevPathRef.current = location.pathname
+      setMobileSidebar(false)
+    }
+  }, [location.pathname, setMobileSidebar])
+
+  // Prevent background scroll when mobile sidebar is open
+  useEffect(() => {
+    if (isMobile && sidebarOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMobile, sidebarOpen])
 
   const handleToggleSidebar = () => {
     if (isMobile) {
-      setMobileSidebar(!sidebarOpen)
+      toggleMobileSidebar()
     } else {
-      setSidebarCollapsed(!sidebarCollapsed)
+      toggleSidebar()
     }
   }
 
@@ -45,10 +73,10 @@ export default function AppLayout({ children }) {
         Skip to main content
       </a>
 
-      {/* Mobile Overlay */}
+      {/* Mobile Overlay (covers main area below header) */}
       {isMobile && sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden transition-opacity"
+          className="fixed top-16 inset-x-0 bottom-0 bg-black/40 backdrop-blur-xs z-40 lg:hidden transition-opacity"
           onClick={() => setMobileSidebar(false)}
           aria-hidden="true"
         />
@@ -58,6 +86,7 @@ export default function AppLayout({ children }) {
       <TopHeader
         onToggleSidebar={handleToggleSidebar}
         sidebarCollapsed={sidebarCollapsed}
+        isSidebarOpen={isMobile ? sidebarOpen : !sidebarCollapsed}
         isMobile={isMobile}
       />
 

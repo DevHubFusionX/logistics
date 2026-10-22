@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Search, Bell, Plus, Menu, User, Settings, LogOut, Package, Truck, Home, Globe } from 'lucide-react'
+import { Search, Bell, Plus, Menu, X, User, Settings, LogOut, Package, Truck, Home } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 import { useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from '@/i18n'
@@ -16,8 +16,9 @@ function LanguageToggle() {
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center gap-1 text-xs font-bold font-body-unique tracking-wider cursor-pointer select-none px-2.5 py-1 transition-colors mr-2 hover:opacity-85 active:scale-97"
+      className="flex items-center gap-0.5 sm:gap-1 text-xs font-bold font-body-unique tracking-wider cursor-pointer select-none px-1.5 sm:px-2.5 py-1 rounded-lg hover:bg-gray-50 active:bg-gray-100 transition-colors active:scale-97"
       title={isFrench ? "Switch to English" : "Traduire en Français"}
+      aria-label="Switch language"
     >
       <span className={!isFrench ? 'text-sky-700 font-extrabold' : 'text-gray-400 hover:text-gray-600'}>EN</span>
       <span className="text-gray-300">|</span>
@@ -26,10 +27,11 @@ function LanguageToggle() {
   )
 }
 
-export default function TopHeader({ onToggleSidebar }) {
+export default function TopHeader({ onToggleSidebar, isSidebarOpen = false, isMobile = false }) {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [showQuickAdd, setShowQuickAdd] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
+  const [showMobileSearch, setShowMobileSearch] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const { user, logout, isSuperAdmin, hasPermission } = useAuth()
   const navigate = useNavigate()
@@ -37,6 +39,7 @@ export default function TopHeader({ onToggleSidebar }) {
   const userMenuRef = useRef(null)
   const quickAddRef = useRef(null)
   const notificationsRef = useRef(null)
+  const mobileSearchRef = useRef(null)
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,6 +52,9 @@ export default function TopHeader({ onToggleSidebar }) {
       if (notificationsRef.current && !notificationsRef.current.contains(event.target)) {
         setShowNotifications(false)
       }
+      if (mobileSearchRef.current && !mobileSearchRef.current.contains(event.target)) {
+        setShowMobileSearch(false)
+      }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
@@ -59,6 +65,7 @@ export default function TopHeader({ onToggleSidebar }) {
     e.preventDefault()
     const query = searchQuery.trim()
     if (query) {
+      setShowMobileSearch(false)
       navigate(`/tracking/${encodeURIComponent(query)}`)
     }
   }
@@ -76,16 +83,20 @@ export default function TopHeader({ onToggleSidebar }) {
   }
 
   return (
-    <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-4 lg:px-6 sticky top-0 z-40 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
+    <header className="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-3 sm:px-4 lg:px-6 sticky top-0 z-40 shadow-[0_2px_12px_rgba(0,0,0,0.02)]">
       {/* Left Section */}
-      <div className="flex items-center gap-3 lg:gap-4 flex-1 min-w-0">
+      <div className="flex items-center gap-2 sm:gap-3 lg:gap-4 flex-1 min-w-0">
         {/* Sidebar Toggle */}
         <button
           onClick={onToggleSidebar}
-          className="p-2 rounded-xl hover:bg-gray-55 active:bg-gray-100 transition-all flex-shrink-0 cursor-pointer"
-          aria-label="Toggle sidebar"
+          className="p-1.5 sm:p-2 -ml-0.5 sm:ml-0 rounded-xl hover:bg-gray-100 active:bg-gray-200 transition-all flex-shrink-0 cursor-pointer text-gray-700"
+          aria-label={isMobile && isSidebarOpen ? 'Close sidebar' : 'Toggle sidebar'}
         >
-          <Menu className="w-5 h-5 text-gray-700" />
+          {isMobile && isSidebarOpen ? (
+            <X className="w-5 h-5 text-gray-700" />
+          ) : (
+            <Menu className="w-5 h-5 text-gray-700" />
+          )}
         </button>
 
         {/* Logo */}
@@ -93,11 +104,11 @@ export default function TopHeader({ onToggleSidebar }) {
           <img
             src="/black.svg"
             alt="Darafort"
-            className="h-3.5 sm:h-4 w-auto object-contain"
+            className="h-3.5 sm:h-4 w-auto object-contain max-w-[100px] sm:max-w-none"
           />
         </Link>
 
-        {/* Global Search - Centered and Premium */}
+        {/* Global Search - Desktop (Centered and Premium) */}
         <form onSubmit={handleSearch} className="hidden md:flex relative flex-1 max-w-xl mx-auto">
           <Search className="absolute left-3.5 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
@@ -115,31 +126,44 @@ export default function TopHeader({ onToggleSidebar }) {
       </div>
 
       {/* Right Section */}
-      <div className="flex items-center gap-3 flex-shrink-0">
-        {/* New Booking Button */}
+      <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 flex-shrink-0">
+        {/* Mobile Search Toggle */}
+        <button
+          onClick={() => setShowMobileSearch(prev => !prev)}
+          className={`p-1.5 sm:p-2 rounded-xl border transition-all md:hidden cursor-pointer ${
+            showMobileSearch
+              ? 'bg-sky-50 border-sky-200 text-sky-700'
+              : 'border-gray-100 hover:bg-gray-50 active:bg-gray-100 text-gray-600'
+          }`}
+          aria-label="Toggle mobile search"
+        >
+          <Search className="w-4 h-4" />
+        </button>
+
+        {/* New Booking Button (Desktop/Tablet) */}
         {hasPermission(['Super Admin', 'Support']) && (
           <button
             onClick={() => navigate('/booking/request')}
-            className="hidden sm:flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-750 hover:to-sky-800 text-white font-bold text-xs rounded-xl shadow-[0_4px_12px_rgba(14,165,233,0.15)] hover:shadow-[0_6px_20px_rgba(14,165,233,0.25)] transition-all duration-200 cursor-pointer active:scale-97"
+            className="hidden sm:flex items-center gap-1.5 px-3 sm:px-4 py-2 bg-gradient-to-r from-sky-600 to-sky-700 hover:from-sky-750 hover:to-sky-800 text-white font-bold text-xs rounded-xl shadow-[0_4px_12px_rgba(14,165,233,0.15)] hover:shadow-[0_6px_20px_rgba(14,165,233,0.25)] transition-all duration-200 cursor-pointer active:scale-97"
           >
             <Plus className="w-4 h-4" />
             <span>New Booking</span>
           </button>
         )}
 
-        {/* Quick Add (Mobile/Secondary) */}
+        {/* Quick Add (Secondary) */}
         {hasPermission(['Super Admin', 'Support', 'Fleet Officer']) && (
           <div className="relative" ref={quickAddRef}>
             <button
               onClick={() => setShowQuickAdd(!showQuickAdd)}
-              className="p-2 rounded-xl border border-gray-100 hover:bg-gray-50 active:bg-gray-100 transition-all shadow-sm cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-xl border border-gray-100 hover:bg-gray-50 active:bg-gray-100 transition-all shadow-sm cursor-pointer"
               aria-label="Quick add"
             >
-              <Plus className="w-5 h-5 text-gray-600" />
+              <Plus className="w-4 h-4 text-gray-600" />
             </button>
 
             {showQuickAdd && (
-              <div className="absolute right-0 top-14 w-56 bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.06)] border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:right-0 sm:top-14 sm:w-56 w-auto max-w-xs bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.08)] border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="px-3 py-2 border-b border-gray-50">
                   <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Quick Actions</p>
                 </div>
@@ -176,14 +200,15 @@ export default function TopHeader({ onToggleSidebar }) {
         <div className="relative" ref={notificationsRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
-            className="p-2 rounded-xl border border-gray-100 hover:bg-gray-50 active:bg-gray-100 transition-all relative cursor-pointer"
+            className="p-1.5 sm:p-2 rounded-xl border border-gray-100 hover:bg-gray-50 active:bg-gray-100 transition-all relative cursor-pointer"
+            aria-label="Notifications"
           >
-            <Bell className="w-5 h-5 text-gray-600" />
-            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-rose-500 rounded-full ring-2 ring-white" />
+            <Bell className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
+            <span className="absolute top-1 right-1 w-2 sm:w-2.5 h-2 sm:h-2.5 bg-rose-500 rounded-full ring-2 ring-white" />
           </button>
 
           {showNotifications && (
-            <div className="absolute right-0 top-14 w-80 bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.06)] border border-gray-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="fixed inset-x-3 top-16 sm:absolute sm:inset-x-auto sm:right-0 sm:top-14 sm:w-80 w-auto max-w-sm bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.08)] border border-gray-100 z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50 flex items-center justify-between">
                 <h3 className="font-bold text-gray-950 text-sm">Notifications</h3>
                 <span className="text-[10px] bg-rose-50 text-rose-600 px-2 py-0.5 rounded-full font-bold">2 New</span>
@@ -211,10 +236,11 @@ export default function TopHeader({ onToggleSidebar }) {
         <div className="relative" ref={userMenuRef}>
           <button
             onClick={() => setShowUserMenu(!showUserMenu)}
-            className="flex items-center gap-2 pl-2 pr-3 py-1.5 rounded-xl border border-gray-100 hover:bg-gray-50 active:bg-gray-100 transition-all cursor-pointer shadow-sm"
+            className="flex items-center gap-1.5 sm:gap-2 p-1 sm:pl-2 sm:pr-3 sm:py-1.5 rounded-xl border border-gray-100 hover:bg-gray-50 active:bg-gray-100 transition-all cursor-pointer shadow-sm"
+            aria-label="User profile menu"
           >
-            <div className="w-8 h-8 bg-sky-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
-              <span className="text-white font-bold text-sm">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-sky-700 rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm">
+              <span className="text-white font-bold text-xs sm:text-sm">
                 {getUserInitials()}
               </span>
             </div>
@@ -229,24 +255,24 @@ export default function TopHeader({ onToggleSidebar }) {
           </button>
 
           {showUserMenu && (
-            <div className="absolute right-0 top-14 w-64 bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.06)] border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="absolute right-0 top-14 w-60 sm:w-64 max-w-[calc(100vw-1.5rem)] bg-white rounded-xl shadow-[0_12px_36px_rgba(0,0,0,0.08)] border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
               <div className="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
-                <p className="text-sm font-bold text-gray-955">{user?.firstName || 'User'} {user?.lastName || ''}</p>
-                <p className="text-[11px] text-gray-400 mt-0.5 font-medium">{user?.email || 'user@dara.com'}</p>
+                <p className="text-sm font-bold text-gray-950 truncate">{user?.firstName || 'User'} {user?.lastName || ''}</p>
+                <p className="text-[11px] text-gray-400 mt-0.5 font-medium truncate">{user?.email || 'user@dara.com'}</p>
                 <span className="inline-block mt-2 px-2.5 py-0.5 bg-sky-50 text-sky-700 text-[10px] font-bold rounded-md">
                   {user?.role || 'Member'}
                 </span>
               </div>
               <button
                 onClick={() => { navigate('/'); setShowUserMenu(false) }}
-                className="w-full px-4 py-2.5 text-left hover:bg-sky-50/50 text-xs flex items-center gap-3 text-gray-750 transition-colors cursor-pointer font-semibold hover:text-sky-750"
+                className="w-full px-4 py-2.5 text-left hover:bg-sky-50/50 text-xs flex items-center gap-3 text-gray-700 transition-colors cursor-pointer font-semibold hover:text-sky-750"
               >
                 <Home className="w-4 h-4 text-gray-400" />
                 <span>Homepage</span>
               </button>
               <button
                 onClick={() => { navigate('/profile'); setShowUserMenu(false) }}
-                className="w-full px-4 py-2.5 text-left hover:bg-sky-50/50 text-xs flex items-center gap-3 text-gray-750 transition-colors cursor-pointer font-semibold hover:text-sky-750"
+                className="w-full px-4 py-2.5 text-left hover:bg-sky-50/50 text-xs flex items-center gap-3 text-gray-700 transition-colors cursor-pointer font-semibold hover:text-sky-750"
               >
                 <User className="w-4 h-4 text-gray-400" />
                 <span>My Profile</span>
@@ -254,7 +280,7 @@ export default function TopHeader({ onToggleSidebar }) {
               {isSuperAdmin && (
                 <button
                   onClick={() => { navigate('/settings'); setShowUserMenu(false) }}
-                  className="w-full px-4 py-2.5 text-left hover:bg-sky-50/50 text-xs flex items-center gap-3 text-gray-750 transition-colors cursor-pointer font-semibold hover:text-sky-750"
+                  className="w-full px-4 py-2.5 text-left hover:bg-sky-50/50 text-xs flex items-center gap-3 text-gray-700 transition-colors cursor-pointer font-semibold hover:text-sky-750"
                 >
                   <Settings className="w-4 h-4 text-gray-400" />
                   <span>Settings</span>
@@ -272,6 +298,31 @@ export default function TopHeader({ onToggleSidebar }) {
           )}
         </div>
       </div>
+
+      {/* Expandable Mobile Search Bar */}
+      {showMobileSearch && (
+        <div ref={mobileSearchRef} className="absolute top-16 left-0 right-0 bg-white border-b border-gray-200 px-3 py-2.5 shadow-md md:hidden z-40 animate-in fade-in slide-in-from-top-1 duration-150">
+          <form onSubmit={handleSearch} className="relative flex items-center">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              autoFocus
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search shipments, orders, routes..."
+              className="w-full pl-9 pr-9 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-sky-500 focus:ring-2 focus:ring-sky-500/10 bg-gray-50/50"
+            />
+            <button
+              type="button"
+              onClick={() => setShowMobileSearch(false)}
+              className="absolute right-2 p-1 text-gray-400 hover:text-gray-600 cursor-pointer"
+              aria-label="Close search"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
+      )}
     </header>
   )
 }

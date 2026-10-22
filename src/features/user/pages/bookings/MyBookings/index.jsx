@@ -191,7 +191,7 @@ export default function MyBookings() {
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Home Dashboard</h1>
           <p className="text-sm text-slate-500 mt-1">Manage, monitor, and place temperature-controlled shipments</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 sm:gap-3">
           <TripWorkflowButton variant="outline" mode="user" label="How It Works" />
           <button
             onClick={() => navigate('/booking/request')}

@@ -81,7 +81,7 @@ export default function BookingSearchBar({
         </div>
 
         {/* Search input */}
-        <div className="relative flex-1 min-w-[280px]">
+        <div className="relative flex-1 min-w-0 sm:min-w-[220px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
@@ -108,7 +108,7 @@ export default function BookingSearchBar({
           </button>
 
           {showGroup && (
-            <div className="absolute right-0 mt-2 w-56 bg-white border border-slate-100 rounded-xl shadow-xl z-20 py-1.5 animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="absolute right-0 mt-2 w-56 max-w-[calc(100vw-2rem)] bg-white border border-slate-100 rounded-xl shadow-xl z-20 py-1.5 animate-in fade-in slide-in-from-top-2 duration-150">
               <div className="px-3 py-1.5 text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-50">
                 Group Bookings By
               </div>
@@ -146,7 +146,7 @@ export default function BookingSearchBar({
           </button>
 
           {showFilters && (
-            <div className="absolute right-0 mt-2 w-72 bg-white border border-slate-100 rounded-xl shadow-xl z-20 p-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-150">
+            <div className="absolute right-0 mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white border border-slate-100 rounded-xl shadow-xl z-20 p-4 space-y-4 animate-in fade-in slide-in-from-top-2 duration-150">
               <div className="flex items-center justify-between border-b border-slate-50 pb-2">
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Filters</span>
                 {hasActiveFilters && (
