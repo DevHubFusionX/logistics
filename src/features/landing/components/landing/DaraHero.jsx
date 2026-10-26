@@ -1,10 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ScheduleDemoModal } from './demo'
 import { heroData } from './Data'
-
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -31,17 +29,34 @@ const itemVariants = {
 
 export default function DaraHero() {
   const [isDemoOpen, setIsDemoOpen] = useState(false)
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (video) {
+      video.defaultMuted = true
+      video.muted = true
+      const playPromise = video.play()
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay blocked by browser policy; container remains clean black
+        })
+      }
+    }
+  }, [])
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden flex items-end bg-black pt-28 pb-16 md:py-0 md:h-screen">
 
-      {/* Background Looping Video — poster shows instantly as LCP, video loads after */}
+      {/* Background Looping Video */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
+        defaultMuted
         playsInline
-        preload="metadata"
+        preload="auto"
         className="absolute inset-0 w-full h-full object-cover z-0 select-none pointer-events-none opacity-90"
       >
         <source

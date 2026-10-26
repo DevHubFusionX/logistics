@@ -58,10 +58,10 @@ export default function Invoice() {
               <p className="text-gray-600">Date: {new Date(booking.createdAt).toLocaleDateString()}</p>
             </div>
             <div className="text-right">
-              <h2 className="text-xl font-bold text-blue-600">Your Logistics Company</h2>
-              <p className="text-sm text-gray-600">123 Business Street</p>
+              <h2 className="text-xl font-bold text-blue-600">Darafort</h2>
+              <p className="text-sm text-gray-600">3 Kudirat Abiola Way, Oregun</p>
               <p className="text-sm text-gray-600">Lagos, Nigeria</p>
-              <p className="text-sm text-gray-600">+234 800 123 4567</p>
+              <p className="text-sm text-gray-600">+234 811 577 9007</p>
             </div>
           </div>
 

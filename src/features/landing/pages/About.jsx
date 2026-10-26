@@ -74,7 +74,7 @@ export default function About() {
           'description': "Nigeria's leading cold chain logistics company specializing in pharma logistics, frozen food transport, refrigerated haulage and temperature-controlled supply chain solutions across all 36 states.",
           'address': {
             '@type': 'PostalAddress',
-            'streetAddress': 'MJS House, 366 Murtala Muhammed Road, Yaba',
+            'streetAddress': '3 Kudirat Abiola Way, Oregun',
             'addressLocality': 'Lagos',
             'addressRegion': 'Lagos State',
             'addressCountry': 'NG'

@@ -114,7 +114,7 @@ export default function Contact() {
             'email': 'hello@darafort.com',
             'address': {
               '@type': 'PostalAddress',
-              'streetAddress': 'MJS House, 366 Murtala Muhammed Road, Yaba',
+              'streetAddress': '3 Kudirat Abiola Way, Oregun',
               'addressLocality': 'Lagos',
               'addressRegion': 'Lagos State',
               'addressCountry': 'NG'
@@ -374,7 +374,7 @@ export default function Contact() {
       <section className="h-[360px] sm:h-[440px] relative overflow-hidden bg-slate-100">
         <iframe
           title="DarafortLocation"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3964.7!2d3.3792!3d6.5095!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8c5!2sMJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos!5e0!3m2!1sen!2sng!4v1"
+          src="https://maps.google.com/maps?q=3+Kudirat+Abiola+Way,+Oregun,+Lagos&t=&z=15&ie=UTF8&iwloc=&output=embed"
           className="absolute inset-0 w-full h-full border-0 grayscale opacity-85"
           allowFullScreen
           loading="lazy"
@@ -384,9 +384,9 @@ export default function Contact() {
         {/* HQ Coordinates overlay */}
         <div className="absolute bottom-6 left-6 right-6 sm:left-14 sm:right-auto bg-white/95 backdrop-blur border border-slate-100 rounded-2xl px-6 py-4 shadow-xl max-w-sm text-left">
           <p className="text-[#0056B8] text-[10px] font-bold tracking-widest uppercase mb-1">Headquarters</p>
-          <p className="font-heading-unique font-bold text-slate-800 text-sm">MJS House, 366 Murtala Muhammed Road, Yaba, Lagos</p>
+          <p className="font-heading-unique font-bold text-slate-800 text-sm">3 Kudirat Abiola Way, Oregun, Lagos</p>
           <a
-            href="https://maps.google.com/?q=MJS+House+366+Murtala+Muhammed+Road+Yaba+Lagos+Nigeria"
+            href="https://maps.google.com/?q=3+Kudirat+Abiola+Way+Oregun+Lagos+Nigeria"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-[#0056B8] text-xs font-semibold mt-1 hover:underline transition-colors"

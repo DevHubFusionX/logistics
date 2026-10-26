@@ -343,7 +343,7 @@ export const contactData = {
         {
             icon: MapPin,
             title: "Visit Us",
-            content: "MJS House, 366 Murtala Muhammed Road, Yaba, Lagos, Nigeria",
+            content: "3 Kudirat Abiola Way, Oregun, Lagos, Nigeria",
             color: "bg-blue-600"
         }
     ]

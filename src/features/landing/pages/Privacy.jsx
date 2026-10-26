@@ -47,7 +47,7 @@ export default function Privacy() {
       content: `If you have any questions or concerns about this Privacy Policy or our data practices, please reach out to us:
       • Email: contact@darfort.com
       • Phone: +234 811 577 9007
-      • Address: MJS House, 366 Murtala Muhammed Road, Yaba, Lagos, Nigeria.`,
+      • Address: 3 Kudirat Abiola Way, Oregun, Lagos, Nigeria.`,
     },
   ]
 

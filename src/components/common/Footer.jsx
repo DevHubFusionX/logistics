@@ -110,7 +110,7 @@ export default function Footer() {
               {[
                 { icon: Phone, lines: ['+234 811 577 9007', '+234 912 116 8485'] },
                 { icon: Mail, lines: ['hello@darafort.com', 'contact@darfort.com'] },
-                { icon: MapPin, lines: ['MJS House, 366 Murtala Muhammed Road, Yaba, Lagos'] },
+                { icon: MapPin, lines: ['3 Kudirat Abiola Way, Oregun, Lagos'] },
               ].map(({ icon: Icon, lines }, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <Icon className="w-4 h-4 text-blue-200 mt-0.5 flex-shrink-0" />

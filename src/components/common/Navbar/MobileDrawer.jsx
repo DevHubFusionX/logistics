@@ -108,7 +108,7 @@ export default function MobileDrawer({ isOpen, user, onClose, onLogout, onDemoOp
                   <li className="flex items-start gap-2.5">
                     <MapPin className="w-3.5 h-3.5 text-[#0056B8] mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      MJS House, 366 Murtala Muhammed Road, Yaba, Lagos
+                      3 Kudirat Abiola Way, Oregun, Lagos
                     </p>
                   </li>
                 </ul>
