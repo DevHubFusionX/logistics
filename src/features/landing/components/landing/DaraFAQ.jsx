@@ -5,28 +5,28 @@ import { Link } from 'react-router-dom'
 
 const faqData = [
   {
-    question: "What makes Darafort different from other transport companies?",
-    answer: "Unlike regular transport companies, we specialize in moving items that need to stay cold. We coordinate 300 reefer trucks and 500 dry trucks, live temperature tracking, and full insurance to protect your goods if anything goes wrong."
+    question: "What makes Darafort the best cold-chain logistics company in Nigeria?",
+    answer: "Unlike traditional haulage operators, Darafort is a technology-enabled cold-chain infrastructure provider. We coordinate an aggregated network of 300 refrigerated reefer trucks and 500 dry trucks with continuous IoT temperature monitoring (±0.1°C precision), GPS route tracking, and comprehensive cargo transit insurance across all 36 Nigerian states."
   },
   {
-    question: "How do you keep items cold during transport?",
-    answer: "We use modern refrigerated trucks and solar-powered cooling systems. We can set the exact temperature your goods need — from deep freeze (-18°C) for food, to cool temperatures (2°C to 8°C) for medicines. We also track the temperature live and get alerts if it changes."
+    question: "How do your temperature-controlled transportation services work?",
+    answer: "We use modern refrigerated trucks and solar-powered cold storage solutions calibrated for specific cargo needs: deep-freeze (-18°C to -25°C) for frozen foods, poultry, and seafood, and controlled chill (2°C to 8°C) for pharmaceuticals and vaccines. Active IoT sensors transmit live telemetry every 15–30 seconds with automated alerts if temperature deviates."
   },
   {
-    question: "Can I hire a cold truck in Lagos, Abuja, and other states?",
-    answer: "Yes. You can rent our trucks in Lagos, Abuja, Port Harcourt, and any other state in Nigeria. We do local deliveries within cities and long trips across the country."
+    question: "Can I arrange refrigerated truck hire in Nigeria for interstate corridors?",
+    answer: "Yes. We provide dedicated and on-demand refrigerated truck hire across key transit corridors including Lagos to Abuja, Lagos to Port Harcourt, Lagos to Kano, and Onitsha. Available vehicle sizes include 5-ton, 10-ton, 15-ton, and 30-ton reefer trucks with experienced, vetted drivers."
   },
   {
-    question: "How much does it cost to ship with Dara?",
-    answer: "You can get a quick price estimate using the Booking Calculator on our website. Just select the distance, weight, and temperature you need. For large businesses with regular shipments, you can contact us for special rates."
+    question: "Why do pharmaceutical logistics companies in Nigeria partner with Darafort?",
+    answer: "Darafort operates as a GDP-compliant pharmaceutical supply-chain logistics partner. Our pharmaceutical transport fleet features sanitized reefers, calibrated temperature loggers, real-time excursion alerts, and complete audit-ready trip temperature certificates for regulatory compliance with NAFDAC standards."
   },
   {
-    question: "Is it safe to transport medicines and vaccines with you?",
-    answer: "Yes, we have clean, sanitized trucks specifically for transporting vaccines and medicines. We keep them at the exact temperature required and provide you with a full history log of the temperature during the trip."
+    question: "How does Darafort handle refrigerated transport for frozen foods?",
+    answer: "Our sub-zero reefer fleet maintains temperatures down to -18°C with dual-compressor refrigeration units, heavy thermal barriers, and backup power to ensure zero thaw cycles for ice cream, frozen seafood, and meat products along interstate highways."
   },
   {
-    question: "How can I track my shipment?",
-    answer: "Once you book a shipment, you can enter your Booking ID on our tracking page. You will see a live map of where the truck is, the current temperature of your goods, and the driver's contact details."
+    question: "How can businesses calculate freight rates or access enterprise logistics solutions?",
+    answer: "You can generate instant route estimates using the Booking Calculator on our website. For B2B logistics contracts, enterprise fleet aggregation, and supply-chain technology partnerships across Africa, our team provides tailored service level agreements (SLAs) and custom API integrations."
   }
 ]
 

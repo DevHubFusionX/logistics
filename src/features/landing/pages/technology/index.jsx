@@ -16,9 +16,9 @@ export default function Technology() {
   return (
     <>
       <SEO
-        title="DaraOS Technology — IoT, GPS & Cold-Chain Intelligence"
-        description="Explore the technology driving DaraOS. Real-time IoT temperature telemetry, GPS fleet tracking, shipment visibility, and operational analytics for cold-chain logistics across Nigeria."
-        keywords="cold chain technology, IoT logistics Nigeria, temperature monitoring, GPS fleet tracking, DaraOS, shipment visibility, cold chain analytics"
+        title="IoT Temperature Monitoring & Cold-Chain Logistics Technology — Darafort"
+        description="Explore the proprietary technology behind DaraOS: end-to-end IoT temperature monitoring for logistics, live reefer telemetry, GPS fleet tracking, automated excursion alerts, and cold-chain analytics."
+        keywords="IoT temperature monitoring for logistics, Cold-chain logistics technology platforms, Technology-enabled cold-chain logistics providers in Africa, Temperature-controlled transportation services, Supply-chain technology startups in Africa, Best cold-chain logistics companies in Nigeria"
         canonical="/technology"
         breadcrumbs={[{ name: 'Technology', url: '/technology' }]}
       />

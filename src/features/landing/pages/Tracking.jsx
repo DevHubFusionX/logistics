@@ -57,10 +57,11 @@ export default function Tracking() {
   return (
     <>
       <SEO
-        title="Track Your Shipment — Real-Time Cold Chain Tracking Nigeria"
-        description="Track your Darafortshipment in real-time. Live updates for reefer trucks in Nigeria, cargo transport Lagos to Abuja, and temperature controlled logistics."
-        keywords="track shipment Nigeria, cargo tracking, cold chain tracking, Daraforttracking"
+        title="Live Shipment & IoT Temperature Telemetry Tracking — Darafort"
+        description="Track your Darafort shipment in real time. Live GPS updates for reefer trucks in Nigeria, IoT temperature monitoring for logistics, and cold-chain cargo tracking from Lagos to Abuja."
+        keywords="IoT temperature monitoring for logistics, Temperature-controlled transportation services, Reliable refrigerated trucks for businesses, Cold-chain logistics technology platforms, track shipment Nigeria, Darafort tracking"
         canonical="/tracking"
+        breadcrumbs={[{ name: 'Tracking', url: '/tracking' }]}
       />
 
       {/* Main Section */}

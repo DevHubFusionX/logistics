@@ -19,22 +19,37 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Darafort— Cold Chain Logistics & Reefer Trucks Nigeria"
-        description="Darafortis Nigeria's #1 cold chain logistics company. 300 reefer trucks and 500 dry trucks for pharma logistics, frozen food transport Lagos to Abuja, refrigerated transport, and haulage services across all 36 Nigerian states."
-        keywords="Darafort, cold chain logistics Nigeria, reefer trucks Nigeria, refrigerated transport Lagos, pharma logistics Nigeria, frozen food transport Lagos, haulage services Nigeria, logistics companies in Nigeria, transport company Abuja, temperature controlled logistics Nigeria"
+        title="Darafort — Best Cold-Chain Logistics & Reefer Trucks in Nigeria"
+        description="Darafort is Nigeria's leading climate-tech cold-chain logistics platform. 300+ refrigerated reefer trucks and 500 dry trucks for pharmaceutical supply chains, frozen food transport Lagos to Abuja, IoT temperature monitoring, and nationwide haulage."
+        keywords="Best cold-chain logistics companies in Nigeria, Refrigerated truck hire in Nigeria, Pharmaceutical logistics companies in Nigeria, Temperature-controlled transportation services, Cold-chain logistics for pharmaceutical companies, Refrigerated transport for frozen foods, Cold-chain fleet aggregation platforms in Africa, Enterprise logistics solutions in Nigeria, IoT temperature monitoring for logistics, Solar-powered cold storage solutions in Nigeria, Cold-chain logistics technology platforms, Reliable refrigerated trucks for businesses, B2B logistics companies in Nigeria, Supply-chain technology startups in Africa, Climate-tech logistics companies in Africa, Technology-enabled cold-chain logistics providers in Africa, Darafort"
         canonical="/"
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Service',
           'serviceType': 'Cold Chain Logistics',
-          'provider': { '@type': 'LocalBusiness', 'name': 'Darafort', 'url': 'https://daraexpress.com' },
+          'provider': {
+            '@type': 'LocalBusiness',
+            '@id': 'https://daraexpress.com/#organization',
+            'name': 'Darafort',
+            'url': 'https://daraexpress.com',
+            'telephone': '+2348115779007',
+            'address': {
+              '@type': 'PostalAddress',
+              'streetAddress': '3 Kudirat Abiola Way, Oregun',
+              'addressLocality': 'Ikeja',
+              'addressRegion': 'Lagos',
+              'addressCountry': 'NG'
+            }
+          },
           'areaServed': { '@type': 'Country', 'name': 'Nigeria' },
-          'description': 'Nigeria\'s #1 cold chain logistics company offering reefer trucks, pharma logistics, frozen food transport, and refrigerated haulage services across all 36 states.',
+          'description': "Nigeria's #1 technology-enabled cold chain logistics company offering 300 reefer trucks, pharma logistics, frozen food transport, and refrigerated haulage services across all 36 states.",
           'offers': [
-            { '@type': 'Offer', 'name': 'Pharma Logistics Nigeria', 'description': 'Temperature-controlled pharma transport 2°C–8°C with IoT monitoring' },
-            { '@type': 'Offer', 'name': 'Frozen Food Transport Lagos', 'description': 'Sub-zero reefer trucking at -18°C nationwide' },
-            { '@type': 'Offer', 'name': 'Refrigerated Transport Lagos', 'description': 'Farm-to-market cold chain across all 36 Nigerian states' },
-            { '@type': 'Offer', 'name': 'Haulage Services Nigeria', 'description': 'Enterprise long-haul trucking and port-to-warehouse logistics' }
+            { '@type': 'Offer', 'name': 'Pharmaceutical Logistics Companies in Nigeria', 'description': 'Temperature-controlled pharma transport 2°C–8°C with NIST-calibrated IoT monitoring and GDP compliance' },
+            { '@type': 'Offer', 'name': 'Refrigerated Transport for Frozen Foods', 'description': 'Sub-zero reefer trucking at -18°C nationwide for seafood, meats and perishable cargo' },
+            { '@type': 'Offer', 'name': 'Refrigerated Truck Hire in Nigeria', 'description': 'Dedicated and on-demand cold chain reefer haulage across all 36 Nigerian states' },
+            { '@type': 'Offer', 'name': 'Enterprise Logistics Solutions in Nigeria', 'description': 'Enterprise long-haul trucking, fleet aggregation, and port-to-warehouse logistics' },
+            { '@type': 'Offer', 'name': 'Solar-Powered Cold Storage Solutions in Nigeria', 'description': 'Sustainable off-grid and hybrid cold rooms reducing post-harvest losses and emissions' },
+            { '@type': 'Offer', 'name': 'Cold-Chain Fleet Aggregation Platforms in Africa', 'description': 'Technology-enabled fleet network connecting 300 reefer and 500 dry trucks across Nigeria' }
           ]
         }}
       />

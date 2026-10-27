@@ -190,15 +190,15 @@ export default function Blog() {
   return (
     <div className="min-h-screen bg-slate-50">
       <SEO
-        title="Dara Resources — Cold Chain Logistics Insights Nigeria"
-        description="Expert insights on cold chain logistics Nigeria, pharma transport, frozen food haulage, and refrigerated trucking from Darafort— Nigeria's #1 reefer truck company."
-        keywords="cold chain logistics blog Nigeria, pharma logistics insights, frozen food transport blog, reefer trucks Nigeria news, logistics company Nigeria articles, cold chain best practices"
+        title="Cold-Chain & Logistics Insights in Nigeria — Darafort Knowledge Hub"
+        description="Expert industry insights, compliance guides, and technology analyses on pharmaceutical cold chains, frozen food transport, and refrigerated logistics across Nigeria."
+        keywords="Best cold-chain logistics companies in Nigeria, Cold-chain logistics for pharmaceutical companies, Supply-chain technology startups in Africa, Climate-tech logistics companies in Africa, IoT temperature monitoring for logistics, Cold-chain logistics technology platforms, African logistics startups raising pre-seed funding, Darafort"
         canonical="/blog"
         breadcrumbs={[{ name: 'Resources', url: '/blog' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'Blog',
-          'name': 'DarafortCold Chain Knowledge Hub',
+          'name': 'Darafort Cold Chain Knowledge Hub',
           'description': 'Expert insights on cold chain logistics, pharma transport, frozen food haulage and reefer trucking across Nigeria.',
           'url': 'https://daraexpress.com/blog',
           'publisher': {

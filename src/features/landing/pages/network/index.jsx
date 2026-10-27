@@ -17,9 +17,9 @@ export default function Network() {
   return (
     <>
       <SEO
-        title="Dara Cold-Chain Network — Reefer Capacity, Cold Storage & 36-State Coverage"
-        description="Explore Dara's connected logistics network. 300 reefer trucks, 500 dry trucks, distributed cold storage depots, and 36-state route coverage — all orchestrated through DaraOS."
-        keywords="cold chain network Nigeria, reefer trucks Nigeria, cold storage depots, logistics network coverage, 36 states logistics"
+        title="Cold-Chain Network & Solar-Powered Cold Storage in Nigeria — Darafort"
+        description="Access Darafort's nationwide cold-chain network: 300 reliable refrigerated trucks for businesses, solar-powered cold storage solutions, and 36-state distribution routes orchestrated via DaraOS."
+        keywords="Solar-powered cold storage solutions in Nigeria, Reliable refrigerated trucks for businesses, Refrigerated truck hire in Nigeria, Cold-chain fleet aggregation platforms in Africa, Cold-chain infrastructure investment opportunities in Africa, Best cold-chain logistics companies in Nigeria"
         canonical="/network"
         breadcrumbs={[{ name: 'Network', url: '/network' }]}
       />

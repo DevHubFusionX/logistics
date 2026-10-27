@@ -96,9 +96,9 @@ export default function Contact() {
   return (
     <>
       <SEO
-        title="Contact Darafort— Get a Cold Chain Logistics Quote Nigeria"
-        description="Get a free cold chain logistics quote from Darafort— Nigeria's #1 reefer truck company. Contact us for pharma transport, frozen food haulage, and refrigerated logistics across Lagos, Abuja and all 36 states."
-        keywords="contact Darafort, cold chain quote Nigeria, logistics quote Lagos, freight quote Nigeria, refrigerated transport quote, reefer truck hire Nigeria, logistics inquiry Nigeria"
+        title="Contact Darafort — Refrigerated Truck Hire & Logistics Quote Nigeria"
+        description="Request a cold-chain logistics quote from Darafort. Inquire about reliable refrigerated truck hire, pharmaceutical logistics, and temperature-controlled freight across Nigeria."
+        keywords="Refrigerated truck hire in Nigeria, Reliable refrigerated trucks for businesses, Best cold-chain logistics companies in Nigeria, Enterprise logistics solutions in Nigeria, B2B logistics companies in Nigeria, Pharmaceutical supply-chain logistics partners"
         canonical="/contact"
         breadcrumbs={[{ name: 'Contact', url: '/contact' }]}
         jsonLd={{

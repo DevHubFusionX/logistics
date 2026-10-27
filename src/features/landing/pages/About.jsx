@@ -58,9 +58,9 @@ export default function About() {
   return (
     <>
       <SEO
-        title="About Darafort— Nigeria's Cold Chain Logistics Company"
-        description="Darafortis Nigeria's leading cold chain logistics company, built in Lagos to move pharma, frozen food, and perishables safely across all 36 states. Learn how we're building Nigeria's cold chain backbone."
-        keywords="about Darafort, cold chain logistics company Nigeria, logistics company Lagos, transport company Abuja, reefer trucks history Nigeria, cold chain Nigeria, logistics company Nigeria"
+        title="About Darafort — Climate-Tech & Cold-Chain Logistics Startup in Africa"
+        description="Darafort is Nigeria's leading climate-tech cold-chain logistics company, built to connect pharma, frozen food, and enterprise supply chains across all 36 states with reliable refrigerated fleet aggregation."
+        keywords="Supply-chain technology startups in Africa, Climate-tech logistics companies in Africa, Cold-chain infrastructure investment opportunities in Africa, African logistics startups raising pre-seed funding, Cold-chain startups for accelerator programmes, Best cold-chain logistics companies in Nigeria, B2B logistics companies in Nigeria, Technology-enabled cold-chain logistics providers in Africa, Darafort"
         canonical="/about"
         breadcrumbs={[{ name: 'About', url: '/about' }]}
         jsonLd={{

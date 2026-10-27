@@ -14,7 +14,7 @@ export default function Privacy() {
     },
     {
       title: '2. How We Use Your Information',
-      content: `Darafortuses the collected data for various purposes:
+      content: `Darafort uses the collected data for various purposes:
       • To process, calculate, and coordinate your shipment bookings.
       • To monitor cargo temperature logs and provide real-time GPS tracking status.
       • To send invoices, payment confirmations, and support ticket updates.
@@ -55,8 +55,8 @@ export default function Privacy() {
     <>
       <SEO
         title="Privacy Policy — Darafort"
-        description="Learn how Darafortcollects, protects, and uses your personal and shipment information. Our commitment to privacy, cold chain transparency, and data security."
-        keywords="privacy policy, Darafortprivacy, data security logistics Nigeria, cold chain privacy"
+        description="Learn how Darafort collects, protects, and uses your personal and shipment information. Our commitment to privacy, cold chain transparency, and data security."
+        keywords="privacy policy, Darafort privacy, data security logistics Nigeria, cold chain privacy"
         canonical="/privacy"
         breadcrumbs={[{ name: 'Privacy Policy', url: '/privacy' }]}
       />
@@ -133,7 +133,7 @@ export default function Privacy() {
             className="mt-12 bg-blue-50/50 border border-blue-100/50 rounded-3xl p-6 sm:p-8 text-center"
           >
             <p className="font-body-unique text-slate-600 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto">
-              We periodically update our policies to align with national logistics regulations and global data privacy standards. Continuing to use Darafortservices signifies your consent to any changes.
+              We periodically update our policies to align with national logistics regulations and global data privacy standards. Continuing to use Darafort services signifies your consent to any changes.
             </p>
           </motion.div>
         </div>

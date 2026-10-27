@@ -24,18 +24,18 @@ export default function DaraAppShowcase() {
   const features = [
     {
       icon: MapPin,
-      title: "Real-time Live GPS Tracking",
-      description: "Follow your temperature-controlled shipment step-by-step on a live interactive map."
+      title: "Real-Time GPS & Live Route Visibility",
+      description: "Follow your temperature-controlled shipment step-by-step with live turn-by-turn route tracking across all 36 states."
     },
     {
       icon: ShieldCheck,
-      title: "Temperature Monitoring & Alerts",
-      description: "Get instant notifications if the temperature inside the reefer truck changes."
+      title: "IoT Temperature Telemetry & Excursion Alerts",
+      description: "Continuous ±0.1°C thermal logging with instant notifications if temperature deviates from specified setpoints."
     },
     {
       icon: Bell,
-      title: "Instant Booking & Status Updates",
-      description: "Book new cold chain shipments instantly and receive notifications upon completion."
+      title: "Instant Reefer Dispatch & Digital e-POD",
+      description: "Book verified refrigerated trucks on-demand with automated dispatch, driver direct-connect, and digital proof of delivery."
     }
   ]
 

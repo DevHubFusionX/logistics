@@ -16,9 +16,9 @@ export default function Platform() {
   return (
     <>
       <SEO
-        title="DaraOS — Cold-Chain Logistics Intelligence Platform"
-        description="Discover DaraOS, the intelligence layer for temperature-controlled logistics in Nigeria. Live IoT telemetry, real-time GPS visibility, fleet orchestration, and automated alerts."
-        keywords="cold chain software, logistics platform Nigeria, temperature monitoring, fleet capacity, GPS tracking, proof of delivery"
+        title="DaraOS — Cold-Chain Fleet Aggregation & Logistics Technology Platform"
+        description="Discover DaraOS, Africa's leading cold-chain fleet aggregation platform. Real-time IoT temperature monitoring, reefer fleet orchestration, GPS tracking, and automated proof of delivery."
+        keywords="Cold-chain fleet aggregation platforms in Africa, Technology-enabled cold-chain logistics providers in Africa, Cold-chain logistics technology platforms, IoT temperature monitoring for logistics, Enterprise logistics solutions in Nigeria, B2B logistics companies in Nigeria, Supply-chain technology startups in Africa"
         canonical="/platform"
         breadcrumbs={[{ name: 'Platform', url: '/platform' }]}
       />

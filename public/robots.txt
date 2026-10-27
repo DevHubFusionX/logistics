@@ -1,4 +1,66 @@
+# Standard Search Engine Crawlers
 User-agent: *
 Allow: /
 
+# Public conversion & informational exceptions
+Allow: /booking-calculator
+Allow: /tracking$
+Allow: /llms.txt
+
+# Disallow private user portals and booking workflows
+Disallow: /booking/
+Disallow: /tracking/invoice/
+Disallow: /profile
+Disallow: /my-bookings
+Disallow: /payment-history
+Disallow: /my-temperature
+Disallow: /my-analytics
+Disallow: /support
+Disallow: /address-book
+Disallow: /driver-app
+
+# Disallow admin control tower and management operations
+Disallow: /dashboard
+Disallow: /admin/
+Disallow: /fleet
+Disallow: /shipments
+Disallow: /routes
+Disallow: /warehouses
+Disallow: /orders
+Disallow: /customers
+Disallow: /trips
+Disallow: /reports
+Disallow: /alerts
+Disallow: /tasks
+Disallow: /payments
+Disallow: /pricing-management
+Disallow: /bookings-management
+Disallow: /settings
+Disallow: /user
+
+# Disallow authentication endpoints
+Disallow: /auth/
+Disallow: /sign-up/
+
+# Explicitly grant access to LLM / AI Search Crawlers (ChatGPT, Perplexity, Claude, Gemini)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Sitemaps & LLM Context Standards
 Sitemap: https://daraexpress.com/sitemap.xml
+# LLMs Machine-Readable Summary: https://daraexpress.com/llms.txt

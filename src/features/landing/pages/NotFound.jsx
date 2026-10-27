@@ -1,10 +1,16 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, ArrowLeft } from 'lucide-react'
+import SEO from '@/components/common/SEO'
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-amber-50 via-yellow-100 to-orange-100 px-6 py-12 relative overflow-hidden font-sans">
+      <SEO
+        title="404 — Page Not Found | Darafort"
+        description="The page you are looking for does not exist or has been moved."
+        robots="noindex, nofollow"
+      />
       
       {/* Decorative floating clouds/bubbles in background for a playful feel */}
       <div className="absolute top-12 left-12 w-24 h-8 bg-white/60 rounded-full blur-sm animate-pulse" />

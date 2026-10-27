@@ -125,31 +125,31 @@ export default function Services() {
     <>
       <SEO
         title="Cold Chain & Reefer Truck Services Nigeria — Pharma, Frozen Food, Haulage"
-        description="Darafortoffers Nigeria's best cold chain services — pharma logistics, frozen food transport Lagos to Abuja, refrigerated transport, and enterprise haulage across all 36 states. Get an instant quote."
-        keywords="pharma logistics Nigeria, frozen food transport Lagos, refrigerated transport Lagos Abuja, reefer trucks Nigeria, haulage services Nigeria, cold chain services Nigeria, temperature controlled logistics, last mile delivery Nigeria"
+        description="Darafort offers Nigeria's best cold chain services — pharmaceutical logistics, refrigerated transport for frozen foods, temperature-controlled transportation, and enterprise haulage across all 36 states."
+        keywords="Best cold-chain logistics companies in Nigeria, Refrigerated truck hire in Nigeria, Pharmaceutical logistics companies in Nigeria, Temperature-controlled transportation services, Cold-chain logistics for pharmaceutical companies, Refrigerated transport for frozen foods, Reliable refrigerated trucks for businesses, Enterprise logistics solutions in Nigeria, B2B logistics companies in Nigeria"
         canonical="/services"
         breadcrumbs={[{ name: 'Services', url: '/services' }]}
         jsonLd={{
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          'name': 'DarafortCold Chain Services',
-          'description': 'Cold chain logistics services offered by Darafortacross Nigeria',
+          'name': 'Darafort Cold Chain Services',
+          'description': 'Cold chain logistics services offered by Darafort across Nigeria',
           'itemListElement': [
             {
               '@type': 'ListItem', 'position': 1,
-              'item': { '@type': 'Service', 'name': 'Pharma Logistics Nigeria', 'description': 'Hospital-grade cold chain for vaccines, insulin, biologics and temperature-sensitive medicines. IoT-monitored with full compliance documentation. Same-day available in Lagos & Abuja.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
+              'item': { '@type': 'Service', 'name': 'Pharmaceutical Logistics Companies in Nigeria', 'description': 'Hospital-grade cold chain for vaccines, insulin, biologics and temperature-sensitive medicines. IoT-monitored with full compliance documentation. Same-day available in Lagos & Abuja.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             },
             {
               '@type': 'ListItem', 'position': 2,
-              'item': { '@type': 'Service', 'name': 'Frozen Food Transport Lagos', 'description': 'Sub-zero reefer trucking maintaining -18°C for seafood, meat, poultry and frozen goods. Nationwide frozen haulage network with 24/7 driver support.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
+              'item': { '@type': 'Service', 'name': 'Refrigerated Transport for Frozen Foods', 'description': 'Sub-zero reefer trucking maintaining -18°C for seafood, meat, poultry and frozen goods. Nationwide frozen haulage network with 24/7 driver support.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             },
             {
               '@type': 'ListItem', 'position': 3,
-              'item': { '@type': 'Service', 'name': 'Refrigerated Transport Lagos', 'description': 'Farm-to-market cold chain keeping fruits, vegetables and dairy fresh. Advanced reefer trucks covering all 36 states with optimised routing.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
+              'item': { '@type': 'Service', 'name': 'Refrigerated Truck Hire in Nigeria', 'description': 'Farm-to-market cold chain keeping fruits, vegetables and dairy fresh. Advanced reefer trucks covering all 36 states with optimised routing.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             },
             {
               '@type': 'ListItem', 'position': 4,
-              'item': { '@type': 'Service', 'name': 'Enterprise Haulage Services Nigeria', 'description': 'Scalable freight contracts for enterprises — port-to-warehouse, long-haul trucking, and custom logistics agreements for dry and temperature-controlled cargo.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
+              'item': { '@type': 'Service', 'name': 'Enterprise Logistics Solutions in Nigeria', 'description': 'Scalable freight contracts for enterprises — port-to-warehouse, long-haul trucking, and custom logistics agreements for dry and temperature-controlled cargo.', 'provider': { '@type': 'LocalBusiness', 'name': 'Darafort' } }
             }
           ]
         }}

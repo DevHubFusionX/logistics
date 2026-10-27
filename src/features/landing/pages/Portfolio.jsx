@@ -1,6 +1,13 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, MapPin, Calendar, Package } from 'lucide-react'
 import { useState } from 'react'
+import SEO from '@/components/common/SEO'
+
+import PharmaImg from '@/assets/climateImage/Pharma.jpg'
+import FrozenImg from '@/assets/climateImage/frozen-foods.jpg'
+import FreshImg from '@/assets/climateImage/fresh-produce.jpg'
+import HaulageImg from '@/assets/climateImage/enterprise-Haulage.png'
+import ClimateOne from '@/assets/climateImage/1.jpg'
 
 const projects = [
   {
@@ -9,7 +16,7 @@ const projects = [
     category: 'Pharmaceutical',
     location: 'Lagos to 36 States',
     date: '2024',
-    image: '/src/assets/img/portfolio/ca-portfoli3.1.png',
+    image: PharmaImg,
     description: 'Successfully distributed temperature-sensitive vaccines across Nigeria with 99.9% integrity.'
   },
   {
@@ -18,7 +25,7 @@ const projects = [
     category: 'Healthcare',
     location: 'Abuja Medical Centers',
     date: '2024',
-    image: '/src/assets/img/portfolio/ca-portfolio3.2.png',
+    image: ClimateOne,
     description: 'Established reliable cold chain network for major hospital groups.'
   },
   {
@@ -27,7 +34,7 @@ const projects = [
     category: 'Storage',
     location: 'Port Harcourt',
     date: '2023',
-    image: '/src/assets/img/portfolio/ca-portfoli3.3.png',
+    image: FreshImg,
     description: 'Built state-of-the-art temperature-controlled warehouse facility.'
   },
   {
@@ -36,7 +43,7 @@ const projects = [
     category: 'Research',
     location: 'Multi-State',
     date: '2023',
-    image: '/src/assets/img/portfolio/ca-project3.4.png',
+    image: PharmaImg,
     description: 'Managed sensitive biological samples for international clinical trials.'
   },
   {
@@ -45,7 +52,7 @@ const projects = [
     category: 'Distribution',
     location: 'Nationwide',
     date: '2024',
-    image: '/src/assets/img/portfolio/ca-portfolio-3.5.png',
+    image: FrozenImg,
     description: 'Connected 500+ pharmacies with reliable cold chain delivery.'
   },
   {
@@ -54,7 +61,7 @@ const projects = [
     category: 'Emergency',
     location: 'Lagos State',
     date: '2024',
-    image: '/src/assets/img/portfolio/portfolio-big-1.1.png',
+    image: HaulageImg,
     description: 'Rapid deployment of temperature-controlled medical supplies during health crisis.'
   }
 ]
@@ -70,6 +77,14 @@ export default function Portfolio() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <SEO
+        title="Cold-Chain Logistics Case Studies & Success Stories — Darafort"
+        description="Explore proven cold-chain case studies across Nigeria. Real-world distribution for vaccines, pharmaceutical supply chains, hospital healthcare groups, and frozen food haulage."
+        keywords="Cold-chain logistics for pharmaceutical companies, Pharmaceutical supply-chain logistics partners, Best cold-chain logistics companies in Nigeria, Reliable refrigerated trucks for businesses, Enterprise logistics solutions in Nigeria, Refrigerated transport for frozen foods"
+        canonical="/portfolio"
+        breadcrumbs={[{ name: 'Portfolio', url: '/portfolio' }]}
+      />
+
       {/* Hero Section */}
       <section className="pt-32 pb-16 px-6">
         <div className="container mx-auto max-w-6xl text-center">

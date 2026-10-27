@@ -16,16 +16,22 @@ export default function SEO({
   robots = 'index, follow',
   jsonLd = null,
   breadcrumbs = null, // array of { name, url }
+  article = null, // { publishedTime, modifiedTime, author, section, tags }
 }) {
   const { locale } = useTranslation()
   const siteUrl = 'https://daraexpress.com'
   const siteName = 'Darafort'
-  const fullTitle = title
-    ? `${title} | Darafort`
-    : 'Darafort— Cold Chain Logistics & Haulage Company in Nigeria'
 
-  const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl
-  const fullImage = `${siteUrl}${ogImage}`
+  // Avoid duplicate brand suffix if already included in title
+  const fullTitle = title
+    ? (title.includes('Darafort') ? title : `${title} | Darafort`)
+    : 'Darafort — Cold Chain Logistics & Haulage Company in Nigeria'
+
+  const fullCanonical = canonical ? `${siteUrl}${canonical.startsWith('/') ? canonical : `/${canonical}`}` : siteUrl
+  const fullImage = ogImage.startsWith('http://') || ogImage.startsWith('https://')
+    ? ogImage
+    : `${siteUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`
+
   const ogLocale = locale === 'fr' ? 'fr_FR' : 'en_NG'
 
   // Dynamically set the HTML lang attribute for SEO crawlers
@@ -43,7 +49,7 @@ export default function SEO({
         '@type': 'ListItem',
         position: i + 2,
         name: crumb.name,
-        item: `${siteUrl}${crumb.url}`,
+        item: `${siteUrl}${crumb.url.startsWith('/') ? crumb.url : `/${crumb.url}`}`,
       })),
     ],
   } : null
@@ -69,6 +75,23 @@ export default function SEO({
       <meta property="og:image:height" content="630" />
       <meta property="og:site_name" content={siteName} />
       <meta property="og:locale" content={ogLocale} />
+
+      {/* Article Specific Open Graph */}
+      {ogType === 'article' && article?.publishedTime && (
+        <meta property="article:published_time" content={article.publishedTime} />
+      )}
+      {ogType === 'article' && article?.modifiedTime && (
+        <meta property="article:modified_time" content={article.modifiedTime} />
+      )}
+      {ogType === 'article' && article?.author && (
+        <meta property="article:author" content={article.author} />
+      )}
+      {ogType === 'article' && article?.section && (
+        <meta property="article:section" content={article.section} />
+      )}
+      {ogType === 'article' && Array.isArray(article?.tags) && article.tags.map((tag) => (
+        <meta property="article:tag" content={tag} key={tag} />
+      ))}
 
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />

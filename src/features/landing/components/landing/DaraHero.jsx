@@ -117,20 +117,28 @@ export default function DaraHero() {
           variants={itemVariants}
           className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto mb-12"
         >
-          {/* Book a Demo (Brand Blue Button) */}
-          <button
-            onClick={() => setIsDemoOpen(true)}
+          {/* Calculate Rates (Primary SEM Conversion Action) */}
+          <Link
+            to="/booking-calculator"
             className="font-body-unique px-6 py-3 bg-[#0056B8] hover:bg-[#004494] text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] shadow-lg shadow-black/10 cursor-pointer text-center w-full sm:w-auto"
           >
-            {heroData.buttons.primary.text}
+            Calculate Freight Rates
+          </Link>
+
+          {/* Book a Demo (Secondary Modal Action) */}
+          <button
+            onClick={() => setIsDemoOpen(true)}
+            className="font-body-unique px-6 py-3 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] backdrop-blur-sm shadow-md text-center w-full sm:w-auto cursor-pointer"
+          >
+            Schedule a Demo
           </button>
 
-          {/* Explore Our Technology (Outline Glass Button) */}
+          {/* Explore Our Technology */}
           <Link
-            to={heroData.buttons.secondary.link}
-            className="font-body-unique px-6 py-3 border border-white/20 hover:border-white/40 bg-white/10 hover:bg-white/20 text-white font-bold rounded-sm text-sm transition-all active:scale-[0.97] backdrop-blur-sm shadow-md text-center w-full sm:w-auto"
+            to="/technology"
+            className="font-body-unique px-6 py-3 text-slate-300 hover:text-white font-semibold text-sm transition-colors text-center w-full sm:w-auto"
           >
-            {heroData.buttons.secondary.text}
+            Explore Tech →
           </Link>
         </motion.div>
 

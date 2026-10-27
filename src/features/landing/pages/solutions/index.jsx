@@ -14,9 +14,9 @@ export default function Solutions() {
   return (
     <>
       <SEO
-        title="Cold-Chain Solutions for Pharma, Food & FMCG — Dara"
-        description="Purpose-built cold-chain logistics solutions for Pharmaceuticals, Food & Beverage, FMCG, Agriculture and Manufacturing across Nigeria. GDP-compliant, real-time visibility."
-        keywords="cold chain solutions Nigeria, pharma logistics, food cold chain, FMCG logistics, agricultural cold chain, GDP compliant transport"
+        title="Cold-Chain Logistics for Pharmaceutical Companies & Frozen Foods — Darafort"
+        description="Purpose-built cold-chain logistics solutions for pharmaceutical supply chains, hospital distribution, frozen food transport, and FMCG manufacturing across Nigeria. GDP-compliant with continuous IoT telemetry."
+        keywords="Cold-chain logistics for pharmaceutical companies, Pharmaceutical supply-chain logistics partners, Refrigerated transport for frozen foods, Temperature-controlled transportation services, Enterprise logistics solutions in Nigeria, Reliable refrigerated trucks for businesses, Best cold-chain logistics companies in Nigeria"
         canonical="/solutions"
         breadcrumbs={[{ name: 'Solutions', url: '/solutions' }]}
       />

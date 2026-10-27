@@ -11,15 +11,15 @@ import {
 export const heroData = {
     title: {
         prefix: "The Digital Infrastructure Powering",
-        highlight: "Nigeria’s Logistics & Cold Chain",
+        highlight: "Africa’s Cold Chain",
         suffix: ""
     },
     description: "Dara combines technology, real-time visibility and temperature-controlled logistics to help businesses safely move temperature-sensitive goods across Nigeria.",
     features: [
-        'Premium Cold Chain Logistics Nigeria: Real-time reefer monitoring',
-        'Nationwide Haulage Services Nigeria: Dedicated refrigerated fleet',
-        'Reefer Trucks in Nigeria: Express transport for vaccines & perishables',
-        'Top Logistics Companies in Nigeria: 24/7 temperature tracking'
+        'Best cold-chain logistics companies in Nigeria: Real-time reefer monitoring',
+        'Refrigerated truck hire in Nigeria: Dedicated 300+ reefer fleet',
+        'Pharmaceutical logistics companies in Nigeria: Temperature-controlled transport',
+        'Refrigerated transport for frozen foods: Sub-zero haulage across all 36 states'
     ],
 
 
@@ -39,36 +39,36 @@ export const heroData = {
 export const aboutData = {
     badge: "Our Journey",
     title: {
-        prefix: "A Simple and Reliable",
-        highlight: "Transport Partner"
+        prefix: "Building Africa’s",
+        highlight: "Cold-Chain Infrastructure"
     },
-    description: "Darafortis a simple, reliable transport company in Abuja and Lagos. We make it easy to move items that need to stay cold, like food and medicine, so they arrive fresh and safe.",
+    description: "Dara is a technology-driven cold-chain infrastructure company building the digital backbone for temperature-sensitive supply chains across Nigeria. Through software, real-time IoT visibility, and an aggregated network of 300 refrigerated and 500 dry trucks, we help enterprises move pharmaceuticals and perishable food safely, efficiently, and with total transparency.",
     timeline: [
         {
-            year: "How We Started",
-            title: "How We Started",
-            description: "We started Dara because we saw how hard it was to transport fresh food and medicine in Nigeria without them spoiling on the way.",
+            year: "Solving Cold-Chain Gaps",
+            title: "Solving Cold-Chain Gaps",
+            description: "We founded Dara to eliminate the 40%+ post-harvest and pharmaceutical losses caused by fragmented logistics, lack of refrigerated assets, and broken cold chains across Nigeria.",
             icon: Target,
             color: "bg-primary"
         },
         {
-            year: "Adding Tracking",
-            title: "Adding Tracking",
-            description: "We put temperature sensors and GPS trackers in our trucks so you can always check how cold your items are and where they are on the road.",
+            year: "IoT Telemetry & DaraOS",
+            title: "IoT Telemetry & DaraOS",
+            description: "We engineered real-time IoT temperature logging (±0.1°C precision), GPS tracking, and automated excursion alerts into every fleet asset, digitizing end-to-end trip integrity.",
             icon: Truck,
             color: "bg-primary"
         },
         {
-            year: "Delivering Everywhere",
-            title: "Delivering Everywhere",
-            description: "Today, we deliver to all parts of Nigeria. From vaccines to fresh farm produce, we make sure they stay cold and arrive safe.",
+            year: "Pan-African Network & Corridors",
+            title: "Pan-African Network & Corridors",
+            description: "Today, we coordinate 300 reefer trucks and 500 dry haulage vehicles across all 36 Nigerian states—powering vital pharmaceutical supply chains and interstate food corridors from Lagos to Abuja, Port Harcourt, and Kano.",
             icon: TrendingUp,
             color: "#00843D"
         }
     ],
     image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     quote: {
-        text: "Keeping things cold is not just about driving a truck—it's about making sure your food and medicines arrive exactly as fresh as they started.",
+        text: "We are not just moving goods. We are digitising how temperature-sensitive goods move across Africa.",
         author: "— Dara Leadership Team"
     },
     stats: [
@@ -83,14 +83,14 @@ export const servicesData = [
     {
         icon: 'Package',
         image: "/assets/img/pharmaceutical.jpg",
-        title: "Vaccines & Medicine Transport",
-        subtitle: "Keeping medical supplies safe",
-        description: "We transport vaccines, medicines, and medical supplies in clean, temperature-controlled trucks to keep them safe and effective.",
+        title: "Pharmaceutical Logistics Companies in Nigeria",
+        subtitle: "GDP-Compliant Temperature-Controlled Transport",
+        description: "Certified temperature-controlled transportation services for vaccines, biopharmaceuticals, and sensitive medicines maintaining continuous 2°C to 8°C cold chains with NIST-calibrated IoT monitoring.",
         features: [
-            "Precise temperature control between 2°C to 8°C",
-            "Clean cold rooms in Lagos and Abuja for storage",
-            "Full insurance cover for all medical shipments",
-            "Reliable refrigerated trucks that do not fail"
+            "GDP & NAFDAC compliant 2°C to 8°C cold-chain transport",
+            "NIST-calibrated IoT temperature loggers with excursion alerts",
+            "Sanitized pharmaceutical reefers with dedicated dispatch",
+            "Full transit cargo insurance and audit-ready temperature logs"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Same-day available",
@@ -99,14 +99,14 @@ export const servicesData = [
     {
         icon: 'Clock',
         image: "/assets/img/frozen-foods.jpg",
-        title: "Frozen Food Delivery",
-        subtitle: "Keeping food frozen on the road",
-        description: "We deliver frozen foods like fish, meat, and poultry using trucks that stay freezing cold at -18°C all through the journey.",
+        title: "Refrigerated Transport for Frozen Foods",
+        subtitle: "Sub-Zero Interstate Reefer Haulage (-18°C)",
+        description: "Dedicated and on-demand refrigerated truck hire in Nigeria for frozen seafood, poultry, dairy, and meat products with uninterrupted sub-zero temperature control from Lagos to Abuja, Port Harcourt, and nationwide.",
         features: [
-            "Deep-freeze storage spaces at our local hubs",
-            "Dry trucks also available for regular food items",
-            "Fast transport from Lagos to Abuja",
-            "Helpful driver and support team available 24/7"
+            "Deep-freeze temperature maintenance down to -18°C",
+            "Refrigerated truck hire in Nigeria (5T, 10T, 15T, 30T)",
+            "Express interstate corridors with dual-driver options",
+            "24/7 central monitoring desk and compressor diagnostics"
         ],
         pricing: "Custom Quote",
         deliveryTime: "1-3 days",
@@ -115,14 +115,14 @@ export const servicesData = [
     {
         icon: 'Truck',
         image: "/assets/img/fresh-produce.jpg",
-        title: "Fresh Produce Transport",
-        subtitle: "From farm to market",
-        description: "We transport fresh fruits and vegetables from farms to cities, keeping them cool so they do not rot or lose their value.",
+        title: "Cold-Chain Logistics for Fresh Produce",
+        subtitle: "Farm-to-Shelf Freshness & Spoilage Reduction",
+        description: "Solar-powered cold storage solutions and temperature-controlled trucks connecting agricultural hubs in Northern and Central Nigeria directly to major commercial consumer markets with minimal transit loss.",
         features: [
-            "Cool storage rooms for fresh fruits and veggies",
-            "Easy truck hire in Lagos and Abuja",
-            "Direct transport without any delays",
-            "Careful handling so your harvest doesn't get crushed"
+            "Multi-temperature compartments for fruits and vegetables",
+            "Solar-powered cold storage hubs in Lagos and Abuja",
+            "Direct farm-to-warehouse aggregation reducing spoilage",
+            "Airflow-optimized crates and protective handling"
         ],
         pricing: "Custom Quote",
         deliveryTime: "12-48 hours",
@@ -131,14 +131,14 @@ export const servicesData = [
     {
         icon: 'Users',
         image: "/assets/img/enterprise.jpg",
-        title: "Large Cargo Transport",
-        subtitle: "Moving big shipments easily",
-        description: "If you have large shipments of goods, we provide big trucks to move them from ports or warehouses to anywhere in Nigeria.",
+        title: "Enterprise Logistics Solutions in Nigeria",
+        subtitle: "B2B Fleet Aggregation & Nationwide Haulage",
+        description: "Reliable refrigerated trucks for businesses and high-capacity dry haulage across all 36 Nigerian states. Full API integration, dedicated account management, and real-time fleet orchestration.",
         features: [
-            "Reliable long-distance moving across the country",
-            "Big trucks available for dry and cold goods",
-            "Direct point-to-point delivery",
-            "Full customer support every step of the way"
+            "Cold-chain fleet aggregation platform across Africa",
+            "Dedicated fleet capacity (5T, 10T, 15T, 30T trailers)",
+            "Enterprise SLA guarantees with dedicated account managers",
+            "Custom ERP and supply chain API data integrations"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Daily Departures",
@@ -147,14 +147,14 @@ export const servicesData = [
     {
         icon: 'Shield',
         image: "/assets/img/service-1.jpg",
-        title: "Door-to-Door Delivery",
-        subtitle: "Right to your customer",
-        description: "We deliver items directly to your customer's home or shop in Lagos, Abuja, and Port Harcourt, making sure they stay in perfect condition.",
+        title: "Urban Cold-Chain Distribution",
+        subtitle: "Last-Mile Temperature-Controlled Delivery",
+        description: "Temperature-controlled urban distribution for retail chains, supermarkets, pharmacies, and cold storage facilities in Lagos, Abuja, and Port Harcourt with digital proof of delivery.",
         features: [
-            "Refrigerated vans for small packages",
-            "Real-time updates sent straight to your phone",
-            "Digital proof when delivery is complete",
-            "Same-day delivery slots in major cities"
+            "Refrigerated sprinters and vans for urban micro-hubs",
+            "Real-time driver location and temperature tracking",
+            "Digital electronic proof of delivery (e-POD)",
+            "Scheduled daily retail replenishment routes"
         ],
         pricing: "Custom Quote",
         deliveryTime: "Same-day / Next-day",
@@ -165,100 +165,100 @@ export const servicesData = [
 // Why Us Data
 export const whyUsData = {
     header: {
-        badge: "Why Us",
-        title: "Why businesses choose Dara",
-        subtitle: "Simple, reliable transport that you can trust",
-        description: "We make logistics easy. We save you money, deliver your items faster, and keep you updated every step of the way."
+        badge: "Why Dara",
+        title: "Why enterprises choose Dara",
+        subtitle: "Technology-Enabled Cold-Chain Logistics Provider in Africa",
+        description: "We combine IoT temperature monitoring, automated dispatch, and a vetted fleet of 300 reefer and 500 dry trucks to deliver 99.8% temperature compliance across Nigerian transit corridors."
     },
     impactAreas: [
         {
             icon: Clock,
-            title: "Faster delivery for your peace of mind",
-            description: "We use the best routes to deliver your goods quickly — same-day in major cities, next-day across the country.",
-            impact: "40% faster",
-            metric: "Shorter travel times"
+            title: "Guaranteed Temperature Integrity & Precision",
+            description: "Continuous ±0.1°C IoT monitoring with automated trip telemetry and excursion warnings for pharma and perishable goods.",
+            impact: "±0.1°C precision",
+            metric: "NIST-calibrated logging"
         },
         {
             icon: MapPin,
-            title: "We deliver everywhere in Nigeria",
-            description: "Our network covers all 36 states, meaning we can deliver to your customers no matter where they are.",
+            title: "Nationwide Coverage Across All 36 States",
+            description: "Connecting Lagos, Abuja, Port Harcourt, Kano, and regional agrarian belts with reliable reefer and dry haulage.",
             impact: "All 36 states",
-            metric: "Nationwide coverage"
+            metric: "Pan-Nigeria reach"
         },
         {
             icon: Package,
-            title: "Zero damage, zero worries",
-            description: "We handle your goods with care and have full insurance, so you do not have to worry about missing or damaged items.",
-            impact: "99.8% safe deliveries",
-            metric: "Arrived in perfect shape"
+            title: "99.8% Spoilage-Free On-Time Deliveries",
+            description: "Strict cold-chain SOPs, pre-cooled cargo holds, and comprehensive transit insurance protect every payload.",
+            impact: "99.8% compliance",
+            metric: "Safe arrival guarantee"
         },
         {
             icon: Users,
-            title: "Built to help your business grow",
-            description: "Whether you are sending one package or renting a whole truck, we have cheap options that fit your budget.",
-            impact: "5,000+ businesses helped",
-            metric: "Growing together"
+            title: "Fleet Aggregation for Scalable Capacity",
+            description: "Instant access to 300 refrigerated and 500 dry trucks without the massive capital expenditure of buying a fleet.",
+            impact: "800+ total fleet",
+            metric: "On-demand availability"
         },
         {
             icon: Zap,
-            title: "Track everything on your phone",
-            description: "No need to call the driver. See where your truck is and its live temperature directly on our platform.",
-            impact: "60% less stress",
-            metric: "Saved time and effort"
+            title: "Real-Time GPS & Telemetry Dashboard",
+            description: "End-to-end trip visibility from dispatch to delivery with live GPS coordinates, temperature graphs, and digital POD.",
+            impact: "Real-time visibility",
+            metric: "15s telemetry interval"
         },
         {
             icon: Award,
-            title: "Friendly and professional team",
-            description: "Our drivers and support team are well-trained, polite, and always ready to help you solve any issue.",
-            impact: "Best-in-class support",
-            metric: "Here for you 24/7"
+            title: "Enterprise SLAs & 24/7 Monitoring Desk",
+            description: "Dedicated account management, GDP compliance support, and round-the-clock logistics operations teams.",
+            impact: "24/7 support",
+            metric: "Enterprise SLA"
         }
     ],
     cta: {
-        title: "Ready to send a shipment?",
-        description: "Join thousands of businesses that trust us to deliver their goods safely and on time.",
-        primaryBtn: { text: "Get a quote", link: "/booking/request" },
-        secondaryBtn: { text: "See our services", link: "/services" }
+        title: "Ready to schedule a cold-chain shipment?",
+        description: "Join leading pharmaceutical, food, and enterprise brands that trust Dara for zero-spoilage temperature-controlled logistics.",
+        primaryBtn: { text: "Calculate Freight Rates", link: "/booking-calculator" },
+        secondaryBtn: { text: "Explore Our Technology", link: "/technology" }
     }
 }
 
 // Climate Tech Data
 export const climateTechData = {
     header: {
-        badge: "Solar Technology",
-        title: "Solar-Powered Trucks",
-        subtitle: "Good for the Earth",
-        description: "We use solar power to keep our refrigerated trucks cold. This protects the environment and reduces fuel costs."
+        badge: "Climate-Tech Logistics",
+        title: "Solar-Powered Cold Storage & Transport",
+        subtitle: "Sustainable Cold-Chain Solutions in Africa",
+        description: "We integrate solar-powered cold storage and hybrid cooling systems into our logistics network to cut fuel dependency, reduce carbon emissions, and minimize transit spoilage."
     },
     carouselSlides: [
         {
             id: 1,
             image: "/climateImage/image-3.jpeg",
-            title: "Powered by the Sun",
-            description: "Our trucks use solar panels to run their cooling systems, saving fuel and reducing smoke emissions.",
+            title: "Solar-Assisted Refrigeration",
+            description: "Hybrid solar-powered refrigeration units reduce diesel consumption while maintaining continuous cooling during transit stops.",
             icon: Sun,
             color: "bg-green-500"
         },
         {
             id: 2,
             image: "/climateImage/image-1.png",
-            title: "Always Cold and Fresh",
-            description: "Thick insulation and modern cooling keep food and medicines fresh from start to finish.",
+            title: "Multi-Temperature Thermal Barriers",
+            description: "High-grade thermal insulation and partitioned zones allow simultaneous transport of chilled (2°C–8°C) and frozen (-18°C) cargo.",
             icon: Snowflake,
             color: "bg-blue-500"
         },
         {
             id: 3,
             image: "/climateImage/image-2.png",
-            title: "Seamless Delivery",
-            description: "A well-planned delivery system designed to move temperature-sensitive goods without waste.",
+            title: "Zero-Spoilage Cold Corridors",
+            description: "Real-time IoT temperature monitoring across interstate corridors prevents food and vaccine waste before it happens.",
             icon: Globe,
             color: "bg-amber-500"
         }
     ],
     stats: {
         efficiency: { value: "70%", label: "Lower Carbon Emissions" },
-        precision: { accuracy: "±0.1°C", minTemp: "Perfect Temperature" }
+        precision: { accuracy: "±0.1°C", minTemp: "IoT Telemetry Precision" }
     }
 }
 

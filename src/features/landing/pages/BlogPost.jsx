@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Calendar, User, Clock, ArrowLeft, Tag, MessageCircle, Heart, Share2 } from 'lucide-react'
 import { wordpressApi, stripHtml, formatDate, calculateReadTime } from '@/services/wordpressService'
+import SEO from '@/components/common/SEO'
 
 export default function BlogPost() {
   const { slug } = useParams()
@@ -74,6 +75,11 @@ export default function BlogPost() {
   if (error || !post) {
     return (
       <div className="min-h-screen bg-slate-50">
+        <SEO
+          title="Article Not Found | Darafort"
+          description="The requested logistics article could not be found."
+          robots="noindex, nofollow"
+        />
         <div className="pt-32 pb-20 px-6">
           <div className="container mx-auto max-w-4xl text-center">
             <motion.div
@@ -104,9 +110,56 @@ export default function BlogPost() {
   }
 
   const readTime = calculateReadTime(post.content || post.excerpt)
+  const cleanTitle = stripHtml(post.title)
+  const cleanExcerpt = stripHtml(post.excerpt || post.content).slice(0, 160)
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <SEO
+        title={`${cleanTitle} — Darafort Logistics Insights`}
+        description={cleanExcerpt}
+        keywords={post.categories && post.categories.length > 0 ? post.categories.join(', ') : 'cold chain logistics Nigeria, pharma logistics, Darafort'}
+        canonical={`/blog/${post.slug}`}
+        ogType="article"
+        ogImage={post.featured_image || '/og-image.png?v=2'}
+        breadcrumbs={[
+          { name: 'Blog', url: '/blog' },
+          { name: cleanTitle, url: `/blog/${post.slug}` }
+        ]}
+        article={{
+          publishedTime: post.date,
+          modifiedTime: post.date,
+          author: post.author?.name || 'Darafort',
+          section: post.categories?.[0] || 'Logistics',
+          tags: post.tags
+        }}
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          'headline': cleanTitle,
+          'description': cleanExcerpt,
+          'image': post.featured_image ? [post.featured_image] : ['https://daraexpress.com/og-image.png?v=2'],
+          'datePublished': post.date,
+          'dateModified': post.date,
+          'author': {
+            '@type': 'Person',
+            'name': post.author?.name || 'Darafort'
+          },
+          'publisher': {
+            '@type': 'Organization',
+            'name': 'Darafort',
+            'logo': {
+              '@type': 'ImageObject',
+              'url': 'https://daraexpress.com/og-image.png?v=2'
+            }
+          },
+          'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': `https://daraexpress.com/blog/${post.slug}`
+          }
+        }}
+      />
+
       {/* Article Header */}
       <section className="pt-32 pb-12 px-6">
         <div className="container mx-auto max-w-4xl">

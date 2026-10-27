@@ -82,10 +82,11 @@ export default function ProductDemo() {
   return (
     <>
       <SEO
-        title="DaraOS Interactive Product Demo — Cold-Chain Logistics"
-        description="Experience the step-by-step cold-chain logistics simulation with DaraOS. See shipment creation, real-time GPS tracking, IoT telemetry, and compliance proof in action."
-        keywords="product demo, logistics simulator, cold chain demo, GPS tracking demo, IoT monitoring"
+        title="DaraOS Interactive Product Simulator — Cold-Chain Logistics"
+        description="Experience the step-by-step cold-chain logistics simulation with DaraOS. See shipment creation, real-time GPS tracking, IoT temperature telemetry, and compliance proof in action."
+        keywords="Cold-chain logistics technology platforms, Technology-enabled cold-chain logistics providers in Africa, Cold-chain fleet aggregation platforms in Africa, IoT temperature monitoring for logistics, Supply-chain technology startups in Africa"
         canonical="/demo"
+        breadcrumbs={[{ name: 'Demo', url: '/demo' }]}
       />
 
       <section className="bg-white pt-32 pb-24 text-left overflow-hidden min-h-screen">

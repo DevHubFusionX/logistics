@@ -5,18 +5,18 @@ import { ArrowRight } from 'lucide-react'
 const problems = [
   {
     num: '01',
-    title: 'Hard to find trucks',
-    desc: 'Finding a cold truck is hard. Shippers have to make too many phone calls to find a driver.',
+    title: 'Fragmented Truck Supply',
+    desc: 'Finding verified refrigerated truck hire in Nigeria requires endless phone calls, unpredictable availability, and unvetted drivers.',
   },
   {
     num: '02',
-    title: 'No live updates',
-    desc: 'You cannot see the temperature of your food during the trip. Items get spoiled easily.',
+    title: 'Temperature Blind Spots',
+    desc: 'Zero in-transit visibility leads to cold-chain breakages, spoiled pharmaceutical batches, and catastrophic food waste without real-time alerts.',
   },
   {
     num: '03',
-    title: 'Slow and expensive',
-    desc: 'Getting a price quote takes too long. Prices change everyday and drivers are late.',
+    title: 'Opaque Pricing & Delays',
+    desc: 'Volatile freight rates, slow manual dispatch quotes, and unmonitored road breakdowns cause enterprise delivery delays and revenue loss.',
   }
 ]
 
@@ -232,7 +232,7 @@ export default function DaraHowItWorks() {
                 variants={bannerItemVariants}
                 className="font-heading-unique text-xl sm:text-3xl font-bold leading-tight mb-4"
               >
-                Dara provides a seamless platform that connects businesses to reliable refrigerated trucks, offers real-time temperature monitoring, and ensures the safe, timely delivery of temperature-sensitive goods.
+                Dara aggregates 300+ refrigerated and 500 dry trucks with continuous IoT temperature monitoring and real-time shipment visibility.
               </motion.h3>
 
               {/* Description */}
@@ -240,16 +240,16 @@ export default function DaraHowItWorks() {
                 variants={bannerItemVariants}
                 className="font-body-unique text-blue-100 text-sm sm:text-base leading-relaxed mb-8"
               >
-                A smarter way to transport food, pharmaceuticals, and industrial chemicals across Nigeria — with complete visibility, competitive pricing, and uncompromising cold-chain integrity.
+                The technology-enabled cold-chain infrastructure powering pharmaceutical logistics, frozen food transport, and agricultural distribution across all 36 Nigerian states.
               </motion.p>
 
               {/* Action CTA */}
               <motion.div variants={bannerItemVariants}>
                 <Link
-                  to="/booking/request"
+                  to="/booking-calculator"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white text-[#0056B8] hover:bg-blue-50 font-bold rounded-sm text-sm transition-all active:scale-97 shadow-lg shadow-black/10 group cursor-pointer"
                 >
-                  Book
+                  Calculate Freight Rates
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               </motion.div>
