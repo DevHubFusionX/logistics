@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ScheduleDemoModal } from './demo'
-import { heroData } from './Data'
+import { heroData, clientsData } from './Data'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -142,9 +142,27 @@ export default function DaraHero() {
           </Link>
         </motion.div>
 
+        {/* Clients Row */}
+        <motion.div
+          variants={itemVariants}
+          className="w-full border-t border-white/10 pt-6 pb-6 md:pb-12 flex flex-col gap-4"
+        >
+          <span className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase font-body-unique">
+            Trusted by our clients
+          </span>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            {clientsData.map((client) => (
+              <span
+                key={client.name}
+                className="font-heading-unique text-white/60 hover:text-white text-sm sm:text-base font-bold tracking-wide transition-colors duration-300"
+              >
+                {client.name}
+              </span>
+            ))}
+          </div>
+        </motion.div>
 
-
-          </motion.div>
+      </motion.div>
 
       <ScheduleDemoModal isOpen={isDemoOpen} onClose={() => setIsDemoOpen(false)} />
     </div>

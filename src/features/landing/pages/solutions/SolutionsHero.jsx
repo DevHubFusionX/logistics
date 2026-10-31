@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { clientsData } from '../../components/landing/Data'
 
 export default function SolutionsHero({ onBookDemo }) {
   return (
@@ -60,12 +61,12 @@ export default function SolutionsHero({ onBookDemo }) {
             Trusted by
           </span>
           <div className="flex flex-wrap gap-3">
-            {['Pharma', 'Agriculture', 'Retail', 'FMCG', 'Healthcare'].map((tag) => (
+            {clientsData.map(({ name }) => (
               <span
-                key={tag}
+                key={name}
                 className="px-4 py-1.5 rounded-full border border-white/20 text-[11px] font-bold text-white/60 tracking-wide"
               >
-                {tag}
+                {name}
               </span>
             ))}
           </div>

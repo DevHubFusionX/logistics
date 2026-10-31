@@ -6,6 +6,14 @@ import {
 } from 'lucide-react'
 
 
+// Clients & Customers — add new clients here; they appear on Home hero and Solutions page
+export const clientsData = [
+    { name: 'Emzor Pharmaceutical' },
+    { name: 'UNICEF' },
+    { name: 'NPHCDA' },
+    { name: 'NewRest' },
+    { name: 'WHO' },
+]
 
 // Hero Data
 export const heroData = {
