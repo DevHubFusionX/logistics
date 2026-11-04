@@ -142,23 +142,32 @@ export default function DaraHero() {
           </Link>
         </motion.div>
 
-        {/* Clients Row */}
+        {/* Clients Marquee Row */}
         <motion.div
           variants={itemVariants}
-          className="w-full border-t border-white/10 pt-6 pb-6 md:pb-12 flex flex-col gap-4"
+          className="w-full border-t border-white/10 pt-6 pb-6 md:pb-12 flex flex-col gap-4 overflow-hidden"
         >
           <span className="text-white/50 text-[10px] font-bold tracking-[0.2em] uppercase font-body-unique">
             Trusted by our clients
           </span>
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
-            {clientsData.map((client) => (
-              <span
-                key={client.name}
-                className="font-heading-unique text-white/60 hover:text-white text-sm sm:text-base font-bold tracking-wide transition-colors duration-300"
-              >
-                {client.name}
-              </span>
-            ))}
+          <div
+            className="relative w-full overflow-hidden"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)'
+            }}
+          >
+            <div className="flex w-max items-center gap-12 sm:gap-16 animate-marquee">
+              {[...clientsData, ...clientsData].map((client, idx) => (
+                <img
+                  key={`${client.name}-${idx}`}
+                  src={client.logo}
+                  alt={client.name}
+                  title={client.name}
+                  className="h-7 sm:h-9 w-auto max-w-[130px] object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity duration-300 shrink-0 select-none"
+                />
+              ))}
+            </div>
           </div>
         </motion.div>
 

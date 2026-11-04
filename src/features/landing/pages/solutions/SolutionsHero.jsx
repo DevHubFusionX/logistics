@@ -55,20 +55,29 @@ export default function SolutionsHero({ onBookDemo }) {
 
         </div>
 
-        {/* Bottom trusted-by bar */}
-        <div className="border-t border-white/15 py-7 flex flex-col sm:flex-row sm:items-center gap-5 mt-12">
+        {/* Bottom trusted-by marquee bar */}
+        <div className="border-t border-white/15 py-7 flex flex-col sm:flex-row sm:items-center gap-6 mt-12 overflow-hidden">
           <span className="text-[11px] font-bold tracking-widest text-white/40 uppercase flex-shrink-0">
             Trusted by
           </span>
-          <div className="flex flex-wrap gap-3">
-            {clientsData.map(({ name }) => (
-              <span
-                key={name}
-                className="px-4 py-1.5 rounded-full border border-white/20 text-[11px] font-bold text-white/60 tracking-wide"
-              >
-                {name}
-              </span>
-            ))}
+          <div
+            className="relative flex-1 overflow-hidden"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)'
+            }}
+          >
+            <div className="flex w-max items-center gap-12 sm:gap-16 animate-marquee">
+              {[...clientsData, ...clientsData].map(({ name, logo }, idx) => (
+                <img
+                  key={`${name}-${idx}`}
+                  src={logo}
+                  alt={name}
+                  title={name}
+                  className="h-7 sm:h-9 w-auto max-w-[130px] object-contain brightness-0 invert opacity-65 hover:opacity-100 transition-opacity duration-300 shrink-0 select-none"
+                />
+              ))}
+            </div>
           </div>
         </div>
 

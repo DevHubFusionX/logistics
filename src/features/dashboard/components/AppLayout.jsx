@@ -7,7 +7,6 @@ import Sidebar from './Sidebar'
 export default function AppLayout({ children }) {
   const {
     sidebarCollapsed,
-    setSidebarCollapsed,
     toggleSidebar,
     sidebarOpen,
     setMobileSidebar,
