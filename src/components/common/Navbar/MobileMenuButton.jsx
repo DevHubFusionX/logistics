@@ -8,13 +8,17 @@ import { motion } from 'framer-motion'
  *  - scrolled  {boolean} — controls light/dark icon styling
  *  - onToggle  {() => void}
  */
-export default function MobileMenuButton({ isOpen, _scrolled, onToggle }) {
+export default function MobileMenuButton({ isOpen, scrolled = false, lightNav = false, onToggle }) {
   return (
     <div className="lg:hidden flex items-center justify-end">
       <button
         onClick={onToggle}
         aria-label="Toggle Menu"
-        className="w-10 h-10 rounded-lg flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer border bg-slate-50 border-slate-200/60 text-slate-700 hover:bg-slate-100"
+        className={`w-10 h-10 rounded-lg flex flex-col items-center justify-center gap-1.5 transition-all cursor-pointer border ${
+          lightNav && !scrolled
+            ? 'bg-white/10 hover:bg-white/20 border-white/20 text-white backdrop-blur-sm'
+            : 'bg-slate-50 hover:bg-slate-100 border-slate-200/60 text-slate-700'
+        }`}
       >
         <motion.span
           animate={isOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}

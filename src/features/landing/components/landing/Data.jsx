@@ -4,24 +4,20 @@ import {
     Users, Target, Award, Leaf, Sun, Thermometer, Snowflake, Globe,
     Phone, Mail, CheckCircle
 } from 'lucide-react'
-import ColdHubsLogo from '@/assets/ClientLogo/image.svg'
-import EcotutuLogo from '@/assets/ClientLogo/image (1).svg'
-import IntegratedDairiesLogo from '@/assets/ClientLogo/image (2).svg'
-import NavgasLogo from '@/assets/ClientLogo/image (3).svg'
-import NewrestLogo from '@/assets/ClientLogo/image (4).svg'
-import KcclLogo from '@/assets/ClientLogo/image (5).svg'
-import OlpharmLogo from '@/assets/ClientLogo/image (6).svg'
+import EmzorLogo from '@/assets/ClientLogo/emzor.svg'
+import UnicefLogo from '@/assets/ClientLogo/unicef.svg'
+import NphcdaLogo from '@/assets/ClientLogo/nphcda.svg'
+import NewrestLogo from '@/assets/ClientLogo/newrest.svg'
+import WhoLogo from '@/assets/ClientLogo/who.svg'
 
 
 // Clients & Customers — add new clients here; they appear on Home hero and Solutions page
 export const clientsData = [
-    { name: 'ColdHubs', logo: ColdHubsLogo },
-    { name: 'Ecotutu', logo: EcotutuLogo },
-    { name: 'Integrated Dairies Limited', logo: IntegratedDairiesLogo },
-    { name: 'Navgas', logo: NavgasLogo },
-    { name: 'Newrest', logo: NewrestLogo },
-    { name: 'KCCL', logo: KcclLogo },
-    { name: 'Olpharm Nigeria Limited', logo: OlpharmLogo },
+    { name: 'Emzor Pharmaceutical', logo: EmzorLogo },
+    { name: 'UNICEF', logo: UnicefLogo },
+    { name: 'NPHCDA', logo: NphcdaLogo },
+    { name: 'NewRest', logo: NewrestLogo },
+    { name: 'WHO', logo: WhoLogo },
 ]
 
 // Hero Data

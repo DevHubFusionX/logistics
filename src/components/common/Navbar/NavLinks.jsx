@@ -19,7 +19,7 @@ const MENUS = {
   company:    CompanyMenu,
 }
 
-export default function NavLinks({ _lightNav = false }) {
+export default function NavLinks({ lightNav = false }) {
   const location = useLocation()
   const [activeMenu, setActiveMenu] = useState(null)
   const navRef = useRef(null)
@@ -61,7 +61,11 @@ export default function NavLinks({ _lightNav = false }) {
                 <button
                   onClick={() => toggle(link.megaMenu)}
                   className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${
-                    active || isOpen ? 'text-[#0056B8]' : 'text-slate-600 hover:text-slate-900'
+                    active || isOpen
+                      ? 'text-[#38bdf8] sm:text-[#0056B8]'
+                      : lightNav
+                        ? 'text-white/80 hover:text-white'
+                        : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {link.label}
@@ -71,7 +75,11 @@ export default function NavLinks({ _lightNav = false }) {
                 <Link
                   to={link.path}
                   className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${
-                    active ? 'text-[#0056B8]' : 'text-slate-600 hover:text-slate-900'
+                    active
+                      ? lightNav ? 'text-[#38bdf8]' : 'text-[#0056B8]'
+                      : lightNav
+                        ? 'text-white/80 hover:text-white'
+                        : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
                   {link.label}

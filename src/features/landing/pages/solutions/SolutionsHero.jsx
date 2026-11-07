@@ -56,25 +56,39 @@ export default function SolutionsHero({ onBookDemo }) {
         </div>
 
         {/* Bottom trusted-by marquee bar */}
-        <div className="border-t border-white/15 py-7 flex flex-col sm:flex-row sm:items-center gap-6 mt-12 overflow-hidden">
-          <span className="text-[11px] font-bold tracking-widest text-white/40 uppercase flex-shrink-0">
+        <div className="border-t border-white/15 py-4 sm:py-5 flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6 mt-8 sm:mt-10 overflow-hidden">
+          <span className="text-[10px] font-bold tracking-widest text-white/40 uppercase flex-shrink-0">
             Trusted by
           </span>
           <div
-            className="relative flex-1 overflow-hidden"
+            className="relative flex-1 overflow-hidden flex select-none group"
             style={{
-              maskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
-              WebkitMaskImage: 'linear-gradient(to right, transparent, black 8%, black 92%, transparent)'
+              maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
             }}
           >
-            <div className="flex w-max items-center gap-12 sm:gap-16 animate-marquee">
-              {[...clientsData, ...clientsData].map(({ name, logo }, idx) => (
+            {/* Track 1 */}
+            <div className="flex shrink-0 items-center gap-12 sm:gap-16 pr-12 sm:pr-16 animate-marquee">
+              {[...clientsData, ...clientsData, ...clientsData].map(({ name, logo }, idx) => (
                 <img
-                  key={`${name}-${idx}`}
+                  key={`sol-t1-${name}-${idx}`}
                   src={logo}
                   alt={name}
                   title={name}
-                  className="h-7 sm:h-9 w-auto max-w-[130px] object-contain brightness-0 invert opacity-65 hover:opacity-100 transition-opacity duration-300 shrink-0 select-none"
+                  className="h-5 sm:h-6 w-auto max-w-[90px] sm:max-w-[105px] object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity duration-300 shrink-0 select-none"
+                />
+              ))}
+            </div>
+
+            {/* Track 2 (Duplicate for continuous infinite loop) */}
+            <div className="flex shrink-0 items-center gap-12 sm:gap-16 pr-12 sm:pr-16 animate-marquee" aria-hidden="true">
+              {[...clientsData, ...clientsData, ...clientsData].map(({ name, logo }, idx) => (
+                <img
+                  key={`sol-t2-${name}-${idx}`}
+                  src={logo}
+                  alt={name}
+                  title={name}
+                  className="h-5 sm:h-6 w-auto max-w-[90px] sm:max-w-[105px] object-contain brightness-0 invert opacity-60 hover:opacity-100 transition-opacity duration-300 shrink-0 select-none"
                 />
               ))}
             </div>

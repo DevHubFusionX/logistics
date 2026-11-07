@@ -16,7 +16,7 @@ import LanguageToggle from './LanguageToggle'
 export default function NavActions({ user, lightNav, onDemoOpen, onLogout }) {
   return (
     <div className="hidden lg:flex items-center gap-4">
-      <LanguageToggle />
+      <LanguageToggle lightNav={lightNav} />
 
       {user ? (
         <>

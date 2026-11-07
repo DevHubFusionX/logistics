@@ -41,8 +41,9 @@ export default function Navbar() {
     logout(); setMenuOpen(false); navigate('/')
   }, [logout, navigate])
 
-  const lightNav   = false
-  const headerAnim = useMemo(() => ({ y: visible ? 0 : -80 }), [visible])
+  const isDarkHeroPage = location.pathname === '/' || location.pathname === '/solutions' || location.pathname === '/network'
+  const lightNav       = isDarkHeroPage && !scrolled
+  const headerAnim     = useMemo(() => ({ y: visible ? 0 : -80 }), [visible])
 
   return (
     <>
@@ -52,8 +53,10 @@ export default function Navbar() {
         transition={{ type: 'spring', stiffness: 280, damping: 28 }}
         className={`fixed top-0 left-0 right-0 z-50 select-none transition-all duration-300 ${
           scrolled
-            ? 'bg-white border-b border-slate-100 shadow-sm py-3'
-            : 'bg-white border-b border-slate-100 py-4'
+            ? 'bg-white/90 backdrop-blur-md border-b border-slate-200/70 shadow-sm py-3'
+            : isDarkHeroPage
+              ? 'bg-transparent border-b border-white/10 py-4'
+              : 'bg-white/80 backdrop-blur-md border-b border-slate-100 py-4'
         }`}
       >
         <nav className="mx-auto max-w-7xl w-full px-6 md:px-10">
@@ -62,7 +65,7 @@ export default function Navbar() {
             {/* Logo */}
             <Link to="/" className="flex-shrink-0">
               <AnimatedLogo
-                className="h-3.5 sm:h-4 transition-all duration-300"
+                className="h-4 sm:h-5 transition-all duration-300"
                 isDarkText={!lightNav}
               />
             </Link>
@@ -81,6 +84,7 @@ export default function Navbar() {
               <MobileMenuButton
                 isOpen={menuOpen}
                 scrolled={scrolled}
+                lightNav={lightNav}
                 onToggle={() => setMenuOpen((o) => !o)}
               />
             </div>

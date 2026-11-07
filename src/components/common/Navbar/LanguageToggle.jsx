@@ -6,7 +6,7 @@ import { useTranslation } from '../../../i18n'
  *  - isMobile: full-row row inside the mobile drawer
  *  - default:  compact inline version for the desktop nav
  */
-export default function LanguageToggle({ isMobile = false }) {
+export default function LanguageToggle({ isMobile = false, lightNav = false }) {
   const { locale, setLocale } = useTranslation()
   const isFrench = locale === 'fr'
   const toggle = () => setLocale(isFrench ? 'en' : 'fr')
@@ -33,11 +33,13 @@ export default function LanguageToggle({ isMobile = false }) {
     <button
       onClick={toggle}
       title={isFrench ? 'Switch to English' : 'Traduire en Français'}
-      className="flex items-center gap-1 text-[10px] font-semibold font-body-unique tracking-widest cursor-pointer select-none transition-colors text-slate-500 hover:text-slate-800"
+      className={`flex items-center gap-1 text-[10px] font-semibold font-body-unique tracking-widest cursor-pointer select-none transition-colors ${
+        lightNav ? 'text-white/70 hover:text-white' : 'text-slate-500 hover:text-slate-800'
+      }`}
     >
-      <span className={!isFrench ? 'text-[#0056B8] font-bold' : ''}>EN</span>
-      <span className="text-slate-300 mx-0.5">|</span>
-      <span className={isFrench ? 'text-[#0056B8] font-bold' : ''}>FR</span>
+      <span className={!isFrench ? (lightNav ? 'text-[#38bdf8] font-bold' : 'text-[#0056B8] font-bold') : ''}>EN</span>
+      <span className={lightNav ? 'text-white/30 mx-0.5' : 'text-slate-300 mx-0.5'}>|</span>
+      <span className={isFrench ? (lightNav ? 'text-[#38bdf8] font-bold' : 'text-[#0056B8] font-bold') : ''}>FR</span>
     </button>
   )
 }
