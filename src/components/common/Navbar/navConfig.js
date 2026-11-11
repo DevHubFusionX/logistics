@@ -4,6 +4,7 @@ export const navLinks = [
   { label: 'Solutions',  path: '/solutions',   megaMenu: 'solutions' },
   { label: 'Network',    path: '/network',     megaMenu: 'network' },
   { label: 'Technology', path: '/technology',  megaMenu: 'technology' },
+  { label: 'Resources',  path: 'https://resources.darafort.com/', isExternal: true },
   { label: 'Company',    path: '/about',       megaMenu: 'company' },
 ]
 

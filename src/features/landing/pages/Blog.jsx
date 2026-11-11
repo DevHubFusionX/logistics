@@ -200,7 +200,7 @@ export default function Blog() {
           '@type': 'Blog',
           'name': 'Darafort Cold Chain Knowledge Hub',
           'description': 'Expert insights on cold chain logistics, pharma transport, frozen food haulage and reefer trucking across Nigeria.',
-          'url': 'https://daraexpress.com/blog',
+          'url': 'https://resources.darafort.com/',
           'publisher': {
             '@type': 'Organization',
             'name': 'Darafort',

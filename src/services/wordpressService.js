@@ -1,7 +1,7 @@
-// WordPress Self-Hosted REST API v2 for resources.daraexpress.com
+// WordPress Self-Hosted REST API v2 for resources.darafort.com
 // Public endpoint — no authentication required for published posts
 
-const API_BASE = 'https://resources.daraexpress.com/wp-json/wp/v2'
+const API_BASE = 'https://resources.darafort.com/wp-json/wp/v2'
 
 // Simple in-memory cache
 const cache = new Map()

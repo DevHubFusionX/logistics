@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom'
 import { Info, Phone, BookOpen } from 'lucide-react'
 
 const items = [
-  { icon: Info,     label: 'About',     desc: 'Our mission, story and values.',         path: '/about',   color: 'bg-slate-900 text-white' },
-  { icon: Phone,    label: 'Contact',   desc: 'Get in touch with our team.',            path: '/contact', color: 'bg-[#0056B8] text-white' },
-  { icon: BookOpen, label: 'Resources', desc: 'Insights, news, and cold chain reports.', path: '/blog',    color: 'bg-slate-100 text-slate-900' },
+  { icon: Info,     label: 'About',     desc: 'Our mission, story and values.',         path: '/about',                       color: 'bg-slate-900 text-white' },
+  { icon: Phone,    label: 'Contact',   desc: 'Get in touch with our team.',            path: '/contact',                     color: 'bg-[#0056B8] text-white' },
+  { icon: BookOpen, label: 'Resources', desc: 'Insights, news, and cold chain reports.', href: 'https://resources.darafort.com/', color: 'bg-slate-100 text-slate-900' },
 ]
 
 function CompanyMenu({ onClose }) {
@@ -14,17 +14,38 @@ function CompanyMenu({ onClose }) {
         <p className="text-[10px] font-bold tracking-widest text-slate-400 uppercase">Company</p>
       </div>
       <div className="grid grid-cols-3 gap-3">
-        {items.map(({ icon: Icon, label, desc, path, color }) => {
+        {items.map(({ icon: Icon, label, desc, path, href, color }) => {
           const isLight = color.includes('slate-100')
-          return (
-            <Link key={label} to={path} onClick={onClose}
-              className={`flex flex-col justify-between p-6 rounded-2xl transition-opacity hover:opacity-90 group min-h-[160px] ${color}`}
-            >
+          const cardClasses = `flex flex-col justify-between p-6 rounded-2xl transition-opacity hover:opacity-90 group min-h-[160px] ${color}`
+          const cardContent = (
+            <>
               <Icon className={`w-5 h-5 ${isLight ? 'text-slate-400' : 'text-white/70'}`} />
               <div className="mt-8">
                 <p className={`text-sm font-semibold ${isLight ? 'text-slate-800' : 'text-white'}`}>{label}</p>
                 <p className={`text-[11px] mt-1 leading-snug ${isLight ? 'text-slate-400' : 'text-white/60'}`}>{desc}</p>
               </div>
+            </>
+          )
+
+          return href ? (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
+              className={cardClasses}
+            >
+              {cardContent}
+            </a>
+          ) : (
+            <Link
+              key={label}
+              to={path}
+              onClick={onClose}
+              className={cardClasses}
+            >
+              {cardContent}
             </Link>
           )
         })}

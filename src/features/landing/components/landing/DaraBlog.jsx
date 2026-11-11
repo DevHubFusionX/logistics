@@ -151,13 +151,15 @@ export default function DaraBlog() {
           </motion.div>
 
           <motion.div variants={headerAnim} className="mt-8">
-            <Link
-              to="/blog"
+            <a
+              href="https://resources.darafort.com/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors"
             >
               View all articles
               <ChevronRight className="w-4 h-4" />
-            </Link>
+            </a>
           </motion.div>
         </motion.div>
 

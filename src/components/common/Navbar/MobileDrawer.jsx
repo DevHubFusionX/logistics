@@ -70,18 +70,31 @@ export default function MobileDrawer({ isOpen, user, onClose, onLogout, onDemoOp
               >
                 {navLinks.map((link) => (
                   <motion.div key={link.label} variants={mobileItemVariants}>
-                    <Link
-                      to={link.path}
-                      onClick={onClose}
-                      className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-                        isActive(link)
-                          ? 'bg-blue-50 text-[#0056B8] font-semibold'
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
-                      }`}
-                    >
-                      {link.label}
-                      {isActive(link) && <ArrowRight className="w-3.5 h-3.5 text-[#0056B8]" />}
-                    </Link>
+                    {link.isExternal ? (
+                      <a
+                        href={link.path}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={onClose}
+                        className="flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                      >
+                        {link.label}
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                      </a>
+                    ) : (
+                      <Link
+                        to={link.path}
+                        onClick={onClose}
+                        className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                          isActive(link)
+                            ? 'bg-blue-50 text-[#0056B8] font-semibold'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        }`}
+                      >
+                        {link.label}
+                        {isActive(link) && <ArrowRight className="w-3.5 h-3.5 text-[#0056B8]" />}
+                      </Link>
+                    )}
                   </motion.div>
                 ))}
               </motion.div>

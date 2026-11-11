@@ -1,4 +1,4 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { useRoutes, Outlet } from 'react-router-dom'
 import ProtectedRoute from '../components/common/ProtectedRoute'
 import PublicLayout from '../components/layout/PublicLayout'
@@ -9,6 +9,21 @@ import ScrollToTop from '../components/common/ScrollToTop'
 // never load on the public Home page.
 const AuthLayout = lazy(() => import('../components/layout/AuthLayout'))
 const DashboardLayout = lazy(() => import('../components/layout/DashboardLayout'))
+
+// Redirect helper for external Resources hub
+const ResourceRedirect = () => {
+  useEffect(() => {
+    window.location.replace('https://resources.darafort.com/')
+  }, [])
+  return (
+    <div className="min-h-[60vh] flex items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-10 h-10 rounded-full border-2 border-sky-100 border-t-sky-600 animate-spin" />
+        <span className="text-xs text-sky-700 font-semibold tracking-wide">Redirecting to Resources…</span>
+      </div>
+    </div>
+  )
+}
 
 // Common Loading Component
 const PageLoader = () => (
@@ -47,9 +62,9 @@ const Contact = lazy(() => import('../features/landing/pages/Contact'))
 const Privacy = lazy(() => import('../features/landing/pages/Privacy'))
 const Terms = lazy(() => import('../features/landing/pages/Terms'))
 const ProductDemo = lazy(() => import('../features/landing/pages/ProductDemo'))
-const Technology = lazy(() => import('../features/landing/pages/technology'))
-const Solutions = lazy(() => import('../features/landing/pages/solutions'))
-const Network = lazy(() => import('../features/landing/pages/network'))
+const Technology = lazy(() => import('../features/landing/pages/technology/index'))
+const Solutions = lazy(() => import('../features/landing/pages/solutions/index'))
+const Network = lazy(() => import('../features/landing/pages/network/index'))
 
 // --- Auth Pages ---
 const SignUp = lazy(() => import('../pages/auth/SignUp'))
@@ -123,6 +138,7 @@ const routesConfig = [
       // { path: '/team', element: <Team /> },
       { path: '/blog', element: <Blog /> },
       { path: '/blog/:slug', element: <BlogPost /> },
+      { path: '/resources', element: <ResourceRedirect /> },
       { path: '/contact', element: <Contact /> },
       { path: '/tracking', element: <Tracking /> },
       { path: '/booking-calculator', element: <BookingCalculatorPage /> },

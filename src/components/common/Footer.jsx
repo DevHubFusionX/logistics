@@ -8,6 +8,7 @@ const quickLinks = [
   { label: 'Home', to: '/' },
   { label: 'Platform', to: '/platform' },
   { label: 'Services', to: '/services' },
+  { label: 'Resources', href: 'https://resources.darafort.com/' },
   { label: 'Contact', to: '/contact' },
 ]
 
@@ -69,14 +70,25 @@ export default function Footer() {
               Company
             </p>
             <ul className="space-y-3 font-body-unique">
-              {quickLinks.map(({ label, to }) => (
+              {quickLinks.map(({ label, to, href }) => (
                 <li key={label}>
-                  <Link
-                    to={to}
-                    className="text-xs sm:text-sm text-white/80 hover:text-white transition-colors"
-                  >
-                    {label}
-                  </Link>
+                  {href ? (
+                    <a
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs sm:text-sm text-white/80 hover:text-white transition-colors"
+                    >
+                      {label}
+                    </a>
+                  ) : (
+                    <Link
+                      to={to}
+                      className="text-xs sm:text-sm text-white/80 hover:text-white transition-colors"
+                    >
+                      {label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
