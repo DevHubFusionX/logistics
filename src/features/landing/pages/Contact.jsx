@@ -110,7 +110,7 @@ export default function Contact() {
           'mainEntity': {
             '@type': 'LocalBusiness',
             'name': 'Darafort',
-            'telephone': '+2349054610119',
+            'telephone': '+2347030659111',
             'email': 'hello@darafort.com',
             'address': {
               '@type': 'PostalAddress',

@@ -162,11 +162,11 @@ export default function BookingCalculatorPage() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
             <a
-              href="tel:+2349054610119"
+              href="tel:+2347030659111"
               className="px-6 py-3 bg-white text-[#003366] font-bold rounded-lg text-sm hover:bg-slate-100 transition-colors flex items-center justify-center gap-2 cursor-pointer shadow-md"
             >
               <PhoneCall className="w-4 h-4" />
-              <span>Call +234 905 461 0119</span>
+              <span>Call +234 703 065 9111</span>
             </a>
             <Link
               to="/contact"
