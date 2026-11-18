@@ -41,6 +41,11 @@ export default function NavLinks({ lightNav = false }) {
 
   const isActive = (link) => {
     if (link.path === '/') return location.pathname === '/'
+    if (link.megaMenu === 'company') {
+      return ['/about', '/contact', '/portfolio', '/blog'].some(
+        (p) => location.pathname === p || location.pathname.startsWith(p + '/')
+      )
+    }
     return location.pathname === link.path || location.pathname.startsWith(link.path + '/')
   }
 
@@ -55,45 +60,37 @@ export default function NavLinks({ lightNav = false }) {
           const hasMega = !!link.megaMenu
           const isOpen  = activeMenu === link.megaMenu
 
+          const linkColorClass = active || isOpen
+            ? lightNav
+              ? 'text-white bg-white/15'
+              : 'text-[#0056B8] bg-blue-50/70'
+            : lightNav
+              ? 'text-white/85 hover:text-white hover:bg-white/10'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/70'
+
           return (
             <div key={link.label} className="relative">
               {hasMega ? (
                 <button
                   onClick={() => toggle(link.megaMenu)}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${
-                    active || isOpen
-                      ? 'text-[#38bdf8] sm:text-[#0056B8]'
-                      : lightNav
-                        ? 'text-white/80 hover:text-white'
-                        : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${linkColorClass}`}
                 >
                   {link.label}
-                  <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? 'rotate-180 text-[#0056B8]' : ''}`} />
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isOpen ? (lightNav ? 'rotate-180 text-white' : 'rotate-180 text-[#0056B8]') : ''}`} />
                 </button>
               ) : link.isExternal ? (
                 <a
                   href={link.path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${
-                    lightNav
-                      ? 'text-white/80 hover:text-white'
-                      : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${linkColorClass}`}
                 >
                   {link.label}
                 </a>
               ) : (
                 <Link
                   to={link.path}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${
-                    active
-                      ? lightNav ? 'text-[#38bdf8]' : 'text-[#0056B8]'
-                      : lightNav
-                        ? 'text-white/80 hover:text-white'
-                        : 'text-slate-600 hover:text-slate-900'
-                  }`}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-md text-[11px] font-semibold tracking-wide transition-colors duration-150 font-body-unique cursor-pointer ${linkColorClass}`}
                 >
                   {link.label}
                 </Link>
@@ -102,7 +99,7 @@ export default function NavLinks({ lightNav = false }) {
               {active && (
                 <motion.span
                   layoutId="nav-indicator"
-                  className="absolute bottom-0 left-3 right-3 h-[2px] bg-[#0056B8] rounded-full"
+                  className={`absolute bottom-0 left-3 right-3 h-[2px] rounded-full ${lightNav ? 'bg-white' : 'bg-[#0056B8]'}`}
                 />
               )}
             </div>
@@ -119,7 +116,7 @@ export default function NavLinks({ lightNav = false }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="hidden lg:block fixed inset-0 top-[72px] z-40 backdrop-blur-sm bg-black/20"
+            className="hidden lg:block fixed inset-0 top-[76px] z-40 backdrop-blur-sm bg-black/20"
             onClick={close}
           />
         )}
@@ -134,7 +131,7 @@ export default function NavLinks({ lightNav = false }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.15, ease: 'easeOut' }}
-            className="hidden lg:block fixed left-0 right-0 top-[72px] z-50 px-6 pt-2"
+            className="hidden lg:block fixed left-0 right-0 top-[76px] z-50 px-6 pt-2"
           >
             <div className={`mx-auto bg-white border border-slate-100 rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,0.12)] p-6 ${ MenuComp.menuWidth ?? 'max-w-3xl' }`}>
               <MenuComp onClose={close} />

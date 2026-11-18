@@ -22,7 +22,11 @@ export default function NavActions({ user, lightNav, onDemoOpen, onLogout }) {
         <>
           <Link
             to="/my-bookings"
-            className="flex items-center gap-1.5 px-4 py-2 bg-slate-900 hover:bg-black text-white font-body-unique text-[11px] font-semibold tracking-wide rounded transition-all"
+            className={`flex items-center gap-1.5 px-4 py-2 font-body-unique text-[11px] font-semibold tracking-wide rounded transition-all shadow-sm ${
+              lightNav
+                ? 'bg-white hover:bg-blue-50 text-[#0056B8]'
+                : 'bg-slate-900 hover:bg-black text-white'
+            }`}
           >
             <LayoutDashboard className="w-3.5 h-3.5" />
             Dashboard
@@ -32,7 +36,7 @@ export default function NavActions({ user, lightNav, onDemoOpen, onLogout }) {
             onClick={onLogout}
             className={`flex items-center gap-1.5 text-[11px] font-semibold font-body-unique tracking-wide transition-colors cursor-pointer ${
               lightNav
-                ? 'text-white/70 hover:text-white'
+                ? 'text-white/80 hover:text-white'
                 : 'text-slate-500 hover:text-red-600'
             }`}
           >
@@ -46,8 +50,8 @@ export default function NavActions({ user, lightNav, onDemoOpen, onLogout }) {
             to="/auth/login"
             className={`text-[11px] font-semibold font-body-unique tracking-wide transition-colors ${
               lightNav
-                ? 'text-white/80 hover:text-white'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'text-white/90 hover:text-white'
+                : 'text-slate-600 hover:text-[#0056B8]'
             }`}
           >
             Login
@@ -55,10 +59,18 @@ export default function NavActions({ user, lightNav, onDemoOpen, onLogout }) {
 
           <button
             onClick={onDemoOpen}
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#0056B8] hover:bg-[#004aad] text-white font-body-unique text-[11px] font-bold tracking-wide rounded transition-all shadow-md hover:shadow-lg cursor-pointer group"
+            className={`flex items-center gap-2 px-5 py-2.5 font-body-unique text-[11px] font-bold tracking-wide rounded transition-all shadow-md hover:shadow-lg cursor-pointer group ${
+              lightNav
+                ? 'bg-white hover:bg-blue-50 text-[#0056B8]'
+                : 'bg-[#0056B8] hover:bg-[#004aad] text-white'
+            }`}
           >
             <span>Book a Demo</span>
-            <span className="flex-shrink-0 bg-white text-[#0056B8] rounded-full p-0.5 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+            <span
+              className={`flex-shrink-0 rounded-full p-0.5 flex items-center justify-center group-hover:translate-x-0.5 transition-transform ${
+                lightNav ? 'bg-[#0056B8] text-white' : 'bg-white text-[#0056B8]'
+              }`}
+            >
               <ArrowRight className="w-2.5 h-2.5" />
             </span>
           </button>

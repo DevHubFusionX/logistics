@@ -34,12 +34,12 @@ export default function LanguageToggle({ isMobile = false, lightNav = false }) {
       onClick={toggle}
       title={isFrench ? 'Switch to English' : 'Traduire en Français'}
       className={`flex items-center gap-1 text-[10px] font-semibold font-body-unique tracking-widest cursor-pointer select-none transition-colors ${
-        lightNav ? 'text-white/70 hover:text-white' : 'text-slate-500 hover:text-slate-800'
+        lightNav ? 'text-white/65 hover:text-white' : 'text-slate-500 hover:text-slate-800'
       }`}
     >
-      <span className={!isFrench ? (lightNav ? 'text-[#38bdf8] font-bold' : 'text-[#0056B8] font-bold') : ''}>EN</span>
+      <span className={!isFrench ? (lightNav ? 'text-white font-bold' : 'text-[#0056B8] font-bold') : ''}>EN</span>
       <span className={lightNav ? 'text-white/30 mx-0.5' : 'text-slate-300 mx-0.5'}>|</span>
-      <span className={isFrench ? (lightNav ? 'text-[#38bdf8] font-bold' : 'text-[#0056B8] font-bold') : ''}>FR</span>
+      <span className={isFrench ? (lightNav ? 'text-white font-bold' : 'text-[#0056B8] font-bold') : ''}>FR</span>
     </button>
   )
 }

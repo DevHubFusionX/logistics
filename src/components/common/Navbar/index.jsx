@@ -9,6 +9,8 @@ import NavActions from './NavActions'
 import MobileMenuButton from './MobileMenuButton'
 import MobileDrawer from './MobileDrawer'
 
+const DARK_HERO_PATHS = new Set(['/', '/solutions', '/network', '/platform', '/technology'])
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen]       = useState(false)
   const [scrolled, setScrolled]       = useState(false)
@@ -20,9 +22,13 @@ export default function Navbar() {
   const navigate         = useNavigate()
   const location         = useLocation()
 
-  // Close drawer on route change
+  // Reset drawer, visibility, and scroll state on route change
   useEffect(() => {
     setMenuOpen(false)
+    setVisible(true)
+    const y = window.scrollY
+    setScrolled(y > 20)
+    lastScrollY.current = y
   }, [location.pathname])
 
   // Hide-on-scroll + frosted glass background
@@ -41,7 +47,8 @@ export default function Navbar() {
     logout(); setMenuOpen(false); navigate('/')
   }, [logout, navigate])
 
-  const isDarkHeroPage = location.pathname === '/' || location.pathname === '/solutions' || location.pathname === '/network'
+  const normalizedPath = location.pathname.replace(/\/+$/, '') || '/'
+  const isDarkHeroPage = DARK_HERO_PATHS.has(normalizedPath)
   const lightNav       = isDarkHeroPage && !scrolled
   const headerAnim     = useMemo(() => ({ y: visible ? 0 : -80 }), [visible])
 
@@ -53,10 +60,10 @@ export default function Navbar() {
         transition={{ type: 'spring', stiffness: 280, damping: 28 }}
         className={`fixed top-0 left-0 right-0 z-50 select-none transition-all duration-300 ${
           scrolled
-            ? 'bg-white/90 backdrop-blur-md border-b border-slate-200/70 shadow-sm py-3'
+            ? 'bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-[0_4px_20px_rgba(0,0,0,0.06)] py-2.5'
             : isDarkHeroPage
-              ? 'bg-transparent border-b border-white/10 py-4'
-              : 'bg-white/80 backdrop-blur-md border-b border-slate-100 py-4'
+              ? 'bg-gradient-to-b from-slate-950/25 to-transparent border-b border-white/15 py-3.5'
+              : 'bg-white/90 backdrop-blur-md border-b border-slate-200/60 py-3.5'
         }`}
       >
         <nav className="mx-auto max-w-7xl w-full px-6 md:px-10">
